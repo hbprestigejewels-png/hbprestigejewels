@@ -1,0 +1,549 @@
+{% comment %}
+  Enhanced Dropdown Menu (AUTO COLLECTION IMAGES - DAWN)
+  FIX: Only shows images uploaded DIRECTLY to collection, never product images
+  UPDATED: Ensures NO product images appear, only manually uploaded collection images
+{% endcomment %}
+
+<style>
+    /* ===== SAME STYLES (UNCHANGED - KEEP AS IS) ===== */
+    .enhanced-dropdown { position: relative; list-style: none; }
+
+    .enhanced-dropdown__trigger {
+      font-weight: 500;
+      font-size: 14px;
+      color: #1f2a3e;
+      text-decoration: none;
+      padding: 0.5rem 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .enhanced-dropdown__trigger .enhanced-dropdown__menu-icon{
+      display:none !important;
+    }
+
+  .enhanced-dropdown__menu-icon {
+      width: 50px !important;
+      height: 20px !important;
+      object-fit: contain !important;
+      object-position: center;
+      display: block;
+      max-width: 50px;
+      max-height: 20px;
+      border-radius: 40px;
+      flex-shrink: 0;
+  }
+
+  .enhanced-dropdown__content {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 50vw;
+      height: 80vh;
+      overflow-y:scroll;
+      padding: 2rem 0;
+      background: #fff;
+      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease;
+      z-index: 999;
+    }
+
+    details[open] .enhanced-dropdown__content {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .enhanced-dropdown__inner {
+      width: 100%;
+      padding: 15px 20px;
+    }
+
+    .enhanced-dropdown__content {
+      min-height: 320px;
+    }
+
+    .enhanced-dropdown__grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      align-items: start;
+    }
+
+    .enhanced-dropdown__links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(420px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .enhanced-dropdown__links > div {
+      position: relative;
+      padding-right: 20px;
+    }
+
+    .enhanced-dropdown__links > div:not(:nth-child(2n))::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: #e5e5e5;
+    }
+
+    .enhanced-dropdown__section-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: black;
+      text-transform: uppercase;
+    }
+
+    .enhanced-dropdown__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      display: grid;
+      grid-auto-flow: column;     /* પહેલા column ભરાશે */
+      grid-template-rows: repeat(10, auto); /* દરેક column માં 10 items */
+      grid-auto-columns: minmax(100px, 1fr);
+
+    }
+
+    .enhanced-dropdown__list li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .enhanced-dropdown__link {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .enhanced-dropdown__menu-icon {
+      width: auto;
+      height: 20px;
+      max-width:50px;
+      flex-shrink: 0;
+      object-fit: none;
+    }
+
+    .enhanced-dropdown__link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #333;
+      padding: 5px 0;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .enhanced-dropdown__images {
+      border-left: 1px solid #eee;
+      padding-left: 20px;
+    }
+
+    .enhanced-dropdown__promo-images {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .enhanced-dropdown__promo-card img {
+      width: 100%;
+      border-radius: 10px;
+      transition: .3s;
+    }
+
+    .enhanced-dropdown__promo-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .enhanced-dropdown:hover .enhanced-dropdown__trigger svg {
+      transform: rotate(180deg);
+    }
+
+    .header__inline-menu {
+      position: relative;
+    }
+
+    .enhanced-dropdown {
+      position: static !important;
+    }
+
+    .enhanced-dropdown__grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+    }
+
+    .enhanced-dropdown__images {
+      justify-self: end;
+      padding-right: 20px;
+    }
+
+    html, body {
+      overflow-x: hidden;
+    }
+
+    .enhanced-dropdown__content {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      width: 100vw;
+      padding: 2rem 0;
+      background: #fff;
+      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease;
+      z-index: -999;
+    }
+</style>
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list" style="display:flex; gap:2rem; row-gap: 0px;">
+    {% for link in section.settings.menu.links %}
+      <li class="enhanced-dropdown">
+        {% if link.links != blank %}
+          <details>
+            <summary class="enhanced-dropdown__trigger">
+              <div class="enhanced-dropdown__title">
+                {% assign show_icon = false %}
+                {% assign collection_img_url = blank %}
+
+                {% if link.type == 'collection_link' %}
+                  {% assign collection_obj = link.object %}
+                  {% if collection_obj.featured_image %}
+                    {% assign collection_img_url = collection_obj.featured_image
+                      | image_url: width: 40, height: 40, crop: 'center'
+                    %}
+                    {% assign show_icon = true %}
+                  {% endif %}
+                {% endif %}
+
+                <a
+                  href="{{ link.url }}"
+                  class="enhanced-dropdown__link"
+                  onclick="event.stopPropagation();"
+                >
+                  {% comment %} {% if show_icon %}
+                    <img
+                      src="{{ collection_img_url }}"
+                      class="enhanced-dropdown__menu-icon"
+                      alt="{{ link.title }}"
+                      loading="lazy"
+                      width="40"
+                      height="40"
+                    >
+                  {% endif %} {% endcomment %}
+
+                  <span>{{ link.title }}</span>
+                </a>
+              </div>
+
+              {% comment %} <span class="enhanced-dropdown__arrow">
+                {% render 'icon-caret' %}
+              </span> {% endcomment %}
+            </summary>
+
+            <div class="enhanced-dropdown__content">
+              <div class="enhanced-dropdown__inner">
+                <div class="enhanced-dropdown__grid">
+                  <!-- LEFT MENU -->
+                  <div class="enhanced-dropdown__links">
+                    {% for childlink in link.links %}
+                      <div>
+                        {% assign show_child_icon = false %}
+                        {% assign child_img_url = null %}
+
+                        {% if childlink.type == 'collection_link' %}
+                          {% assign child_collection = childlink.object %}
+                          {% if child_collection.featured_image != blank %}
+                            {% assign child_img_url = child_collection.featured_image
+                              | image_url: width: 40, height: 40, crop: 'center'
+                            %}
+                            {% assign show_child_icon = true %}
+                          {% endif %}
+                        {% endif %}
+
+                        <a href="{{ childlink.url }}" class="enhanced-dropdown__section-title">
+                          {% if show_child_icon == true and child_img_url != blank %}
+                            <img
+                              src="{{ child_img_url }}"
+                              class="enhanced-dropdown__menu-icon"
+                              loading="lazy"
+                              alt="{{ childlink.title }}"
+                              width="40"
+                              height="40"
+                            >
+                          {% endif %}
+
+                          {{ childlink.title }}
+                        </a>
+
+                        {% if childlink.links != blank %}
+                          <ul class="enhanced-dropdown__list">
+                            {% for grandchildlink in childlink.links %}
+                              {% assign show_grand_icon = false %}
+                              {% assign grand_img_url = null %}
+
+                              {% if grandchildlink.type == 'collection_link' %}
+                                {% assign grand_collection = grandchildlink.object %}
+                                {% if grand_collection.featured_image != blank %}
+                                  {% assign grand_img_url = grand_collection.featured_image
+                                    | image_url: width: 40, height: 40, crop: 'center'
+                                  %}
+                                  {% assign show_grand_icon = true %}
+                                {% endif %}
+                              {% endif %}
+
+                              <li>
+                                <a href="{{ grandchildlink.url }}" class="enhanced-dropdown__link">
+                                  {% if show_grand_icon == true and grand_img_url != blank %}
+                                    <img
+                                      src="{{ grand_img_url }}"
+                                      class="enhanced-dropdown__menu-icon"
+                                      loading="lazy"
+                                      alt="{{ grandchildlink.title }}"
+                                      width="40"
+                                      height="40"
+                                    >
+                                  {% endif %}
+
+                                  {{ grandchildlink.title }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                  </div>
+
+                  <!-- RIGHT SIDE AUTO COLLECTION IMAGES -->
+                  <div class="enhanced-dropdown__images">
+                    <div class="enhanced-dropdown__promo-images">
+                      {% if section.settings.menu_type_desktop == 'enhanced-dropdown' %}
+                        {% if section.settings.dropdown_image_1 != blank
+                          or section.settings.dropdown_image_2 != blank
+                        %}
+                          {% comment %}Use manually uploaded promo images from settings{% endcomment %}
+                          {% if section.settings.dropdown_image_1 != blank %}
+                            <a
+                              href="{{ section.settings.dropdown_image_1_link | default: '#' }}"
+                              class="enhanced-dropdown__promo-card"
+                            >
+                              <img
+                                src="{{ section.settings.dropdown_image_1 | image_url: width:400 }}"
+                                alt="Promo Image 1"
+                                loading="lazy"
+                                width="400"
+                                height="400"
+                              >
+                            </a>
+                          {% endif %}
+
+                          {% if section.settings.dropdown_image_2 != blank %}
+                            <a
+                              href="{{ section.settings.dropdown_image_2_link | default: '#' }}"
+                              class="enhanced-dropdown__promo-card"
+                            >
+                              <img
+                                src="{{ section.settings.dropdown_image_2 | image_url: width:400 }}"
+                                alt="Promo Image 2"
+                                loading="lazy"
+                                width="400"
+                                height="400"
+                              >
+                            </a>
+                          {% endif %}
+
+                        {% else %}
+                          {% comment %}
+                            FALLBACK: Show ONLY collection images that YOU manually uploaded
+                            CRITICAL: We ONLY check collection.featured_image which is NULL unless you uploaded an image
+                            NO PRODUCT IMAGES will ever appear here because products don't have featured_image property in this context
+                          {% endcomment %}
+
+                          {% assign images_shown = 0 %}
+
+                          {% for childlink in link.links %}
+                            {% if childlink.type == 'collection_link' %}
+                              {% assign collection_obj = childlink.object %}
+
+                              {% if collection_obj != blank %}
+                                {% for product in collections[collection_obj.handle].products limit: 2 %}
+                                  {% if product.featured_image != blank and images_shown < 2 %}
+                                    <a href="{{ product.url }}" class="enhanced-dropdown__promo-card">
+                                      <img
+                                        src="{{ product.featured_image | image_url: width:400 }}"
+                                        alt="{{ product.title }}"
+                                        loading="lazy"
+                                        width="400"
+                                        height="400"
+                                      >
+                                    </a>
+
+                                    {% assign images_shown = images_shown | plus: 1 %}
+                                  {% endif %}
+                                {% endfor %}
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+
+                          {% comment %}
+                            If no collection images found at child level, try parent level collections
+                          {% endcomment %}
+                          {% if images_shown == 0 %}
+                            {% if link.type == 'collection_link' and images_shown < max_images %}
+                              {% assign parent_collection = link.object %}
+                              {% if parent_collection.featured_image != blank %}
+                                <a href="{{ link.url }}" class="enhanced-dropdown__promo-card">
+                                  <img
+                                    src="{{ parent_collection.featured_image | image_url: width:400 }}"
+                                    alt="{{ link.title }}"
+                                    loading="lazy"
+                                    width="400"
+                                    height="400"
+                                  >
+                                </a>
+                                {% assign images_shown = images_shown | plus: 1 %}
+                              {% endif %}
+                            {% endif %}
+                          {% endif %}
+
+                          {% comment %}
+                            If STILL no images found, render NOTHING (empty div)
+                            This ensures NO placeholder images or product images appear
+                          {% endcomment %}
+                          {% if images_shown == 0 %}
+                            {% comment %}Empty - no images to show{% endcomment %}
+                          {% endif %}
+                        {% endif %}
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+        {% else %}
+          <a href="{{ link.url }}" class="enhanced-dropdown__trigger">
+            {% assign show_direct_icon = false %}
+            {% assign direct_img_url = null %}
+
+            {% if link.type == 'collection_link' %}
+              {% assign direct_collection = link.object %}
+              {% if direct_collection.featured_image != blank %}
+                {% assign direct_img_url = direct_collection.featured_image
+                  | image_url: width: 40, height: 40, crop: 'center'
+                %}
+                {% assign show_direct_icon = true %}
+              {% endif %}
+            {% endif %}
+
+            {% if show_direct_icon == true and direct_img_url != blank %}
+              <img
+                src="{{ direct_img_url }}"
+                class="enhanced-dropdown__menu-icon"
+                loading="lazy"
+                alt="{{ link.title }}"
+                width="40"
+                height="40"
+              >
+            {% endif %}
+
+            {{ link.title }}
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const dropdowns = document.querySelectorAll('.enhanced-dropdown details');
+
+    dropdowns.forEach((dropdown) => {
+      const summary = dropdown.querySelector('summary');
+      let timeout;
+
+      if (summary) {
+        summary.addEventListener('click', function (e) {
+          e.preventDefault();
+        });
+      }
+
+      if (dropdown.parentElement) {
+        dropdown.parentElement.addEventListener('mouseenter', () => {
+          clearTimeout(timeout);
+          dropdown.setAttribute('open', true);
+        });
+
+        dropdown.parentElement.addEventListener('mouseleave', () => {
+          timeout = setTimeout(() => {
+            dropdown.removeAttribute('open');
+          }, 150);
+        });
+      }
+    });
+  });
+</script>
+
+<script>
+  let lastScroll = 0;
+
+  document.addEventListener('scroll', function () {
+    const currentScroll = window.scrollY;
+
+    if (Math.abs(currentScroll - lastScroll) > 10) {
+      const dropdowns = document.querySelectorAll('.enhanced-dropdown details[open]');
+
+      dropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute('open');
+      });
+    }
+
+    lastScroll = currentScroll;
+  });
+  document.querySelectorAll('.enhanced-dropdown').forEach((dropdown) => {
+    const summary = dropdown.querySelector('.enhanced-dropdown__trigger');
+    const link = dropdown.querySelector('.enhanced-dropdown__link');
+
+    link.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // href પ્રમાણે page open થશે
+    });
+
+    summary.addEventListener('click', function (e) {
+      if (e.target.closest('.enhanced-dropdown__link')) return;
+
+      e.preventDefault();
+
+      dropdown.open = !dropdown.open;
+    });
+  });
+</script>

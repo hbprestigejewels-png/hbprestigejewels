@@ -1,0 +1,576 @@
+{% doc %}
+  @prompt
+    mane blog setse karva ni ane hb prestige jewels welcom kari ne ane nide thoduc discription apu hoy ke product full detail information hea search and fins and red more and if wation to commit plse mane proper actractive searck karva nu kari ne apo ane tem hu searck kari to blog searck proper work karvu joie mane proper kari ne apo 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-blog-hero-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: {{ block.settings.section_padding }}px 20px;
+    background: {{ block.settings.background_gradient }};
+    background-color: {{ block.settings.background_color }};
+    text-align: center;
+  }
+
+  .ai-blog-hero__container-{{ ai_gen_id }} {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ai-blog-hero__welcome-{{ ai_gen_id }} {
+    font-size: {{ block.settings.welcome_size }}px;
+    color: {{ block.settings.welcome_color }};
+    margin: 0 0 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .ai-blog-hero__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    color: {{ block.settings.title_color }};
+    margin: 0 0 20px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ai-blog-hero__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    margin: 0 0 40px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ai-blog-hero__search-wrapper-{{ ai_gen_id }} {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    position: relative;
+  }
+
+  .ai-blog-hero__search-form-{{ ai_gen_id }} {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .ai-blog-hero__search-input-{{ ai_gen_id }} {
+    flex: 1;
+    padding: 16px 20px;
+    border: 2px solid {{ block.settings.search_border_color }};
+    border-radius: {{ block.settings.search_border_radius }}px;
+    font-size: 16px;
+    background-color: {{ block.settings.search_bg_color }};
+    color: {{ block.settings.search_text_color }};
+    transition: all 0.3s ease;
+  }
+
+  .ai-blog-hero__search-input-{{ ai_gen_id }}:focus {
+    outline: none;
+    border-color: {{ block.settings.search_focus_color }};
+    box-shadow: 0 0 0 3px {{ block.settings.search_focus_color | color_modify: 'alpha', 0.2 }};
+  }
+
+  .ai-blog-hero__search-button-{{ ai_gen_id }} {
+    padding: 16px 32px;
+    background-color: {{ block.settings.button_bg_color }};
+    color: {{ block.settings.button_text_color }};
+    border: none;
+    border-radius: {{ block.settings.button_border_radius }}px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-blog-hero__search-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px {{ block.settings.button_bg_color | color_modify: 'alpha', 0.3 }};
+  }
+
+  .ai-blog-hero__features-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  .ai-blog-hero__feature-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background-color: {{ block.settings.feature_bg_color }};
+    border-radius: {{ block.settings.feature_border_radius }}px;
+    transition: all 0.3s ease;
+  }
+
+  .ai-blog-hero__feature-{{ ai_gen_id }}:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px {{ block.settings.feature_bg_color | color_modify: 'alpha', 0.3 }};
+  }
+
+  .ai-blog-hero__feature-icon-{{ ai_gen_id }} {
+    width: 24px;
+    height: 24px;
+    color: {{ block.settings.feature_icon_color }};
+  }
+
+  .ai-blog-hero__feature-text-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.feature_text_color }};
+    font-weight: 500;
+  }
+
+  .ai-blog-hero__divider-{{ ai_gen_id }} {
+    width: 80px;
+    height: 3px;
+    background: {{ block.settings.divider_color }};
+    margin: 30px auto;
+    border-radius: 2px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-blog-hero__title-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.title_size }}px * 0.7);
+    }
+
+    .ai-blog-hero__welcome-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.welcome_size }}px * 0.8);
+    }
+
+    .ai-blog-hero__description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+
+    .ai-blog-hero__search-form-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-blog-hero__search-button-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-blog-hero__features-{{ ai_gen_id }} {
+      gap: 15px;
+    }
+
+    .ai-blog-hero__feature-{{ ai_gen_id }} {
+      padding: 10px 16px;
+    }
+  }
+{% endstyle %}
+
+<blog-hero-{{ ai_gen_id }} class="ai-blog-hero-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-blog-hero__container-{{ ai_gen_id }}">
+    {% if block.settings.show_welcome %}
+      <div class="ai-blog-hero__welcome-{{ ai_gen_id }}">
+        {{ block.settings.welcome_text }}
+      </div>
+    {% endif %}
+
+    {% if block.settings.title != blank %}
+      <h1 class="ai-blog-hero__title-{{ ai_gen_id }}">
+        {{ block.settings.title }}
+      </h1>
+    {% endif %}
+
+    {% if block.settings.show_divider %}
+      <div class="ai-blog-hero__divider-{{ ai_gen_id }}"></div>
+    {% endif %}
+
+    {% if block.settings.description != blank %}
+      <div class="ai-blog-hero__description-{{ ai_gen_id }}">
+        {{ block.settings.description }}
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_search %}
+      <div class="ai-blog-hero__search-wrapper-{{ ai_gen_id }}">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          class="ai-blog-hero__search-form-{{ ai_gen_id }}"
+          role="search"
+        >
+          <input
+            type="search"
+            name="q"
+            class="ai-blog-hero__search-input-{{ ai_gen_id }}"
+            placeholder="{{ block.settings.search_placeholder }}"
+            aria-label="Search blog articles"
+            value="{{ search.terms | escape }}"
+          >
+          <input type="hidden" name="type" value="article">
+          {% if block.settings.blog_handle != blank %}
+            <input type="hidden" name="options[prefix]" value="last">
+          {% endif %}
+          <button type="submit" class="ai-blog-hero__search-button-{{ ai_gen_id }}">
+            {{ block.settings.search_button_text }}
+          </button>
+        </form>
+      </div>
+    {% endif %}
+
+    {% if block.settings.show_features %}
+      <div class="ai-blog-hero__features-{{ ai_gen_id }}">
+        {% if block.settings.feature_1_text != blank %}
+          <div class="ai-blog-hero__feature-{{ ai_gen_id }}">
+            <svg class="ai-blog-hero__feature-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span class="ai-blog-hero__feature-text-{{ ai_gen_id }}">{{ block.settings.feature_1_text }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.feature_2_text != blank %}
+          <div class="ai-blog-hero__feature-{{ ai_gen_id }}">
+            <svg class="ai-blog-hero__feature-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="ai-blog-hero__feature-text-{{ ai_gen_id }}">{{ block.settings.feature_2_text }}</span>
+          </div>
+        {% endif %}
+
+        {% if block.settings.feature_3_text != blank %}
+          <div class="ai-blog-hero__feature-{{ ai_gen_id }}">
+            <svg class="ai-blog-hero__feature-icon-{{ ai_gen_id }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span class="ai-blog-hero__feature-text-{{ ai_gen_id }}">{{ block.settings.feature_3_text }}</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</blog-hero-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BlogHero{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.searchForm = this.querySelector('.ai-blog-hero__search-form-{{ ai_gen_id }}');
+        this.searchInput = this.querySelector('.ai-blog-hero__search-input-{{ ai_gen_id }}');
+        
+        if (this.searchForm && this.searchInput) {
+          this.searchForm.addEventListener('submit', this.handleSearch.bind(this));
+        }
+      }
+
+      handleSearch(event) {
+        if (this.searchInput.value.trim() === '') {
+          event.preventDefault();
+          this.searchInput.focus();
+        }
+      }
+    }
+
+    customElements.define('blog-hero-{{ ai_gen_id }}', BlogHero{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Blog hero with search",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Welcome section"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_welcome",
+      "label": "Show welcome message",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "welcome_text",
+      "label": "Welcome text",
+      "default": "Welcome to HB Prestige Jewels"
+    },
+    {
+      "type": "range",
+      "id": "welcome_size",
+      "label": "Welcome text size",
+      "min": 12,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "welcome_color",
+      "label": "Welcome text color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Discover Our Jewelry Stories"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore our collection of articles featuring product details, jewelry care tips, design inspiration, and the latest trends in fine jewelry. Search and find everything you need to know about our exquisite pieces."
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size",
+      "min": 12,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search articles, products, jewelry tips..."
+    },
+    {
+      "type": "text",
+      "id": "search_button_text",
+      "label": "Search button text",
+      "default": "Search"
+    },
+    {
+      "type": "blog",
+      "id": "blog_handle",
+      "label": "Blog to search"
+    },
+    {
+      "type": "color",
+      "id": "search_bg_color",
+      "label": "Search background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "search_text_color",
+      "label": "Search text color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "search_border_color",
+      "label": "Search border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "search_focus_color",
+      "label": "Search focus color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "search_border_radius",
+      "label": "Search border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Search button"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#334fb4"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Show feature badges",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "feature_1_text",
+      "label": "Feature 1 text",
+      "default": "Search & Find"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_text",
+      "label": "Feature 2 text",
+      "default": "Product Details"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_text",
+      "label": "Feature 3 text",
+      "default": "Read More"
+    },
+    {
+      "type": "color",
+      "id": "feature_bg_color",
+      "label": "Feature background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "color",
+      "id": "feature_icon_color",
+      "label": "Feature icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "feature_text_color",
+      "label": "Feature text color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "feature_border_radius",
+      "label": "Feature border radius",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "#334fb4"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient",
+      "label": "Background gradient"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Section padding",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog hero with search"
+    }
+  ]
+}
+{% endschema %}

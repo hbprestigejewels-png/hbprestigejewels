@@ -1,0 +1,431 @@
+{% render 'lazy-stylesheet', file: 'section-main-page.css' %}
+
+{%- style -%}
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      }
+
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+
+      .main-page-{{ section.id }} {
+        --accent: {{ section.settings.accent_color }};
+        --accent-soft: {{ section.settings.accent_color }}26;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .main-page-bg-{{ section.id }} {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+
+      .main-page-bg-{{ section.id }} img,
+      .main-page-bg-{{ section.id }} video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .main-page-bg-overlay-{{ section.id }} {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});
+        z-index: 1;
+      }
+
+      .main-page-inner-{{ section.id }} {
+        position: relative;
+        z-index: 2;
+      }
+
+      .main-page-card-{{ section.id }} {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--accent-soft);
+        border-radius: 24px;
+        padding: 56px 48px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        text-align: center;
+      }
+
+      @media screen and (max-width: 749px) {
+        .main-page-card-{{ section.id }} {
+          padding: 32px 22px;
+          border-radius: 18px;
+        }
+      }
+
+      .main-page-title-{{ section.id }} {
+        font-style: italic;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 0;
+      }
+
+      .main-page-title-{{ section.id }}::after {
+        content: '';
+        display: block;
+        width: 64px;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 18px auto 0 auto;
+      }
+
+      .main-page-content-{{ section.id }} {
+        margin-top: 28px;
+        line-height: 1.75;
+        font-size: 1.05rem;
+        opacity: 0.92;
+      }
+
+      .main-page-content-{{ section.id }} a {
+        color: var(--accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .main-page-content-{{ section.id }} a:hover {
+        text-decoration: underline;
+      }
+
+      .main-page-content-{{ section.id }} p {
+        margin: 0 0 16px 0;
+      }
+
+      .main-page-content-{{ section.id }} p:last-child {
+        margin-bottom: 0;
+      }
+      .page-trust-section{
+        margin-top:60px;
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:25px;
+    }
+
+    .trust-card{
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.15);
+        border-radius:18px;
+        padding:30px;
+        text-align:center;
+        backdrop-filter:blur(10px);
+        transition:.3s;
+    }
+
+    .trust-card:hover{
+        transform:translateY(-6px);
+        box-shadow:0 15px 35px rgba(0,0,0,.15);
+    }
+
+    .trust-card h3{
+        margin-bottom:12px;
+        font-size:22px;
+    }
+
+    .trust-card p{
+        margin:0;
+        line-height:1.7;
+        opacity:.9;
+    }
+    .custom-about-content{
+      max-width:1100px;
+      margin:auto;
+      text-align:center;
+  }
+
+  .custom-about-content h2{
+      font-size:34px;
+      margin:45px 0 20px;
+  }
+
+  .custom-about-content p{
+      font-size:17px;
+      line-height:1.9;
+      margin-bottom:20px;
+  }
+
+  .custom-about-content ul{
+      list-style:none;
+      padding:0;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:15px;
+      margin-top:30px;
+  }
+
+  .custom-about-content ul li{
+      padding:15px;
+      border-radius:10px;
+      background:rgba(255,255,255,.08);
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient main-page-{{ section.id }}">
+  {%- assign bg_video = section.settings.background_video -%}
+  {%- assign has_valid_video = false -%}
+  {%- if bg_video != blank and bg_video.sources.size > 0 -%}
+    {%- assign has_valid_video = true -%}
+  {%- endif -%}
+
+  {%- if has_valid_video or section.settings.background_video_url != blank -%}
+    <div class="main-page-bg-{{ section.id }}">
+      <video
+        {% if section.settings.video_autoplay %}
+          autoplay
+        {% endif %}
+        {% if section.settings.video_loop %}
+          loop
+        {% endif %}
+        {% if section.settings.video_muted %}
+          muted
+        {% endif %}
+        {% if section.settings.video_show_controls %}
+          controls
+        {% endif %}
+        playsinline
+        preload="metadata"
+        {% if has_valid_video %}
+          poster="{{ bg_video.preview_image | image_url: width: 1500 }}"
+        {% endif %}
+      >
+        {%- if has_valid_video -%}
+          {%- for source in bg_video.sources -%}
+            {%- if source.format == 'mp4' -%}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <source src="{{ section.settings.background_video_url }}" type="video/mp4">
+        {%- endif -%}
+      </video>
+    </div>
+    <div class="main-page-bg-overlay-{{ section.id }}"></div>
+  {%- elsif section.settings.background_image != blank -%}
+    <div class="main-page-bg-{{ section.id }}">
+      {{
+        section.settings.background_image
+        | image_url: width: 2000
+        | image_tag: loading: 'lazy', widths: '750,1100,1500,2000', alt: section.settings.background_image.alt
+        | default: 'Jewellery Collection'
+      }}
+    </div>
+    <div class="main-page-bg-overlay-{{ section.id }}"></div>
+  {%- endif -%}
+
+  <div class="page-width page-width--narrow section-{{ section.id }}-padding main-page-inner-{{ section.id }}">
+    <div class="main-page-card-{{ section.id }}">
+      <h1 class="main-page-title-{{ section.id }} page-title h0{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+        {{ page.title | escape }}
+      </h1>
+      <div class="custom-about-content">
+        <h2>Welcome to HB Prestige Jewels</h2>
+
+        <p>
+          At HB Prestige Jewels, we believe jewellery is more than an accessory—it's a symbol of love, celebration, and
+          timeless elegance. Every piece in our collection is thoughtfully crafted using premium materials and
+          exceptional craftsmanship to ensure unmatched quality and lasting beauty.
+        </p>
+
+        <p>
+          Our mission is to provide every customer with a secure, transparent, and enjoyable shopping experience. From
+          carefully selecting the finest jewellery to delivering it safely to your doorstep, customer satisfaction
+          remains our highest priority.
+        </p>
+
+        <p>
+          Whether you have questions about our collections, need help choosing the perfect jewellery, or require
+          assistance with an existing order, our team is here to help.
+        </p>
+
+        <p>
+          We strive to respond quickly and provide accurate information so that every customer enjoys a smooth and
+          memorable shopping experience.
+        </p>
+
+        <h2>Why Customers Choose Us</h2>
+
+        <ul>
+          <li>✔ Premium Craftsmanship</li>
+          <li>✔ Certified Jewellery</li>
+          <li>✔ Secure Payments</li>
+          <li>✔ Fast Shipping</li>
+          <li>✔ Premium Gift Packaging</li>
+          <li>✔ Dedicated Customer Support</li>
+          <li>✔ Transparent Pricing</li>
+          <li>✔ Trusted Shopping Experience</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#C9A227"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add a video (takes priority) or an image below. Leave both empty for no background."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background video (uploaded to Shopify)"
+    },
+    {
+      "type": "text",
+      "id": "background_video_url",
+      "label": "Or external video URL (.mp4)",
+      "info": "Used only if no video is uploaded above. Must be a direct .mp4 link."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Mute video sound",
+      "info": "Most browsers block autoplay with sound. Keep this ON if Autoplay is ON.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "video_show_controls",
+      "label": "Show play/pause/volume controls",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Background overlay darkness",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Trust Cards"
+    },
+    {
+      "type": "text",
+      "id": "trust_title_1",
+      "label": "Card 1 Title",
+      "default": "✓ Certified Quality"
+    },
+    {
+      "type": "textarea",
+      "id": "trust_text_1",
+      "label": "Card 1 Description",
+      "default": "Every jewellery piece is carefully inspected and crafted to meet the highest quality standards."
+    },
+    {
+      "type": "text",
+      "id": "trust_title_2",
+      "label": "Card 2 Title",
+      "default": "✓ Secure Payments"
+    },
+    {
+      "type": "textarea",
+      "id": "trust_text_2",
+      "label": "Card 2 Description",
+      "default": "Enjoy safe and encrypted payment methods for a secure shopping experience."
+    },
+    {
+      "type": "text",
+      "id": "trust_title_3",
+      "label": "Card 3 Title",
+      "default": "✓ Fast & Insured Shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "trust_text_3",
+      "label": "Card 3 Description",
+      "default": "All orders are securely packed and shipped with trusted delivery partners."
+    },
+    {
+      "type": "text",
+      "id": "trust_title_4",
+      "label": "Card 4 Title",
+      "default": "✓ Dedicated Customer Support"
+    },
+    {
+      "type": "textarea",
+      "id": "trust_text_4",
+      "label": "Card 4 Description",
+      "default": "Our support team is always ready to help before and after your purchase."
+    }
+  ]
+}
+{% endschema %}

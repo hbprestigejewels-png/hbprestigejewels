@@ -1,0 +1,15 @@
+{% render 'lazy-stylesheet', file: 'quick-order-list.css' %}
+
+<script src="{{ 'quick-order-list.js' | asset_url }}" defer></script>
+
+{% render 'quick-order-list', product: product, show_image: true, show_sku: true, is_modal: true %}
+
+{% schema %}
+{
+  "name": "t:sections.quick-order-list.name",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,166 @@
+<div class="store-features-section">
+  <div class="page-width">
+    <ul class="store-features-grid">
+      {% for block in section.blocks %}
+        <li class="feature-item">
+          <div class="feature-inner">
+            {% if block.settings.icon != blank %}
+              <img
+                src="{{ block.settings.icon | image_url: width: 80 }}"
+                class="feature-icon"
+                alt="Feature icon"
+                width="38"
+                height="38"
+                loading="lazy"
+              >
+            {% endif %}
+
+            <div class="feature-text">
+              <p class="feature-title">
+                {{ block.settings.title }}
+              </p>
+
+              <p class="feature-desc">
+                {{ block.settings.text }}
+              </p>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .store-features-section{
+    background:#292929;
+    padding:25px 0;
+  }
+
+  .store-features-grid{
+    display:flex;
+    justify-content:space-between;
+    gap:30px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+
+  .feature-item{
+    flex:1;
+  }
+
+  .feature-inner{
+    display:flex;
+    align-items:center;
+    gap:15px;
+  }
+
+  .feature-icon{
+    width:38px;
+    height:38px;
+    object-fit:contain;
+  }
+
+  .feature-text{
+    color:#fff;
+  }
+
+  .feature-title{
+    font-size:12px;
+    font-weight:600;
+    margin:0 0 3px 0;
+    letter-spacing:0.3px;
+  }
+
+  .feature-desc{
+    font-size:12px;
+    margin:0;
+    opacity:0.85;
+  }
+
+  /* MOBILE */
+
+  @media(max-width:768px){
+
+  .store-features-grid{
+  flex-direction:column;
+  gap:20px;
+  }
+
+  .feature-inner{
+  justify-content:flex-start;
+  }
+
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Store Features",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+
+  "max_blocks": 4,
+
+  "presets": [
+    {
+      "name": "Store Features",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "HIGH QUALITY BRAND",
+            "text": "Curated for style, quality and durability."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "24/7 SUPPORT",
+            "text": "Real-time chat & email support"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "FREE SHIPPING",
+            "text": "On all prepaid orders above ₹999"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "SECURE PAYMENTS",
+            "text": "All major cards & UPI accepted"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

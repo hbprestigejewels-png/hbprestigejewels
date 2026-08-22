@@ -1,0 +1,25 @@
+{%- comment -%}
+  Lazy-load a CSS file to eliminate render-blocking.
+  Usage: {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  
+  This outputs:
+  - A <link rel="preload"> for the browser to start fetching early
+  - media="print" onload pattern so it doesn't block rendering
+  - A <noscript> fallback for users with JS disabled
+{%- endcomment -%}
+
+{%- liquid
+  assign file_url = file | asset_url
+-%}
+
+{%- if file_url != blank -%}
+  <link
+    rel="preload"
+    href="{{ file_url }}"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  >
+  <noscript>
+    <link rel="stylesheet" href="{{ file_url }}">
+  </noscript>
+{%- endif -%}

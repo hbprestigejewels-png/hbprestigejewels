@@ -1,0 +1,266 @@
+{% if request.page_type == 'collection' %}
+  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+{% endif %}
+{% render 'lazy-stylesheet', file: 'section-collection-list.css' %}
+
+<style>
+    /* Self-contained fallback styles so collection cards always render correctly
+       even if section-collection-list.css / component-card.css don't cover
+       every class used below. */
+    .clw-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .clw-card__media {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: #f4f4f4;
+  border-radius: 20px !important;
+    }
+
+    .clw-card__media.ratio-square { aspect-ratio: 1 / 1; }
+    .clw-card__media.ratio-portrait { aspect-ratio: 2 / 3; }
+    .clw-card__media.ratio-adapt { aspect-ratio: auto; }
+
+    .clw-card__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .clw-card:hover .clw-card__media img {
+      transform: scale(1.04);
+    }
+
+    .clw-card__placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f0f0f0 0%, #e2e2e2 100%);
+      color: #999;
+    }
+
+    .clw-card__placeholder svg {
+      width: 40%;
+      height: 40%;
+      opacity: 0.6;
+    }
+
+    .clw-card__content {
+      padding-top: 1.2rem;
+      text-align: center;
+    }
+
+    .clw-card__heading {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+</style>
+
+<div class="page-width">
+  <h1 class="title title--primary inline-richtext{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    {{ section.settings.title }}
+  </h1>
+  {%- liquid
+    case section.settings.sort
+      when 'products_high', 'products_low'
+        assign collections = collections | sort: 'all_products_count'
+      when 'date', 'date_reversed'
+        assign collections = collections | sort: 'published_at'
+    endcase
+
+    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+      assign collections = collections | reverse
+    endif
+
+    assign moduloResult = 28 | modulo: section.settings.columns_desktop
+    assign paginate_by = 30
+    if moduloResult == 0
+      assign paginate_by = 28
+    endif
+  -%}
+  {%- paginate collections by paginate_by -%}
+    <ul
+      class="collection-list grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
+      role="list"
+    >
+      {%- for collection in collections -%}
+        {%- liquid
+          # Fallback chain for the card image:
+          # 1. The collection's own image
+          # 2. The featured image of the first product inside it
+          # 3. A default image set in the section settings (theme editor)
+          # If none of these exist, a placeholder icon is shown instead.
+          assign card_image = collection.featured_image
+          if card_image == blank
+            assign fallback_product = collection.products.first
+            if fallback_product and fallback_product.featured_image
+              assign card_image = fallback_product.featured_image
+            endif
+          endif
+          if card_image == blank and section.settings.default_collection_image != blank
+            assign card_image = section.settings.default_collection_image
+          endif
+
+          case section.settings.image_ratio
+            when 'portrait'
+              assign ratio_class = 'ratio-portrait'
+            when 'square'
+              assign ratio_class = 'ratio-square'
+            else
+              assign ratio_class = 'ratio-adapt'
+          endcase
+        -%}
+        <li
+          class="collection-list__item grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
+        >
+          <a href="{{ collection.url }}" class="clw-card" aria-label="{{ collection.title | escape }}">
+            <div class="clw-card__media {{ ratio_class }}">
+              {%- if card_image -%}
+                <img
+                  srcset="
+                    {%- if card_image.width >= 165 -%}{{ card_image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if card_image.width >= 360 -%}{{ card_image | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if card_image.width >= 535 -%}{{ card_image | image_url: width: 535 }} 535w,{%- endif -%}
+                    {%- if card_image.width >= 750 -%}{{ card_image | image_url: width: 750 }} 750w,{%- endif -%}
+                    {%- if card_image.width >= 1070 -%}{{ card_image | image_url: width: 1070 }} 1070w,{%- endif -%}
+                    {{ card_image | image_url }} {{ card_image.width }}w
+                  "
+                  src="{{ card_image | image_url: width: 535 }}"
+                  sizes="(min-width: 990px) calc(100vw / {{ section.settings.columns_desktop }}), calc(100vw / {{ section.settings.columns_mobile }})"
+                  alt="{{ card_image.alt | default: collection.title | escape }}"
+                  loading="lazy"
+                  width="{{ card_image.width }}"
+                  height="{{ card_image.height }}"
+                  class="motion-reduce"
+                >
+              {%- else -%}
+                <div class="clw-card__placeholder">
+                  {{ 'collection-apparel-1' | placeholder_svg_tag }}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="clw-card__content">
+              <h3 class="clw-card__heading">{{ collection.title }}</h3>
+            </div>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% render 'pagination', paginate: paginate %}
+  {%- endpaginate -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-list-collections.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:sections.main-list-collections.settings.title.label",
+      "default": "t:sections.main-list-collections.settings.title.default"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+        },
+        {
+          "value": "date_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+        },
+        {
+          "value": "date",
+          "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+        },
+        {
+          "value": "products_high",
+          "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+        },
+        {
+          "value": "products_low",
+          "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+        }
+      ],
+      "default": "alphabetical",
+      "label": "t:sections.main-list-collections.settings.sort.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-list-collections.settings.image_ratio.label"
+    },
+    {
+      "type": "header",
+      "content": "Default Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "default_collection_image",
+      "label": "Default collection image",
+      "info": "Used when a collection has no image of its own AND none of its products have an image either."
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "t:sections.main-list-collections.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-list-collections.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-list-collections.settings.columns_mobile.options__2.label"
+        }
+      ],
+      "default": "2",
+      "label": "t:sections.main-list-collections.settings.columns_mobile.label"
+    }
+  ]
+}
+{% endschema %}

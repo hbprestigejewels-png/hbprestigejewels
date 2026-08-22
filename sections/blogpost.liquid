@@ -1,0 +1,709 @@
+{% comment %}
+  Section: Featured Blog Articles - Cadiant Style
+  Fully compatible with Dawn theme
+  Uses Dawn's native spacing and container system
+{% endcomment %}
+
+<div class="cadiant-blog-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width {% if section.settings.full_width %}full-width{% endif %}">
+    <!-- Section Header -->
+    <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin">
+      {% if section.settings.title != blank %}
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.title | escape }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="cadiant-description rte">
+          {{ section.settings.description | escape }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.show_view_all and section.settings.blog != blank %}
+        <a href="{{ section.settings.blog.url }}" class="link underlined-link large-up-hide">
+          {{ section.settings.view_all_text | default: 'View all' }}
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="cadiant-blog-grid">
+      {% for block in section.blocks limit: section.blocks.size %}
+        {% assign article = block.settings.article %}
+        {% assign image_ratio = section.settings.image_ratio %}
+
+        <div class="cadiant-blog-card-wrapper" {{ block.shopify_attributes }}>
+          <div class="cadiant-blog-card">
+            <!-- Article Image -->
+            <div class="cadiant-blog-image-wrapper">
+              <a href="{{ article.url | default: '#' }}" class="cadiant-blog-image-link">
+                <div class="cadiant-blog-image-container {{ image_ratio }}">
+                  {% if article.image != blank %}
+                    <img
+                      srcset="
+                        {%- if article.image.width >= 350 -%}{{ article.image | image_url: width: 350 }} 350w,{%- endif -%}
+                        {%- if article.image.width >= 550 -%}{{ article.image | image_url: width: 550 }} 550w,{%- endif -%}
+                        {%- if article.image.width >= 750 -%}{{ article.image | image_url: width: 750 }} 750w,{%- endif -%}
+                        {%- if article.image.width >= 1100 -%}{{ article.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                        {%- if article.image.width >= 1500 -%}{{ article.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                      "
+                      src="{{ article.image | image_url: width: 550 }}"
+                      sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+                      alt="{{ article.title | escape }}"
+                      loading="lazy"
+                      width="550"
+                      height="{{ 550 | divided_by: article.image.aspect_ratio | round }}"
+                      class="cadiant-blog-image"
+                    >
+                  {% elsif block.settings.custom_image != blank %}
+                    <img
+                      src="{{ block.settings.custom_image | image_url: width: 800 }}"
+                      alt="{{ article.title | escape }}"
+                      class="cadiant-blog-image"
+                      sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+                      loading="lazy"
+                      width="800"
+                      height="{{ 800 | divided_by: block.settings.custom_image.aspect_ratio | round }}"
+                    >
+                  {% else %}
+                    <div class="cadiant-blog-image-placeholder">
+                      {{ 'blog-apparel-1' | placeholder_svg_tag: 'cadiant-placeholder-svg' }}
+                    </div>
+                  {% endif %}
+                </div>
+
+                <!-- Date Badge -->
+                {% if section.settings.show_date %}
+                  <p class="blog__meta">
+                    <time datetime="{{ article.published_at }}">
+                      <span class="meta-b">{{ article.published_at | date: '%b' }}</span>
+                      <span class="meta-d">{{ article.published_at | date: '%d' }}</span>
+                      <span class="meta-y">{{ article.published_at | date: '%Y' }}</span>
+                    </time>
+                  </p>
+                {% endif %}
+              </a>
+            </div>
+
+            <!-- Article Content -->
+            <div class="cadiant-blog-content">
+              <!-- Tags and Comments Row -->
+              <div class="cadiant-blog-meta">
+                {% if section.settings.show_tags and article.tags.size > 0 %}
+                  <div class="cadiant-blog-tags">
+                    <a href="{{ article.url }}/tagged/{{ article.tags.first | handle }}" class="cadiant-blog-tag link">
+                      {{ article.tags.first }}
+                    </a>
+                  </div>
+                {% endif %}
+
+                {% if section.settings.show_comments %}
+                  <div class="cadiant-blog-comments">
+                    <svg
+                      class="cadiant-comment-icon"
+                      viewBox="0 0 512 512"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M408 64H104a56.16 56.16 0 00-56 56v192a56.16 56.16 0 0056 56h40v80l93.72-78.14a8 8 0 015.13-1.86H408a56.16 56.16 0 0056-56V120a56.16 56.16 0 00-56-56z" stroke="currentColor" stroke-width="32" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                    <span>{{ article.comments_count }} comments</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Article Title -->
+              <h3 class="cadiant-blog-title">
+                <a href="{{ article.url | default: '#' }}">
+                  {{ article.title | default: block.settings.custom_title | default: 'Sample Article' }}
+                </a>
+              </h3>
+
+              <!-- Read More Button -->
+              {% if section.settings.show_read_more %}
+                <a href="{{ article.url | default: '#' }}" class="cadiant-read-more link">
+                  {{ section.settings.read_more_text | default: 'More Details' }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- View All Button Desktop -->
+    {% if section.settings.show_view_all and section.settings.blog != blank %}
+      <div class="cadiant-view-all-wrapper small-hide medium-hide">
+        <a href="{{ section.settings.blog.url }}" class="button button--secondary">
+          {{ section.settings.view_all_text | default: 'View all articles' }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cadiant Style Blog",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Latest Articles"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Subscribe for latest news and blog updates from our editor."
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Blog Settings"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "portrait",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "square",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "wide",
+          "label": "Wide (16:9)"
+        }
+      ],
+      "default": "landscape"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Show comment count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_read_more",
+      "label": "Show read more button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "read_more_text",
+      "label": "Read more button text",
+      "default": "More Details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View all button text",
+      "default": "View all articles"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Article",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom image",
+          "info": "Optional: Overrides article featured image"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title",
+          "info": "Optional: Overrides article title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cadiant Style Blog",
+      "blocks": [
+        {
+          "type": "article"
+        },
+        {
+          "type": "article"
+        },
+        {
+          "type": "article"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+    .cadiant-blog-section {
+      padding: 5rem 0;
+    }
+
+    @media screen and (max-width: 749px) {
+      .cadiant-blog-section {
+        padding: 3rem 0;
+      }
+    }
+
+    .page-width.full-width {
+      max-width: 100%;
+      padding: 0 5rem;
+    }
+
+    @media screen and (max-width: 749px) {
+      .page-width.full-width {
+        padding: 0 1.5rem;
+      }
+    }
+
+    /* Description Styling */
+    .cadiant-description {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      color: rgba(var(--color-foreground), 0.9);
+      max-width: 600px;
+    }
+
+    /* Blog Grid */
+    .cadiant-blog-grid {
+      display: grid;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    @media screen and (min-width: 750px) {
+      .cadiant-blog-grid {
+        grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    @media screen and (min-width: 750px) and (max-width: 989px) {
+      .cadiant-blog-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Blog Card */
+    .cadiant-blog-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .cadiant-blog-card:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Image Wrapper */
+    .cadiant-blog-image-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .cadiant-blog-image-link {
+      display: block;
+      text-decoration: none;
+    }
+
+    .cadiant-blog-image-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(var(--color-foreground), 0.05);
+    }
+
+    .cadiant-blog-image-container.portrait {
+      padding-top: 120%;
+    }
+
+    .cadiant-blog-image-container.square {
+      padding-top: 100%;
+    }
+
+    .cadiant-blog-image-container.landscape {
+      padding-top: 75%;
+      border-radius:20px !important;
+    }
+
+    .cadiant-blog-image-container.wide {
+      padding-top: 56.25%;
+    }
+
+    .cadiant-blog-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .cadiant-blog-card:hover .cadiant-blog-image {
+      transform: scale(1.05);
+    }
+
+    .cadiant-blog-image-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cadiant-placeholder-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Date Badge */
+    .cadiant-date-badge {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: rgb(var(--color-background));
+      padding: 0.6rem 1rem;
+      min-width: 5rem;
+      text-align: center;
+      box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      line-height: 1.2;
+    }
+
+    .cadiant-date-month {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: rgba(var(--color-foreground), 0.6);
+      letter-spacing: 0.05rem;
+    }
+
+    .cadiant-date-day {
+      display: block;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: rgb(var(--color-foreground));
+      line-height: 1.2;
+    }
+
+    .cadiant-date-year {
+      display: block;
+      font-size: 0.9rem;
+      color: rgba(var(--color-foreground), 0.5);
+    }
+
+    /* Blog Content */
+    .cadiant-blog-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Blog Meta */
+    .cadiant-blog-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .cadiant-blog-tags {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .cadiant-blog-tag {
+      font-size: 1.2rem;
+      color: rgba(var(--color-foreground), 0.6);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+      transition: color 0.2s ease;
+    }
+
+    .cadiant-blog-tag:hover {
+      color: rgb(var(--color-foreground));
+    }
+
+    .cadiant-blog-comments {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.2rem;
+      color: rgba(var(--color-foreground), 0.6);
+    }
+
+    .cadiant-comment-icon {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    /* Blog Title */
+    .cadiant-blog-title {
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin: 0 0 1.5rem 0;
+      line-height: 1.3;
+    }
+
+    @media screen and (max-width: 749px) {
+      .cadiant-blog-title {
+        font-size: 1.6rem;
+      }
+    }
+
+    .cadiant-blog-title a {
+      color: rgb(var(--color-foreground));
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .cadiant-blog-title a:hover {
+      opacity: 0.7;
+      text-decoration: none;
+    }
+
+    /* Read More Button */
+    .cadiant-read-more {
+      display: inline-block;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: rgb(var(--color-foreground));
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+      padding: 0.5rem 0;
+      border-bottom: 0.1rem solid rgb(var(--color-foreground));
+      transition: opacity 0.2s ease;
+      width: fit-content;
+    }
+
+    .cadiant-read-more:hover {
+      opacity: 0.7;
+      text-decoration: none;
+    }
+
+    /* View All Button */
+    .cadiant-view-all-wrapper {
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    /* Responsive Adjustments */
+    @media screen and (max-width: 749px) {
+      .cadiant-blog-grid {
+        gap: 2rem;
+      }
+
+      .cadiant-date-badge {
+        padding: 0.4rem 0.8rem;
+        min-width: 4.5rem;
+        bottom: 0.8rem;
+        left: 0.8rem;
+      }
+
+      .cadiant-date-day {
+        font-size: 1.4rem;
+      }
+
+      .cadiant-date-month {
+        font-size: 0.9rem;
+      }
+
+      .cadiant-blog-meta {
+        margin-bottom: 0.8rem;
+      }
+
+      .cadiant-blog-tag,
+      .cadiant-blog-comments {
+        font-size: 1rem;
+      }
+
+      .cadiant-comment-icon {
+        width: 1.4rem;
+        height: 1.4rem;
+      }
+
+      .cadiant-read-more {
+        font-size: 1rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .cadiant-blog-title {
+        font-size: 1.4rem;
+      }
+
+      .cadiant-blog-meta {
+        gap: 0.8rem;
+      }
+    }
+
+    /* Tablet */
+    @media screen and (min-width: 750px) and (max-width: 989px) {
+      .cadiant-blog-title {
+        font-size: 1.6rem;
+      }
+    }
+
+  .blog__meta {
+    position: absolute;
+    top: 0px;
+    left: 12px;
+    background: #fff;
+    padding: 6px 10px;
+    border-radius:20px !important;  display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 13px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    color: #a3a4a3; /* 🔥 MAIN COLOR */
+  }
+
+  /* APPLY SAME COLOR TO ALL */
+  .blog__meta .meta-b,
+  .blog__meta .meta-d,
+  .blog__meta .meta-y {
+    display: inline;
+    font-size: 13px;
+    color: #595959;
+  }
+
+  /* OPTIONAL STYLE */
+  .meta-b {
+    text-transform: uppercase;
+  }
+
+  .meta-b::after {
+    content: "|";
+    margin: 0 4px;
+  }
+
+  .meta-d {
+    font-weight: 600;
+  }
+
+  .meta-y::before {
+    content: "|";
+    margin: 0 4px;
+  }
+
+  /* Wrapper */
+  .title-wrapper-with-link {
+    display: flex;
+    flex-direction: column; /* 🔥 forces new line */
+    align-items: flex-start;
+    gap: 8px; /* space between title & subtitle */
+  }
+
+  /* Title */
+  .title-wrapper-with-link .title {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  /* Subtitle */
+  .cadiant-description {
+    margin: 0;
+    font-size: 14px;
+    color: #777;
+    line-height: 1.5;
+  }
+</style>

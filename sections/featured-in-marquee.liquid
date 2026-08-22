@@ -1,0 +1,523 @@
+{% schema %}
+{
+  "name": "Featured In Marquee",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured In"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll Speed (seconds)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo Height (px)",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on Hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        { "value": "full", "label": "Full Width" },
+        { "value": "page", "label": "Page Width" },
+        { "value": "custom", "label": "Custom Width" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "Custom Width (px)",
+      "min": 800,
+      "max": 1800,
+      "step": 50,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "logo_gap",
+      "label": "Gap Between Logos (px)",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured In Marquee"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .featured-marquee-section {
+    background: #ffffff;
+    width: 100%;
+    position: relative;
+  }
+
+  .featured-marquee {
+    padding: 50px 0;
+    overflow-x: hidden;
+    position: relative;
+    background: #ffffff;
+  }
+
+  /* Container width handling */
+  .featured-container {
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .featured-container.page-width {
+    max-width: 1200px;
+    width: 100%;
+  }
+
+  .featured-container.custom-width {
+    max-width: {{ section.settings.custom_width }}px;
+    width: 100%;
+  }
+
+  .featured-container.full {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  /* HEADING STYLES */
+  .featured-heading {
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  }
+
+  /* MARQUEE OUTER - hides overflow */
+  .marquee-outer {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+
+  /* JavaScript-driven marquee wrapper */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Individual row: flex container with gap */
+  .marquee-row {
+    display: flex;
+    align-items: center;
+    gap: {{ section.settings.logo_gap }}px;
+    flex-shrink: 0;
+    padding: 0 10px;
+  }
+
+  /* Logo items */
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .marquee-item a {
+    display: block;
+    line-height: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .marquee-item img {
+    height: {{ section.settings.logo_height }}px;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    opacity: 0.75;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    vertical-align: middle;
+  }
+
+  .marquee-item img:hover {
+    opacity: 1;
+  }
+
+  .marquee-item:hover img {
+    transform: scale(1.03);
+  }
+
+  /* Responsive adjustments */
+  @media screen and (max-width: 768px) {
+    .featured-marquee {
+      padding: 40px 0;
+    }
+    .marquee-row {
+      gap: {{ section.settings.logo_gap | times: 0.7 | round }}px;
+    }
+    .featured-heading {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .featured-marquee {
+      padding: 32px 0;
+    }
+    .marquee-row {
+      gap: {{ section.settings.logo_gap | times: 0.5 | round }}px;
+    }
+    .featured-heading {
+      font-size: 22px;
+      margin-bottom: 24px;
+    }
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      transform: translate3d(0, 0, 0) !important;
+    }
+  }
+</style>
+
+<div class="featured-marquee-section" data-marquee-section="{{ section.id }}">
+  <div class="featured-marquee">
+    <div
+      class="
+        featured-container
+        {% if section.settings.section_width == 'page' %}page-width{% endif %}
+        {% if section.settings.section_width == 'custom' %}custom-width{% endif %}
+        {% if section.settings.section_width == 'full' %}full{% endif %}
+      "
+    >
+      {% if section.settings.heading != blank %}
+        <h2 class="featured-heading">{{ section.settings.heading | escape }}</h2>
+      {% endif %}
+
+      <div class="marquee-outer" data-marquee-outer="{{ section.id }}">
+        <div class="marquee-track" data-marquee-track="{{ section.id }}">
+          {% comment %} Original set of logos {% endcomment %}
+          <div class="marquee-row" data-marquee-row="original">
+            {% for block in section.blocks %}
+              {% if block.settings.image != blank %}
+                <div class="marquee-item">
+                  {% if block.settings.link != blank %}
+                    <a
+                      href="{{ block.settings.link }}"
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      aria-label="{% if block.settings.alt_text != blank %}{{ block.settings.alt_text | escape }}{% elsif block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
+                    >
+                      <img
+                        src="{{ block.settings.image | image_url: width: 200 }}"
+                        alt="{{ block.settings.image.alt | default: 'Logo' }}"
+                        loading="lazy"
+                        width="{{ section.settings.logo_height | times: 2 }}"
+                        height="{{ section.settings.logo_height }}"
+                        draggable="false"
+                      >
+                    </a>
+                  {% else %}
+                    <img
+                      src="{{ block.settings.image | image_url: width: 200 }}"
+                      alt="{{ block.settings.image.alt | default: 'Logo' }}"
+                      loading="lazy"
+                      width="{{ section.settings.logo_height | times: 2 }}"
+                      height="{{ section.settings.logo_height }}"
+                      draggable="false"
+                    >
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  
+  // Store all marquee instances for cleanup
+  const marqueeInstances = new Map();
+  
+  class InfiniteMarquee {
+    constructor(container, sectionId) {
+      this.container = container;
+      this.sectionId = sectionId;
+      this.track = container.querySelector('[data-marquee-track="' + sectionId + '"]');
+      this.outer = container.querySelector('[data-marquee-outer="' + sectionId + '"]');
+      this.originalRow = container.querySelector('[data-marquee-row="original"]');
+      
+      if (!this.track || !this.outer || !this.originalRow) {
+        console.warn('Marquee elements not found for section:', sectionId);
+        return;
+      }
+      
+      this.speed = {{ section.settings.speed }};
+      this.pauseOnHover = {{ section.settings.pause_on_hover | json }};
+      this.gap = {{ section.settings.logo_gap }};
+      
+      this.animationId = null;
+      this.currentPosition = 0;
+      this.isPaused = false;
+      this.startTime = null;
+      this.totalWidth = 0;
+      this.scrollDistance = 0;
+      this.pixelsPerSecond = 0;
+      this.lastTimestamp = 0;
+      
+      this.init();
+    }
+    
+    init() {
+      // Clear existing clones
+      const existingClones = this.track.querySelectorAll('[data-marquee-row="clone"]');
+      existingClones.forEach(clone => clone.remove());
+      
+      // Create enough clones to fill at least 2x the viewport width
+      // This ensures no blank space ever appears
+      const cloneCount = Math.max(3, Math.ceil(2000 / this.originalRow.offsetWidth) + 1);
+      
+      for (let i = 0; i < cloneCount; i++) {
+        const clone = this.originalRow.cloneNode(true);
+        clone.setAttribute('data-marquee-row', 'clone');
+        clone.setAttribute('data-clone-index', i);
+        this.track.appendChild(clone);
+      }
+      
+      // Wait for images to load
+      this.waitForImages().then(() => {
+        this.calculateDimensions();
+        this.startAnimation();
+      });
+    }
+    
+    waitForImages() {
+      const images = this.track.querySelectorAll('img');
+      const promises = Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        });
+      });
+      return Promise.all(promises);
+    }
+    
+    calculateDimensions() {
+      const rows = this.track.querySelectorAll('.marquee-row');
+      let totalWidth = 0;
+      rows.forEach(row => {
+        totalWidth += row.offsetWidth;
+      });
+      
+      this.totalWidth = totalWidth;
+      // Scroll distance is the width of one original set
+      this.scrollDistance = this.originalRow.offsetWidth + this.gap;
+      this.pixelsPerSecond = this.scrollDistance / this.speed;
+      
+      // Reset position
+      this.currentPosition = 0;
+      if (this.track) {
+        this.track.style.transform = 'translate3d(0, 0, 0)';
+      }
+    }
+    
+    startAnimation() {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+      }
+      
+      this.startTime = null;
+      this.lastTimestamp = 0;
+      this.currentPosition = 0;
+      
+      const animate = (timestamp) => {
+        if (!this.startTime) {
+          this.startTime = timestamp;
+          this.lastTimestamp = timestamp;
+          this.animationId = requestAnimationFrame(animate);
+          return;
+        }
+        
+        if (!this.isPaused) {
+          const delta = Math.min(50, timestamp - this.lastTimestamp);
+          const pixelsToMove = this.pixelsPerSecond * (delta / 1000);
+          
+          this.currentPosition -= pixelsToMove;
+          
+          // Reset position seamlessly when we've moved one full set
+          if (Math.abs(this.currentPosition) >= this.scrollDistance) {
+            this.currentPosition = this.currentPosition + this.scrollDistance;
+          }
+          
+          // Apply transform with 3D acceleration for smooth rendering
+          this.track.style.transform = `translate3d(${this.currentPosition}px, 0, 0)`;
+        }
+        
+        this.lastTimestamp = timestamp;
+        this.animationId = requestAnimationFrame(animate);
+      };
+      
+      this.animationId = requestAnimationFrame(animate);
+      
+      // Setup hover pause
+      if (this.pauseOnHover && this.outer) {
+        this.outer.addEventListener('mouseenter', () => { this.isPaused = true; });
+        this.outer.addEventListener('mouseleave', () => { this.isPaused = false; });
+      }
+    }
+    
+    cleanup() {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+    }
+    
+    recalculate() {
+      this.calculateDimensions();
+    }
+  }
+  
+  // Initialize all marquees
+  function initMarquees() {
+    const sections = document.querySelectorAll('[data-marquee-section]');
+    
+    sections.forEach(section => {
+      const sectionId = section.getAttribute('data-marquee-section');
+      
+      // Cleanup existing instance
+      if (marqueeInstances.has(sectionId)) {
+        const instance = marqueeInstances.get(sectionId);
+        instance.cleanup();
+        marqueeInstances.delete(sectionId);
+      }
+      
+      // Create new instance
+      const instance = new InfiniteMarquee(section, sectionId);
+      marqueeInstances.set(sectionId, instance);
+    });
+  }
+  
+  // Handle resize events with debounce
+  let resizeTimeout;
+  function handleResize() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      marqueeInstances.forEach(instance => {
+        instance.recalculate();
+      });
+    }, 250);
+  }
+  
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMarquees);
+  } else {
+    initMarquees();
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', handleResize);
+  
+  // Shopify theme editor support
+  if (window.Shopify && Shopify.designMode) {
+    document.addEventListener('shopify:section:load', (event) => {
+      const section = event.target;
+      const marqueeSection = section.querySelector('[data-marquee-section]');
+      if (marqueeSection) {
+        setTimeout(() => {
+          const sectionId = marqueeSection.getAttribute('data-marquee-section');
+          if (marqueeInstances.has(sectionId)) {
+            const instance = marqueeInstances.get(sectionId);
+            instance.cleanup();
+            marqueeInstances.delete(sectionId);
+          }
+          const newInstance = new InfiniteMarquee(marqueeSection, sectionId);
+          marqueeInstances.set(sectionId, newInstance);
+        }, 100);
+      }
+    });
+    
+    document.addEventListener('shopify:section:unload', (event) => {
+      const sectionId = event.target.id;
+      if (sectionId) {
+        marqueeInstances.forEach((instance, key) => {
+          if (key.includes(sectionId) || sectionId.includes(key)) {
+            instance.cleanup();
+            marqueeInstances.delete(key);
+          }
+        });
+      }
+    });
+  }
+  
+  // Handle visibility change to save resources
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      marqueeInstances.forEach(instance => {
+        if (instance.animationId) {
+          cancelAnimationFrame(instance.animationId);
+          instance.animationId = null;
+        }
+      });
+    } else {
+      marqueeInstances.forEach(instance => {
+        if (!instance.animationId) {
+          instance.startAnimation();
+        }
+      });
+    }
+  });
+})();
+</script>

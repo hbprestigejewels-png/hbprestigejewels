@@ -1,0 +1,890 @@
+{%- style -%}
+        .premium-drawer {
+          position: relative;
+        }
+
+        .premium-drawer__toggle {
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.2rem;
+          border-radius: 50%;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          /* background: rgba(var(--color-foreground), 0.03); */
+          position: relative;
+          overflow: hidden;
+        }
+
+        .premium-drawer__toggle::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(var(--color-foreground), 0.1);
+          transform: translate(-50%, -50%);
+          transition: width 0.4s, height 0.4s;
+        }
+
+        .premium-drawer__toggle:hover::before {
+          width: 100%;
+          height: 100%;
+        }
+
+        .premium-drawer__toggle:hover {
+          background: rgba(var(--color-foreground), 0.08);
+          transform: scale(1.02);
+        }
+
+        .premium-drawer__overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(12px);
+          z-index: 999;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+           touch-action: none;
+        }
+
+        .premium-drawer__overlay.active {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .premium-drawer__container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100%;
+          max-width: 500px;
+          background: rgb(var(--color-background));
+          box-shadow: 20px 0 60px rgba(0, 0, 0, 0.15);
+          z-index: 1000;
+          transform: translateX(-100%);
+          transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+          overflow-y: auto;
+          visibility: hidden;
+          scrollbar-width: thin;
+          border-radius:20px;
+          overscroll-behavior: contain;
+           -webkit-overflow-scrolling: touch;
+        }
+
+        .premium-drawer__container.open {
+          transform: translateX(0);
+          visibility: visible;
+        }
+
+        /* Premium Header with gradient */
+        .premium-drawer__header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 2rem 2.4rem;
+          border-bottom: 1px solid rgba(var(--color-foreground), 0.06);
+          background: linear-gradient(135deg, rgb(var(--color-background)) 0%, rgba(var(--color-background), 0.98) 100%);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          backdrop-filter: blur(10px);
+        }
+
+        .premium-drawer__logo-area {
+          font-size: 1.8rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          background: linear-gradient(135deg, rgb(var(--color-foreground)) 0%, rgba(var(--color-foreground), 0.7) 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+
+        .premium-drawer__close {
+          background: rgba(var(--color-foreground), 0.05);
+          border: none;
+          width: 4rem;
+          height: 4rem;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          color: rgb(var(--color-foreground));
+        }
+
+        .premium-drawer__close:hover {
+          background: rgba(var(--color-foreground), 0.12);
+          transform: rotate(90deg);
+        }
+
+        /* Navigation Styling */
+        .premium-drawer__navigation {
+          padding: 0.8rem 0 2rem;
+        }
+
+        .premium-nav__list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .premium-nav__item {
+          border-bottom: 1px solid rgba(var(--color-foreground), 0.04);
+        }
+
+        /* Menu item with chevron styling */
+        .premium-nav__link,
+        .premium-nav__summary {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.6rem 2.4rem;
+          font-size: 1.7rem;
+          font-weight: 500;
+          text-decoration: none;
+          color: rgb(var(--color-foreground));
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          background: transparent;
+          border: none;
+          width: 100%;
+          text-align: left;
+          letter-spacing: -0.01em;
+          position: relative;
+        }
+
+        .premium-nav__link::before,
+        .premium-nav__summary::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 0;
+          background: linear-gradient(90deg, rgba(var(--color-accent), 0.15) 0%, transparent 100%);
+          transition: width 0.3s ease;
+        }
+
+        .premium-nav__link:hover::before,
+        .premium-nav__summary:hover::before {
+          width: 100%;
+        }
+
+        .premium-nav__link:hover,
+        .premium-nav__summary:hover {
+          /* padding-left: 2.8rem; */
+          color: rgb(var(--color-accent));
+        }
+
+        .premium-nav__link.active {
+          color: rgb(var(--color-accent));
+          font-weight: 600;
+          background: linear-gradient(90deg, rgba(var(--color-accent), 0.08) 0%, transparent 100%);
+        }
+
+        /* Chevron Icon Styling */
+       .premium-nav__chevron {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        color: rgba(var(--color-foreground), 0.5);
+        font-size: 1.3rem;
+        font-weight: 300;
+        width: 2.4rem;
+        height: 2.4rem;
+        flex-shrink: 0;
+      }
+
+      .premium-nav__chevron i,
+      .premium-nav__chevron svg {
+        display: block;
+        width: 1.2rem;
+        height: 1.2rem;
+        font-size: 1.2rem;
+        transition: transform 0.35s ease;
+      }
+
+      /* .premium-nav__details[open] .premium-nav__chevron i,
+      .premium-nav__details[open] .premium-nav__chevron svg {
+        transform: rotate(180deg);
+      }
+
+      .premium-nav__details[open] .premium-nav__summary {
+        color: rgb(var(--color-accent));
+      }
+
+      .premium-nav__details[open] .premium-nav__chevron {
+        color: rgb(var(--color-accent));
+      } */
+
+      .premium-nav__summary .premium-nav__chevron{
+      transition:.35s;
+  }
+
+  .premium-nav__details > .premium-nav__summary .premium-nav__chevron svg{
+      transition:.35s;
+  }
+
+  .premium-nav__details[open] > .premium-nav__summary .premium-nav__chevron svg{
+      transform:rotate(180deg);
+  }
+
+        /* Submenu styling with depth */
+        .premium-nav__submenu {
+          background: linear-gradient(135deg, rgba(var(--color-foreground), 0.02) 0%, rgba(var(--color-foreground), 0.01) 100%);
+          padding-left: 0;
+          animation: slideDown 0.25s ease-out;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .premium-nav__submenu .premium-nav__link,
+        .premium-nav__submenu .premium-nav__summary {
+          padding: 1.2rem 2.4rem 1.2rem 3.6rem;
+          font-size: 1.55rem;
+          font-weight: 450;
+        }
+
+        .premium-nav__submenu .premium-nav__link:hover,
+        .premium-nav__submenu .premium-nav__summary:hover {
+          /* padding-left: 4rem; */
+        }
+
+        .premium-nav__submenu .premium-nav__submenu {
+          background: rgba(var(--color-foreground), 0.03);
+          padding-left: 0;
+        }
+
+        .premium-nav__submenu .premium-nav__submenu .premium-nav__link,
+        .premium-nav__submenu .premium-nav__submenu .premium-nav__summary {
+          /* padding-left: 5rem; */
+          font-size: 1.45rem;
+          font-weight: 400;
+          color: rgba(var(--color-foreground), 0.85);
+        }
+
+        .premium-nav__submenu .premium-nav__submenu .premium-nav__link:hover,
+        .premium-nav__submenu .premium-nav__submenu .premium-nav__summary:hover {
+          /* padding-left: 5.4rem; */
+        }
+
+        /* Back button styling */
+        .premium-nav__back {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          padding: 1.4rem 2.4rem;
+          margin: 0 0 1rem 0;
+          background: linear-gradient(90deg, rgba(var(--color-accent), 0.08) 0%, transparent 100%);
+          border: none;
+          width: 100%;
+          text-align: left;
+          font-size: 1.5rem;
+          font-weight: 500;
+          color: rgb(var(--color-accent));
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-bottom: 1px solid rgba(var(--color-foreground), 0.06);
+        }
+
+        .premium-nav__back i {
+          transition: transform 0.3s ease;
+        }
+
+        .premium-nav__back:hover {
+          background: linear-gradient(90deg, rgba(var(--color-accent), 0.12) 0%, transparent 100%);
+          padding-left: 2.8rem;
+        }
+
+        .premium-nav__back:hover i {
+          transform: translateX(-4px);
+        }
+
+        /* Utility links section premium */
+        .premium-drawer__utilities {
+          padding: 2.4rem;
+          border-top: 1px solid rgba(var(--color-foreground), 0.08);
+          margin-top: 2rem;
+          background: linear-gradient(180deg, transparent 0%, rgba(var(--color-foreground), 0.02) 100%);
+        }
+
+        .premium-account-link {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          padding: 1.2rem 0;
+          text-decoration: none;
+          font-size: 1.6rem;
+          font-weight: 500;
+          color: rgb(var(--color-foreground));
+          transition: all 0.3s ease;
+          border-radius: 1rem;
+        }
+
+        .premium-account-link i {
+          width: 2.4rem;
+          font-size: 2rem;
+          color: rgba(var(--color-foreground), 0.7);
+          transition: all 0.3s ease;
+        }
+
+        .premium-account-link:hover {
+          color: rgb(var(--color-accent));
+          transform: translateX(6px);
+        }
+
+        .premium-account-link:hover i {
+          color: rgb(var(--color-accent));
+          transform: scale(1.1);
+        }
+
+        /* Premium Localization */
+        .premium-localization {
+          padding: 1.6rem 0;
+          display: flex;
+          gap: 1.6rem;
+          flex-wrap: wrap;
+        }
+
+        .premium-localization .disclosure {
+          position: relative;
+        }
+
+        .premium-localization .disclosure__button {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          padding: 0.8rem 1.6rem;
+          background: rgba(var(--color-foreground), 0.04);
+          border: 1px solid rgba(var(--color-foreground), 0.08);
+          border-radius: 4rem;
+          font-size: 1.35rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .premium-localization .disclosure__button:hover {
+          background: rgba(var(--color-foreground), 0.08);
+          border-color: rgba(var(--color-accent), 0.3);
+          transform: translateY(-2px);
+        }
+
+        /* Premium Social Links */
+        .premium-social-links {
+          display: flex;
+          gap: 1.2rem;
+          margin-top: 2.4rem;
+          padding-top: 2rem;
+          border-top: 1px solid rgba(var(--color-foreground), 0.08);
+        }
+
+        .premium-social-link {
+          width: 4rem;
+          height: 4rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(var(--color-foreground), 0.04);
+          border-radius: 50%;
+          color: rgb(var(--color-foreground));
+          font-size: 1.8rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .premium-social-link::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background: rgb(var(--color-accent));
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          transition: width 0.4s, height 0.4s;
+          z-index: -1;
+        }
+
+        .premium-social-link:hover {
+          color: rgb(var(--color-background));
+          transform: translateY(-4px);
+        }
+
+        .premium-social-link:hover::before {
+          width: 120%;
+          height: 120%;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+          .premium-drawer__container {
+            max-width: 100%;
+          }
+
+          .premium-nav__link,
+          .premium-nav__summary {
+            padding: 1.4rem 2rem;
+            font-size: 1.6rem;
+          }
+
+          .premium-nav__submenu .premium-nav__link,
+          .premium-nav__submenu .premium-nav__summary {
+            padding: 1rem 2rem 1rem 3rem;
+          }
+
+          .premium-nav__submenu .premium-nav__submenu .premium-nav__link {
+            padding-left: 4.2rem;
+          }
+        }
+
+        /* Smooth scroll and custom scrollbar */
+        .premium-drawer__container {
+          scroll-behavior: smooth;
+        }
+
+        .premium-drawer__container::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .premium-drawer__container::-webkit-scrollbar-track {
+          background: rgba(var(--color-foreground), 0.05);
+        }
+
+        .premium-drawer__container::-webkit-scrollbar-thumb {
+          background: rgba(var(--color-accent), 0.4);
+          border-radius: 4px;
+        }
+
+        .premium-drawer__container::-webkit-scrollbar-thumb:hover {
+          background: rgba(var(--color-accent), 0.6);
+        }
+
+        .premium-nav__link,
+    .premium-nav__summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .premium-nav__content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .premium-nav__image {
+      width: auto;
+      height: 14px;
+      max-width:40px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+{%- endstyle -%}
+
+<header-drawer
+  class="premium-drawer"
+  data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}"
+>
+  <button
+    class="premium-drawer__toggle"
+    aria-label="{{ 'sections.header.menu' | t }}"
+    data-drawer-toggle
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 12H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M3 6H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M3 18H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <div class="premium-drawer__overlay" data-drawer-overlay></div>
+
+  <div class="premium-drawer__container" data-drawer-container>
+    <div class="premium-drawer__header">
+      <div class="premium-drawer__logo-area">
+        {% if settings.logo != blank %}
+          <img
+            src="{{ settings.logo | image_url: width: 180 }}"
+            alt="{{ shop.name }}"
+            width="{{ settings.logo.width }}"
+            height="{{ settings.logo.height }}"
+            style="max-height:40px;width:auto;"
+          >
+        {% else %}
+          {{ shop.name }}
+        {% endif %}
+      </div>
+      <button class="premium-drawer__close" data-drawer-close aria-label="{{ 'general.common.close' | t }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="premium-drawer__navigation">
+      <ul class="premium-nav__list" role="list">
+        {%- for link in section.settings.menu.links -%}
+          <li class="premium-nav__item">
+            {%- if link.links != blank -%}
+              <details class="premium-nav__details">
+                <summary class="premium-nav__summary">
+                  <span>{{ link.title | escape }}</span>
+                  <span class="premium-nav__chevron">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </summary>
+                <div class="premium-nav__submenu">
+                  {% comment %}
+                    <button class="premium-nav__back" data-back-button>
+                      <i class="fas fa-arrow-left"></i>
+                      <span>{{ link.title | escape }}</span>
+                    </button>
+                  {% endcomment %}
+                  <ul class="premium-nav__list" role="list">
+                    {%- for childlink in link.links -%}
+                      <li class="premium-nav__item">
+                        {%- if childlink.links != blank -%}
+                          <details class="premium-nav__details">
+                            <summary class="premium-nav__summary">
+                              <span class="premium-nav__content">
+                                {% if childlink.type == 'collection_link' and childlink.object.featured_image %}
+                                  <img
+                                    src="{{ childlink.object.featured_image | image_url: width: 60 }}"
+                                    class="premium-nav__image"
+                                    alt="{{ childlink.title }}"
+                                    width="14"
+                                    height="14"
+                                    loading="lazy"
+                                  >
+                                {% endif %}
+
+                                <span>{{ childlink.title | escape }}</span>
+                              </span>
+                              <span class="premium-nav__chevron">
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                  <path d="M2.5 4.5L6 8L9.5 4.5"
+                                        stroke="currentColor"
+                                        stroke-width="1.2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"/>
+                                </svg>
+                              </span>
+                            </summary>
+                            <div class="premium-nav__submenu">
+                              {% comment %}
+                                <button class="premium-nav__back" data-back-button>
+                                  <i class="fas fa-arrow-left"></i>
+                                  <span>{{ childlink.title | escape }}</span>
+                                </button>
+                              {% endcomment %}
+                              <ul class="premium-nav__list" role="list">
+                                {%- for grandchildlink in childlink.links -%}
+                                  <li>
+                                    <a
+                                      href="{{ grandchildlink.url }}"
+                                      class="premium-nav__link {% if grandchildlink.current %}active{% endif %}"
+                                      {% if grandchildlink.current %}
+                                        aria-current="page"
+                                      {% endif %}
+                                    >
+                                      <span class="premium-nav__content">
+                                        {% if grandchildlink.type == 'collection_link'
+                                          and grandchildlink.object.featured_image
+                                        %}
+                                          <img
+                                            src="{{ grandchildlink.object.featured_image | image_url: width: 60 }}"
+                                            class="premium-nav__image"
+                                            alt="{{ grandchildlink.title }}"
+                                            width="14"
+                                            height="14"
+                                            loading="lazy"
+                                         >
+                                        {% endif %}
+                                        <span>{{ grandchildlink.title | escape }}</span>
+                                      </span>
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </details>
+                        {%- else -%}
+                          <a
+                            href="{{ childlink.url }}"
+                            class="premium-nav__link {% if childlink.current %}active{% endif %}"
+                            {% if childlink.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{ childlink.title | escape }}
+                          </a>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              </details>
+            {%- else -%}
+              <a
+                href="{{ link.url }}"
+                class="premium-nav__link {% if link.current %}active{% endif %}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{ link.title | escape }}
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <div class="premium-drawer__utilities">
+      {%- if shop.customer_accounts_enabled -%}
+        <a
+          href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+          class="premium-account-link"
+          rel="nofollow"
+        >
+          <i class="fas fa-user-circle"></i>
+          <span>
+            {%- if customer -%}
+              {{ 'customer.account_fallback' | t }}
+            {%- else -%}
+              {{ 'customer.log_in' | t }}
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endif -%}
+
+      {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+        <div class="premium-localization">
+          {%- if localization.available_countries.size > 1 -%}
+            <localization-form>
+              {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button" aria-expanded="false" aria-controls="CountryList">
+                    <i class="fas fa-globe"></i>
+                    {{ localization.country.name }} ({{ localization.country.currency.iso_code }})
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <ul id="CountryList" role="list" class="disclosure__list" hidden>
+                    {%- for country in localization.available_countries -%}
+                      <li>
+                        <a href="#" data-value="{{ country.iso_code }}">
+                          {{ country.name }} ({{ country.currency.iso_code }})
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+                </div>
+              {%- endform -%}
+            </localization-form>
+          {%- endif -%}
+
+          {%- if localization.available_languages.size > 1 -%}
+            <localization-form>
+              {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
+                <div class="disclosure">
+                  <button type="button" class="disclosure__button" aria-expanded="false" aria-controls="LanguageList">
+                    <i class="fas fa-language"></i>
+                    {{ localization.language.endonym_name }}
+                    <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <ul id="LanguageList" role="list" class="disclosure__list" hidden>
+                    {%- for language in localization.available_languages -%}
+                      <li>
+                        <a href="#" data-value="{{ language.iso_code }}">
+                          {{ language.endonym_name }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+                </div>
+              {%- endform -%}
+            </localization-form>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="premium-social-links">
+        {%- if settings.social_facebook_link != blank -%}
+          <a href="{{ settings.social_facebook_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_instagram_link != blank -%}
+          <a href="{{ settings.social_instagram_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-instagram"></i>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}
+          <a href="{{ settings.social_twitter_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-twitter"></i>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_youtube_link != blank -%}
+          <a href="{{ settings.social_youtube_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-youtube"></i>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_pinterest_link != blank -%}
+          <a href="{{ settings.social_pinterest_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-pinterest-p"></i>
+          </a>
+        {%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}
+          <a href="{{ settings.social_tiktok_link }}" class="premium-social-link" target="_blank" rel="noopener">
+            <i class="fab fa-tiktok"></i>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</header-drawer>
+
+<script>
+  (function () {
+    const drawer = document.querySelector('header-drawer');
+    if (!drawer) return;
+
+    const toggleBtn = drawer.querySelector('[data-drawer-toggle]');
+    const closeBtn = drawer.querySelector('[data-drawer-close]');
+    const overlay = drawer.querySelector('[data-drawer-overlay]');
+    const container = drawer.querySelector('[data-drawer-container]');
+    const body = document.body;
+
+    function openDrawer() {
+      container.classList.add('open');
+      overlay.classList.add('active');
+
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+
+      document.dispatchEvent(new CustomEvent('drawer:opened'));
+    }
+
+    function closeDrawer() {
+      container.classList.remove('open');
+      overlay.classList.remove('active');
+
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+
+      document.dispatchEvent(new CustomEvent('drawer:closed'));
+    }
+
+    if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && container && container.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
+
+    // Handle nested back buttons
+    document.querySelectorAll('[data-back-button]').forEach((btn) => {
+      btn.addEventListener('click', function (e) {
+        const details = this.closest('.premium-nav__submenu')?.previousElementSibling;
+        if (details && details.tagName === 'DETAILS') {
+          details.open = false;
+        }
+        e.stopPropagation();
+      });
+    });
+
+    // Close drawer when clicking on top-level links for better UX
+    if (container) {
+      container.querySelectorAll('.premium-nav__link:not(.premium-nav__submenu .premium-nav__link)').forEach((link) => {
+        link.addEventListener('click', () => {
+          setTimeout(closeDrawer, 150);
+        });
+      });
+    }
+
+    // Prevent body scroll when touching drawer contents edge
+    if (container) {
+      let touchStartY = 0;
+      container.addEventListener(
+        'touchstart',
+        (e) => {
+          touchStartY = e.touches[0].clientY;
+        },
+        { passive: true }
+      );
+
+      container.addEventListener(
+        'touchmove',
+        (e) => {
+          const scrollTop = container.scrollTop;
+          const scrollHeight = container.scrollHeight;
+          const clientHeight = container.clientHeight;
+
+          if (
+            (scrollTop === 0 && e.touches[0].clientY > touchStartY) ||
+            (scrollTop + clientHeight >= scrollHeight && e.touches[0].clientY < touchStartY)
+          ) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+    }
+  })();
+
+  document.querySelectorAll('.premium-nav__details').forEach((details) => {
+    details.addEventListener('toggle', function () {
+      if (!this.open) return;
+
+      // current details જે list માં છે
+      const list = this.parentElement.parentElement;
+
+      // same level ના બધા details
+      const siblings = list.children;
+
+      [...siblings].forEach((li) => {
+        const other = li.querySelector(':scope > .premium-nav__details');
+
+        if (other && other !== this) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,207 @@
+<section class="ck-scrolling-text" 
+style="
+background: {{ section.settings.bg_color }};
+padding-top: {{ section.settings.padding_top }}px;
+padding-bottom: {{ section.settings.padding_bottom }}px;
+">
+
+  <div class="ck-scroll-wrapper">
+    <div class="ck-scroll-track">
+
+      {% for block in section.blocks %}
+        <span class="ck-scroll-item">{{ block.settings.text }}</span>
+      {% endfor %}
+
+      {% for block in section.blocks %}
+        <span class="ck-scroll-item">{{ block.settings.text }}</span>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+<style>
+
+.ck-scrolling-text{
+  width:100%;
+  overflow:hidden;
+}
+
+.ck-scroll-wrapper{
+  width:100%;
+  overflow:hidden;
+  position:relative;
+}
+
+.ck-scroll-track{
+  display:flex;
+  width:max-content;
+  animation:ck-scroll linear infinite;
+  animation-duration:{{ section.settings.speed }}s;
+}
+
+.ck-scroll-item{
+  white-space:nowrap;
+  margin-right:60px;
+  font-size:{{ section.settings.text_size }}px;
+  color:{{ section.settings.text_color }};
+  font-weight:500;
+  letter-spacing:1px;
+  font-family:var(--font-body-family);
+}
+
+/* Animation */
+
+@keyframes ck-scroll{
+  0%{
+    transform:translateX(0);
+  }
+  100%{
+    transform:translateX(-50%);
+  }
+}
+
+/* Mobile */
+
+@media screen and (max-width:768px){
+
+.ck-scrolling-text{
+  padding-top:{{ section.settings.padding_top_mobile }}px;
+  padding-bottom:{{ section.settings.padding_bottom_mobile }}px;
+}
+
+.ck-scroll-item{
+  font-size:{{ section.settings.text_size_mobile }}px;
+  margin-right:40px;
+}
+
+}
+
+</style>
+
+
+{% schema %}
+{
+  "name": "Scrolling Text",
+  "settings": [
+
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#191919"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "label": "Desktop Text Size",
+      "default": 14
+    },
+
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "label": "Mobile Text Size",
+      "default": 12
+    },
+
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "label": "Scroll Speed",
+      "default": 30
+    },
+
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "label": "Top Padding",
+      "default": 12
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "label": "Bottom Padding",
+      "default": 12
+    },
+
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "label": "Top Padding Mobile",
+      "default": 10
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "label": "Bottom Padding Mobile",
+      "default": 10
+    }
+
+  ],
+
+  "blocks":[
+    {
+      "type":"text",
+      "name":"Scrolling Text",
+      "settings":[
+        {
+          "type":"text",
+          "id":"text",
+          "label":"Text",
+          "default":"SIMPLICITY IS THE ULTIMATE SOPHISTICATION"
+        }
+      ]
+    }
+  ],
+
+  "max_blocks":10,
+
+  "presets":[
+    {
+      "name":"Scrolling Text"
+    }
+  ]
+}
+{% endschema %}

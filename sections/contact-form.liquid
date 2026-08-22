@@ -1,0 +1,671 @@
+{% render 'lazy-stylesheet', file: 'section-contact-form.css' %}
+
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+    .contact-wrapper-{{ section.id }} {
+      --accent: {{ section.settings.accent_color }};
+      --accent-soft: {{ section.settings.accent_color }}26;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media screen and (min-width: 990px) {
+      .contact-wrapper-{{ section.id }} {
+        grid-template-columns: {% if section.settings.show_map or section.settings.show_legal_info %}1.1fr 0.9fr{% else %}1fr{% endif %};
+        gap: 48px;
+      }
+    }
+
+    .contact-form-card-{{ section.id }} {
+      background: rgba(var(--color-foreground), 0.03);
+      border: 1px solid var(--accent-soft);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    @media screen and (max-width: 749px) {
+      .contact-form-card-{{ section.id }} {
+        padding: 20px;
+      }
+    }
+
+    .contact-name-row-{{ section.id }} {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media screen and (min-width: 550px) {
+      .contact-name-row-{{ section.id }} {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .contact-wrapper-{{ section.id }} .field {
+      margin-bottom: 18px;
+    }
+
+    .contact-wrapper-{{ section.id }} .field__input {
+      border-radius: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .contact-wrapper-{{ section.id }} .field__input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .contact__button{
+            display:flex ;
+      justify-content: center;
+    }
+
+    .contact__button .button {
+      border-radius: 8px;
+      padding-left: 32px;
+      padding-right: 32px;
+      background: var(--accent);
+      color: #1a1305;
+      border-color: var(--accent);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .contact__button .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px var(--accent-soft);
+    }
+
+    .contact-info-card-{{ section.id }} {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-map-{{ section.id }} {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--accent-soft);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .contact-map-{{ section.id }} iframe {
+      width: 100%;
+      height: 340px;
+      border: 0;
+      display: block;
+    }
+
+    .contact-details-{{ section.id }} {
+      background: rgba(var(--color-foreground), 0.03);
+      border: 1px solid var(--accent-soft);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-details-{{ section.id }} .contact-detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .contact-details-{{ section.id }} .contact-detail-row svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      color: var(--accent);
+      fill: var(--accent);
+    }
+
+    .contact-details-{{ section.id }} a {
+      text-decoration: none;
+      color: rgb(var(--color-foreground));
+    }
+
+    .contact-details-{{ section.id }} a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .contact-legal-{{ section.id }} {
+      background: rgba(var(--color-foreground), 0.03);
+      border: 1px solid var(--accent-soft);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .contact-legal-{{ section.id }} .contact-legal-title {
+      margin: 0 0 4px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: rgba(var(--color-foreground), 0.6);
+    }
+
+    .contact-legal-{{ section.id }} .contact-legal-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .contact-legal-{{ section.id }} .contact-legal-row .contact-legal-label {
+      font-weight: 600;
+      color: rgb(var(--color-foreground));
+    }
+
+    .contact-legal-{{ section.id }} .contact-legal-row .contact-legal-value {
+      color: rgba(var(--color-foreground), 0.8);
+      white-space: pre-line;
+    }
+
+    .contact-form-header {
+    margin-bottom: 30px;
+  }
+
+  .contact-form-header h3 {
+    margin: 0 0 10px;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .contact-form-header p {
+    margin: 0;
+    color: rgba(var(--color-foreground), 0.75);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  @media screen and (max-width:749px){
+    .contact-form-header h3{
+      font-size:24px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="contact page-width section-{{ section.id }}-padding">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.heading }}
+      </h2>
+    {%- else -%}
+      <h2 class="visually-hidden">{{ 'templates.contact.form.title' | t }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="contact-subheading">{{ section.settings.subheading }}</p>
+    {%- endif -%}
+
+    <div class="contact-wrapper-{{ section.id }}">
+      {%- liquid
+        assign contact_form_class = 'isolate'
+        if settings.animations_reveal_on_scroll
+          assign contact_form_class = 'isolate scroll-trigger animate--slide-in'
+        endif
+      -%}
+      {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
+        <div class="contact-form-card-{{ section.id }}">
+          {% if section.settings.form_heading != blank %}
+            <div class="contact-form-header">
+              <h3>{{ section.settings.form_heading }}</h3>
+
+              {% if section.settings.form_description != blank %}
+                <p>{{ section.settings.form_description }}</p>
+              {% endif %}
+            </div>
+          {% endif %}
+          {%- if form.posted_successfully? -%}
+            <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+              {{- 'icon-success.svg' | inline_asset_content -}}
+              {{ 'templates.contact.form.post_success' | t }}
+            </h2>
+          {%- elsif form.errors -%}
+            <div class="form__message">
+              <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+                {{- 'icon-error.svg' | inline_asset_content -}}
+                {{ 'templates.contact.form.error_heading' | t }}
+              </h2>
+            </div>
+            <ul class="form-status-list caption-large" role="list">
+              <li>
+                <a href="#ContactForm-email" class="link">
+                  {{ form.errors.translated_fields.email | capitalize }}
+                  {{ form.errors.messages.email }}
+                </a>
+              </li>
+            </ul>
+          {%- endif -%}
+
+          <div class="contact-name-row-{{ section.id }}">
+            <div class="field">
+              <input
+                class="field__input"
+                autocomplete="given-name"
+                type="text"
+                id="ContactForm-first-name"
+                name="contact[{{ section.settings.first_name_label | default: 'First name' }}]"
+                value="{% if form.first_name %}{{ form.first_name }}{% elsif customer %}{{ customer.first_name }}{% endif %}"
+                placeholder="{{ section.settings.first_name_label | default: 'First name' }}"
+              >
+              <label class="field__label" for="ContactForm-first-name">
+                {{- section.settings.first_name_label | default: 'First name' -}}
+              </label>
+            </div>
+            <div class="field">
+              <input
+                class="field__input"
+                autocomplete="family-name"
+                type="text"
+                id="ContactForm-last-name"
+                name="contact[{{ section.settings.last_name_label | default: 'Last name' }}]"
+                value="{% if form.last_name %}{{ form.last_name }}{% elsif customer %}{{ customer.last_name }}{% endif %}"
+                placeholder="{{ section.settings.last_name_label | default: 'Last name' }}"
+              >
+              <label class="field__label" for="ContactForm-last-name">
+                {{- section.settings.last_name_label | default: 'Last name' -}}
+              </label>
+            </div>
+          </div>
+
+          <div class="contact__fields">
+            <div class="field field--with-error">
+              <input
+                autocomplete="email"
+                type="email"
+                required
+                id="ContactForm-email"
+                class="field__input"
+                name="contact[email]"
+                spellcheck="false"
+                autocapitalize="off"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                aria-required="true"
+                {% if form.errors contains 'email' %}
+                  aria-invalid="true"
+                  aria-describedby="ContactForm-email-error"
+                {% endif %}
+                placeholder="{{ 'templates.contact.form.email' | t }}"
+              >
+              <label class="field__label" for="ContactForm-email">
+                {{- 'templates.contact.form.email' | t }}
+                <span aria-hidden="true">*</span></label
+              >
+              {%- if form.errors contains 'email' -%}
+                <small class="contact__field-error" id="ContactForm-email-error">
+                  <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                  <span class="form__message">
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    {{- form.errors.translated_fields.email | capitalize }}
+                    {{ form.errors.messages.email -}}
+                  </span>
+                </small>
+              {%- endif -%}
+            </div>
+
+            <div class="field">
+              <input
+                type="tel"
+                id="ContactForm-phone"
+                class="field__input"
+                autocomplete="tel"
+                name="contact[{{ 'templates.contact.form.phone' | t }}]"
+                pattern="[0-9+\-\s()]*"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.phone' | t }}"
+              >
+              <label class="field__label" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <textarea
+              rows="8"
+              id="ContactForm-body"
+              class="text-area field__input"
+              name="contact[{{ 'templates.contact.form.comment' | t }}]"
+              placeholder="{{ 'templates.contact.form.comment' | t }}"
+            >
+              {{- form.body -}}
+            </textarea>
+            <label class="form__label field__label" for="ContactForm-body">
+              {{- 'templates.contact.form.comment' | t -}}
+            </label>
+          </div>
+
+          <div class="contact__button">
+            <button type="submit" class="button button--primary">
+              {{ 'templates.contact.form.send' | t }}
+            </button>
+          </div>
+        </div>
+      {%- endform -%}
+
+      {%- if section.settings.show_map or section.settings.show_legal_info -%}
+        {% assign map_src = section.settings.map_embed_url %}
+        <div class="contact-info-card-{{ section.id }}">
+          {%- if section.settings.show_map -%}
+            {% if map_src != blank %}
+              <div class="contact-map-{{ section.id }}">
+                <iframe
+                  src="{{ map_src }}"
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade"
+                >
+                </iframe>
+              </div>
+            {% endif %}
+
+            {%- if section.settings.address != blank
+              or section.settings.contact_phone != blank
+              or section.settings.contact_email != blank
+            -%}
+              <div class="contact-details-{{ section.id }}">
+                {%- if section.settings.address != blank -%}
+                  <div class="contact-detail-row">
+                    {{- 'icon-map-pin.svg' | inline_asset_content -}}
+                    <span>{{ section.settings.address }}</span>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.contact_phone != blank -%}
+                  <div class="contact-detail-row">
+                    {{- 'icon-phone.svg' | inline_asset_content -}}
+                    <a href="tel:{{ section.settings.contact_phone }}">{{ section.settings.contact_phone }}</a>
+                  </div>
+                {%- endif -%}
+                {%- if section.settings.contact_email != blank -%}
+                  <div class="contact-detail-row">
+                    {{- 'icon-email.svg' | inline_asset_content -}}
+                    <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+
+          {%- if section.settings.show_legal_info
+            and section.settings.legal_name != blank
+            or section.settings.show_legal_info
+            and section.settings.trade_name != blank
+            or section.settings.show_legal_info
+            and section.settings.gstin != blank
+            or section.settings.show_legal_info
+            and section.settings.registered_address != blank
+          -%}
+            <div class="contact-legal-{{ section.id }}">
+              <p class="contact-legal-title">
+                {{ section.settings.legal_info_heading | default: 'Company Information' }}
+              </p>
+
+              {%- if section.settings.legal_name != blank -%}
+                <div class="contact-legal-row">
+                  <span class="contact-legal-label">Legal Name:</span>
+                  <span class="contact-legal-value">{{ section.settings.legal_name }}</span>
+                </div>
+              {%- endif -%}
+
+              {%- if section.settings.trade_name != blank -%}
+                <div class="contact-legal-row">
+                  <span class="contact-legal-label">Trade Name:</span>
+                  <span class="contact-legal-value">{{ section.settings.trade_name }}</span>
+                </div>
+              {%- endif -%}
+
+              {%- if section.settings.gstin != blank -%}
+                <div class="contact-legal-row">
+                  <span class="contact-legal-label">GSTIN:</span>
+                  <span class="contact-legal-value">{{ section.settings.gstin }}</span>
+                </div>
+              {%- endif -%}
+
+              {%- if section.settings.registered_address != blank -%}
+                <div class="contact-legal-row">
+                  <span class="contact-legal-label">Registered Address:</span>
+                  <span class="contact-legal-value">{{ section.settings.registered_address }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.contact-form.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "t:sections.contact-form.settings.title.default",
+      "label": "t:sections.contact-form.settings.title.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "mute_video",
+      "label": "Mute video",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form Heading",
+      "default": "Get In Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "form_description",
+      "label": "Form Description",
+      "default": "Have questions or need assistance? Fill out the form below and our team will get back to you as soon as possible."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We would love to hear from you. Fill the form below and we'll get back to you soon."
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.all.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.all.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#C9A227"
+    },
+    {
+      "type": "header",
+      "content": "Form field labels"
+    },
+    {
+      "type": "text",
+      "id": "first_name_label",
+      "label": "First name field label",
+      "default": "First name"
+    },
+    {
+      "type": "text",
+      "id": "last_name_label",
+      "label": "Last name field label",
+      "default": "Last name"
+    },
+    {
+      "type": "header",
+      "content": "Map & Location"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_map",
+      "label": "Show map and location details",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "map_embed_url",
+      "label": "Google Maps embed URL (optional)",
+      "info": "Optional. Go to Google Maps > Share > Embed a map > copy the URL inside src=\"...\" and paste here. A normal share link (maps.app.goo.gl/...) will NOT work here. If left blank, the map below is built automatically from your Address."
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "123 Main Street, Bhopal, Madhya Pradesh, India"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone number",
+      "default": "+91 00000 00000"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email address",
+      "default": "info@example.com"
+    },
+    {
+      "type": "header",
+      "content": "Business / Legal Information (GST)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_legal_info",
+      "label": "Show company legal / GST information",
+      "default": true,
+      "info": "Displays your registered business details (Legal Name, Trade Name, GSTIN, Registered Address) next to the contact form."
+    },
+    {
+      "type": "text",
+      "id": "legal_info_heading",
+      "label": "Card title",
+      "default": "Company Information"
+    },
+    {
+      "type": "text",
+      "id": "legal_name",
+      "label": "Legal Name",
+      "info": "The full legal / registered name of the business, as per your GST certificate.",
+      "default": "Hbprestige Jewels Pvt. Ltd."
+    },
+    {
+      "type": "text",
+      "id": "trade_name",
+      "label": "Trade Name",
+      "info": "The name customers know you by, if different from the legal name.",
+      "default": "Hbprestige Jewels"
+    },
+    {
+      "type": "text",
+      "id": "gstin",
+      "label": "GSTIN / GST Number",
+      "info": "15-character GST Identification Number, e.g. 23AAAAA0000A1Z5"
+    },
+    {
+      "type": "textarea",
+      "id": "registered_address",
+      "label": "Registered Office Address (as per GST)",
+      "info": "Use this if your GST-registered address is different from the Address field above."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact-form.presets.name"
+    }
+  ]
+}
+{% endschema %}

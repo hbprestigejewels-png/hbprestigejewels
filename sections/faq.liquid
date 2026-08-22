@@ -1,0 +1,485 @@
+<div class="faq-page-section">
+  <div class="page-width">
+    <!-- Title above both columns -->
+    <div class="faq-title-wrapper">
+      <div class="faq-subheading">{{ section.settings.subheading | default: 'FAQS' }}</div>
+      <h1 class="faq-main-title">{{ section.settings.heading | default: 'Frequently Asked Questions' }}</h1>
+    </div>
+
+    <!-- Two column layout: Image left, FAQ right -->
+    <div class="faq-two-columns">
+      <!-- Left Column: Image -->
+      <div class="faq-image-col">
+        {% if section.settings.image != blank %}
+          <div class="faq-image-wrapper">
+            {{
+              section.settings.image
+              | image_url: width: 1000
+              | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 990px) 45vw, 100vw',
+                widths: '400,600,800,1000',
+                class: 'faq-side-image',
+                alt: 'Frequently Asked Questions - HB Prestige Jewels'
+            }}
+          </div>
+        {% else %}
+          <div class="faq-image-placeholder">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column: FAQ Accordion -->
+      <div class="faq-accordion-col">
+        <div class="faq-accordion" id="faq-accordion">
+          {% for block in section.blocks %}
+            <div class="faq-item">
+              <div class="faq-question" data-faq-id="{{ forloop.index }}">
+                <span class="faq-question-text">{{ block.settings.question | default: 'Sample question?' }}</span>
+                <span class="faq-icon">
+                  <svg
+                    class="plus-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M10 2V18M2 10H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                  <svg
+                    class="minus-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display: none;"
+                  >
+                    <path d="M2 10H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </span>
+              </div>
+              <div class="faq-answer" data-faq-answer="{{ forloop.index }}">
+                <div class="faq-answer-content">
+                  {{ block.settings.answer }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ with Image Left",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "FAQS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Left Side Image",
+      "info": "Recommended size: 800x1000px or similar vertical ratio"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How do you choose what materials to use?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Act natural. We also use mostly natural materials, which break down better and are less of a pollutant than the synthetic fibers that are being found in oceans and water supplies.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ with Image Left",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do you choose what materials to use?",
+            "answer": "<p>Act natural. We also use mostly natural materials, which break down better and are less of a pollutant than the synthetic fibers that are being found in oceans and water supplies.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Where are your products made?",
+            "answer": "<p>Our products are ethically manufactured in facilities that prioritize both worker welfare and environmental sustainability. We work closely with our production partners to ensure fair wages and safe working conditions.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What are you doing to be more sustainable?",
+            "answer": "<p>We're committed to reducing our environmental impact through sustainable packaging, using recycled materials, offsetting our carbon emissions, and continuously researching more eco-friendly production methods.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+    .faq-page-section {
+      background-color: {{ section.settings.background_color }};
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      width: 100%;
+      padding-left: 15px;
+    }
+
+    @media screen and (max-width: 749px) {
+      .faq-page-section {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+    }
+
+    /* Title Section */
+    .faq-title-wrapper {
+      text-align: left;
+      margin-bottom: 4rem;
+    }
+
+    .faq-subheading {
+      font-size: 1.3rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .faq-main-title {
+      font-family: var(--font-heading-family);
+      font-size: 3.2rem;
+      font-weight: normal;
+      margin: 0;
+      line-height: 1.2;
+      color: #000;
+      letter-spacing: -0.01em;
+    }
+    .faq-question-text {
+    font-family: 'Cormorant', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 39px;
+    color: rgb(32, 32, 37);
+    letter-spacing: 0.2px;
+  }
+
+    @media screen and (min-width: 750px) {
+      .faq-main-title {
+        font-size: 4rem;
+      }
+    }
+
+    /* Two Column Layout */
+    .faq-two-columns {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    @media screen and (min-width: 990px) {
+      .faq-two-columns {
+        flex-direction: row;
+        gap: 0rem;
+        align-items: flex-start;
+      }
+
+      .faq-image-col {
+        flex: 1;
+        position: sticky;
+        top: 2rem;
+      }
+
+      .faq-accordion-col {
+        flex: 1;
+      }
+    }
+
+    /* Image Styles */
+  .faq-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;   /* 🔥 makes it perfect square */
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+
+   .faq-side-image {
+    width: 95%;
+    height: 80%;
+    object-fit: cover;   /* 🔥 fills square without distortion */
+    display: block;
+  }
+
+    .faq-image-placeholder {
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      overflow: hidden;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .placeholder-svg {
+      width: 80%;
+      height: auto;
+      fill: #9ca3af;
+    }
+
+    /* FAQ Accordion Styles */
+    .faq-accordion {
+      width: 100%;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .faq-item:first-child {
+      border-top: 1px solid #e5e5e5;
+    }
+
+    /* FAQ Question */
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 1.8rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question-text {
+
+      color: #000;
+      font-family: 'Cormorant', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 39px;
+
+    letter-spacing: 0.2px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .faq-question-text {
+        font-size: 1.9rem;
+      }
+    }
+
+    .faq-question:hover .faq-question-text {
+      opacity: 0.7;
+    }
+
+    /* FAQ Icons */
+    .faq-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .faq-icon svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.3s ease;
+      color: #000;
+    }
+
+    .faq-item.active .plus-icon {
+      display: none;
+    }
+
+    .faq-item.active .minus-icon {
+      display: block !important;
+    }
+
+    /* FAQ Answer */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      transition: max-height 0.2s ease-in;
+    }
+
+    .faq-answer-content {
+      font-family: 'Cormorant', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 25px;
+      color: rgb(32, 32, 37);
+      letter-spacing: 0.2px;
+    }
+    
+    .faq-answer-content p {
+      margin: 0 0 1.2rem 0;
+    }
+
+    .faq-answer-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Separator style between questions - matching reference */
+    .faq-item .faq-question-text {
+      font-weight: 500;
+    }
+
+    /* Mobile Adjustments */
+    @media screen and (max-width: 749px) {
+      .faq-main-title {
+        font-size: 2.8rem;
+      }
+
+      .faq-question-text {
+        font-size: 1.5rem;
+      }
+
+      .faq-title-wrapper {
+        margin-bottom: 2.5rem;
+      }
+
+      .faq-image-col {
+        margin-bottom: 1rem;
+      }
+
+      .faq-image-placeholder {
+        min-height: 300px;
+      }
+    }
+
+    /* Optional: Add subtle hover effect to image */
+    .faq-image-wrapper:hover .faq-side-image {
+      transform: scale(1.02);
+      transition: transform 0.2s ease;
+    }
+
+    .faq-side-image {
+      transition: transform 0.2s ease;
+      border-radius:20px !important;
+    }
+{% endstyle %}
+
+{% javascript %}
+  class FAQAccordion {
+    constructor() {
+      this.accordion = document.getElementById('faq-accordion');
+      if (!this.accordion) return;
+
+      this.questions = this.accordion.querySelectorAll('.faq-question');
+      this.init();
+    }
+
+    init() {
+      // Optional: Open first FAQ item by default (uncomment if desired)
+      // const firstFaqItem = this.accordion.querySelector('.faq-item');
+      // if (firstFaqItem) {
+      //   firstFaqItem.classList.add('active');
+      // }
+
+      this.questions.forEach((question) => {
+        question.addEventListener('click', (e) => {
+          e.preventDefault();
+          const faqItem = question.closest('.faq-item');
+          this.toggleFaq(faqItem);
+        });
+      });
+    }
+
+    toggleFaq(faqItem) {
+      // Close all other FAQs (optional - uncomment for exclusive accordion)
+      const allFaqItems = this.accordion.querySelectorAll('.faq-item');
+      allFaqItems.forEach((item) => {
+        if (item !== faqItem && item.classList.contains('active')) {
+          item.classList.remove('active');
+        }
+      });
+
+      // Toggle current FAQ
+      faqItem.classList.toggle('active');
+    }
+  }
+
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    new FAQAccordion();
+  });
+
+  // Re-initialize for Shopify AJAX navigation (like quick add, cart updates)
+  document.addEventListener('shopify:section:load', (event) => {
+    if (event.detail.sectionId && event.detail.sectionId.includes('faq')) {
+      new FAQAccordion();
+    }
+  });
+{% endjavascript %}

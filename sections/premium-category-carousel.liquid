@@ -1,0 +1,926 @@
+{% comment %}
+  Section: 3D Category Carousel - 7 Front Collections with Proper Fading
+  Compatible with Dawn theme
+  Full width, customizable background image
+{% endcomment %}
+
+<div
+  class="category-carousel-section"
+  style="
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.bg_image %}background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');{% endif %}
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  "
+>
+  <div class="category-carousel-container {% if section.settings.full_width %}full-width{% else %}page-width{% endif %}">
+    <div class="category-carousel__header">
+      {% if section.settings.title != blank %}
+        <h2 class="category-carousel__title" style="color: {{ section.settings.title_color }};">
+          {{ section.settings.title | escape }}
+        </h2>
+      {% endif %}
+      {% if section.settings.description != blank %}
+        <p class="category-carousel__description" style="color: {{ section.settings.description_color }};">
+          {{ section.settings.description | escape }}
+        </p>
+      {% endif %}
+    </div>
+
+    <category-carousel-component
+      data-autoplay="{{ section.settings.autoplay }}"
+      data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+    >
+      <div class="category-carousel__viewport">
+        <div class="category-carousel__track">
+          {% for block in section.blocks limit: 15 %}
+            {% assign category = block.settings %}
+            <a
+              href="{{ category.url | default: '#' }}"
+              class="category-carousel__card"
+              data-index="{{ forloop.index0 }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="category-carousel__image-wrapper">
+                {% if category.image != blank %}
+                  {{
+                    category.image
+                    | image_url: width: 800
+                    | image_tag:
+                      loading: 'lazy',
+                      class: 'category-carousel__image',
+                      sizes: '(max-width: 749px) 180px, (max-width: 990px) 220px, (max-width: 1200px) 260px, 300px',
+                      widths: '400, 600, 800',
+                      alt: category.image
+                    | default: 'Jewellery Collection'
+                  }}
+
+                {% else %}
+                  {{ 'collection-1' | placeholder_svg_tag: 'category-carousel__image-placeholder' }}
+                {% endif %}
+              </div>
+              <div class="category-carousel__content">
+                <h3 class="category-carousel__card-title">{{ category.title | default: 'Category' }}</h3>
+                {% if category.subtitle != blank %}
+                  <p class="category-carousel__card-subtitle">{{ category.subtitle }}</p>
+                {% endif %}
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+
+        <button class="category-carousel__nav category-carousel__nav--prev" aria-label="Previous">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="category-carousel__nav category-carousel__nav--next" aria-label="Next">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </category-carousel-component>
+
+    {% if section.settings.show_view_all %}
+      <div class="category-carousel__viewall-wrap">
+        <a
+          href="{{ section.settings.view_all_url | default: '/collections/all' }}"
+          class="category-carousel__viewall-btn"
+          style="
+            color: {{ section.settings.view_all_text_color }};
+            border-color: {{ section.settings.view_all_border_color }};
+            background: {{ section.settings.view_all_bg_color }};
+          "
+        >
+          {{ section.settings.view_all_text | default: 'View All Categories' }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "3D Category Carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#f9f9f9"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "SHOP BY CATEGORY"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading color",
+      "default": "#111111"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Discover timeless elegance—shop Silver Ora collections by category to find the perfect piece for every moment."
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#3a3a3a"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate carousel",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed (seconds)",
+      "min": 2,
+      "max": 8,
+      "step": 0.5,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "View All Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Button text",
+      "default": "View All Categories"
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "view_all_text_color",
+      "label": "Button text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "view_all_border_color",
+      "label": "Button border color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "view_all_bg_color",
+      "label": "Button background",
+      "default": "transparent"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Card",
+      "limit": 20,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category image",
+          "info": "Recommended: 800x1000px portrait image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category name",
+          "default": "Category"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle (optional)"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Category link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D Category Carousel",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .category-carousel-section {
+    position: relative;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-x: clip;
+  }
+
+  .category-carousel-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    padding: 80px 20px;
+  }
+
+  .category-carousel-container.full-width {
+    max-width: 100%;
+    padding: 30px 0;
+  }
+
+  .category-carousel-container:not(.full-width) {
+    max-width: 1400px;
+    padding: 80px 20px;
+  }
+
+  .category-carousel__header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+  }
+
+  .category-carousel__title {
+    font-size: clamp(16px, 4vw, 22px);
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+  }
+
+  .category-carousel__description {
+    font-size: clamp(12px, 3vw, 14px);
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .category-carousel__viewport {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    perspective: 2200px;
+    perspective-origin: 50% 50%;
+    overflow: visible;
+    padding: 0px 0 0px;
+  }
+
+  category-carousel-component {
+    display: block;
+    width: 100%;
+  }
+
+  .category-carousel__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .category-carousel__track.dragging {
+    transition: none;
+    cursor: grabbing;
+  }
+
+  .category-carousel__card {
+    position: absolute;
+    width: 280px;
+    background: #ffffff;
+    border-radius:20px !important;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    cursor: pointer;
+  }
+
+  /* ======================================== */
+  /* 7 VISIBLE CARDS WITH PROPER OPACITY FADE */
+  /* ======================================== */
+
+  /* CENTER CARD - position 0 (fully opaque, largest) */
+  .category-carousel__card[data-position="0"] {
+    transform: translateX(0) translateZ(160px) scale(1);
+    z-index: 20;
+    opacity: 1;
+    box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.35);
+  }
+
+  /* FIRST LEFT & RIGHT - position -1 and 1 (slightly faded) */
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-340px) translateZ(60px) scale(0.88) rotateY(20deg);
+    z-index: 18;
+    opacity: 0.85;
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(340px) translateZ(60px) scale(0.88) rotateY(-20deg);
+    z-index: 18;
+    opacity: 0.85;
+  }
+
+  /* SECOND LEFT & RIGHT - position -2 and 2 (more faded) */
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-600px) translateZ(-20px) scale(0.75) rotateY(38deg);
+    z-index: 14;
+    opacity: 0.65;
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(600px) translateZ(-20px) scale(0.75) rotateY(-38deg);
+    z-index: 14;
+    opacity: 0.65;
+  }
+
+  /* THIRD LEFT & RIGHT - position -3 and 3 (heavily faded, almost transparent) */
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-820px) translateZ(-120px) scale(0.62) rotateY(52deg);
+    z-index: 8;
+    opacity: 0.4;
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(820px) translateZ(-120px) scale(0.62) rotateY(-52deg);
+    z-index: 8;
+    opacity: 0.4;
+  }
+
+  /* CARDS BEYOND POSITION 3 - completely hidden (not visible) */
+  .category-carousel__card[data-position="-4"],
+  .category-carousel__card[data-position="4"],
+  .category-carousel__card[data-position="-5"],
+  .category-carousel__card[data-position="5"],
+  .category-carousel__card[data-position="-6"],
+  .category-carousel__card[data-position="6"] {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(1200px) translateZ(-400px) scale(0.5);
+    visibility: hidden;
+  }
+
+  .category-carousel__card[data-position="-4"],
+  .category-carousel__card[data-position="-5"],
+  .category-carousel__card[data-position="-6"] {
+    transform: translateX(-1200px) translateZ(-400px) scale(0.5);
+  }
+
+  .category-carousel__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+
+  .category-carousel__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .category-carousel__card:hover .category-carousel__image {
+    transform: scale(1.06);
+  }
+
+  .category-carousel__image-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #e8e8e8;
+  }
+
+  .category-carousel__content {
+    padding: 16px 12px;
+    text-align: center;
+    background: #ffffff;
+  }
+
+  .category-carousel__card-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #1a1a1a;
+    margin: 0;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .category-carousel__card-subtitle {
+    font-size: 11px;
+    color: #888;
+    margin: 5px 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Navigation buttons */
+  .category-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 35;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+  }
+
+  .category-carousel__nav:hover {
+    background: #000000;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .category-carousel__nav:hover svg {
+    stroke: white;
+  }
+
+  .category-carousel__nav svg {
+    width: 22px;
+    height: 22px;
+    stroke: #111;
+    transition: stroke 0.25s;
+  }
+
+  .category-carousel__nav--prev {
+    left: 25px;
+  }
+  .category-carousel__nav--next {
+    right: 25px;
+  }
+
+  /* View All button */
+  .category-carousel__viewall-wrap {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .category-carousel__viewall-btn {
+    display: inline-block;
+    padding: 12px 32px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+  }
+
+  .category-carousel__viewall-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media screen and (min-width: 1600px) {
+    .category-carousel__card {
+      width: 320px;
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-400px) translateZ(70px) scale(0.88);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(400px) translateZ(70px) scale(0.88);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-700px) translateZ(-10px) scale(0.75);
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(700px) translateZ(-10px) scale(0.75);
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-960px) translateZ(-140px) scale(0.62);
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(960px) translateZ(-140px) scale(0.62);
+    }
+    .category-carousel__track {
+      min-height: 560px;
+    }
+  }
+
+  @media screen and (max-width: 1300px) {
+    .category-carousel__card {
+      width: 260px;
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-310px) translateZ(50px) scale(0.88);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(310px) translateZ(50px) scale(0.88);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-550px) translateZ(-30px) scale(0.75);
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(550px) translateZ(-30px) scale(0.75);
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-750px) translateZ(-140px) scale(0.62);
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(750px) translateZ(-140px) scale(0.62);
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    .category-carousel__card {
+      width: 240px;
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-280px) translateZ(40px) scale(0.86);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(280px) translateZ(40px) scale(0.86);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-490px) translateZ(-40px) scale(0.73);
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(490px) translateZ(-40px) scale(0.73);
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-670px) translateZ(-150px) scale(0.6);
+      opacity: 0.35;
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(670px) translateZ(-150px) scale(0.6);
+      opacity: 0.35;
+    }
+    .category-carousel__track {
+      min-height: 460px;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    .category-carousel-container {
+      padding: 60px 15px;
+    }
+    .category-carousel__card {
+      width: 210px;
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-240px) translateZ(30px) scale(0.84);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(240px) translateZ(30px) scale(0.84);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-420px) translateZ(-50px) scale(0.7);
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(420px) translateZ(-50px) scale(0.7);
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-570px) translateZ(-160px) scale(0.58);
+      opacity: 0.3;
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(570px) translateZ(-160px) scale(0.58);
+      opacity: 0.3;
+    }
+    .category-carousel__track {
+      min-height: 420px;
+    }
+    .category-carousel__nav {
+      width: 42px;
+      height: 42px;
+    }
+    .category-carousel__nav svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .category-carousel-container {
+      padding: 50px 12px;
+    }
+    .category-carousel__card {
+      width: 185px;
+    }
+    .category-carousel__card[data-position="0"] {
+      transform: translateX(0) translateZ(100px) scale(1);
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-200px) translateZ(20px) scale(0.82);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(200px) translateZ(20px) scale(0.82);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-350px) translateZ(-60px) scale(0.68);
+      opacity: 0.55;
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(350px) translateZ(-60px) scale(0.68);
+      opacity: 0.55;
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-480px) translateZ(-170px) scale(0.55);
+      opacity: 0.25;
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(480px) translateZ(-170px) scale(0.55);
+      opacity: 0.25;
+    }
+    .category-carousel__track {
+      min-height: 370px;
+    }
+    .category-carousel__card-title {
+      font-size: 15px;
+    }
+    .category-carousel__content {
+      padding: 12px 8px;
+    }
+    .category-carousel__nav--prev {
+      left: 10px;
+    }
+    .category-carousel__nav--next {
+      right: 10px;
+    }
+    .category-carousel__nav {
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .category-carousel__card {
+      width: 160px;
+    }
+    .category-carousel__card[data-position="-1"] {
+      transform: translateX(-160px) translateZ(10px) scale(0.8);
+    }
+    .category-carousel__card[data-position="1"] {
+      transform: translateX(160px) translateZ(10px) scale(0.8);
+    }
+    .category-carousel__card[data-position="-2"] {
+      transform: translateX(-280px) translateZ(-70px) scale(0.65);
+      opacity: 0.5;
+    }
+    .category-carousel__card[data-position="2"] {
+      transform: translateX(280px) translateZ(-70px) scale(0.65);
+      opacity: 0.5;
+    }
+    .category-carousel__card[data-position="-3"] {
+      transform: translateX(-380px) translateZ(-180px) scale(0.52);
+      opacity: 0.2;
+    }
+    .category-carousel__card[data-position="3"] {
+      transform: translateX(380px) translateZ(-180px) scale(0.52);
+      opacity: 0.2;
+    }
+    .category-carousel__track {
+      min-height: 320px;
+    }
+    .category-carousel__card-title {
+      font-size: 13px;
+    }
+    .category-carousel__header {
+      margin-bottom: 30px;
+    }
+  }
+
+  /* Touch devices */
+  @media (hover: none) and (pointer: coarse) {
+    .category-carousel__nav {
+      background: rgba(255, 255, 255, 0.98);
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    if (customElements.get('category-carousel-component')) return;
+
+    class CategoryCarousel extends HTMLElement {
+      constructor() {
+        super();
+        this.track = this.querySelector('.category-carousel__track');
+        this.prevBtn = this.querySelector('.category-carousel__nav--prev');
+        this.nextBtn = this.querySelector('.category-carousel__nav--next');
+        this.cards = Array.from(this.querySelectorAll('.category-carousel__card'));
+        this.currentIndex = 0;
+        this.totalCards = this.cards.length;
+        this.isDragging = false;
+        this.startX = 0;
+        this.autoplayInterval = null;
+        this.isAutoplay = this.dataset.autoplay === 'true';
+        this.autoplaySpeed = parseInt(this.dataset.speed) || 3000;
+      }
+
+      connectedCallback() {
+        if (this.totalCards === 0) return;
+        this.updatePositions();
+        this.setupEventListeners();
+        if (this.isAutoplay && this.totalCards > 1) {
+          this.startAutoplay();
+        }
+      }
+
+      disconnectedCallback() {
+        this.stopAutoplay();
+      }
+
+      setupEventListeners() {
+        if (this.prevBtn) {
+          this.prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.prevSlide();
+          });
+        }
+        if (this.nextBtn) {
+          this.nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.nextSlide();
+          });
+        }
+
+        const viewport = this.querySelector('.category-carousel__viewport');
+        if (viewport && this.totalCards > 1) {
+          viewport.addEventListener('mouseenter', () => this.stopAutoplay());
+          viewport.addEventListener('mouseleave', () => {
+            if (this.isAutoplay && this.totalCards > 1) this.startAutoplay();
+          });
+
+          viewport.addEventListener('mousedown', this.onDragStart.bind(this));
+          viewport.addEventListener('touchstart', this.onDragStart.bind(this), { passive: false });
+
+          window.addEventListener('mousemove', this.onDragMove.bind(this));
+          window.addEventListener('touchmove', this.onDragMove.bind(this), { passive: false });
+
+          window.addEventListener('mouseup', this.onDragEnd.bind(this));
+          window.addEventListener('touchend', this.onDragEnd.bind(this));
+        }
+      }
+
+      onDragStart(e) {
+        if (this.totalCards <= 1) return;
+        this.isDragging = true;
+        this.startX = this.getClientX(e);
+        if (this.track) this.track.classList.add('dragging');
+        this.stopAutoplay();
+        e.preventDefault();
+      }
+
+      onDragMove(e) {
+        if (!this.isDragging || this.totalCards <= 1) return;
+        e.preventDefault();
+      }
+
+      onDragEnd(e) {
+        if (!this.isDragging || this.totalCards <= 1) {
+          this.isDragging = false;
+          return;
+        }
+        this.isDragging = false;
+        if (this.track) this.track.classList.remove('dragging');
+
+        const endX = this.getClientX(e);
+        const diff = this.startX - endX;
+
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            this.nextSlide();
+          } else {
+            this.prevSlide();
+          }
+        }
+
+        if (this.isAutoplay && this.totalCards > 1) {
+          this.startAutoplay();
+        }
+      }
+
+      getClientX(e) {
+        if (e.type.includes('mouse')) return e.clientX;
+        return e.touches && e.touches[0] ? e.touches[0].clientX : 0;
+      }
+
+      nextSlide() {
+        if (this.totalCards === 0) return;
+        this.currentIndex = (this.currentIndex + 1) % this.totalCards;
+        this.updatePositions();
+      }
+
+      prevSlide() {
+        if (this.totalCards === 0) return;
+        this.currentIndex = (this.currentIndex - 1 + this.totalCards) % this.totalCards;
+        this.updatePositions();
+      }
+
+      updatePositions() {
+        this.cards.forEach((card, idx) => {
+          let position = idx - this.currentIndex;
+          const half = this.totalCards / 2;
+          if (position > half) position -= this.totalCards;
+          if (position < -half) position += this.totalCards;
+          card.setAttribute('data-position', position);
+        });
+      }
+
+      startAutoplay() {
+        this.stopAutoplay();
+        if (this.totalCards <= 1) return;
+        this.autoplayInterval = setInterval(() => this.nextSlide(), this.autoplaySpeed);
+      }
+
+      stopAutoplay() {
+        if (this.autoplayInterval) {
+          clearInterval(this.autoplayInterval);
+          this.autoplayInterval = null;
+        }
+      }
+    }
+
+    customElements.define('category-carousel-component', CategoryCarousel);
+  })();
+</script>

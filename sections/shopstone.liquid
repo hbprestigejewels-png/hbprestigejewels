@@ -1,0 +1,638 @@
+{% comment %}
+  Section: Shop Stone by Shape
+  Fully responsive with interactive shape selector and working image switching
+  Compatible with Dawn theme
+{% endcomment %}
+
+{% comment %} {% render 'lazy-stylesheet', file: 'section-shop-stone-shape.css' %} {% endcomment %}
+
+<div
+  class="shop-stone-shape-section"
+  style="background-color: {{ section.settings.bg_color }};"
+>
+  <div class="shop-stone-shape-container {% if section.settings.full_width %}full-width{% else %}page-width{% endif %}">
+    <div class="shop-stone-shape-wrapper">
+      <!-- Left side - Title and Featured Image -->
+      <div class="shop-stone-shape-left">
+        <h2 class="shop-stone-shape-title" style="color: {{ section.settings.title_color }};">
+          {{ section.settings.title | default: 'Shop Stone by Shape' }}
+        </h2>
+
+        <div class="shop-stone-shape-featured-image">
+          {% if section.blocks.size > 0 and section.blocks.first.settings.shape_image != blank %}
+            <img
+              src="{{ section.blocks.first.settings.shape_image | image_url: width: 800 }}"
+              alt="Featured stone shape"
+              class="shop-stone-shape-featured-img"
+              id="featured-stone-image"
+              loading="eager"
+              width="800"
+              height="800"
+            >
+          {% elsif section.settings.default_featured_image != blank %}
+            <img
+              src="{{ section.settings.default_featured_image | image_url: width: 800 }}"
+              alt="Featured stone shape"
+              class="shop-stone-shape-featured-img"
+              id="featured-stone-image"
+              loading="eager"
+              width="800"
+              height="800"
+            >
+          {% else %}
+            <div class="shop-stone-shape-placeholder">
+              {{ 'collection-1' | placeholder_svg_tag: 'shop-stone-shape-placeholder-svg' }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right side - Shape icons grid -->
+      <div class="shop-stone-shape-right">
+        <div class="shop-stone-shape-grid">
+          {% for block in section.blocks %}
+            {% assign shape = block.settings %}
+            <a
+              href="{{ shape.url | default: '#' }}"
+              class="shop-stone-shape-item {% if forloop.first %}active{% endif %}"
+              data-shape-id="{{ forloop.index0 }}"
+              data-shape-url="{{ shape.url | default: '#' }}"
+              data-shape-image="{% if shape.shape_image != blank %}{{ shape.shape_image | image_url: width: 800 }}{% endif %}"
+              data-shape-name="{{ shape.shape_name | escape }}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="shop-stone-shape-icon-wrapper">
+                {% if shape.icon_image != blank %}
+                  <img
+                    src="{{ shape.icon_image | image_url: width: 120 }}"
+                    alt="{{ shape.icon_image | escape }}"
+                    class="shop-stone-shape-icon"
+                    loading="lazy"
+                    width="100"
+                    height="100"
+                  >
+                {% else %}
+                  <div class="shop-stone-shape-icon-placeholder">
+                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="50" cy="50" r="45" stroke="#CCCCCC" stroke-width="2" fill="#F5F5F5"/>
+                      <text x="50" y="56" text-anchor="middle" fill="#999999" font-size="12" font-family="Arial">💎</text>
+                    </svg>
+                  </div>
+                {% endif %}
+              </div>
+
+              <p class="shop-stone-shape-name" style="color: {{ section.settings.text_color }};">
+                {{ shape.shape_name | default: 'Shape' }}
+              </p>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Shop Stone by Shape",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#F9F9F9"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Shape text color",
+      "default": "#2C2C2C"
+    },
+    {
+      "type": "color",
+      "id": "active_border_color",
+      "label": "Active shape border color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "Shop Stone by Shape"
+    },
+    {
+      "type": "image_picker",
+      "id": "default_featured_image",
+      "label": "Default featured image",
+      "info": "Shown when no shape image is available"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shape",
+      "name": "Stone Shape",
+      "limit": 20,
+      "settings": [
+        {
+          "type": "text",
+          "id": "shape_name",
+          "label": "Shape name",
+          "default": "Oval",
+          "info": "Example: Oval, Round, Emerald, etc."
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Shape icon",
+          "info": "Recommended size: 100x100px. This appears in the grid."
+        },
+        {
+          "type": "image_picker",
+          "id": "shape_image",
+          "label": "Shape featured image",
+          "info": "Main image shown when this shape is clicked. Recommended: 800x800px or 800x1000px"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Collection link",
+          "info": "Link to collection page for this shape. Clicking the shape will navigate to this URL."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop Stone by Shape",
+      "blocks": [
+        { "type": "shape", "settings": { "shape_name": "Oval" } },
+        { "type": "shape", "settings": { "shape_name": "Round" } },
+        { "type": "shape", "settings": { "shape_name": "Emerald" } },
+        { "type": "shape", "settings": { "shape_name": "Marquise" } },
+        { "type": "shape", "settings": { "shape_name": "Radiant" } },
+        { "type": "shape", "settings": { "shape_name": "Pear" } },
+        { "type": "shape", "settings": { "shape_name": "Cushion" } },
+        { "type": "shape", "settings": { "shape_name": "Princess" } },
+        { "type": "shape", "settings": { "shape_name": "Asscher" } },
+        { "type": "shape", "settings": { "shape_name": "Heart" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+    .shop-stone-shape-section {
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      padding: 60px 0;
+    }
+
+    @media screen and (max-width: 768px) {
+      .shop-stone-shape-section {
+        padding: 40px 0;
+      }
+    }
+
+    .shop-stone-shape-container {
+      max-width: 1344px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .shop-stone-shape-container.full-width {
+      max-width: 70%;
+      padding: 0 32px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .shop-stone-shape-container.full-width {
+        padding: 0 16px;
+      }
+    }
+
+    .shop-stone-shape-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 48px;
+      }
+    }
+
+    /* Left Side Styles */
+    .shop-stone-shape-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+    }
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-left {
+        flex: 0 0 385px;
+        align-items: flex-start;
+        text-align: left;
+      }
+    }
+
+    .shop-stone-shape-title {
+      font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
+      font-size: 28px;
+      font-weight: normal;
+      margin: 0 0 24px 0;
+      letter-spacing: 0.5px;
+      text-transform: capitalize;
+    }
+
+    @media screen and (min-width: 768px) {
+      .shop-stone-shape-title {
+        font-size: 34px;
+        margin-bottom: 32px;
+      }
+    }
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-title {
+        font-size: 35px;
+        margin-bottom: 40px;
+        padding-left: 30px;
+      }
+    }
+
+  /* FIXED 1080x1080 CONTAINER */
+  /* CONTAINER */
+  .shop-stone-shape-featured-image {
+    width: 100%;
+    max-width: 335px;
+    height: 226px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 🔥 LEFT ALIGN */
+  }
+
+  /* IMAGE */
+  .shop-stone-shape-featured-img {
+      width: 90%;
+      height: 100%;
+      object-fit: initial;
+      transition: 0.3s ease;
+      border-radius: 30px;
+  }
+
+  /* DESKTOP */
+  @media screen and (min-width: 1024px) {
+    .shop-stone-shape-featured-image {
+      max-width: 385px;   /* keep same size for consistency */
+      margin: 0 auto;
+    }
+  }
+
+    .shop-stone-shape-placeholder {
+      width: 100%;
+      padding-bottom: 100%;
+      position: relative;
+      background: #e8e8e8;
+      border-radius: 12px;
+    }
+
+    .shop-stone-shape-placeholder-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Right Side Styles */
+    .shop-stone-shape-right {
+      flex: 2;
+      width: 100%;
+    }
+
+    .shop-stone-shape-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media screen and (min-width: 480px) {
+      .shop-stone-shape-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+    }
+
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media screen and (min-width: 1200px) {
+      .shop-stone-shape-grid {
+        gap: 30px;
+      }
+    }
+
+    .shop-stone-shape-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding-bottom: 8px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      background: transparent;
+    }
+
+    .shop-stone-shape-item.active {
+      border-bottom-color: {{ section.settings.active_border_color | default: '#000000' }};
+    }
+
+    .shop-stone-shape-item:hover {
+      opacity: 0.8;
+      transform: translateY(-2px);
+    }
+
+    .shop-stone-shape-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      mix-blend-mode: multiply;
+      width: 100%;
+    }
+
+    .shop-stone-shape-icon {
+      width: 65px;
+      height: 65px;
+      object-fit: contain;
+      transition: transform 0.25s ease;
+    }
+
+
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-icon {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .shop-stone-shape-icon-placeholder {
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+
+    @media screen and (min-width: 1024px) {
+      .shop-stone-shape-icon-placeholder {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .shop-stone-shape-name {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+      text-transform: capitalize;
+      font-family: inherit;
+      letter-spacing: 0.3px;
+    }
+
+
+    /* Mobile Small */
+    @media screen and (max-width: 480px) {
+      .shop-stone-shape-grid {
+        gap: 15px;
+      }
+
+      .shop-stone-shape-title {
+        font-size: 24px;
+      }
+
+      .shop-stone-shape-name {
+        font-size: 12px;
+      }
+
+      .shop-stone-shape-icon {
+        width: 50px;
+        height: 50px;
+      }
+
+      .shop-stone-shape-icon-placeholder {
+        width: 50px;
+        height: 50px;
+      }
+
+      .shop-stone-shape-item {
+        gap: 6px;
+        padding-bottom: 6px;
+      }
+    }
+
+    /* Large screens */
+    @media screen and (min-width: 1600px) {
+      .shop-stone-shape-container {
+        padding: 0 40px;
+      }
+
+      .shop-stone-shape-wrapper {
+        gap: 80px;
+      }
+
+      .shop-stone-shape-left {
+        flex: 0 0 450px;
+      }
+    }
+
+    /* Hover effect for desktop */
+    @media (hover: hover) {
+      .shop-stone-shape-item:hover .shop-stone-shape-icon {
+        transform: scale(1.08);
+      }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .shop-stone-shape-item {
+        cursor: default;
+      }
+
+      .shop-stone-shape-item:active {
+        opacity: 0.6;
+        transform: scale(0.98);
+      }
+    }
+
+    /* HIDE SECTION ON MOBILE */
+  @media screen and (max-width: 768px) {
+    .shop-stone-shape-section {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    // Initialize the shop by shape interactive component
+    function initShopStoneShape() {
+      const shapeItems = document.querySelectorAll('.shop-stone-shape-item');
+      const featuredImage = document.getElementById('featured-stone-image');
+      const featuredContainer = document.querySelector('.shop-stone-shape-featured-image');
+
+      if (!shapeItems.length) return;
+
+      // Store original images for each shape
+      const shapeData = new Map();
+
+      shapeItems.forEach((item, index) => {
+        const shapeImageUrl = item.dataset.shapeImage;
+        const shapeName = item.dataset.shapeName || '';
+        const shapeUrl = item.dataset.shapeUrl;
+
+        if (shapeImageUrl && shapeImageUrl !== '') {
+          shapeData.set(item, {
+            imageUrl: shapeImageUrl,
+            name: shapeName,
+            url: shapeUrl,
+          });
+        }
+
+        // Add click event listener for image switching
+        // Note: Navigation is handled by the <a> tag, we just need to update the active state and image
+        item.addEventListener('click', function (e) {
+          // Prevent default only if we need to handle image switching without immediate navigation
+          // The navigation will still happen because this is an <a> tag
+
+          // Remove active class from all shapes
+          shapeItems.forEach((shape) => {
+            shape.classList.remove('active');
+          });
+
+          // Add active class to clicked shape
+          this.classList.add('active');
+
+          // Update featured image
+          const shapeInfo = shapeData.get(this);
+
+          if (shapeInfo && shapeInfo.imageUrl && shapeInfo.imageUrl !== '' && featuredImage) {
+            updateFeaturedImage(shapeInfo.imageUrl, shapeInfo.name);
+          } else if (featuredImage && featuredImage.src) {
+            // Keep current image if no new image available
+            console.log('No image available for this shape');
+          }
+
+          // Dispatch custom event for analytics or other integrations
+          const event = new CustomEvent('stoneShapeSelected', {
+            detail: {
+              shapeName: shapeInfo?.name || this.querySelector('.shop-stone-shape-name')?.innerText,
+              shapeUrl: shapeInfo?.url || '#',
+              shapeId: this.dataset.shapeId,
+            },
+          });
+          document.dispatchEvent(event);
+        });
+      });
+
+      function updateFeaturedImage(imageUrl, shapeName) {
+        if (!featuredImage) return;
+
+        // Fade out effect
+        featuredImage.style.opacity = '0';
+
+        setTimeout(() => {
+          featuredImage.src = imageUrl;
+          if (shapeName) {
+            featuredImage.alt = shapeName + ' stone shape';
+          }
+
+          // When image loads, fade in
+          featuredImage.onload = function () {
+            featuredImage.style.opacity = '1';
+          };
+
+          // If image is already cached
+          if (featuredImage.complete) {
+            featuredImage.style.opacity = '1';
+          }
+        }, 150);
+      }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initShopStoneShape);
+    } else {
+      initShopStoneShape();
+    }
+
+    // Re-initialize for Shopify AJAX and dynamic content
+    if (window.Shopify) {
+      document.addEventListener('shopify:section:load', function (event) {
+        if (event.detail.sectionId) {
+          const section = document.querySelector(`#shopify-section-${event.detail.sectionId}`);
+          if (section && section.querySelector('.shop-stone-shape-section')) {
+            // Small delay to ensure DOM is ready
+            setTimeout(initShopStoneShape, 100);
+          }
+        }
+      });
+    }
+
+    // Also reinitialize when Shopify updates blocks via theme editor
+    if (window.Shopify && Shopify.designMode) {
+      document.addEventListener('shopify:block:select', function () {
+        setTimeout(initShopStoneShape, 100);
+      });
+    }
+  })();
+</script>

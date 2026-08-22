@@ -1,0 +1,1112 @@
+{% if request.page_type == 'collection' %}
+  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+{% endif %}
+{% if request.page_type == 'product' or request.page_type == 'collection' %}
+  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+{% endif %}
+{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+{% render 'lazy-stylesheet', file: 'template-collection.css' %}
+
+<link rel="stylesheet" href="{{ 'component-deferred-media.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<style>
+      .featured-collections-styles {
+        background-color: {{ section.settings.background_color }};
+        padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+        width: 100%;
+        overflow: hidden;
+        padding-left: 120px;
+      }
+
+      /* Force the container to ignore theme limits when full-width is checked */
+      .featured-collections-styles.full-width-enabled .page-width--full-width {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 1rem !important;  /* Added a tiny bit of padding as requested */
+        padding-right: 1rem !important;
+        margin: 0 !important;
+      }
+
+      @media screen and (max-width: 749px) {
+        .featured-collections-styles {
+          padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px 0;
+        }
+        .featured-collections-styles.full-width-enabled .page-width--full-width {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+      }
+
+      /* ===== FULL WIDTH SECTION FIX ===== */
+    .featured-collections-styles.full-width-enabled {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    /* Remove Shopify container restriction */
+    .featured-collections-styles.full-width-enabled .page-width,
+    .featured-collections-styles.full-width-enabled .page-width--full-width {
+      max-width: 100% !important;
+      width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Remove slider spacing */
+    .featured-collections-styles .slider {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      scroll-padding-left: 0;
+    }
+
+    /* Remove unwanted grid spacing */
+    .featured-collections-styles .grid__item {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Each slide full width (mobile scroll) */
+    .featured-collections-styles .slider__slide {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Desktop GRID (clean 3 column layout) */
+    @media (min-width: 990px) {
+      .featured-collections-styles.full-width-enabled .slider {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+      }
+    }
+
+    /* Tablet */
+    @media (min-width: 750px) and (max-width: 989px) {
+      .featured-collections-styles.full-width-enabled .slider {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width:749px){
+
+    .featured-collections-styles .slider{
+
+    display:flex;
+
+    overflow-x:auto;
+
+    scroll-snap-type:x mandatory;
+
+    scroll-behavior:smooth;
+
+    }
+
+    .featured-collections-styles .slider__slide{
+
+    flex:0 0 calc(100% / {{ section.settings.columns_mobile }});
+
+    scroll-snap-align:start;
+
+    }
+
+    }
+    /* Hide scrollbar (clean UI) */
+    .featured-collections-styles .slider::-webkit-scrollbar {
+      display: none;
+    }
+    .featured-collections-styles .slider {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+
+
+    .featured-collections-styles .slider__slide {
+      flex: 0 0 calc(100% / {{ section.settings.columns_desktop }}) !important;
+      max-width: calc(100% / {{ section.settings.columns_desktop }});
+    }
+    /* Tablet */
+    @media screen and (max-width: 989px) {
+      .featured-collections-styles .slider__slide {
+        flex: 0 0 calc(100% / {{ section.settings.columns_tablet }}) !important;
+        max-width: calc(100% / {{ section.settings.columns_tablet }});
+      }
+    }
+
+    /* Mobile */
+    @media screen and (max-width: 749px) {
+      .featured-collections-styles .slider__slide {
+        flex: 0 0 calc(100% / {{ section.settings.columns_mobile }}) !important;
+        max-width: calc(100% / {{ section.settings.columns_mobile }});
+      }
+    }
+    .featured-collections-styles.full-width-enabled {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+    }
+
+
+      /* When full width is enabled, slides should be full width on mobile/tablet */
+      .featured-collections-styles .page-width--full-width .slider__slide {
+        width: 100%;
+      }
+
+      /* Desktop: 3 columns with no gaps (edge-to-edge) */
+      @media screen and (min-width: 990px) {
+        .featured-collections-styles .page-width--full-width .slider--desktop {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0;
+          margin: 0;
+          padding: 0;
+        }
+
+        .featured-collections-styles .page-width--full-width .slider__slide {
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+
+        /* Remove slider button for desktop full-width grid mode */
+        .featured-collections-styles .page-width--full-width .slider-buttons {
+          display: none;
+        }
+      }
+
+      /* Tablet: 2 columns with no gaps */
+      @media screen and (min-width: 750px) and (max-width: 989px) {
+        .featured-collections-styles .page-width--full-width .slider--tablet {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 0;
+          margin: 0;
+          padding: 0;
+        }
+
+        .featured-collections-styles .page-width--full-width .slider__slide {
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+      }
+
+      /* Mobile: 1 column with no gaps */
+      @media screen and (max-width: 749px) {
+        .featured-collections-styles .page-width--full-width .slider--mobile {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 0;
+          margin: 0;
+          padding: 0;
+        }
+
+        .featured-collections-styles .page-width--full-width .slider__slide {
+          width: 100%;
+          padding: 0;
+          margin: 0;
+        }
+      }
+
+      /* When full width is NOT enabled, maintain standard padding */
+      .featured-collections-styles .page-width {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      /* Title and subtitle styling */
+      .featured-collections-styles .subtitle {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        color: {{ section.settings.subtitle_color }};
+        font-size: 1.4rem;
+        letter-spacing: 0.1rem;
+        font-weight: 500;
+      }
+
+      .featured-collections-styles .title {
+        font-style: {{ section.settings.title_style }};
+        display: block;
+        width: 100%;
+        color: {{ section.settings.title_color }};
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      /* Alignment styles for title and subtitle */
+      .featured-collections-styles .title-wrapper-with-link.text-left {
+        text-align: left;
+      }
+
+      .featured-collections-styles .title-wrapper-with-link.text-center {
+        text-align: center;
+      }
+
+      .featured-collections-styles .title-wrapper-with-link.text-right {
+        text-align: right;
+
+        .slider-dot{
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:#bbb;
+    }
+
+    .slider-dot.active{
+        width:22px;
+        background:#222;
+        border-radius:30px;
+    }
+      }
+
+      /* Collection card styling */
+      {% comment %} .collection-card-styles {
+        text-align: center;
+        transition: transform 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      } {% endcomment %}
+
+      .collection-card-styles:hover {
+        transform: translateY(-5px);
+      }
+
+      .collection-card-styles .card-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .collection-card-styles .card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+      }
+
+      .collection-card-styles .card__inner {
+        border-radius: {{ section.settings.image_border_radius }}px;
+        overflow: hidden;
+        background-color: #f5f5f5;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Dynamic image ratio handling - ensures consistent sizing */
+      .collection-card-styles .card__media {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background-color: #f8f8f8;
+      }
+
+      /* Square (1:1) */
+      .collection-card-styles .card__media.ratio-square {
+        padding-top: 100%;
+      }
+
+      /* Landscape (4:3) */
+      .collection-card-styles .card__media.ratio-landscape {
+        padding-top: 75%;
+      }
+
+      /* Portrait (2:3) - Best for jewelry */
+      .collection-card-styles .card__media.ratio-portrait {
+        padding-top: 133.33%;
+      }
+
+      /* Wide (16:9) */
+      .collection-card-styles .card__media.ratio-wide {
+        padding-top: 56.25%;
+      }
+
+      .collection-card-styles .card__media .media {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .collection-card-styles .card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.5s ease;
+        display: block;
+      }
+
+      .collection-card-styles:hover .card__media img {
+        transform: scale(1.08);
+      }
+
+      /* Placeholder styling */
+      .collection-card-styles .placeholder-svg {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+        color: #999;
+      }
+
+      .collection-card-styles .placeholder-svg svg {
+        width: 60%;
+        height: 60%;
+        opacity: 0.6;
+      }
+
+      .collection-card-styles .card__information {
+        padding: 1.8rem 0.5rem 0 0.5rem;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .collection-card-styles .card__heading {
+        font-size: 1.8rem;
+        margin: 0;
+        font-weight: {{ section.settings.title_font_weight }};
+        line-height: 1.4;
+      }
+
+      .collection-card-styles .card__heading a {
+        color: {{ section.settings.collection_title_color }};
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .collection-card-styles .card__heading a:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.3rem;
+        color: {{ section.settings.collection_title_color | color_modify: 'alpha', 0.7 }};
+      }
+
+      @media screen and (max-width: 749px) {
+        .collection-card-styles .card__heading {
+          font-size: 1.6rem;
+        }
+        .collection-card-styles .card__information {
+          padding: 1.2rem 0.5rem 0 0.5rem;
+        }
+      }
+      /* ===== FIX: REMOVE LEFT GAP / MAKE FIRST IMAGE TOUCH EDGE ===== */
+
+    /* Remove hidden left spacing from slider */
+    .featured-collections-styles .slider {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+    }
+
+    /* Remove grid spacing coming from Shopify */
+    .featured-collections-styles .grid__item {
+      padding-left: 0 !important;
+      padding-right: 15px !important;
+    }
+
+    /* Remove any scroll padding */
+    .featured-collections-styles slider-component {
+      scroll-padding-left: 0 !important;
+    }
+
+    /* Ensure first item starts from extreme left */
+    .featured-collections-styles .slider__slide:first-child {
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+    }
+
+    /* EXTRA: fix Dawn default negative margins (important) */
+    @media screen and (min-width: 990px) {
+      .featured-collections-styles .slider--desktop {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+    }
+
+    /* Ensure full width container truly spans edge */
+    .featured-collections-styles.full-width-enabled {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+    }
+
+      /* Slider navigation styling (for non-full-width mode) */
+      .featured-collections-styles .slider-buttons {
+        margin-top: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .featured-collections-styles .slider-button {
+        background: transparent;
+        border: 2px solid {{ section.settings.collection_title_color }};
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: {{ section.settings.collection_title_color }};
+      }
+
+      .featured-collections-styles .slider-button:hover:not(:disabled) {
+        background: {{ section.settings.collection_title_color }};
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .featured-collections-styles .slider-button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .featured-collections-styles .slider-counter {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: {{ section.settings.collection_title_color }};
+      }
+
+      /* For non-full-width mode, maintain standard slider spacing */
+      @media screen and (min-width: 990px) {
+        .featured-collections-styles:not(.full-width-enabled) .slider--desktop {
+          margin-left: -1.5rem;
+          margin-right: -1.5rem;
+        }
+
+        .featured-collections-styles:not(.full-width-enabled) .slider__slide {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+      }
+
+      /* Slider list - no gaps for seamless look */
+      .featured-collections-styles .slider {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        gap: 15px; /* Adjust to 0 if you want images to touch each other */
+      }
+
+      /* Desktop Grid for Full Width */
+      @media screen and (min-width: 990px) {
+        .featured-collections-styles.full-width-enabled .slider--desktop {
+
+          gap: 20px;
+        }
+
+        .featured-collections-styles.full-width-enabled .slider__slide {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+
+      /* Card Styling */
+      .collection-card-styles {
+        width: 100%;
+        transition: transform 0.3s ease;
+        margin-top:16px;
+      }
+
+      .collection-card-styles .card__inner {
+        border-radius: {{ section.settings.image_border_radius }}px;
+        overflow: hidden;
+      }
+
+      .collection-card-styles img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .featured-collections-styles .title-wrapper-with-link {
+        padding: 0 rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Ratio Handlers */
+      .ratio-square { aspect-ratio: 1 / 1; }
+      .ratio-portrait { aspect-ratio: 2 / 3; }
+      .ratio-landscape { aspect-ratio: 4 / 3; }
+      .ratio-wide { aspect-ratio: 16 / 9; }
+
+      .featured-collections-styles .slider-dots{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:8px;
+        margin-top:18px;
+    }
+
+    .featured-collections-styles .slider-dot{
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:#bdbdbd;
+        border:none;
+        cursor:pointer;
+        opacity:.5;
+        transition:.3s;
+        padding:14px;
+        min-width:36px;
+        min-height:36px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .featured-collections-styles .slider-dot::after {
+        content:'';
+        display:block;
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:inherit;
+    }
+
+    .featured-collections-styles .slider-dot.active{
+        width:24px;
+        border-radius:20px;
+        background:#222;
+        opacity:1;
+    }
+
+    /* Hide dots on Desktop & Tablet */
+  .featured-collections-styles .slider-dots{
+      display:none;
+  }
+
+  /* Show only on Mobile */
+  @media screen and (max-width:749px){
+
+      .featured-collections-styles .slider-dots{
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          gap:8px;
+          margin-top:20px;
+      }
+
+      .featured-collections-styles .slider-dot{
+          width:8px;
+          height:8px;
+          border:none;
+          border-radius:50%;
+          background:#c4c4c4;
+          cursor:pointer;
+          transition:.3s;
+          padding:14px;
+          min-width:36px;
+          min-height:36px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+      }
+      .featured-collections-styles .slider-dot::after {
+          content:'';
+          display:block;
+          width:8px;
+          height:8px;
+          border-radius:50%;
+          background:inherit;
+      }
+
+      .featured-collections-styles .slider-dot.active{
+          width:24px;
+          border-radius:20px;
+          background:#000;
+      }
+  }
+</style>
+
+<div class="featured-collections-styles {% if section.settings.full_width %} full-width-enabled{% endif %}">
+  {% comment %} <div class="{% if section.settings.full_width %}page-width--full-width{% else %}page-width{% endif %}"> {% endcomment %}
+
+  {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+    <div class="title-wrapper-with-link text-{{ section.settings.text_alignment }}">
+      {%- if section.settings.subtitle != blank -%}
+        <span class="subtitle" style="color: {{ section.settings.subtitle_color }}">
+          {{- section.settings.subtitle -}}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2
+          class="title {{ section.settings.heading_size }}"
+          style="color: {{ section.settings.title_color }}; font-style: {{ section.settings.title_style }}"
+        >
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <ul
+      class="slider slider--desktop slider--tablet{% if section.settings.grid_type == 'collage' %} slider--mobile grid--peek--collage{% else %} slider--mobile{% endif %}"
+      id="Slider-{{ section.id }}"
+      role="list"
+    >
+      {%- for block in section.blocks -%}
+        <li
+          id="Slide-{{ section.id }}-{{ forloop.index }}"
+          class="slider__slide grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {{ block.shopify_attributes }}
+          data-cascade
+          style="--animation-order: {{ forloop.index }};"
+        >
+          <div class="collection-card-styles">
+            <div class="card-wrapper">
+              <div class="card card--standard card--media">
+                <div class="card__inner color-{{ section.settings.card_color_scheme }} gradient">
+                  <div
+                    class="
+                      card__media
+                      {% if section.settings.image_ratio == '100' %}ratio-square
+                      {% elsif section.settings.image_ratio == '75' %}ratio-landscape
+                      {% elsif section.settings.image_ratio == '130' %}ratio-portrait
+                      {% elsif section.settings.image_ratio == '60' %}ratio-wide
+                      {% endif %}
+                    "
+                  >
+                    <div class="media">
+                      {%- if block.settings.collection_image != blank -%}
+                        {%- assign image = block.settings.collection_image -%}
+                        {%- assign image_widths = '165,360,535,750,1070,1500' | split: ',' -%}
+                        <img
+                          srcset="
+                            {% for width in image_widths %}
+                              {%- if image.width >= width -%}
+                                {{ image | image_url: width: width }} {{ width }}w{% if forloop.last == false %},{% endif %}
+                              {%- endif -%}
+                            {% endfor %}
+                          "
+                          src="{{ image | image_url: width: 535 }}"
+                          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 3 }}px, (min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 35px)"
+                          alt="{{ image.alt | default: block.settings.collection_title | escape }}"
+                          loading="lazy"
+                          width="{{ image.width }}"
+                          height="{{ image.height }}"
+                          class="motion-reduce"
+                        >
+                      {%- else -%}
+                        <div class="placeholder-svg">
+                          {{ 'collection-1' | placeholder_svg_tag }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+                <div class="card__information">
+                  <h3 class="card__heading">
+                    {%- if block.settings.collection_link != blank -%}
+                      <a href="{{ block.settings.collection_link }}" class="full-unstyled-link">
+                        {{ block.settings.collection_title | escape }}
+                      </a>
+                    {%- else -%}
+                      {{ block.settings.collection_title | escape }}
+                    {%- endif -%}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {% if section.settings.enable_slider_navigation and section.blocks.size > 1 %}
+      <div class="slider-dots">
+        {% for block in section.blocks %}
+          <button
+            class="slider-dot {% if forloop.first %}active{% endif %}"
+            data-slide="{{ forloop.index0 }}"
+            aria-label="Go to slide {{ forloop.index }}"
+          ></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </slider-component>
+</div>
+
+{% schema %}
+{
+  "name": "Shop By Styles",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Columns on Desktop",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "columns_tablet",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on Tablet",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "Columns on Mobile",
+      "default": 2
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width (Edge-to-Edge)",
+      "default": true,
+      "info": "Enable for images that stretch from left to right with no padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top (desktop)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom (desktop)",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top (mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom (mobile)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Explore Cadiant"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop By Styles"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "Extra large"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "title_style",
+      "label": "Title font style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "italic",
+          "label": "Italic"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Collection Cards"
+    },
+
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "100",
+          "label": "Square (1:1) - Best for product close-ups"
+        },
+        {
+          "value": "75",
+          "label": "Landscape (4:3) - Best for lifestyle photos"
+        },
+        {
+          "value": "130",
+          "label": "Portrait (2:3) - Best for jewelry photography"
+        },
+        {
+          "value": "60",
+          "label": "Wide (16:9) - Best for panoramic images"
+        }
+      ],
+      "default": "130",
+      "info": "Choose the aspect ratio that best fits your collection images"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 0,
+      "info": "Set to 0 for sharp edges that touch side to side"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "collection_title_color",
+      "label": "Collection title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Slider Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider_navigation",
+      "label": "Enable slider navigation",
+      "default": false,
+      "info": "Navigation buttons only appear when full width is disabled"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "collection_image",
+          "label": "Collection image",
+          "info": "For best edge-to-edge results, use images with proper composition. The image will fill the entire card width."
+        },
+        {
+          "type": "text",
+          "id": "collection_title",
+          "label": "Collection title",
+          "default": "Collection Title"
+        },
+        {
+          "type": "url",
+          "id": "collection_link",
+          "label": "Collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop By Styles",
+      "blocks": [
+        {
+          "type": "collection",
+          "settings": {
+            "collection_title": "Solitaire",
+            "collection_link": "/collections/solitaire"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "collection_title": "Halo",
+            "collection_link": "/collections/halo"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "collection_title": "Loose Stone",
+            "collection_link": "/collections/loose-stone"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('#Slider-{{ section.id }}');
+
+    if (!slider) return;
+
+    const dots = document.querySelectorAll('.featured-collections-styles .slider-dot');
+
+    function updateDots() {
+      const slide = slider.querySelector('.slider__slide');
+
+      if (!slide) return;
+
+      const index = Math.round(slider.scrollLeft / slide.offsetWidth);
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    slider.addEventListener('scroll', updateDots);
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', function () {
+        const slide = slider.querySelector('.slider__slide');
+
+        slider.scrollTo({
+          left: index * slide.offsetWidth,
+
+          behavior: 'smooth',
+        });
+      });
+    });
+
+    updateDots();
+  });
+</script>

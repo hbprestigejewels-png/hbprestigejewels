@@ -1,0 +1,510 @@
+{% render 'lazy-stylesheet', file: 'our-8-cs-promise.css' %}
+
+<div class="our-8-cs-promise section-{{ section.id }}">
+  <div class="page-width">
+    <div class="usp-widget" data-trk-type="view" data-trk-title="Our 8 Cs Promise">
+      <!-- LEFT PART: Text Content -->
+      <div class="usp-left">
+        <h2 class="usp-title">{{ section.settings.title | default: 'Our 8 Cs Promise' }}</h2>
+        <p class="usp-subtitle">
+          {{
+            section.settings.subtitle
+            | default: 'We blend a 400-year gemstone legacy with modern technology to craft bespoke fine jewellery faster, offering 30% more value.'
+          }}
+        </p>
+
+        <!-- TEXT CAROUSEL -->
+        <div class="text-carousel-wrapper">
+          <div class="text-carousel" id="textCarousel-{{ section.id }}">
+            <!-- Intro Slide -->
+            <div class="carousel-slide" data-index="intro">
+              <div class="slide-content slide-intro">
+                <span class="intro-emoji">✨</span>
+                <div>
+                  <div class="slide-title">The Internet's Favorite Jeweller. Here's Why.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8 Cs Slides -->
+            {% for i in (1..8) %}
+              {% assign c_key = 'c' | append: i %}
+              {% assign c_title_key = c_key %}
+              {% assign c_desc_key = c_key | append: '_desc' %}
+
+              {% assign default_title = '' %}
+              {% assign default_desc = '' %}
+
+              {% case i %}
+                {% when 1 %}
+                  {% assign default_title = 'Colours Hand' %}
+                  {% assign default_desc = 'Only the most vibrant and hand-picked gemstone hues make it to the cut.' %}
+                {% when 2 %}
+                  {% assign default_title = 'Cut Unmatched Beauty' %}
+                  {% assign default_desc = 'Expertly cut to maximise radiance, fire and beauty.' %}
+                {% when 3 %}
+                  {% assign default_title = 'Curation Superior Selection' %}
+                  {% assign default_desc = 'Carefully curated collection for every moment of life.' %}
+                {% when 4 %}
+                  {% assign default_title = 'Customisation Always Personal' %}
+                  {% assign default_desc = 'Bringing your dream pieces to life, just the way you imagined them.' %}
+                {% when 5 %}
+                  {% assign default_title = 'Craftsmanship Time Honoured Tradition' %}
+                  {% assign default_desc = 'Handcrafted by skilled artisans using techniques handed down from generations.' %}
+                {% when 6 %}
+                  {% assign default_title = 'Care Mindful Design' %}
+                  {% assign default_desc = 'Each piece is created with love that finds a place straight into your heart.' %}
+                {% when 7 %}
+                  {% assign default_title = 'Cost Exceptional Value' %}
+                  {% assign default_desc = 'No middlemen, just exceptional value quality directly from us to you.' %}
+                {% when 8 %}
+                  {% assign default_title = 'Commitment Lifelong Relationship' %}
+                  {% assign default_desc = 'Complete transparency with certified gemstones & secure returns.' %}
+              {% endcase %}
+
+              <div class="carousel-slide" data-index="{{ i }}">
+                <div class="slide-content">
+                  <div class="slide-number">{{ i }}</div>
+                  <div>
+                    <div class="slide-title">{{ section.settings[c_title_key] | default: default_title }}</div>
+                    <div class="slide-description">{{ section.settings[c_desc_key] | default: default_desc }}</div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Carousel Controls -->
+          <button class="carousel-arrow carousel-prev" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="carousel-arrow carousel-next" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- BUTTON GRID -->
+        <div class="usp-buttons-grid">
+          <!-- Intro Button -->
+          <button class="usp-button" data-target="intro">
+            <span class="button-icon-wrapper">
+              <span class="button-icon">
+                <img
+                  src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_3.png?v=1774261453"
+                  alt="Sparkle"
+                  class="icon"
+                  width="32"
+                  height="32"
+                  loading="lazy"
+                >
+              </span>
+            </span>
+            <span class="button-text">Why Us</span>
+          </button>
+
+          <!-- 8 C Buttons -->
+          {% for i in (1..8) %}
+            {% assign c_key = 'c' | append: i %}
+            <button class="usp-button {% if i == 1 %}active{% endif %}" data-target="{{ i }}">
+              <span class="button-icon-wrapper">
+                <span class="button-icon">
+                  {% case i %}
+                    {% when 1 %}
+                  <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/rgb.png?v=1774261452"
+                        alt="Art"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 2 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_6.png?v=1774261453"
+                        alt="Diamond"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 3 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_1.png?v=1774261453"
+                        alt="Sparkle"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 4 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/engagement-ring.png?v=1774261453"
+                        alt="Pencil"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 5 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_1.png?v=1774261453"
+                        alt="Tools"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 6 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_2.png?v=1774261453"
+                        alt="Heart"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 7 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_5_1.png?v=1774261453"
+                        alt="Money"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                    {% when 8 %}
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/relationship.png?v=1774261453"
+                        alt="Handshake"
+                        class="icon"
+                        width="32"
+                        height="32"
+                        loading="lazy"
+                      >
+                  {% endcase %}
+                </span>
+              </span>
+              <span class="button-text">
+                {% case i %}
+                  {% when 1 -%}
+                    Colour
+                  {% when 2 -%}
+                    Cut
+                  {% when 3 -%}
+                    Curation
+                  {% when 4 -%}
+                    Customisation
+                  {% when 5 -%}
+                    Craftsmanship
+                  {% when 6 -%}
+                    Care
+                  {% when 7 -%}
+                    Cost
+                  {% when 8 -%}
+                    Commitment
+                {% endcase %}
+              </span>
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- RIGHT PART: Media Slider -->
+      <div class="usp-right">
+        <div class="media-slider-wrapper">
+          <div class="media-slider" id="mediaSlider-{{ section.id }}">
+            <!-- Intro Video/Image -->
+            <div class="media-slide" data-index="intro">
+              {% if section.settings.intro_video != blank %}
+                <video
+                  width="464"
+                  height="464"
+                  loop
+                  muted
+                  playsinline
+                  poster="{{ section.settings.intro_image | img_url: '464x464' }}"
+                  preload="none"
+                >
+                  <source src="{{ section.settings.intro_video }}" type="video/mp4">
+                </video>
+              {% else %}
+                {% if section.settings.intro_image != blank %}
+                  {{
+                    section.settings.intro_image
+                    | image_url: width: 464
+                    | image_tag: width: 464, height: 464, loading: 'lazy', alt: section.settings.intro_image.alt
+                    | default: 'Jewellery Collection'
+                  }}
+                {% endif %}
+              {% endif %}
+            </div>
+
+            <!-- 8 C Media Slides -->
+            {% for i in (1..8) %}
+              {% assign media_key = 'c' | append: i | append: '_media' %}
+              <div class="media-slide" data-index="{{ i }}">
+                {% if section.settings[media_key] != blank %}
+                  {{
+                    section.settings[media_key]
+                    | image_url: width: 464
+                    | image_tag: width: 464, height: 464, loading: 'lazy', alt: section.settings[media_key].alt
+                    | default: 'Jewellery Collection'
+                  }}
+                {% else %}
+                  {% assign default_image = '8c_' | append: i | append: '_colour.png' %}
+                  <img src="{{ default_image | asset_url }}" width="464" height="464" loading="lazy" alt="Jewellery Collection">
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Media Slider Controls -->
+          <button class="media-arrow media-prev" aria-label="Previous media">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="media-arrow media-next" aria-label="Next media">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <!-- Dots Navigation -->
+          <ul class="media-dots" id="mediaDots-{{ section.id }}"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Our 8 Cs Promise",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our 8 Cs Promise"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "We blend a 400-year gemstone legacy with modern technology to craft bespoke fine jewellery faster, offering 30% more value."
+    },
+    {
+      "type": "header",
+      "content": "Intro Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "intro_image",
+      "label": "Intro Image"
+    },
+    {
+      "type": "url",
+      "id": "intro_video",
+      "label": "Intro Video URL"
+    },
+    {
+      "type": "header",
+      "content": "C1 - Colour"
+    },
+    {
+      "type": "text",
+      "id": "c1",
+      "label": "Title",
+      "default": "Colours Hand"
+    },
+    {
+      "type": "textarea",
+      "id": "c1_desc",
+      "label": "Description",
+      "default": "Only the most vibrant and hand-picked gemstone hues make it to the cut."
+    },
+    {
+      "type": "image_picker",
+      "id": "c1_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C2 - Cut"
+    },
+    {
+      "type": "text",
+      "id": "c2",
+      "label": "Title",
+      "default": "Cut Unmatched Beauty"
+    },
+    {
+      "type": "textarea",
+      "id": "c2_desc",
+      "label": "Description",
+      "default": "Expertly cut to maximise radiance, fire and beauty."
+    },
+    {
+      "type": "image_picker",
+      "id": "c2_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C3 - Curation"
+    },
+    {
+      "type": "text",
+      "id": "c3",
+      "label": "Title",
+      "default": "Curation Superior Selection"
+    },
+    {
+      "type": "textarea",
+      "id": "c3_desc",
+      "label": "Description",
+      "default": "Carefully curated collection for every moment of life."
+    },
+    {
+      "type": "image_picker",
+      "id": "c3_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C4 - Customisation"
+    },
+    {
+      "type": "text",
+      "id": "c4",
+      "label": "Title",
+      "default": "Customisation Always Personal"
+    },
+    {
+      "type": "textarea",
+      "id": "c4_desc",
+      "label": "Description",
+      "default": "Bringing your dream pieces to life, just the way you imagined them."
+    },
+    {
+      "type": "image_picker",
+      "id": "c4_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C5 - Craftsmanship"
+    },
+    {
+      "type": "text",
+      "id": "c5",
+      "label": "Title",
+      "default": "Craftsmanship Time Honoured Tradition"
+    },
+    {
+      "type": "textarea",
+      "id": "c5_desc",
+      "label": "Description",
+      "default": "Handcrafted by skilled artisans using techniques handed down from generations."
+    },
+    {
+      "type": "image_picker",
+      "id": "c5_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C6 - Care"
+    },
+    {
+      "type": "text",
+      "id": "c6",
+      "label": "Title",
+      "default": "Care Mindful Design"
+    },
+    {
+      "type": "textarea",
+      "id": "c6_desc",
+      "label": "Description",
+      "default": "Each piece is created with love that finds a place straight into your heart."
+    },
+    {
+      "type": "image_picker",
+      "id": "c6_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C7 - Cost"
+    },
+    {
+      "type": "text",
+      "id": "c7",
+      "label": "Title",
+      "default": "Cost Exceptional Value"
+    },
+    {
+      "type": "textarea",
+      "id": "c7_desc",
+      "label": "Description",
+      "default": "No middlemen, just exceptional value quality directly from us to you."
+    },
+    {
+      "type": "image_picker",
+      "id": "c7_media",
+      "label": "Media Image"
+    },
+    {
+      "type": "header",
+      "content": "C8 - Commitment"
+    },
+    {
+      "type": "text",
+      "id": "c8",
+      "label": "Title",
+      "default": "Commitment Lifelong Relationship"
+    },
+    {
+      "type": "textarea",
+      "id": "c8_desc",
+      "label": "Description",
+      "default": "Complete transparency with certified gemstones & secure returns."
+    },
+    {
+      "type": "image_picker",
+      "id": "c8_media",
+      "label": "Media Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our 8 Cs Promise",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  /* Defer our-8-cs-promise.js until browser is idle */
+  (function() {
+    function loadOur8Cs() {
+      var s = document.createElement('script');
+      s.src = '{{ 'our-8-cs-promise.js' | asset_url }}';
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(loadOur8Cs, { timeout: 3000 });
+    } else {
+      setTimeout(loadOur8Cs, 500);
+    }
+  })();
+</script>

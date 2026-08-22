@@ -1,0 +1,432 @@
+<style>
+  .top-header-wrapper{
+    max-width:100%;
+    background:#000;
+    color:#fff;
+    font-size:12px;
+    text-align:center;
+    position: relative;
+    z-index: 10;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    pointer-events: auto;
+    {% comment %} display:none !important ; {% endcomment %}
+  }
+
+  .top-header{
+    max-width:100%;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0px 10px;
+    position:relative;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  .top-left{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    flex-shrink: 0;
+  }
+
+  .top-center{
+    text-align:center;
+    font-weight:500;
+    flex: 1;
+  }
+
+  .top-right ul{
+    display:flex;
+    gap:14px;
+    list-style:none;
+    padding:0;
+    margin:0;
+    flex-shrink: 0;
+  }
+
+  .top-right a{
+    color:#fff;
+    text-decoration:none;
+    font-size:12px;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s ease;
+  }
+
+  .top-right a:hover{
+    opacity:0.7;
+  }
+
+  .announcement-text {
+      display: flex;
+      justify-content: center; /* Centers horizontally in flex */
+      align-items: center;     /* Centers vertically in flex */
+      text-align: center;
+      margin: 0 auto;          /* Standard centering trick */
+      width: 100%;             /* Ensures it takes up the available space */
+      flex: 1;
+      position: relative;
+      white-space: nowrap;
+  }
+
+  /* Social icons styling */
+  .top-right svg {
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+    display: block;
+  }
+
+  .top-right a:hover svg {
+    transform:scale(1.1);
+  }
+
+  /* Performance optimization */
+  .top-header-wrapper * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Mobile responsive - Optimized */
+  @media(max-width:768px){
+    .top-header-wrapper {
+      position: relative;
+      transform: none;
+    }
+
+    .top-header{
+      flex-direction:column;
+      gap:6px;
+      padding-top: 6px;
+      padding-bottom: 6px;
+      transform: none;
+    }
+
+    .top-left{
+      display:none;
+    }
+
+    .top-right{
+      display:none;
+    }
+
+    {% comment %} .announcement-text{
+      position:static;
+      transform:none;
+      white-space:normal;
+      width: 100%;
+    }
+
+    .announcement-text p {
+      margin: 0;
+      animation: none;
+    }
+  } {% endcomment %}
+
+  /* Small screen adjustments */
+  @media(max-width:480px){
+    .top-header{
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .announcement-text p {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+  }
+
+  /* Prevent glitch on iOS devices */
+  @supports (-webkit-touch-callout: none) {
+    .top-header-wrapper {
+      position: relative;
+      transform: none;
+    }
+
+    .top-header {
+      transform: none;
+    }
+  }
+</style>
+
+<div class="top-header-wrapper" data-section-id="{{ section.id }}" data-section-type="top-header">
+  <div class="top-header">
+    <!-- Left side: Contact info -->
+    <div class="top-left">
+      {% if section.settings.phone != blank %}
+        <span>📞 {{ section.settings.phone }}</span>
+      {% endif %}
+
+      {% if section.settings.email != blank %}
+        <span>✉️ {{ section.settings.email }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Center: Announcement text -->
+    <div class="announcement-text">
+      {{ section.settings.shipping_text }}
+    </div>
+
+    <!-- Right side: Social icons -->
+    <div class="top-right">
+      <ul>
+        {% if section.settings.facebook != blank %}
+          <li>
+            <a href="{{ section.settings.facebook }}" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.009 10.125 11.927V15.56H7.078V12.073h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.926-1.956 1.875v2.266h3.328l-.532 3.487h-2.796V24C19.612 23.082 24 18.092 24 12.073z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.instagram != blank %}
+          <li>
+            <a href="{{ section.settings.instagram }}" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M7.75 2C4.57 2 2 4.57 2 7.75v8.5C2 19.43 4.57 22 7.75 22h8.5C19.43 22 22 19.43 22 16.25v-8.5C22 4.57 19.43 2 16.25 2h-8.5zm0 2h8.5C18.55 4 20 5.45 20 7.75v8.5C20 18.55 18.55 20 16.25 20h-8.5C5.45 20 4 18.55 4 16.25v-8.5C4 5.45 5.45 4 7.75 4zm4.25 2.5A5.75 5.75 0 1 0 17.75 12 5.75 5.75 0 0 0 12 6.5zm0 2A3.75 3.75 0 1 1 8.25 12 3.75 3.75 0 0 1 12 8.5zm5.5-.88a1.13 1.13 0 1 0 1.13 1.13 1.13 1.13 0 0 0-1.13-1.13z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.youtube != blank %}
+          <li>
+            <a href="{{ section.settings.youtube }}" target="_blank" aria-label="YouTube" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M23.5 6.2s-.2-1.7-.9-2.4c-.9-.9-1.9-.9-2.4-1C16.7 2.5 12 2.5 12 2.5h0s-4.7 0-8.2.3c-.5.1-1.5.1-2.4 1C.7 4.5.5 6.2.5 6.2S0 8.2 0 10.3v1.5c0 2.1.5 4.1.5 4.1s.2 1.7.9 2.4c.9.9 2.1.9 2.6 1 1.9.2 8 .3 8 .3s4.7 0 8.2-.3c.5-.1 1.5-.1 2.4-1 .7-.7.9-2.4.9-2.4s.5-2 .5-4.1v-1.5c0-2.1-.5-4.1-.5-4.1zM9.6 14.8V8.6l6 3.1-6 3.1z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.whatsapp != blank %}
+          <li>
+            <a
+              href="https://wa.me/{{ section.settings.whatsapp | replace: '+', '' | replace: ' ', '' }}"
+              target="_blank"
+              aria-label="WhatsApp"
+              rel="noopener noreferrer"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                <path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.8-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.8.9.9-2.7-.2-.3A8 8 0 1112 20zm4.2-6.1c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1-.1.2-.6.7-.7.8-.1.1-.3.1-.5 0-.2-.1-.9-.3-1.7-1-.6-.5-1-1.1-1.2-1.3-.1-.2 0-.3.1-.4.1-.1.2-.3.3-.4.1-.1.1-.2.2-.4.1-.1 0-.3 0-.4 0-.1-.5-1.2-.7-1.6-.2-.4-.3-.3-.5-.3h-.4c-.1 0-.4 0-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.3c.1.1 1.5 2.4 3.7 3.2.5.2.9.3 1.2.4.5.2 1 .1 1.4.1.4-.1 1.3-.5 1.5-.9.2-.4.2-.8.1-.9-.1-.1-.2-.2-.4-.3z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.x != blank %}
+          <li>
+            <a href="{{ section.settings.x }}" target="_blank" aria-label="X (Twitter)" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M18.9 2H22l-6.8 7.8L23 22h-6.1l-4.8-6.3L6.5 22H3.4l7.3-8.4L1 2h6.3l4.4 5.8L18.9 2zm-1.1 18h1.7L6.2 3.9H4.4L17.8 20z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.linkedin != blank %}
+          <li>
+            <a href="{{ section.settings.linkedin }}" target="_blank" aria-label="LinkedIn" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M4.98 3.5A2.48 2.48 0 1 0 5 8.46 2.48 2.48 0 0 0 4.98 3.5zM3 9h4v12H3zm7 0h3.83v1.64h.05c.53-1 1.84-2.05 3.79-2.05 4.05 0 4.8 2.66 4.8 6.12V21h-4v-5.54c0-1.32-.03-3.02-1.84-3.02-1.84 0-2.12 1.44-2.12 2.93V21h-4z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.pinterest != blank %}
+          <li>
+            <a href="{{ section.settings.pinterest }}" target="_blank" aria-label="Pinterest" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M12.04 2C6.49 2 3 5.79 3 10.65c0 3.1 1.75 4.87 2.81 4.87.44 0 .69-1.22.69-1.56 0-.41-1.04-1.28-1.04-2.98 0-3.53 2.69-6.02 6.14-6.02 2.98 0 5.18 1.69 5.18 4.79 0 2.31-.93 6.65-3.96 6.65-1.09 0-1.96-.9-1.96-1.98 0-1.71 1.2-3.36 1.2-5.13 0-3.08-4.36-2.52-4.36 1.2 0 .78.1 1.64.45 2.34-.65 2.79-1.98 6.95-1.98 9.8 0 .87.12 1.72.2 2.59.15.17.08.15.31.06 2.18-3 2.1-3.58 3.09-7.52.53 1.02 1.9 1.56 3.01 1.56 4.62 0 6.69-4.5 6.69-8.59C21 5.79 16.86 2 12.04 2z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.tumblr != blank %}
+          <li>
+            <a href="{{ section.settings.tumblr }}" target="_blank" aria-label="Tumblr" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M14.08 20c-3.25 0-4.62-2.29-4.62-4.31V10H7V7.39c1.93-.69 2.69-2.35 2.87-4.39h2.83V7h3.78v3h-3.78v5.19c0 1.17.63 1.75 1.56 1.75.67 0 1.3-.21 1.74-.46v2.75c-.58.39-1.63.77-2.92.77z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.blog != blank %}
+          <li>
+            <a href="{{ section.settings.blog }}" target="_blank" aria-label="Blog" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+
+        {% if section.settings.threads != blank %}
+          <li>
+            <a href="{{ section.settings.threads }}" target="_blank" aria-label="Threads" rel="noopener noreferrer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="white"
+                aria-hidden="true"
+              >
+                <path d="M17.45 10.42c-.18-.09-.37-.17-.57-.24-.05-1.67-.92-2.97-2.43-3.66-1.01-.46-2.32-.57-3.73-.31-2.07.39-3.5 1.78-3.65 3.55-.1 1.19.36 2.29 1.31 3.09l1.38-1.01c-.56-.46-.83-1.04-.78-1.68.09-1.03 1.03-1.89 2.39-2.14 1.04-.2 1.97-.13 2.66.19.61.28.97.77 1.08 1.47-.83-.11-1.73-.07-2.61.14-2.42.57-3.89 2.28-3.57 4.16.29 1.7 1.97 2.8 4.18 2.8.31 0 .63-.02.96-.07 2.29-.33 3.73-1.72 4.04-3.92.08-.54.09-1.05.04-1.53.43.26.74.62.88 1.06.18.55.14 1.16-.12 1.81-.47 1.19-1.54 2.16-3.01 2.72-1.54.58-3.49.68-5.49.27-3.5-.72-5.81-3.64-5.75-7.28.06-3.84 2.84-6.83 6.77-7.28 4.6-.52 7.9 2.08 8.39 6.63.04.37.05.76.03 1.16l1.73.15c.03-.48.02-.95-.03-1.4C20.66 5.08 16.63 2 11.77 2 6.52 2 2.5 6.04 2.5 11.25S6.52 20.5 11.77 20.5c4.3 0 7.55-2.29 8.6-6.03.38-1.34.28-2.62-.28-3.67-.51-.95-1.38-1.7-2.64-2.38zm-3.24 5.03c-.21 1.47-1.11 2.29-2.67 2.51-1.48.21-2.61-.33-2.77-1.26-.17-.99.73-1.96 2.31-2.33.93-.22 1.94-.24 2.87-.07.26.41.35.83.26 1.15z"/>
+              </svg>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Top Header Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone Number",
+      "default": "+91 95372 53838"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email Address",
+      "default": "hbprestigejewels@gmail.com"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_text",
+      "label": "Announcement Text",
+      "default": "<p>FREE SHIPPING on order above Rs.2999 😍</p>"
+    },
+    {
+      "type": "url",
+      "id": "facebook",
+      "label": "Facebook Link"
+    },
+    {
+      "type": "url",
+      "id": "instagram",
+      "label": "Instagram Link"
+    },
+    {
+      "type": "url",
+      "id": "youtube",
+      "label": "YouTube Link"
+    },
+    {
+      "type": "url",
+      "id": "x",
+      "label": "X (Twitter) Link"
+    },
+    {
+      "type": "url",
+      "id": "linkedin",
+      "label": "LinkedIn Link"
+    },
+    {
+      "type": "url",
+      "id": "pinterest",
+      "label": "Pinterest Link"
+    },
+    {
+      "type": "url",
+      "id": "tumblr",
+      "label": "Tumblr Link"
+    },
+    {
+      "type": "url",
+      "id": "blog",
+      "label": "Blog Link"
+    },
+    {
+      "type": "url",
+      "id": "threads",
+      "label": "Threads Link"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp",
+      "label": "WhatsApp Number",
+      "default": "919537253838",
+      "info": "Enter number without + or spaces. Example: 919537253838"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Header Bar"
+    }
+  ]
+}
+{% endschema %}

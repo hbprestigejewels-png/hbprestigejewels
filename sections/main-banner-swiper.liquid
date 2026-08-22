@@ -1,0 +1,450 @@
+{% comment %}
+  Swiper.js Full-width / Page-width Clickable Banner Slider
+  - Fully editable schema visible in theme editor
+  - Per-slide "Image or Video" priority setting (desktop + mobile separately)
+  - Border Radius setting
+  - Entire slide clickable via overlay link
+  - Video auto play/pause fixed: only the ACTIVE slide's video plays,
+    all other slide videos are paused + reset so they don't fight for playback
+{% endcomment %}
+
+{% if request.page_type == 'index' or request.page_type == 'product' %}
+  <link
+    rel="preload"
+    href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  >
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+    >
+  </noscript>
+
+  <script>
+    /* Lazy-load Swiper JS only when the banner is in view */
+    (function() {
+      var loaded = false;
+      function loadSwiper() {
+        if (loaded) return;
+        loaded = true;
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js';
+        s.defer = true;
+        document.head.appendChild(s);
+      }
+      var el = document.getElementById('main-banner-{{ section.id }}');
+      if (el) {
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) { loadSwiper(); io.disconnect(); }
+          }, { rootMargin: '200px' });
+          io.observe(el);
+        } else {
+          loadSwiper();
+        }
+      }
+    })();
+  </script>
+{% endif %}
+
+<section id="main-banner-{{ section.id }}" class="main-banner-section {{ section.settings.layout }}">
+  <div class="{% if section.settings.layout == 'page-width' %}page-width-wrap{% endif %}">
+    <div class="swiper" id="swiper-{{ section.id }}">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          <div class="swiper-slide" {{ block.shopify_attributes }}>
+            <div
+              class="banner-box"
+              style="border-radius: {{ section.settings.border_radius }}px;"
+            >
+              {% comment %} ---------- DESKTOP MEDIA ---------- {% endcomment %}
+              {% if forloop.first and block.settings.media_type_desktop != 'video' and block.settings.image_desktop != blank %}
+                <link rel="preload" as="image" href="{{ block.settings.image_desktop | image_url: width: 480, format: 'webp' }}" imagesrcset="{{ block.settings.image_desktop | image_url: width: 480, format: 'webp' }} 480w, {{ block.settings.image_desktop | image_url: width: 960, format: 'webp' }} 960w" imagesizes="50vw">
+              {% endif %}
+              {% if block.settings.media_type_desktop == 'video' and block.settings.video != blank %}
+                {{
+                  block.settings.video
+                  | video_tag:
+                    autoplay: block.settings.video_autoplay,
+                    loop: block.settings.video_loop,
+                    muted: block.settings.video_muted,
+                    controls: block.settings.video_controls,
+                    playsinline: true,
+                    preload: 'none',
+                    class: 'banner-video small-hide',
+                    image_size: '1280x'
+                }}
+              {% elsif block.settings.image_desktop %}
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="{{ block.settings.image_desktop | image_url: width: 480, format: 'avif' }} 480w, {{ block.settings.image_desktop | image_url: width: 960, format: 'avif' }} 960w, {{ block.settings.image_desktop | image_url: width: 1440, format: 'avif' }} 1440w"
+                    sizes="(max-width: 749px) 100vw, (max-width: 1023px) 75vw, 50vw"
+                  >
+                  <source
+                    type="image/webp"
+                    srcset="{{ block.settings.image_desktop | image_url: width: 480, format: 'webp' }} 480w, {{ block.settings.image_desktop | image_url: width: 960, format: 'webp' }} 960w, {{ block.settings.image_desktop | image_url: width: 1440, format: 'webp' }} 1440w"
+                    sizes="(max-width: 749px) 100vw, (max-width: 1023px) 75vw, 50vw"
+                  >
+                  <img
+                    src="{{ block.settings.image_desktop | image_url: width: 960 }}"
+                    srcset="{{ block.settings.image_desktop | image_url: width: 480 }} 480w, {{ block.settings.image_desktop | image_url: width: 960 }} 960w, {{ block.settings.image_desktop | image_url: width: 1440 }} 1440w"
+                    sizes="(max-width: 749px) 100vw, (max-width: 1023px) 75vw, 50vw"
+                    alt="{{ block.settings.alt_text | default: shop.name | escape }}"
+                    class="media small-hide"
+                    loading="eager"
+                    fetchpriority="high"
+                    width="960"
+                    height="{{ 960 | divided_by: block.settings.image_desktop.aspect_ratio | round }}"
+                  >
+                </picture>
+              {% endif %}
+
+              {% comment %} ---------- MOBILE MEDIA ---------- {% endcomment %}
+              {% if block.settings.media_type_mobile == 'video' and block.settings.video_mobile != blank %}
+                {{
+                  block.settings.video_mobile
+                  | video_tag:
+                    autoplay: block.settings.video_autoplay,
+                    loop: block.settings.video_loop,
+                    muted: block.settings.video_muted,
+                    controls: block.settings.video_controls,
+                    playsinline: true,
+                    preload: 'none',
+                    class: 'banner-video medium-hide large-up-hide',
+                    image_size: '750x'
+                }}
+              {% elsif block.settings.image_mobile %}
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcset="{{ block.settings.image_mobile | image_url: width: 480, format: 'avif' }} 480w, {{ block.settings.image_mobile | image_url: width: 750, format: 'avif' }} 750w"
+                    sizes="100vw"
+                  >
+                  <source
+                    type="image/webp"
+                    srcset="{{ block.settings.image_mobile | image_url: width: 480, format: 'webp' }} 480w, {{ block.settings.image_mobile | image_url: width: 750, format: 'webp' }} 750w"
+                    sizes="100vw"
+                  >
+                  <img
+                    src="{{ block.settings.image_mobile | image_url: width: 750 }}"
+                    srcset="{{ block.settings.image_mobile | image_url: width: 480 }} 480w, {{ block.settings.image_mobile | image_url: width: 750 }} 750w"
+                    sizes="100vw"
+                    alt="{{ block.settings.alt_text | escape }}"
+                    class="media medium-hide large-up-hide"
+                    loading="lazy"
+                    width="750"
+                    height="{{ 750 | divided_by: block.settings.image_mobile.aspect_ratio | round }}"
+                  >
+                </picture>
+              {% endif %}
+
+              {% if block.settings.link != blank %}
+                <a
+                  href="{{ block.settings.link }}"
+                  class="slide-overlay-link"
+                  aria-label="Jewellery Collection"
+                ></a>
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+          <div class="swiper-slide">
+            <div class="banner-box" style="border-radius: {{ section.settings.border_radius }}px;">
+              <img src="https://placehold.co/1920x600?text=Sample+Banner" alt="Placeholder" width="1920" height="600" loading="lazy">
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if section.settings.show_pagination %}
+        <div class="swiper-pagination"></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .main-banner-section { width:100%; margin:0; padding:0; }
+  .main-banner-section.page-width .page-width-wrap { max-width:var(--page-width,1200px); margin:0 auto; }
+  .main-banner-section.full-width { width:100%; }
+
+  .swiper,
+  .swiper-wrapper,
+  .swiper-slide {
+    width:100%;
+    height:100%;
+  }
+
+  .swiper-slide {
+    position: relative !important;
+    z-index: 0;
+    opacity: 0 !important;
+    transition: opacity 0.8s ease-in-out !important;
+  }
+  .swiper-slide-active {
+    opacity: 1 !important;
+  }
+
+  .banner-box {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    min-height: 320px;
+    overflow: hidden;
+    border-radius: inherit;
+    background: #eee; /* visible placeholder color instead of a blank/white gap while video loads or processes */
+  }
+
+  .banner-box img,
+  .banner-box video,
+  .banner-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+    background: #eee;
+  }
+
+  /* Overlay link sits above the slide media */
+  .slide-overlay-link {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 10 !important;
+    display: block !important;
+    pointer-events: auto !important;
+    text-decoration: none !important;
+    background: transparent !important;
+  }
+
+  /* Pagination styles */
+  .swiper-pagination { text-align:center; margin-top:10px; position:relative; }
+  .swiper-pagination-bullet {
+    width:10px; height:10px; background:rgb(122,120,120);
+    border-radius:50%; transition:all .3s; opacity: 1;
+  }
+  .swiper-pagination-bullet-active {
+    width:30px; border-radius:20px; background:rgb(49,49,49);
+  }
+
+  @media screen and (max-width:749px) {
+    .banner-box { height:80dvh; }
+  }
+  @media screen and (min-width:750px) {
+    .banner-box { height:80vh; }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const sectionEl = document.getElementById("main-banner-{{ section.id }}");
+    if (!sectionEl) return;
+
+    // Play the video inside the ACTIVE slide only (respecting each block's own
+    // autoplay / muted settings from the theme editor). Pause + reset all others.
+    function syncSlideVideos() {
+      const allVideos = sectionEl.querySelectorAll(".swiper-slide video");
+      allVideos.forEach((video) => {
+        const parentSlide = video.closest(".swiper-slide");
+        const isActive = parentSlide && parentSlide.classList.contains("swiper-slide-active");
+        const wantsAutoplay = video.hasAttribute("autoplay");
+
+        if (isActive && wantsAutoplay) {
+          // playsinline required for reliable inline autoplay on mobile browsers (iOS Safari especially)
+          video.setAttribute("playsinline", "");
+          video.setAttribute("webkit-playsinline", "");
+          if (video.muted !== true && video.hasAttribute("muted")) {
+            video.muted = true; // browsers require the JS property, not just the attribute
+          }
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // Autoplay blocked by the browser (e.g. video isn't muted) - ignore silently
+            });
+          }
+        } else if (!isActive) {
+          video.pause();
+          if (!video.loop) {
+            video.currentTime = 0;
+          }
+        }
+      });
+    }
+
+    const swiper = new Swiper("#swiper-{{ section.id }}", {
+      slidesPerView: 1,
+      loop: true,
+      autoHeight: false,
+      effect: "fade",
+      fadeEffect: {
+        crossFade: true
+      },
+      pagination: {
+        el: "#main-banner-{{ section.id }} .swiper-pagination",
+        clickable: true
+      },
+      {% if section.settings.autoplay_enable %}
+      autoplay: {
+        delay: {{ section.settings.autoplay_speed | times: 1000 }},
+        disableOnInteraction: false,
+      },
+      {% endif %}
+      on: {
+        init: function () {
+          syncSlideVideos();
+        },
+        slideChangeTransitionEnd: function () {
+          syncSlideVideos();
+        },
+        slideChange: function () {
+          syncSlideVideos();
+        }
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Main Banner (Swiper)",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout Width",
+      "default": "full-width",
+      "options": [
+        { "value": "full-width", "label": "Full width" },
+        { "value": "page-width", "label": "Page width (container)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Banner Border Radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_enable",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Autoplay interval",
+      "options": [
+        { "value": "3", "label": "Every 3 seconds" },
+        { "value": "5", "label": "Every 5 seconds" },
+        { "value": "10", "label": "Every 10 seconds" }
+      ],
+      "default": "5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Banner Slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "media_type_desktop",
+          "label": "Desktop media",
+          "info": "Choose whether to show image or video on desktop for this slide",
+          "default": "image",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Desktop Image",
+          "visible_if": "{{ block.settings.media_type_desktop == 'image' }}"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Desktop Video",
+          "visible_if": "{{ block.settings.media_type_desktop == 'video' }}"
+        },
+        {
+          "type": "select",
+          "id": "media_type_mobile",
+          "label": "Mobile media",
+          "info": "Choose whether to show image or video on mobile for this slide",
+          "default": "image",
+          "options": [
+            { "value": "image", "label": "Image" },
+            { "value": "video", "label": "Video" }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image",
+          "visible_if": "{{ block.settings.media_type_mobile == 'image' }}"
+        },
+        {
+          "type": "video",
+          "id": "video_mobile",
+          "label": "Mobile Video",
+          "visible_if": "{{ block.settings.media_type_mobile == 'video' }}"
+        },
+        {
+          "type": "header",
+          "content": "Video settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "video_autoplay",
+          "label": "Autoplay video",
+          "info": "Requires 'Muted' to also be on - browsers block autoplay with sound",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "video_loop",
+          "label": "Loop video",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "video_muted",
+          "label": "Muted",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "video_controls",
+          "label": "Show video controls",
+          "default": false
+        },
+        { "type": "url", "id": "link", "label": "Slide Link" },
+        { "type": "text", "id": "alt_text", "label": "Alt Text" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Main Banner (Swiper)",
+      "blocks": [{ "type": "slide" }]
+    }
+  ]
+}
+{% endschema %}

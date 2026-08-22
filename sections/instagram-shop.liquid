@@ -1,0 +1,317 @@
+<section class="instagram-shop-section">
+  <div class="page-width">
+    <div class="insta-header">
+      <h2>{{ section.settings.heading }}</h2>
+      <p>{{ section.settings.subtext }}</p>
+    </div>
+
+    <div class="insta-grid ratio-{{ section.settings.image_ratio }}">
+      <div class="insta-slider-buttons">
+        <button class="insta-prev">‹</button>
+        <button class="insta-next">›</button>
+      </div>
+
+      {% for block in section.blocks %}
+        <a
+          href="{{ block.settings.link }}"
+          class="insta-item"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="{% if block.settings.alt_text != blank %}{{ block.settings.alt_text | escape }}{% elsif block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
+        >
+          <div class="insta-image">
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 400 }}"
+                alt="instagram image"
+                loading="lazy"
+                width="400"
+                height="400"
+              >
+            {% endif %}
+
+            <span class="insta-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000" viewBox="0 0 24 24">
+                <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 2A3.75 3.75 0 004 7.75v8.5A3.75 3.75 0 007.75 20h8.5A3.75 3.75 0 0020 16.25v-8.5A3.75 3.75 0 0016.25 4h-8.5zm4.25 3.25a4.75 4.75 0 110 9.5 4.75 4.75 0 010-9.5zm0 2a2.75 2.75 0 100 5.5 2.75 2.75 0 000-5.5zm5.25-2.88a1.13 1.13 0 110 2.25 1.13 1.13 0 010-2.25z"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .instagram-shop-section {
+    padding: 10px 0;
+    width: 100%;
+  }
+
+  /* Force full width with small side padding */
+  .instagram-shop-section .page-width {
+    max-width: 100% !important;
+    padding: 0 10px !important; /* Small side padding for the whole section */
+    margin: 0 auto !important;
+  }
+
+  .insta-header {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+
+  .insta-header h2 {
+    font-size: 40px;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .insta-header p {
+    font-size: 13px;
+    color: #555;
+  }
+
+  .insta-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px; /* REDUCED GAP FOR DESKTOP */
+  }
+
+  .insta-item {
+    display: block;
+    position: relative;
+  }
+
+  /* IMAGE WRAPPER */
+  .insta-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* RATIO OPTIONS */
+  .ratio-square .insta-image {
+    aspect-ratio: 1/1;
+  }
+
+  .ratio-portrait .insta-image {
+    aspect-ratio: 3/4;
+  }
+
+  .ratio-landscape .insta-image {
+    aspect-ratio: 4/3;
+  }
+
+  .ratio-adapt .insta-image {
+    aspect-ratio: auto;
+    border-radius:20px !important;
+  }
+
+  .insta-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: 0.4s;
+  }
+
+  /* ICON */
+  .insta-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.3s;
+  }
+
+  .insta-item:hover img {
+    transform: scale(1.08);
+  }
+
+  .insta-item:hover .insta-icon {
+    opacity: 1;
+  }
+
+  /* MOBILE → CAROUSEL */
+  @media(max-width: 900px) {
+    .insta-grid {
+      display: flex;
+      overflow-x: auto;
+      gap: 4px; /* REDUCED GAP FOR MOBILE */
+      scroll-snap-type: x mandatory;
+      padding-bottom: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .insta-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .insta-item {
+      /* Adjusted calculation to account for the smaller 4px gap */
+      flex: 0 0 calc(50% - 2px);
+      scroll-snap-align: start;
+    }
+  }
+
+  /* SMALL MOBILE */
+  @media(max-width: 600px) {
+    .insta-item {
+      flex: 0 0 calc(50% - 2px);
+    }
+  }
+
+  /* Make section relative for arrow positioning */
+  .instagram-shop-section {
+    position: relative;
+  }
+
+  /* Hide arrows on desktop */
+  .insta-slider-buttons {
+    display: none;
+  }
+
+  /* MOBILE ONLY */
+  @media(max-width: 900px) {
+
+    .insta-grid {
+      display: flex !important;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 6px;
+    }
+
+    .insta-item {
+      flex: 0 0 48%;
+      scroll-snap-align: center;
+    }
+
+    /* SHOW arrows */
+    .insta-slider-buttons {
+      display: flex !important;
+      position: absolute;
+      top: 60%;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Arrow style */
+    .insta-prev,
+    .insta-next {
+      pointer-events: all;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .insta-prev { margin-left: 10px; }
+    .insta-next { margin-right: 10px; }
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const grid = document.querySelector('.insta-grid');
+    const prev = document.querySelector('.insta-prev');
+    const next = document.querySelector('.insta-next');
+
+    if (!grid) return;
+
+    next.addEventListener('click', () => {
+      grid.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+
+    prev.addEventListener('click', () => {
+      grid.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Instagram Shop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "INSTAGRAM SHOP"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Sub Text",
+      "default": "Describe your products, collection etc..."
+    },
+
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image Ratio",
+      "default": "square",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to Image"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ]
+    }
+  ],
+
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Instagram Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Instagram Link"
+        }
+      ]
+    }
+  ],
+
+  "max_blocks": 12,
+
+  "presets": [
+    {
+      "name": "Instagram Shop"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,831 @@
+{% comment %}
+  Parallax Banner Section - Holiday Gift Guide
+  Compatible with Shopify Dawn theme
+{% endcomment %}
+
+{%- assign image_url = section.settings.parallax_image | img_url: '2000x' -%}
+
+<style>
+  .parallax-banner__wrapper--{{ section.id }} {
+    --st-parallax-height: {{ section.settings.section_height }}px;
+    --st-bgvideo-height-mb: {{ section.settings.mobile_height }}px;
+    min-height: var(--st-parallax-height);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: {{ section.settings.content_vertical_position }};
+    justify-content: {{ section.settings.content_horizontal_position }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    content-visibility: auto;
+    contain-intrinsic-size: 0 {{ section.settings.section_height }}px;
+  }
+
+  @media (max-width: 749px) {
+    .parallax-banner__wrapper--{{ section.id }} {
+      min-height: var(--st-bgvideo-height-mb);
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    }
+  }
+
+  .parallax-bg--{{ section.id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: none !important;
+    will-change: transform;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .parallax-bg--{{ section.id }} {
+    background-attachment: scroll;
+  }
+}
+
+@media (min-width: 750px) and (hover: hover) {
+  .parallax-bg--{{ section.id }} {
+    background-attachment: fixed;
+  }
+}
+  /* Parallax overlay */
+  .parallax-banner__wrapper--{{ section.id }}::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    pointer-events: none;
+  }
+
+  /* Content container */
+  .parallax-banner__container--{{ section.id }} {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: {{ section.settings.container_width }}%;
+    padding: 0 20px;
+    margin: 0 auto;
+    display: flex;
+    align-items: {{ section.settings.content_vertical_position }};
+    justify-content: {{ section.settings.content_horizontal_position }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  /* Content box (the card) */
+  .parallax-banner__content--{{ section.id }} {
+    max-width: {{ section.settings.content_width }}px;
+    {% if section.settings.content_bg_enabled %}
+      background-color: {{ section.settings.content_bg_color }};
+      {% if section.settings.content_blur > 0 %}
+        backdrop-filter: blur({{ section.settings.content_blur }}px);
+      {% endif %}
+    {% endif %}
+    padding: {{ section.settings.content_padding }}px;
+    text-align: {{ section.settings.content_text_align }};
+    transition: all 0.3s ease;
+    border-radius: 20px;
+  }
+
+  @media (max-width: 749px) {
+    .parallax-banner__content--{{ section.id }} {
+      padding: {{ section.settings.content_padding_mobile }}px;
+      max-width: 90%;
+    }
+  }
+
+  /* Subtitle styling */
+  .parallax-banner__subtitle--{{ section.id }} {
+    font-size: {{ section.settings.subtitle_size }}px;
+    letter-spacing: {{ section.settings.subtitle_letter_spacing }}px;
+    color: {{ section.settings.subtitle_color }};
+    margin-bottom: {{ section.settings.subtitle_margin_bottom }}px;
+    font-weight: {{ section.settings.subtitle_font_weight }};
+    text-transform: {{ section.settings.subtitle_transform }};
+  }
+
+  /* Title styling */
+  .parallax-banner__title--{{ section.id }} {
+    font-size: {{ section.settings.title_size }}px;
+    color: {{ section.settings.title_color }};
+    margin-bottom: {{ section.settings.title_margin_bottom }}px;
+    font-weight: {{ section.settings.title_font_weight }};
+    line-height: 1.2;
+    letter-spacing: {{ section.settings.title_letter_spacing }}px;
+  }
+
+  @media (max-width: 749px) {
+    .parallax-banner__title--{{ section.id }} {
+      font-size: {{ section.settings.title_size_mobile }}px;
+    }
+    .parallax-banner__subtitle--{{ section.id }} {
+      font-size: {{ section.settings.subtitle_size_mobile }}px;
+    }
+  }
+
+  /* Description text */
+  .parallax-banner__text--{{ section.id }} {
+    font-size: {{ section.settings.text_size }}px;
+    color: {{ section.settings.text_color }};
+    margin-bottom: {{ section.settings.text_margin_bottom }}px;
+    line-height: 1.5;
+  }
+
+  /* Button styling */
+  .parallax-banner__btn--{{ section.id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+    font-size: {{ section.settings.button_text_size }}px;
+    font-weight: {{ section.settings.button_font_weight }};
+    padding: {{ section.settings.button_padding_y }}px {{ section.settings.button_padding_x }}px;
+    border-radius: {{ section.settings.button_border_radius }}px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: {{ section.settings.button_border_width }}px solid {{ section.settings.button_border_color }};
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .parallax-banner__btn--{{ section.id }}:hover {
+    background-color: {{ section.settings.button_hover_bg_color }};
+    color: {{ section.settings.button_hover_text_color }};
+    border-color: {{ section.settings.button_hover_border_color }};
+    transform: translateY(-2px);
+  }
+
+  /* Animation fade-in - only if animations enabled */
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax-banner__wrapper--{{ section.id }} {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease forwards;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+    .parallax-banner__title--{{ section.id }},
+    .parallax-banner__subtitle--{{ section.id }},
+    .parallax-banner__text--{{ section.id }} {
+        font-family: var(--font-heading-family, 'Cormorant', serif);
+    }
+</style>
+
+<div class="parallax-banner__wrapper--{{ section.id }} parallax-banner__wrapper" data-section-id="{{ section.id }}" data-section-type="parallax-banner">
+  <!-- Parallax background image layer with inline style -->
+  <div class="parallax-bg--{{ section.id }} js-parallax-bg" 
+       data-speed="{{ section.settings.parallax_speed }}"
+       {% if section.settings.parallax_image != blank %}
+         style="background-image: url('{{ image_url }}');"
+       {% else %}
+         style="background-image: url('https://placehold.co/2000x1000/cccccc/999999?text=Upload+Image');"
+       {% endif %}>
+  </div>
+  
+  <div class="parallax-banner__container--{{ section.id }}">
+    <div class="parallax-banner__content--{{ section.id }}">
+      {% if section.settings.subtitle != blank %}
+        <div class="parallax-banner__subtitle--{{ section.id }}">
+          {{ section.settings.subtitle | escape }}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.title != blank %}
+        <h2 class="parallax-banner__title--{{ section.id }}">
+          {{ section.settings.title | newline_to_br }}
+        </h2>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+        <div class="parallax-banner__text--{{ section.id }}">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <div>
+          <a href="{{ section.settings.button_link }}" class="parallax-banner__btn--{{ section.id }}">
+            {{ section.settings.button_label | escape }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Wait for DOM to be fully loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initParallax);
+    } else {
+      initParallax();
+    }
+    
+    function initParallax() {
+      const bgElement = document.querySelector('.parallax-bg--{{ section.id }}');
+      if (!bgElement) return;
+      
+      const speed = parseFloat(bgElement.dataset.speed) || 0.3;
+      let ticking = false;
+      let wrapper = bgElement.closest('.parallax-banner__wrapper');
+      
+      function updateParallax() {
+        if (!wrapper) {
+          wrapper = bgElement.closest('.parallax-banner__wrapper');
+          if (!wrapper) return;
+        }
+        
+        const scrolled = window.pageYOffset;
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const wrapperTop = wrapperRect.top + window.pageYOffset;
+        const wrapperHeight = wrapper.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        
+        // Only animate when element is in viewport
+        if (scrolled + viewportHeight > wrapperTop && scrolled < wrapperTop + wrapperHeight) {
+          const scrollPercent = (scrolled - wrapperTop) / wrapperHeight;
+          // const yPos = -scrollPercent * wrapperHeight * speed;
+// bgElement.style.transform = 'translateY(' + yPos + 'px)';
+        }
+        
+        ticking = false;
+      }
+      
+      function requestTick() {
+        if (!ticking) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }
+      
+      window.addEventListener('scroll', requestTick);
+      window.addEventListener('resize', requestTick);
+      
+      // Initial position
+      updateParallax();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Parallax Banner",
+  "tag": "section",
+  "class": "section parallax-banner-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "parallax_image",
+      "label": "Background image",
+      "info": "Recommended size: 1920x1080px or higher"
+    },
+    {
+      "type": "range",
+      "id": "parallax_speed",
+      "label": "Parallax speed",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3,
+      "info": "Higher value = faster movement"
+    },
+    {
+      "type": "header",
+      "content": "Layout & Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Desktop section height",
+      "min": 400,
+      "max": 900,
+      "step": 10,
+      "default": 550,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile section height",
+      "min": 300,
+      "max": 700,
+      "step": 10,
+      "default": 450,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop padding top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Mobile padding top",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Mobile padding bottom",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container width (%)",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "default": 90,
+      "unit": "%"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal_position",
+      "label": "Content horizontal position",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Right" }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_position",
+      "label": "Content vertical position",
+      "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center", "label": "Middle" },
+        { "value": "flex-end", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Content Box"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content max width",
+      "min": 300,
+      "max": 700,
+      "step": 10,
+      "default": 480,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "content_bg_enabled",
+      "label": "Enable background card",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "content_bg_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "content_blur",
+      "label": "Backdrop blur",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "content_padding",
+      "label": "Desktop card padding",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "content_padding_mobile",
+      "label": "Mobile card padding",
+      "min": 15,
+      "max": 50,
+      "step": 5,
+      "default": 25,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "content_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "content_text_align",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle text",
+      "default": "Holiday Gift Guides"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Desktop font size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size_mobile",
+      "label": "Mobile font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "default": 1,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "subtitle_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "select",
+      "id": "subtitle_transform",
+      "label": "Text transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_bottom",
+      "label": "Margin bottom",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Main Title"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title text",
+      "default": "An Unforgettable\nProposal"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Desktop font size",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Mobile font size",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 36,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing",
+      "label": "Letter spacing",
+      "min": -2,
+      "max": 5,
+      "step": 0.5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Margin bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Description Text"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description text",
+      "default": "Need help choosing a gift?"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "text_margin_bottom",
+      "label": "Margin bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Gift"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "button_text_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 24,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "button_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 1,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_border_color",
+      "label": "Border color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Hover background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_border_color",
+      "label": "Hover border color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Banner - Holiday",
+      "settings": {
+        "subtitle": "Holiday Gift Guides",
+        "title": "An Unforgettable\nProposal",
+        "description": "Need help choosing a gift?",
+        "button_label": "Shop Gift",
+        "content_horizontal_position": "flex-end",
+        "content_vertical_position": "center",
+        "section_height": 550,
+        "mobile_height": 450,
+        "content_bg_enabled": true,
+        "content_bg_color": "#ffffff",
+        "content_padding": 40,
+        "title_size": 48,
+        "subtitle_size": 16,
+        "button_bg_color": "#000000"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1180 @@
+{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+
+<section class="custom-collection-carousel color-{{ section.settings.color_scheme }}">
+  <div class="page-width{% if section.settings.full_width %} page-width--full{% endif %}">
+    {%- if section.settings.title != blank or section.settings.subheading != blank -%}
+      <div class="title-wrapper title-wrapper--no-top-margin cc-heading">
+        {% if section.settings.title != blank %}
+          <h2
+            id="SectionHeading-{{ section.id }}"
+            class="collection-list-title inline-richtext {{ section.settings.heading_size }}"
+          >
+            {{ section.settings.title }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="cc-subheading">
+            {{ section.settings.subheading }}
+          </p>
+        {% endif %}
+      </div>
+    {%- endif -%}
+
+    <carousel-component
+      class="cc-carousel"
+      data-desktop-per-view="{{ section.settings.columns_desktop }}"
+      data-mobile-per-view="{{ section.settings.columns_mobile }}"
+      data-autoplay="{{ section.settings.autoplay }}"
+      data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+      data-loop="{{ section.settings.loop }}"
+      data-gap="{{ section.settings.gap }}"
+      data-drag-enabled="true"
+      data-swipe-enabled="true"
+    >
+      <div class="cc-carousel__container">
+        <div class="cc-carousel__track" data-carousel-track>
+          {% for block in section.blocks %}
+            {% assign collection = collections[block.settings.collection] %}
+
+            {%- assign img = block.settings.collection_image | default: collection.image -%}
+            {%- assign img_mobile = block.settings.collection_image_mobile -%}
+            {% assign title = block.settings.collection_name | default: collection.title %}
+            {% assign link = block.settings.url | default: collection.url %}
+
+            {% if img %}
+              <div class="cc-carousel__slide" {{ block.shopify_attributes }}>
+                <a
+                  class="cc-carousel__card"
+                  href="{{ link }}"
+                  style="{% if section.settings.image_aspect_ratio == 'auto' %}aspect-ratio: {{ img.aspect_ratio | default: 1 }}{% endif %}"
+                >
+                  <picture>
+                    {% if img_mobile %}
+                      <source media="(max-width: 768px)" srcset="{{ img_mobile | image_url: width: 600 }}">
+                    {% endif %}
+                    <img
+                      src="{{ img | image_url: width: 800 }}"
+                      alt="{{ title }}"
+                      class="cc-carousel__image"
+                      loading="lazy"
+                      width="{{ img.width }}"
+                      height="{{ img.height }}"
+                    >
+                  </picture>
+                </a>
+
+                <div class="cc-carousel__content-below">
+                  <h3 class="cc-carousel__title-below">{{ title }}</h3>
+                  <a href="{{ link }}" class="cc-carousel__button-below">{{ block.settings.button_text }}</a>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      {%- if section.settings.show_slide_counter -%}
+        <div class="cc-carousel__controls">
+          <button
+            type="button"
+            class="cc-carousel__arrow cc-carousel__arrow--prev"
+            data-carousel-prev
+            aria-label="Previous slide"
+          >
+            ‹
+          </button>
+
+          {%- if section.settings.show_slide_counter -%}
+            <div class="cc-carousel__counter" data-carousel-counter>
+              <span data-counter-current>1</span><span class="cc-carousel__counter-sep">/</span
+              ><span data-counter-total>{{ section.blocks.size }}</span>
+            </div>
+          {%- endif -%}
+
+          <button
+            type="button"
+            class="cc-carousel__arrow cc-carousel__arrow--next"
+            data-carousel-next
+            aria-label="Next slide"
+          >
+            ›
+          </button>
+        </div>
+      {%- endif -%}
+    </carousel-component>
+  </div>
+
+  <style>
+            .custom-collection-carousel {
+              padding-top: {{ section.settings.padding_top }}px;
+              padding-bottom: {{ section.settings.padding_bottom }}px;
+              overflow: hidden;
+            }
+
+            .page-width--full {
+              max-width: 100%;
+              padding-left: 1.5rem;
+              padding-right: 1.5rem;
+            }
+
+            /* CAROUSEL COMPONENT */
+            .cc-carousel {
+              position: relative;
+              display: block;
+              width: 100%;
+            }
+
+            .cc-carousel__container {
+              overflow: hidden;
+              position: relative;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+              touch-action: pan-y pinch-zoom;
+            }
+
+            .cc-carousel__track {
+              display: flex;
+              transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              margin: 0;
+              cursor: grab;
+              will-change: transform;
+              touch-action: pan-y pinch-zoom;
+            }
+
+            .cc-carousel__track.dragging {
+              cursor: grabbing;
+              transition: none;
+            }
+
+            .cc-carousel__track:active {
+              cursor: grabbing;
+            }
+
+            /* Disable transitions during drag */
+            .cc-carousel__track.no-transition {
+              transition: none !important;
+            }
+
+            .cc-carousel__slide {
+              flex: 0 0 auto;
+              padding: 0;
+              box-sizing: border-box;
+              user-select: none;
+              -webkit-user-select: none;
+              -webkit-tap-highlight-color: transparent;
+            }
+
+            /* Dynamic gap between slides - controlled by data-gap attribute */
+            .cc-carousel__slide:not(:last-child) {
+              margin-right: {{ section.settings.gap }}px;
+            }
+
+            /* Desktop slide width based on columns and gap */
+            @media screen and (min-width: 769px) {
+              .cc-carousel__slide {
+                width: calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.columns_desktop }} - 1))) / {{ section.settings.columns_desktop }});
+              }
+            }
+
+            /* Mobile slide width based on columns and gap */
+            @media screen and (max-width: 768px) {
+              .cc-carousel__slide {
+                width: calc((100% - ({{ section.settings.gap }}px * ({{ section.settings.columns_mobile }} - 1))) / {{ section.settings.columns_mobile }});
+              }
+            }
+
+            /* CARD STYLES - Image only, no overlay */
+            .cc-carousel__card {
+              position: relative;
+              display: block;
+              overflow: hidden;
+              border-radius: {{ section.settings.card_radius }}px;
+              text-decoration: none;
+              width: 100%;
+              {% if section.settings.image_aspect_ratio != 'auto' %}
+                aspect-ratio: {{ section.settings.image_aspect_ratio }};
+              {% endif %}
+              border-radius:20px !important;
+            }
+
+            .cc-carousel__image {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              pointer-events: none;
+            }
+
+            {% comment %} .cc-carousel__card:hover .cc-carousel__image {
+              transform: scale(1.02);
+            } {% endcomment %}
+
+            /* CONTENT BELOW IMAGE */
+            .cc-carousel__content-below {
+              padding: 1.2rem 0.5rem;
+              text-align: {{ section.settings.text_alignment }};
+              background: transparent;
+            }
+
+            .cc-carousel__title-below {
+               margin: 0 0 0.5rem 0;
+              color: {{ section.settings.title_color | default: '#000000' }};
+              line-height: 1.2;
+            }
+            .featured-collections-styles .title {
+              font-family: "Cormorant", serif;
+              font-style: italic;
+              font-weight: 500;
+              font-size: 40px;
+              line-height: 15px;;
+              color: rgb(32, 32, 37);
+              margin: 0 0 0.5rem 0;
+            }
+
+            .cc-carousel__button-below {
+              display: inline-block;
+              font-size: 0.9rem;
+              letter-spacing: 0.05em;
+              text-transform: uppercase;
+              padding: 0.5rem 1.2rem;
+              background: {{ section.settings.button_bg_color | default: '#000000' }};
+              color: {{ section.settings.button_text_color | default: '#FFFFFF' }};
+              border-radius: {{ section.settings.button_radius }}px;
+              text-decoration: none;
+              transition: all 0.3s ease;
+              border: 1px solid transparent;
+              pointer-events: auto;
+            }
+
+            .cc-carousel__button-below:hover {
+              background: {{ section.settings.button_hover_bg_color | default: '#333333' }};
+              transform: translateY(-2px);
+            }
+
+            /* CONTROLS - plain outlined arrows with a slide counter in between, sitting below the slider */
+            .cc-carousel__controls {
+              display: none;
+              align-items: center;
+              justify-content: center;
+              gap: {{ section.settings.arrow_gap }}px;
+              margin-top: 1.6rem;
+            }
+
+            .cc-carousel__arrow {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: {{ section.settings.arrow_size }}px;
+              height: {{ section.settings.arrow_size }}px;
+              border-radius: 50%;
+              background: transparent;
+              border: 1.5px solid {{ section.settings.arrow_color }};
+              cursor: pointer;
+              transition: all 0.2s ease;
+              color: {{ section.settings.arrow_color }};
+              font-size: 16px;
+              line-height: 1;
+              z-index: 10;
+            }
+
+            .cc-carousel__arrow:hover:not(:disabled) {
+              background: {{ section.settings.arrow_color | color_modify: 'alpha', 0.06 }};
+              transform: scale(1.05);
+            }
+
+            .cc-carousel__arrow:disabled {
+              opacity: 0.35;
+              cursor: not-allowed;
+            }
+
+            .cc-carousel__arrow svg {
+              width: 20px;
+              height: 20px;
+            }
+
+            .cc-carousel__counter {
+              font-size: 1.4rem;
+              min-width: 3.6rem;
+              text-align: center;
+              color: {{ section.settings.counter_color }};
+              user-select: none;
+            }
+
+            .cc-carousel__counter-sep {
+              margin: 0 0.15em;
+              opacity: 0.6;
+            }
+
+            .cc-heading {
+              text-align: center;
+              margin-bottom: 30px;
+            }
+
+            .cc-subheading {
+              font-size: 14px;
+              color: rgba(var(--color-foreground), 0.7);
+              margin-top: 8px;
+              margin-bottom: 0;
+            }
+
+            /* PROGRESS BAR */
+            .cc-carousel__progress {
+              width: 100%;
+              height: {{ section.settings.progress_height }}px;
+              background: {{ section.settings.progress_bg_color }};
+              margin-top: 2rem;
+              overflow: hidden;
+              border-radius: {{ section.settings.progress_radius }}px;
+            }
+
+            .cc-carousel__progress-bar {
+              height: 100%;
+              width: 0%;
+              background: {{ section.settings.progress_fill_color }};
+              transition: width 0.4s ease;
+            }
+
+            /* Mobile optimizations */
+            @media screen and (max-width: 768px) {
+              .cc-carousel__title-below {
+                font-size: 1.2rem;
+              }
+              .featured-collections-styles .title {
+                font-family: "Cormorant", serif;
+                font-style: italic;
+                font-weight: 500;
+                font-size: 30px;
+                line-height: 10px;
+                color: rgb(32, 32, 37);
+                margin: 0 0 0.5rem 0;
+              }
+
+              .cc-carousel__button-below {
+                font-size: 0.8rem;
+                padding: 0.4rem 1rem;
+              }
+
+              .cc-carousel__arrow {
+                width: 40px;
+                height: 40px;
+              }
+
+              .cc-carousel__arrow svg {
+                width: 18px;
+                height: 18px;
+              }
+
+              .cc-carousel__content-below {
+                padding: 1rem 0.3rem;
+              }
+
+              /* Improved touch targets for mobile */
+              .cc-carousel__slide {
+                touch-action: pan-y pinch-zoom;
+              }
+
+              .cc-carousel__card {
+                cursor: pointer;
+              }
+
+              /* Remove hover effects on mobile */
+              {% comment %} .cc-carousel__card:hover .cc-carousel__image {
+                transform: scale(1);
+              } {% endcomment %}
+
+              .cc-heading {
+                margin-bottom: 20px;
+              }
+            }
+
+            /* FORCE SHOW ARROWS + COUNTER BELOW THE SLIDER ON MOBILE */
+        @media screen and (max-width: 768px) {
+          .cc-carousel__controls {
+            display: flex !important;
+          }
+        }
+            /* Ensure first slide is fully visible */
+            .cc-carousel__track .cc-carousel__slide:first-child {
+              margin-left: 0;
+            }
+
+            /* Fix for RTL layouts if needed */
+            [dir="rtl"] .cc-carousel__slide:not(:last-child) {
+              margin-right: 0;
+              margin-left: {{ section.settings.gap }}px;
+            }
+
+            /* Scroll indicators for better UX on mobile - plain round dots, only color changes on active */
+            .cc-carousel__scroll-indicator {
+              display: none;
+              justify-content: center;
+              align-items: center;
+              gap: {{ section.settings.dot_gap }}px;
+              margin-top: 20px;
+            }
+
+            .cc-carousel__scroll-dot {
+              width: {{ section.settings.dot_size }}px;
+              height: {{ section.settings.dot_size }}px;
+              border-radius: 50%;
+              background-color: {{ section.settings.dot_color }};
+              opacity: 1;
+              cursor: pointer;
+              transition: background-color 0.25s ease;
+              flex: 0 0 auto;
+              display:flex !important;
+            }
+
+            .cc-carousel__scroll-dot.active {
+              background-color: {{ section.settings.dot_active_color }};
+            }
+
+            @media screen and (max-width: 768px) {
+              .cc-carousel__scroll-indicator {
+                display: {% if section.settings.show_mobile_dots %}flex{% else %}none{% endif %};
+              }
+            }
+
+            /* Touch feedback */
+            .cc-carousel__slide:active {
+              opacity: 0.95;
+            }
+
+            /* Prevent text selection while dragging */
+            .dragging {
+              user-select: none;
+              -webkit-user-select: none;
+            }
+
+               .slider-dots{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:8px;
+        margin-top:18px;
+    }
+
+     .cc-carousel__scroll-dot{
+        width:8px;
+        height:8px;
+        border-radius:50%;
+        background:#bdbdbd;
+        border:none;
+        cursor:pointer;
+        opacity:.5;
+        transition:.3s;
+        padding:0;
+    }
+
+    .cc-carousel__scroll-dot.active{
+        width:24px;
+        border-radius:20px;
+        background:#222;
+        opacity:1;
+    }
+  </style>
+
+  {% if section.settings.show_mobile_dots %}
+    <div class="cc-carousel__scroll-indicator" data-scroll-indicator>
+      {% for block in section.blocks %}
+        <div
+          class="cc-carousel__scroll-dot{% if forloop.first %} active{% endif %}"
+          data-dot-index="{{ forloop.index0 }}"
+        ></div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>
+
+<script>
+  (function () {
+    // Enhanced Carousel with Touch Support
+    class TouchCarousel {
+      constructor(element) {
+        this.carousel = element;
+        this.container = element.querySelector('[data-carousel-track]');
+        this.prevButton = element.querySelector('[data-carousel-prev]');
+        this.nextButton = element.querySelector('[data-carousel-next]');
+        this.progressBar = element.querySelector('[data-carousel-progress]');
+        this.counterCurrent = element.querySelector('[data-counter-current]');
+
+        // Get settings from data attributes
+        this.desktopPerView = parseInt(element.dataset.desktopPerView) || 4;
+        this.mobilePerView = parseInt(element.dataset.mobilePerView) || 2;
+        this.gap = parseInt(element.dataset.gap) || 20;
+        this.autoplay = element.dataset.autoplay === 'true';
+        this.autoplaySpeed = (parseInt(element.dataset.autoplaySpeed) || 5) * 1000;
+        this.loop = element.dataset.loop === 'true';
+        this.dragEnabled = element.dataset.dragEnabled !== 'false';
+        this.swipeEnabled = element.dataset.swipeEnabled !== 'false';
+
+        this.currentIndex = 0;
+        this.totalSlides = this.container.children.length;
+        this.startX = 0;
+        this.currentX = 0;
+        this.isDragging = false;
+        this.isAnimating = false;
+        this.autoPlayInterval = null;
+        this.slideWidth = 0;
+
+        this.init();
+      }
+
+      init() {
+        if (this.totalSlides === 0) return;
+
+        this.updateSlideWidth();
+        this.updateButtons();
+        this.updateProgress();
+        this.updateCounter();
+
+        // Add event listeners
+        if (this.prevButton) {
+          this.prevButton.addEventListener('click', () => this.prev());
+        }
+        if (this.nextButton) {
+          this.nextButton.addEventListener('click', () => this.next());
+        }
+
+        // Touch and drag events
+        if (this.dragEnabled || this.swipeEnabled) {
+          this.container.addEventListener('mousedown', this.onDragStart.bind(this));
+          this.container.addEventListener('mousemove', this.onDragMove.bind(this));
+          this.container.addEventListener('mouseup', this.onDragEnd.bind(this));
+          this.container.addEventListener('mouseleave', this.onDragEnd.bind(this));
+
+          this.container.addEventListener('touchstart', this.onTouchStart.bind(this));
+          this.container.addEventListener('touchmove', this.onTouchMove.bind(this));
+          this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
+        }
+
+        // Window resize
+        window.addEventListener('resize', this.onResize.bind(this));
+
+        // Start autoplay
+        if (this.autoplay && this.totalSlides > 1) {
+          this.startAutoplay();
+          this.container.addEventListener('mouseenter', () => this.stopAutoplay());
+          this.container.addEventListener('mouseleave', () => this.startAutoplay());
+        }
+
+        // Update dot indicators
+        this.updateDots();
+
+        // Add scroll indicator click events
+        const dots = this.carousel.parentElement.parentElement.querySelectorAll('[data-dot-index]');
+        this.dots = dots;
+        dots.forEach((dot, index) => {
+          dot.addEventListener('click', () => this.goToSlide(index));
+        });
+      }
+
+      updateSlideWidth() {
+        const isMobile = window.innerWidth <= 768;
+        const perView = isMobile ? this.mobilePerView : this.desktopPerView;
+        const containerWidth = this.container.parentElement.offsetWidth;
+        this.slideWidth = (containerWidth - this.gap * (perView - 1)) / perView;
+
+        // Update slide widths
+        const slides = this.container.children;
+        for (let slide of slides) {
+          slide.style.width = `${this.slideWidth}px`;
+        }
+
+        this.updateTransform();
+      }
+
+      updateTransform() {
+        if (this.isAnimating) return;
+
+        const maxIndex = Math.max(0, this.totalSlides - this.getPerView());
+        const validIndex = Math.min(Math.max(0, this.currentIndex), maxIndex);
+
+        if (validIndex !== this.currentIndex) {
+          this.currentIndex = validIndex;
+        }
+
+        const translateX = -(this.currentIndex * (this.slideWidth + this.gap));
+        this.container.style.transform = `translateX(${translateX}px)`;
+
+        this.updateButtons();
+        this.updateProgress();
+        this.updateDots();
+        this.updateCounter();
+      }
+
+      getPerView() {
+        return window.innerWidth <= 768 ? this.mobilePerView : this.desktopPerView;
+      }
+
+      updateButtons() {
+        if (!this.loop) {
+          const perView = this.getPerView();
+          const maxIndex = Math.max(0, this.totalSlides - perView);
+
+          if (this.prevButton) {
+            this.prevButton.disabled = this.currentIndex === 0;
+          }
+          if (this.nextButton) {
+            this.nextButton.disabled = this.currentIndex >= maxIndex;
+          }
+        } else {
+          if (this.prevButton) this.prevButton.disabled = false;
+          if (this.nextButton) this.nextButton.disabled = false;
+        }
+      }
+
+      updateProgress() {
+        if (!this.progressBar) return;
+
+        const perView = this.getPerView();
+        const maxIndex = Math.max(0, this.totalSlides - perView);
+        const progress = maxIndex === 0 ? 100 : (this.currentIndex / maxIndex) * 100;
+        this.progressBar.style.width = `${progress}%`;
+      }
+
+      updateDots() {
+        const dots = this.dots || this.carousel.parentElement.parentElement.querySelectorAll('[data-dot-index]');
+        const perView = this.getPerView();
+        const maxIndex = Math.max(0, this.totalSlides - perView);
+        const activeDotIndex = Math.min(this.currentIndex, maxIndex);
+
+        dots.forEach((dot, index) => {
+          if (index === activeDotIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      updateCounter() {
+        if (!this.counterCurrent) return;
+
+        const perView = this.getPerView();
+        const maxIndex = Math.max(0, this.totalSlides - perView);
+        const activeIndex = Math.min(this.currentIndex, maxIndex);
+        this.counterCurrent.textContent = activeIndex + 1;
+      }
+
+      goToSlide(index) {
+        if (this.isAnimating) return;
+
+        const perView = this.getPerView();
+        const maxIndex = Math.max(0, this.totalSlides - perView);
+        this.currentIndex = Math.min(Math.max(0, index), maxIndex);
+        this.updateTransform();
+      }
+
+      next() {
+        if (this.isAnimating) return;
+
+        const perView = this.getPerView();
+        const maxIndex = Math.max(0, this.totalSlides - perView);
+
+        if (this.loop && this.currentIndex >= maxIndex) {
+          this.currentIndex = 0;
+        } else if (this.currentIndex < maxIndex) {
+          this.currentIndex++;
+        }
+
+        this.updateTransform();
+      }
+
+      prev() {
+        if (this.isAnimating) return;
+
+        if (this.loop && this.currentIndex === 0) {
+          const perView = this.getPerView();
+          this.currentIndex = Math.max(0, this.totalSlides - perView);
+        } else if (this.currentIndex > 0) {
+          this.currentIndex--;
+        }
+
+        this.updateTransform();
+      }
+
+      onDragStart(e) {
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+        this.currentX = this.startX;
+        this.container.style.cursor = 'grabbing';
+        this.container.classList.add('dragging');
+
+        e.preventDefault();
+      }
+
+      onDragMove(e) {
+        if (!this.isDragging) return;
+
+        const x = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+        const deltaX = x - this.startX;
+
+        if (Math.abs(deltaX) > 10) {
+          e.preventDefault();
+        }
+
+        const currentTranslate = -(this.currentIndex * (this.slideWidth + this.gap));
+        const newTranslate = currentTranslate + deltaX;
+
+        this.container.style.transform = `translateX(${newTranslate}px)`;
+        this.container.style.transition = 'none';
+      }
+
+      onDragEnd(e) {
+        if (!this.isDragging) return;
+
+        this.isDragging = false;
+        this.container.style.cursor = '';
+        this.container.classList.remove('dragging');
+        this.container.style.transition = '';
+
+        const endX = e.type === 'mouseup' ? e.clientX : e.changedTouches ? e.changedTouches[0].clientX : this.currentX;
+        const deltaX = endX - this.startX;
+        const threshold = 50;
+
+        if (Math.abs(deltaX) > threshold) {
+          if (deltaX > 0) {
+            this.prev();
+          } else {
+            this.next();
+          }
+        } else {
+          this.updateTransform();
+        }
+      }
+
+      onTouchStart(e) {
+        this.onDragStart(e);
+      }
+
+      onTouchMove(e) {
+        this.onDragMove(e);
+      }
+
+      onTouchEnd(e) {
+        this.onDragEnd(e);
+      }
+
+      onResize() {
+        this.updateSlideWidth();
+        this.updateTransform();
+      }
+
+      startAutoplay() {
+        if (this.autoPlayInterval) return;
+        this.autoPlayInterval = setInterval(() => this.next(), this.autoplaySpeed);
+      }
+
+      stopAutoplay() {
+        if (this.autoPlayInterval) {
+          clearInterval(this.autoPlayInterval);
+          this.autoPlayInterval = null;
+        }
+      }
+    }
+
+    // Initialize all carousels
+    document.querySelectorAll('carousel-component').forEach((carousel) => {
+      new TouchCarousel(carousel);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection Carousel",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 24,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Categories"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Explore our collections"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "default": "1/1",
+      "options": [
+        { "value": "auto", "label": "Auto (adapt to image)" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "4/3", "label": "Landscape (4:3)" },
+        { "value": "3/4", "label": "Portrait (3:4)" },
+        { "value": "16/9", "label": "Widescreen (16:9)" }
+      ],
+      "info": "Auto will use each image's original aspect ratio"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between images",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 20,
+      "unit": "px",
+      "info": "Space between image containers"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Title & Button Styling"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Button hover background",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "default": 4,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Progress Bar Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress",
+      "label": "Show progress bar",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "progress_height",
+      "label": "Progress bar height",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 3,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "progress_bg_color",
+      "label": "Progress bar background",
+      "default": "rgba(0,0,0,0.15)"
+    },
+    {
+      "type": "color",
+      "id": "progress_fill_color",
+      "label": "Progress bar fill color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "progress_radius",
+      "label": "Progress bar radius",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 2,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Settings"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Mobile columns",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Enable infinite loop",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Navigation Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_mobile",
+      "label": "Show arrows on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Arrow & Counter Style"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color (border + icon)",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "arrow_size",
+      "min": 28,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "label": "Arrow circle size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "arrow_gap",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between arrows/counter",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "show_slide_counter",
+      "label": "Show slide counter (e.g. 1/10)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "counter_color",
+      "label": "Counter text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "Dot Indicator Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_dots",
+      "label": "Show dot indicators on mobile",
+      "default": true,
+      "info": "Adds visual dots for better navigation on mobile devices"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color (inactive)",
+      "default": "#D9D9D9"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Dot color (active)",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Dot size",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "dot_gap",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between dots",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Color Scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "collection_image",
+          "label": "Desktop Image (override)"
+        },
+        {
+          "type": "image_picker",
+          "id": "collection_image_mobile",
+          "label": "Mobile Image (optional)"
+        },
+        {
+          "type": "text",
+          "id": "collection_name",
+          "label": "Custom title (optional)"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Custom link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Carousel",
+      "blocks": [{ "type": "collection" }, { "type": "collection" }, { "type": "collection" }, { "type": "collection" }]
+    }
+  ]
+}
+{% endschema %}

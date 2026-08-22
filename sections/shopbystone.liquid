@@ -1,0 +1,1137 @@
+{% if request.page_type == 'collection' %}
+  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+{% endif %}
+{% if request.page_type == 'product' or request.page_type == 'collection' %}
+  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+{% endif %}
+{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+{% render 'lazy-stylesheet', file: 'template-collection.css' %}
+
+<link rel="stylesheet" href="{{ 'component-deferred-media.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<style>
+      /* ========== SHOP BY SHAPE SECTION STYLES ========== */
+      .shop-by-shape {
+        background-color: {{ section.settings.background_color }};
+        padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+        overflow-x: hidden;
+      }
+
+      @media screen and (max-width: 749px) {
+        .shop-by-shape {
+          padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px 0;
+        }
+      }
+
+      /* Container styling */
+      .shop-by-shape .section-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      @media screen and (min-width: 1200px) {
+        .shop-by-shape .section-container {
+          padding: 0 2rem;
+        }
+      }
+
+      @media screen and (min-width: 1600px) {
+        .shop-by-shape .section-container {
+          padding: 0 3rem;
+        }
+      }
+
+      /* Title and subtitle styling */
+      .shop-by-shape .section-header {
+        margin-bottom: 3rem;
+      }
+      h2.italic-title {
+      font-family: 'Cormorant', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 62px;
+      color: rgb(32, 32, 37);
+    }
+
+      .shop-by-shape .subtitle {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        color: {{ section.settings.subtitle_color }};
+        font-size: 1.4rem;
+        letter-spacing: 0.1rem;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+
+      .shop-by-shape .title {
+        font-style: {{ section.settings.title_style }};
+        display: block;
+        width: 100%;
+        color: {{ section.settings.title_color }};
+        margin-bottom: 0;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+
+      /* Alignment styles */
+      .shop-by-shape .section-header.text-left {
+        text-align: left;
+      }
+
+      .shop-by-shape .section-header.text-center {
+        text-align: center;
+      }
+
+      .shop-by-shape .section-header.text-right {
+        text-align: right;
+      }
+
+      /* Slider Container */
+      .shop-by-shape .shape-slider-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        margin: 0 -1.5rem;
+        {% comment %} padding: 0 1.5rem; {% endcomment %}
+      }
+
+      @media screen and (min-width: 750px) {
+        .shop-by-shape .shape-slider-container {
+          margin: 0 -2rem;
+          padding: 0 2rem;
+        }
+      }
+      @media (max-width: 749px) {
+      h2.italic-title {
+        font-size: 25px;
+        line-height: 36px;
+      }
+    }
+
+      /* Horizontal Scroll Container */
+      .shop-by-shape .shape-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: {{ section.settings.gap_between_items }}px;
+        scrollbar-width: none; /* Hide scrollbar for Firefox */
+        padding-bottom: 20px;
+      }
+
+      .shop-by-shape .shape-slider::-webkit-scrollbar {
+        display: none; /* Hide scrollbar for Chrome/Safari */
+      }
+
+      /* Individual Shape Cards - Responsive columns */
+      .shop-by-shape .shape-card {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        width: calc(60% - {{ section.settings.gap_between_items }}px);
+        max-width: 280px;
+      }
+
+      @media screen and (min-width: 640px) {
+        .shop-by-shape .shape-card {
+          width: calc(33.333% - {{ section.settings.gap_between_items | times: 0.666 }}px);
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        .shop-by-shape .shape-card {
+          width: calc(25% - {{ section.settings.gap_between_items | times: 0.75 }}px);
+        }
+      }
+
+      @media screen and (min-width: 1024px) {
+        .shop-by-shape .shape-card {
+          width: calc(20% - {{ section.settings.gap_between_items | times: 0.8 }}px);
+        }
+      }
+
+      @media screen and (min-width: 1280px) {
+        .shop-by-shape .shape-card {
+          width: calc(16.666% - {{ section.settings.gap_between_items | times: 0.833 }}px);
+        }
+      }
+
+      @media screen and (min-width: 1440px) {
+        .shop-by-shape .shape-card {
+          width: calc(14.285% - {{ section.settings.gap_between_items | times: 0.857 }}px);
+        }
+      }
+
+      @media screen and (min-width: 1600px) {
+        .shop-by-shape .shape-card {
+          width: calc(12.5% - {{ section.settings.gap_between_items | times: 0.875 }}px);
+        }
+      }
+
+      @media screen and (min-width: 1920px) {
+        .shop-by-shape .shape-card {
+          width: calc(11.111% - {{ section.settings.gap_between_items | times: 0.889 }}px);
+        }
+      }
+
+      /* Alternative: Grid layout for desktop if preferred */
+      {% if section.settings.use_grid_layout %}
+      @media screen and (min-width: 990px) {
+        .shop-by-shape .shape-slider {
+          display: grid;
+          grid-template-columns: repeat({{ section.settings.desktop_columns }}, 1fr);
+          gap: {{ section.settings.gap_between_items }}px;
+          overflow-x: visible;
+        }
+
+        .shop-by-shape .shape-card {
+          width: 100%;
+          max-width: none;
+        }
+
+        .shop-by-shape .slider-buttons,
+        .shop-by-shape .slider-dots,
+        .shop-by-shape .scroll-progress-track {
+          display: none;
+        }
+      }
+      {% endif %}
+
+      /* Card styling */
+      .shop-by-shape .card-wrapper {
+        height: 100%;
+        transition: transform 0.3s ease;
+      }
+
+      .shop-by-shape .card-wrapper:hover {
+        transform: translateY(-5px);
+      }
+
+      .shop-by-shape .card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+      }
+
+      .shop-by-shape .card__inner {
+        border-radius: {{ section.settings.image_border_radius }}px;
+        overflow: hidden;
+        background-color: #f5f5f5;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Image ratio handling */
+      .shop-by-shape .card__media {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background-color: #f8f8f8;
+      }
+
+      /* Square (1:1) */
+      .shop-by-shape .card__media.ratio-square {
+        padding-top: 100%;
+      }
+
+      /* Landscape (4:3) */
+      .shop-by-shape .card__media.ratio-landscape {
+        padding-top: 75%;
+      }
+
+      /* Portrait (2:3) */
+      .shop-by-shape .card__media.ratio-portrait {
+        padding-top: 133.33%;
+      }
+
+      /* Wide (16:9) */
+      .shop-by-shape .card__media.ratio-wide {
+        padding-top: 56.25%;
+      }
+
+      .shop-by-shape .card__media .media {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .shop-by-shape .card__media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.5s ease;
+        display: block;
+      }
+
+      .shop-by-shape .card-wrapper:hover .card__media img {
+        transform: scale(1.08);
+      }
+
+      /* Placeholder styling */
+      .shop-by-shape .placeholder-svg {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+        color: #999;
+      }
+
+      .shop-by-shape .placeholder-svg svg {
+        width: 60%;
+        height: 60%;
+        opacity: 0.6;
+      }
+
+      /* Card information */
+      .shop-by-shape .card__information {
+        padding: 1.8rem 0.5rem 0 0.5rem;
+        text-align: center;
+      }
+
+      .shop-by-shape .card__heading {
+        font-size: 1.8rem;
+        margin: 0;
+        font-weight: {{ section.settings.title_font_weight }};
+        line-height: 1.4;
+      }
+
+      .shop-by-shape .card__heading a {
+        color: {{ section.settings.collection_title_color }};
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .shop-by-shape .card__heading a:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.3rem;
+        color: {{ section.settings.collection_title_color | color_modify: 'alpha', 0.7 }};
+      }
+
+      @media screen and (max-width: 749px) {
+        .shop-by-shape .card__heading {
+          font-size: 1.6rem;
+        }
+        .shop-by-shape .card__information {
+          padding: 1.2rem 0.5rem 0 0.5rem;
+        }
+      }
+
+      /* Navigation Buttons */
+      .shop-by-shape .slider-buttons {
+        margin-top: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .shop-by-shape .slider-button {
+        background: transparent;
+        border: 2px solid {{ section.settings.collection_title_color }};
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: {{ section.settings.collection_title_color }};
+      }
+
+      .shop-by-shape .slider-button:hover:not(:disabled) {
+        background: {{ section.settings.collection_title_color }};
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .shop-by-shape .slider-button:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      .shop-by-shape .slider-counter {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: {{ section.settings.collection_title_color }};
+      }
+
+      /* ===== Scroll indicator dots (plain round dots, only color changes on active) ===== */
+      .shop-by-shape .slider-dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: {{ section.settings.dot_gap }}px;
+        margin-top: 2rem;
+      }
+
+      .shop-by-shape .slider-dot {
+        flex: 0 0 auto;
+        width: {{ section.settings.dot_size }}px;
+        height: {{ section.settings.dot_size }}px;
+        border-radius: 50%;
+        background-color: {{ section.settings.dot_color }};
+        opacity: 1;
+        cursor: pointer;
+        transition: background-color 0.25s ease, transform 0.25s ease;
+        border: none;
+        padding: 0;
+      }
+
+      .shop-by-shape .slider-dot.active {
+        background-color: {{ section.settings.dot_active_color }};
+      }
+
+      /* Hide dots on mobile if needed */
+      @media screen and (max-width: 749px) {
+        .shop-by-shape .slider-dots {
+          display: {{ section.settings.show_mobile_dots }};
+        }
+      }
+
+      /* ===== Thin scroll progress line (small track + moving fill bar under the slider) ===== */
+      .shop-by-shape .scroll-progress-track {
+        width: {{ section.settings.scroll_line_width }}px;
+        max-width: 90%;
+        height: {{ section.settings.scroll_line_height }}px;
+        margin: 1.6rem auto 0;
+        background-color: {{ section.settings.scroll_line_track_color }};
+        border-radius: {{ section.settings.scroll_line_height }}px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .shop-by-shape .scroll-progress-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 30%;
+        background-color: {{ section.settings.scroll_line_fill_color }};
+        border-radius: inherit;
+        will-change: transform, width;
+      }
+
+      /* Italic style for specific headings if needed */
+      .shop-by-shape .italic-title {
+        font-style: italic;
+      }
+
+      @media screen and (min-width: 1024px) {
+      .shop-by-shape {
+        display: none !important;
+      }
+    }
+    /* HIDE ON DESKTOP */
+    @media screen and (min-width: 769px) {
+      .shop-by-shape {
+        display: none !important;
+      }
+    }
+
+      .cc-carousel__scroll-indicator{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:8px;
+      margin-top:18px;
+  }
+
+   .slider-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#bdbdbd;
+      border:none;
+      cursor:pointer;
+      opacity:.5;
+      transition:.3s;
+      padding:14px;
+      min-width:36px;
+      min-height:36px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+  }
+   .slider-dot::after {
+      content:'';
+      display:block;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:inherit;
+  }
+
+   .slider-dot.active{
+      width:24px;
+      border-radius:20px;
+      background:#222;
+      opacity:1;
+   }
+   .slider-dot.active::after {
+      width:24px;
+      border-radius:20px;
+   }
+</style>
+
+<div class="shop-by-shape color-{{ section.settings.color_scheme }} gradient" id="shop-by-shape-{{ section.id }}">
+  <div class="section-container">
+    <!-- Section Header -->
+    <div class="section-header {% if section.settings.text_alignment == 'left' %}text-left{% elsif section.settings.text_alignment == 'center' %}text-center{% elsif section.settings.text_alignment == 'right' %}text-right{% endif %}">
+      {%- if section.settings.subtitle != blank -%}
+        <div class="subtitle">
+          {{ section.settings.subtitle | escape }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="title {{ section.settings.heading_size }} {% if section.settings.title_style == 'italic' %}italic-title{% endif %}">
+          {{ section.settings.title | escape }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Slider Container -->
+    <div class="shape-slider-container">
+      <div class="shape-slider" id="shape-slider-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <div class="shape-card" id="shape-card-{{ section.id }}-{{ forloop.index }}">
+            <div class="card-wrapper">
+              <div class="card card--standard card--media">
+                <div class="card__inner color-{{ section.settings.card_color_scheme }} gradient">
+                  <div
+                    class="
+                      card__media
+                      {% if section.settings.image_ratio == '100' %}ratio-square
+                      {% elsif section.settings.image_ratio == '75' %}ratio-landscape
+                      {% elsif section.settings.image_ratio == '130' %}ratio-portrait
+                      {% elsif section.settings.image_ratio == '60' %}ratio-wide
+                      {% endif %}
+                    "
+                  >
+                    <div class="media">
+                      {%- if block.settings.shape_image != blank -%}
+                        {%- assign image = block.settings.shape_image -%}
+                        <img
+                          srcset="
+                            {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+                            {%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
+                            {%- if image.width >= 535 -%}{{ image | image_url: width: 535 }} 535w,{%- endif -%}
+                            {%- if image.width >= 750 -%}{{ image | image_url: width: 750 }} 750w,{%- endif -%}
+                            {%- if image.width >= 1070 -%}{{ image | image_url: width: 1070 }} 1070w,{%- endif -%}
+                            {%- if image.width >= 1500 -%}{{ image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                            {{ image | image_url }} {{ image.width }}w
+                          "
+                          src="{{ image | image_url: width: 535 }}"
+                          sizes="(min-width: 1920px) calc(11.11vw), (min-width: 1600px) calc(12.5vw), (min-width: 1440px) calc(14.28vw), (min-width: 1280px) calc(16.66vw), (min-width: 1024px) calc(20vw), (min-width: 768px) calc(25vw), (min-width: 640px) calc(33.33vw), calc(60vw - 20px)"
+                          alt="{{ image.alt | default: block.settings.shape_title | escape }}"
+                          loading="lazy"
+                          width="{{ image.width }}"
+                          height="{{ image.height }}"
+                          class="motion-reduce"
+                        >
+                      {%- else -%}
+                        <div class="placeholder-svg">
+                          {{ 'image' | placeholder_svg_tag }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+                <div class="card__information">
+                  <h3 class="card__heading">
+                    {%- if block.settings.shape_link != blank -%}
+                      <a href="{{ block.settings.shape_link }}">
+                        {{ block.settings.shape_title | escape }}
+                      </a>
+                    {%- else -%}
+                      {{ block.settings.shape_title | escape }}
+                    {%- endif -%}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!--
+      Navigation Controls (mobile-only slider controls; the whole section is already hidden on desktop via CSS, so this no longer depends on the desktop grid setting)
+    -->
+    {%- if section.settings.enable_navigation and section.blocks.size > 1 -%}
+      <div class="slider-buttons">
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          name="previous"
+          aria-label="Previous slide"
+          disabled
+        >
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 10 6"
+            width="10"
+            height="6"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor" transform="rotate(90 5 3)">
+            </path>
+          </svg>
+        </button>
+        <div class="slider-counter caption">
+          <span class="slider-counter--current">1</span>
+          <span aria-hidden="true"> / </span>
+          <span class="slider-counter--total">{{ section.blocks.size }}</span>
+        </div>
+        <button type="button" class="slider-button slider-button--next" name="next" aria-label="Next slide">
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 10 6"
+            width="10"
+            height="6"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor" transform="rotate(-90 5 3)">
+            </path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Thin scroll progress line -->
+      {%- if section.settings.enable_scroll_line -%}
+        <div class="scroll-progress-track">
+          <div class="scroll-progress-fill" id="scroll-progress-{{ section.id }}"></div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <!-- Dot Indicators -->
+    {%- if section.settings.enable_dots -%}
+      <div class="slider-dots">
+        {%- for block in section.blocks -%}
+          <button
+            class="slider-dot{% if forloop.first %} active{% endif %}"
+            data-slide="{{ forloop.index0 }}"
+            aria-label="Go to slide {{ forloop.index }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function() {
+    const sectionId = '{{ section.id }}';
+    const wrapper = document.getElementById('shop-by-shape-' + sectionId);
+    if (!wrapper) return;
+
+    const slider = wrapper.querySelector('#shape-slider-' + sectionId);
+    if (!slider) return;
+
+    let currentIndex = 0;
+    let slideWidth = 0;
+    let totalSlides = {{ section.blocks.size }};
+
+    const dots = wrapper.querySelectorAll('.slider-dots .slider-dot');
+    const prevButton = wrapper.querySelector('.slider-buttons .slider-button--prev');
+    const nextButton = wrapper.querySelector('.slider-buttons .slider-button--next');
+    const currentCounter = wrapper.querySelector('.slider-buttons .slider-counter--current');
+    const progressTrack = wrapper.querySelector('.scroll-progress-track');
+    const progressFill = wrapper.querySelector('#scroll-progress-' + sectionId);
+
+    // Function to update slide width
+    function updateSlideWidth() {
+      const firstCard = slider.querySelector('.shape-card');
+      if (firstCard) {
+        const gap = {{ section.settings.gap_between_items }};
+        slideWidth = firstCard.offsetWidth + gap;
+      }
+    }
+
+    // Function to update the thin scroll progress line
+    function updateProgressBar() {
+      if (!progressFill || !progressTrack) return;
+
+      const trackWidth = progressTrack.clientWidth;
+      const scrollWidth = slider.scrollWidth;
+      const visibleWidth = slider.clientWidth;
+
+      if (scrollWidth <= visibleWidth) {
+        progressFill.style.width = '100%';
+        progressFill.style.transform = 'translateX(0px)';
+        return;
+      }
+
+      const minFillRatio = 0.15; // fill never gets smaller than 15% of the track
+      const fillRatio = Math.max(visibleWidth / scrollWidth, minFillRatio);
+      const fillWidth = fillRatio * trackWidth;
+
+      const maxScrollLeft = scrollWidth - visibleWidth;
+      const scrollRatio = maxScrollLeft > 0 ? (slider.scrollLeft / maxScrollLeft) : 0;
+      const maxTranslate = trackWidth - fillWidth;
+
+      progressFill.style.width = fillWidth + 'px';
+      progressFill.style.transform = 'translateX(' + (scrollRatio * maxTranslate) + 'px)';
+    }
+
+    // Function to update active dot and counter
+    function updateActiveState() {
+      const scrollPosition = slider.scrollLeft;
+      const newIndex = slideWidth ? Math.round(scrollPosition / slideWidth) : 0;
+      currentIndex = Math.min(Math.max(newIndex, 0), totalSlides - 1);
+
+      // Update dots
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentIndex);
+      });
+
+      // Update counter
+      if (currentCounter) {
+        currentCounter.textContent = currentIndex + 1;
+      }
+
+      // Update button states
+      if (prevButton) {
+        prevButton.disabled = currentIndex === 0;
+      }
+      if (nextButton) {
+        nextButton.disabled = currentIndex >= totalSlides - 1;
+      }
+
+      // Update the thin progress line
+      updateProgressBar();
+    }
+
+    // Scroll event handler
+    function handleScroll() {
+      window.requestAnimationFrame(updateActiveState);
+    }
+
+    // Navigation functions
+    function scrollPrev() {
+      if (currentIndex > 0) {
+        slider.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+      }
+    }
+
+    function scrollNext() {
+      if (currentIndex < totalSlides - 1) {
+        slider.scrollBy({ left: slideWidth, behavior: 'smooth' });
+      }
+    }
+
+    function scrollToSlide(index) {
+      slider.scrollTo({ left: index * slideWidth, behavior: 'smooth' });
+    }
+
+    // Slider is mobile-only (desktop is hidden entirely via CSS), so listeners
+    // always attach here regardless of the "use grid layout on desktop" setting.
+    slider.addEventListener('scroll', handleScroll);
+
+    if (prevButton) {
+      prevButton.addEventListener('click', scrollPrev);
+    }
+    if (nextButton) {
+      nextButton.addEventListener('click', scrollNext);
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => scrollToSlide(index));
+    });
+
+    // Initialize
+    function init() {
+      updateSlideWidth();
+      updateActiveState();
+    }
+
+    // Run on load and resize
+    window.addEventListener('load', init);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        updateSlideWidth();
+        updateActiveState();
+      }, 250);
+    });
+
+    // Initial call
+    setTimeout(init, 100);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Shop by Shape",
+  "class": "section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top (desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom (desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top (mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom (mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gap_between_items",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap between items",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Desktop Layout Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_grid_layout",
+      "label": "Use grid layout on desktop",
+      "default": true,
+      "info": "Enable to show all items in a grid without scrolling on desktop"
+    },
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "Number of columns on desktop",
+      "options": [
+        { "value": "4", "label": "4 columns" },
+        { "value": "5", "label": "5 columns" },
+        { "value": "6", "label": "6 columns" },
+        { "value": "7", "label": "7 columns" },
+        { "value": "8", "label": "8 columns" }
+      ],
+      "default": "6",
+      "info": "Only applies when 'Use grid layout' is enabled"
+    },
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Explore Stone"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#666666"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop Stone by Shape"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" },
+        { "value": "h0", "label": "Extra large" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "title_style",
+      "label": "Title font style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" }
+      ],
+      "default": "italic"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Collection Cards"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "100", "label": "Square (1:1)" },
+        { "value": "75", "label": "Landscape (4:3)" },
+        { "value": "130", "label": "Portrait (2:3)" },
+        { "value": "60", "label": "Wide (16:9)" }
+      ],
+      "default": "100"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Image border radius",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "collection_title_color",
+      "label": "Collection title color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_navigation",
+      "label": "Enable navigation controls",
+      "default": true,
+      "info": "Show prev/next buttons, dots, and/or scroll line"
+    },
+    {
+      "type": "header",
+      "content": "Dot Indicator"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_dots",
+      "label": "Show dot indicators",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "show_mobile_dots",
+      "label": "Show dots on mobile",
+      "options": [
+        { "value": "flex", "label": "Yes" },
+        { "value": "none", "label": "No" }
+      ],
+      "default": "flex"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color (inactive)",
+      "default": "#D9D9D9"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Dot color (active)",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Dot size",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "dot_gap",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between dots",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Thin Scroll Progress Line"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_line",
+      "label": "Show scroll progress line",
+      "default": true,
+      "info": "A small line below the slider that fills/moves as the user swipes"
+    },
+    {
+      "type": "color",
+      "id": "scroll_line_track_color",
+      "label": "Line track color (background)",
+      "default": "#E5E5E5"
+    },
+    {
+      "type": "color",
+      "id": "scroll_line_fill_color",
+      "label": "Line fill color (active portion)",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "scroll_line_height",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Line thickness",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "scroll_line_width",
+      "min": 80,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "label": "Line total width",
+      "default": 160
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shape",
+      "name": "Shape Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "shape_image",
+          "label": "Shape image",
+          "info": "Recommended size: 500x500px for best quality"
+        },
+        {
+          "type": "text",
+          "id": "shape_title",
+          "label": "Shape title",
+          "default": "Round"
+        },
+        {
+          "type": "url",
+          "id": "shape_link",
+          "label": "Shape link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Shape",
+      "blocks": [
+        { "type": "shape", "settings": { "shape_title": "Round", "shape_link": "/collections/round" } },
+        { "type": "shape", "settings": { "shape_title": "Oval", "shape_link": "/collections/oval" } },
+        { "type": "shape", "settings": { "shape_title": "Cushion", "shape_link": "/collections/cushion" } },
+        { "type": "shape", "settings": { "shape_title": "Emerald", "shape_link": "/collections/emerald" } },
+        { "type": "shape", "settings": { "shape_title": "Princess", "shape_link": "/collections/princess" } },
+        { "type": "shape", "settings": { "shape_title": "Pear", "shape_link": "/collections/pear" } },
+        { "type": "shape", "settings": { "shape_title": "Radiant", "shape_link": "/collections/radiant" } },
+        { "type": "shape", "settings": { "shape_title": "Marquise", "shape_link": "/collections/marquise" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

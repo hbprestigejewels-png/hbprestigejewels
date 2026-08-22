@@ -1,0 +1,108 @@
+<section class="animated-carousel">
+  <div class="page-width">
+    <div class="carousel-wrapper">
+      <div class="carousel-track">
+        {% for block in section.blocks %}
+          <div class="carousel-item">
+            <div class="carousel-card">
+              <img
+                src="{{ block.settings.image | image_url: width: 400 }}"
+                alt="{% if block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
+                width="220"
+                height="220"
+                loading="lazy"
+              >
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* SECTION */
+  .animated-carousel {
+    padding: 50px 0;
+  }
+
+  /* WRAPPER */
+  .carousel-wrapper {
+    overflow: hidden;
+  }
+
+  /* TRACK */
+  .carousel-track {
+    display: flex;
+    gap: 16px;
+    animation: scrollLoop 20s linear infinite;
+  }
+
+  /* ITEM */
+  .carousel-item {
+    flex: 0 0 auto;
+    width: 220px;
+  }
+
+  /* CARD */
+  .carousel-card {
+    overflow: hidden;
+  }
+
+  .carousel-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 🔥 AUTO SLIDE ANIMATION */
+  @keyframes scrollLoop {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* MOBILE */
+  @media(max-width:768px){
+
+    .carousel-track {
+      animation: none; /* disable auto */
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .carousel-item {
+      width: 70%;
+      scroll-snap-align: start;
+    }
+
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Animated Carousel",
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Animated Carousel"
+    }
+  ]
+}
+{% endschema %}

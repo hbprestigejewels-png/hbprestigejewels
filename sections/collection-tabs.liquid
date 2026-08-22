@@ -1,0 +1,337 @@
+{% render 'lazy-stylesheet', file: 'component-card.css' %}
+{%- if request.page_type == 'product' or request.page_type == 'collection' -%}
+  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+{%- endif -%}
+
+{%- style -%}
+  .collection-tabs-section { padding: 20px 0; width: 100%; overflow: hidden; }
+  .ct-wrapper-full { width: 100% !important; max-width: 100% !important; padding: 0 2rem !important; margin: 0 auto; box-sizing: border-box; }
+  .ct-panel { display: none; width: 100%; }
+  .ct-panel.active { display: block; }
+  .ct-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin-bottom: 30px; padding: 0; list-style: none; }
+  .ct-tab { background: none; border: 1px solid #191919; border-radius: 20px; font-size: 14px; font-weight: 400; text-transform: uppercase; padding: 8px 20px; cursor: pointer; color: #191919; background-color: #ffffff; transition: all 0.3s ease; white-space: nowrap; }
+  .ct-tab.active { color: #ffffff; background-color: #191919; border-color: #000000; }
+  .ct-heading { text-align: center; margin-bottom: 10px; font-size: 40px; color: #666; }
+  .ct-subheading { font-size: 14px; color: #666; margin-top: 6px; margin-bottom: 18px; }
+
+  /* Loading skeleton */
+  .ct-loading { display: flex; gap: 16px; padding: 20px 0; }
+  .ct-loading-item { flex: 1; min-width: 0; }
+  .ct-loading-img { width: 100%; aspect-ratio: 1; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: ctShimmer 1.5s infinite; border-radius: 8px; }
+  .ct-loading-text { height: 14px; background: #f0f0f0; border-radius: 4px; margin-top: 10px; width: 70%; }
+  .ct-loading-price { height: 12px; background: #f0f0f0; border-radius: 4px; margin-top: 6px; width: 40%; }
+  @keyframes ctShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Grid styles */
+  .ct-grid { display: grid; gap: 16px; }
+  .ct-grid .grid__item { list-style: none; }
+
+  @media (max-width: 749px) {
+    .ct-wrapper-full { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .ct-tabs { display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 8px; overflow-x: auto; padding: 0 10px 8px 10px; margin-bottom: 20px; scrollbar-width: none; }
+    .ct-tabs::-webkit-scrollbar { display: none; }
+    .ct-tab { flex: 0 0 auto; font-size: 11px; padding: 6px 14px; border-radius: 10px; }
+    .ct-grid { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto !important; gap: 12px !important; padding-bottom: 12px; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+    .ct-grid .grid__item { scroll-snap-align: start; flex: 0 0 70%; max-width: 70%; list-style: none; }
+    .ct-loading { flex-wrap: nowrap; overflow-x: auto; gap: 12px; }
+    .ct-loading-item { flex: 0 0 70%; min-width: 70%; }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign cols_desktop = section.settings.columns_desktop
+  assign cols_mobile = section.settings.columns_mobile
+-%}
+
+<section id="ctabs-{{ section.id }}" class="collection-tabs-section">
+  <div class="{% if section.settings.full_width %}ct-wrapper-full{% else %}page-width{% endif %}">
+    {% if section.settings.title != blank or section.settings.subheading != blank %}
+      <div class="ct-heading">
+        {% if section.settings.title != blank %}
+          <h2 class="title {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="ct-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- TABS -->
+    <div class="ct-tabs" role="tablist">
+      {% for block in section.blocks %}
+        {% assign col = collections[block.settings.collection] %}
+        <button
+          class="ct-tab {% if forloop.first %}active{% endif %}"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          aria-controls="panel-{{ section.id }}-{{ forloop.index }}"
+          data-target="panel-{{ section.id }}-{{ forloop.index }}"
+          data-collection="{{ block.settings.collection }}"
+          data-tab-index="{{ forloop.index }}"
+        >
+          {{ block.settings.label | default: col.title }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <!-- PANELS -->
+    {% for block in section.blocks %}
+      {% assign col = collections[block.settings.collection] %}
+      {% assign is_first = forloop.first %}
+
+      <div
+        id="panel-{{ section.id }}-{{ forloop.index }}"
+        class="page-width ct-panel {% if is_first %}active{% endif %}"
+        role="tabpanel"
+        data-collection-handle="{{ block.settings.collection }}"
+        data-loaded="{% if is_first %}true{% else %}false{% endif %}"
+      >
+        {% if is_first %}
+          <!-- FIRST TAB: Render products server-side for fast LCP -->
+          <ul
+            class="grid product-grid contains-card contains-card--product{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid--{{ cols_desktop }}-col-desktop grid--{{ cols_mobile }}-col-tablet-down"
+            role="list"
+          >
+            {%- if col.products.size > 0 -%}
+              {% assign lazy_load = false %}
+              {% paginate col.products by section.settings.products_to_show %}
+                {%- for product in col.products limit: section.settings.products_to_show -%}
+                  {% if lazy_load == false and forloop.index > cols_desktop %}
+                    {% assign lazy_load = true %}
+                  {% endif %}
+                  <li class="grid__item">
+                    {% render 'card-product',
+                      card_product: product,
+                      media_aspect_ratio: section.settings.image_ratio,
+                      image_shape: section.settings.image_shape,
+                      lazy_load: lazy_load,
+                      show_secondary_image: section.settings.show_secondary_image,
+                      show_vendor: section.settings.show_vendor,
+                      show_rating: section.settings.show_rating,
+                      section_id: section.id,
+                      quick_add: section.settings.quick_add
+                    %}
+                  </li>
+                {%- endfor -%}
+              {% endpaginate %}
+            {%- else -%}
+              {%- for i in (1..cols_desktop) -%}
+                <li class="grid__item">
+                  {% render 'card-product',
+                    card_product: product,
+                    media_aspect_ratio: section.settings.image_ratio,
+                    image_shape: section.settings.image_shape,
+                    lazy_load: forloop.index > cols_desktop,
+                    show_secondary_image: section.settings.show_secondary_image,
+                    show_vendor: section.settings.show_vendor,
+                    show_rating: section.settings.show_rating,
+                    section_id: section.id,
+                    quick_add: section.settings.quick_add
+                  %}
+                </li>
+              {%- endfor -%}
+            {%- endif -%}
+          </ul>
+        {% else %}
+          <!-- OTHER TABS: Show skeleton loading, products load via AJAX on click -->
+          <div class="ct-loading" aria-label="Loading products...">
+            {%- for i in (1..6) -%}
+              <div class="ct-loading-item">
+                <div class="ct-loading-img"></div>
+                <div class="ct-loading-text"></div>
+                <div class="ct-loading-price"></div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+(function() {
+  'use strict';
+
+  var SECTION_ID = '{{ section.id }}';
+  var PRODUCTS_TO_SHOW = {{ section.settings.products_to_show }};
+  var COLS_DESKTOP = {{ cols_desktop }};
+  var COLS_MOBILE = '{{ cols_mobile }}';
+  var IMAGE_RATIO = '{{ section.settings.image_ratio }}';
+  var IMAGE_SHAPE = '{{ section.settings.image_shape }}';
+  var SHOW_SECONDARY = {{ section.settings.show_secondary_image }};
+  var SHOW_VENDOR = {{ section.settings.show_vendor }};
+  var SHOW_RATING = {{ section.settings.show_rating }};
+  var QUICK_ADD = '{{ section.settings.quick_add }}';
+  var sectionEl = document.getElementById('ctabs-' + SECTION_ID);
+
+  if (!sectionEl) return;
+
+  var tabs = sectionEl.querySelectorAll('.ct-tab');
+  var panels = sectionEl.querySelectorAll('.ct-panel');
+  var loadingCache = {};
+
+  // Lazy-load products for a tab via AJAX
+  function loadTabProducts(panel, collectionHandle, callback) {
+    if (loadingCache[collectionHandle]) {
+      if (callback) callback();
+      return;
+    }
+    loadingCache[collectionHandle] = true;
+
+    var url = '/collections/' + collectionHandle + '/products.json?limit=' + PRODUCTS_TO_SHOW;
+
+    fetch(url)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var products = data.products || [];
+        var grid = document.createElement('ul');
+        grid.className = 'grid product-grid contains-card contains-card--product grid--' + COLS_DESKTOP + '-col-desktop grid--' + COLS_MOBILE + '-col-tablet-down';
+        grid.setAttribute('role', 'list');
+
+        products.forEach(function(product, idx) {
+          var li = document.createElement('li');
+          li.className = 'grid__item';
+
+          // Build product card HTML
+          var image = product.images && product.images[0];
+          var imgUrl = image ? image.src.replace('.png', '_' + (image.width || 600) + 'x.png').replace('.jpg', '_' + (image.width || 600) + 'x.jpg') : '';
+          var imgUrlSmall = image ? image.src.replace('.png', '_300x.png').replace('.jpg', '_300x.jpg') : '';
+          var imgUrlMed = image ? image.src.replace('.png', '_600x.png').replace('.jpg', '_600x.jpg') : '';
+          var secondaryImg = product.images && product.images[1];
+          var secondaryUrl = secondaryImg ? secondaryImg.src.replace('.png', '_300x.png').replace('.jpg', '_300x.jpg') : '';
+          var price = product.variants && product.variants[0] ? product.variants[0].price : '';
+          var comparePrice = product.variants && product.variants[0] ? product.variants[0].compare_at_price : '';
+          var isAvailable = product.variants ? product.variants.some(function(v) { return v.available; }) : true;
+          var isSoldOut = !isAvailable;
+          var ratio = image && image.width && image.height ? image.width / image.height : 1;
+          var aspectPadding = (1 / ratio) * 100;
+          var lazyAttr = idx >= COLS_DESKTOP ? 'loading="lazy"' : 'loading="eager"';
+          var secondaryStyle = SHOW_SECONDARY && secondaryUrl ? '' : 'display:none';
+
+          li.innerHTML =
+            '<div class="card-wrapper">' +
+              '<a href="/products/' + product.handle + '" class="card__inner card-information__textance" style="padding-bottom: ' + aspectPadding + '%">' +
+                '<img src="' + imgUrlSmall + '" srcset="' + imgUrlSmall + ' 300w, ' + imgUrlMed + ' 600w" sizes="(max-width: 749px) 70vw, (max-width: 1199px) 33vw, 25vw" alt="' + (product.title || '').replace(/"/g, '&quot;') + '" class="card__image" width="300" height="' + Math.round(300 / ratio) + '" ' + lazyAttr + ' decoding="async">' +
+                (secondaryUrl ? '<img src="' + secondaryUrl + '" alt="" class="card__image-secondary" width="300" height="' + Math.round(300 / ratio) + '" loading="lazy" decoding="async" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;' + secondaryStyle + '">' : '') +
+                (isSoldOut ? '<span class="badge badge--bottom-left" style="position:absolute;bottom:10px;left:10px;background:#191919;color:#fff;padding:4px 10px;border-radius:4px;font-size:12px">Sold out</span>' : '') +
+              '</a>' +
+              '<div class="card__content" style="padding: 10px;">' +
+                '<h3 style="font-size:14px;font-weight:400;margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><a href="/products/' + product.handle + '" style="text-decoration:none;color:#333">' + product.title + '</a></h3>' +
+                '<div class="price" style="font-size:13px">' +
+                  (comparePrice && comparePrice > price ? '<span style="text-decoration:line-through;color:#999;margin-right:6px">' + Shopify.formatMoney(comparePrice) + '</span>' : '') +
+                  '<span style="font-weight:600">' + Shopify.formatMoney(price) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+
+          grid.appendChild(li);
+        });
+
+        // Replace loading skeleton with products
+        var loading = panel.querySelector('.ct-loading');
+        if (loading) loading.remove();
+        panel.appendChild(grid);
+
+        // Re-init quick-add buttons if Dawn's JS is available
+        if (typeof Shopify && Shopify.PaymentButton) {
+          Shopify.PaymentButton.init();
+        }
+
+        // Hover secondary image effect
+        grid.querySelectorAll('.card__inner').forEach(function(card) {
+          var secondary = card.querySelector('.card__image-secondary');
+          if (!secondary) return;
+          card.addEventListener('mouseenter', function() { secondary.style.opacity = '1'; });
+          card.addEventListener('mouseleave', function() { secondary.style.opacity = '0'; });
+        });
+
+        if (callback) callback();
+      })
+      .catch(function(err) {
+        console.error('Failed to load collection:', collectionHandle, err);
+        var loading = panel.querySelector('.ct-loading');
+        if (loading) loading.innerHTML = '<p style="text-align:center;padding:40px;color:#999;width:100%">Failed to load products. Please try again.</p>';
+        loadingCache[collectionHandle] = false;
+        if (callback) callback();
+      });
+  }
+
+  // Tab click handler
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var targetId = tab.dataset.target;
+      var collectionHandle = tab.dataset.collection;
+
+      // Update active states
+      tabs.forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(function(p) { p.classList.remove('active'); });
+
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+
+      var targetPanel = document.getElementById(targetId);
+      if (!targetPanel) return;
+      targetPanel.classList.add('active');
+
+      // Load products if not already loaded
+      if (targetPanel.dataset.loaded !== 'true') {
+        loadTabProducts(targetPanel, collectionHandle, function() {
+          targetPanel.dataset.loaded = 'true';
+        });
+      }
+    });
+  });
+
+  // Preload next tab on hover for instant switching
+  tabs.forEach(function(tab) {
+    tab.addEventListener('mouseenter', function() {
+      var collectionHandle = tab.dataset.collection;
+      var targetId = tab.dataset.target;
+      var targetPanel = document.getElementById(targetId);
+      if (targetPanel && targetPanel.dataset.loaded !== 'true' && !loadingCache[collectionHandle]) {
+        loadTabProducts(targetPanel, collectionHandle, function() {
+          targetPanel.dataset.loaded = 'true';
+        });
+      }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Collection Tabs",
+  "settings": [
+    { "type": "checkbox", "id": "full_width", "label": "Make section full width", "default": false },
+    { "type": "text", "id": "title", "label": "Section title", "default": "Shop by Category" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Explore our best collections" },
+    { "type": "select", "id": "heading_size", "label": "Heading size", "options": [{ "value": "h2", "label": "H2" }, { "value": "h1", "label": "H1" }, { "value": "h3", "label": "H3" }], "default": "h2" },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 24, "step": 1, "default": 6, "label": "Products per tab" },
+    { "type": "range", "id": "columns_desktop", "min": 2, "max": 6, "default": 6, "label": "Desktop columns" },
+    { "type": "select", "id": "columns_mobile", "label": "Mobile columns", "options": [{ "value": "1", "label": "1" }, { "value": "2", "label": "2" }], "default": "2" },
+    { "type": "checkbox", "id": "show_vendor", "default": false, "label": "Show vendor" },
+    { "type": "checkbox", "id": "show_secondary_image", "default": true, "label": "Show secondary image" },
+    { "type": "checkbox", "id": "show_rating", "default": false, "label": "Show rating" },
+    { "type": "select", "id": "image_ratio", "options": [{ "value": "adapt", "label": "Adapt" }, { "value": "square", "label": "Square" }, { "value": "portrait", "label": "Portrait" }], "default": "adapt", "label": "Image ratio" },
+    { "type": "select", "id": "image_shape", "label": "Image shape", "options": [{ "value": "default", "label": "Default" }, { "value": "round", "label": "Round" }, { "value": "arch", "label": "Arch" }, { "value": "blob", "label": "Blob" }], "default": "default" },
+    { "type": "select", "id": "quick_add", "default": "none", "label": "Quick add", "options": [{ "value": "none", "label": "None" }, { "value": "standard", "label": "Standard" }] }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection tab",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "label", "label": "Tab label" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Collection Tabs", "blocks": [{ "type": "collection" }, { "type": "collection" }, { "type": "collection" }] }
+  ]
+}
+{% endschema %}
