@@ -243,6 +243,9 @@
     const sectionEl = document.getElementById("main-banner-{{ section.id }}");
     if (!sectionEl) return;
 
+    /* Defer Swiper init to avoid blocking main thread */
+    function initSwiper() {
+
     // Play the video inside the ACTIVE slide only (respecting each block's own
     // autoplay / muted settings from the theme editor). Pause + reset all others.
     function syncSlideVideos() {
@@ -304,6 +307,13 @@
         }
       }
     });
+    } /* end initSwiper */
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initSwiper, { timeout: 1500 });
+    } else {
+      setTimeout(initSwiper, 100);
+    }
   });
 </script>
 

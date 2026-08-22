@@ -156,6 +156,18 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   }
 }
 
+/* CSS Containment — reduces style recalculation scope */
+.shopify-section {
+  contain: layout style;
+}
+
+/* Cards don't affect outside layout */
+.card,
+.grid__item,
+.collage__item {
+  contain: layout style;
+}
+
 .element-margin-top {
   margin-top: 5rem;
 }
@@ -3306,6 +3318,7 @@ details-disclosure > details {
   .scroll-trigger.animate--fade-in,
   .scroll-trigger.animate--slide-in {
     opacity: 0.01;
+    will-change: opacity, transform;
   }
 
   .scroll-trigger.animate--slide-in {
