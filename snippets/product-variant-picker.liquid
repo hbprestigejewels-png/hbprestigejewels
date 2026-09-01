@@ -37,7 +37,8 @@
             {%- if init_mat_down contains '925' or init_mat_down contains 'silver' -%}
               {{- materials_opt.selected_value -}}
             {%- else -%}
-              {{- materials_opt.selected_value }} {{ colors_opt.selected_value -}}
+              {{- materials_opt.selected_value }}
+              {{ colors_opt.selected_value -}}
             {%- endif -%}
           </span>
         </legend>
@@ -244,7 +245,10 @@
       {%- else -%}
         {%- if picker_type == 'swatch' -%}
           <fieldset class="js product-form__input product-form__input--swatch">
-            <legend class="form__label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <legend
+              class="form__label"
+              style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
+            >
               <span>
                 {{ option.name }}:
                 <span data-selected-value>
@@ -259,7 +263,9 @@
                   data-ring-size-modal-trigger
                   style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                  </svg>
                   Ring Size Guide
                 </button>
               {% endif %}
@@ -273,7 +279,10 @@
           </fieldset>
         {%- elsif picker_type == 'button' -%}
           <fieldset class="js product-form__input product-form__input--pill">
-            <legend class="form__label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <legend
+              class="form__label"
+              style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
+            >
               <span>
                 {{ option.name }} :
                 <span data-selected-value class="form__label-selected-val">
@@ -288,7 +297,9 @@
                   data-ring-size-modal-trigger
                   style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                  </svg>
                   Ring Size Guide
                 </button>
               {% endif %}
@@ -301,25 +312,31 @@
             %}
           </fieldset>
         {%- else -%}
-          <div class="product-form__input product-form__input--dropdown">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
-              <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}" style="margin-bottom: 0;">
-                {{ option.name }}
+          {% assign opt_name_d = option.name | downcase %}
+          {% assign is_size_opt = false %}
+          {% if opt_name_d contains 'size' %}
+            {% assign is_size_opt = true %}
+          {% endif %}
+          <div class="product-form__input product-form__input--dropdown {% if is_size_opt %}product-form__input--ring-size{% endif %}" style="margin: 1.5rem 0 1.8rem 0; position: relative; clear: both;">
+            <div class="ring-size-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; width: 100%;">
+              <label class="form__label ring-size-label" for="Option-{{ section.id }}-{{ forloop.index0 }}" style="margin: 0; font-size: 1.5rem; font-weight: 500; color: #111111; display: inline-block;">
+                {% if is_size_opt %}Ring Size (US){% else %}{{ option.name }}{% endif %}
               </label>
-              {% assign opt_name_d = option.name | downcase %}
-              {% if opt_name_d contains 'size' %}
+              {% if is_size_opt %}
                 <button
                   type="button"
-                  class="link link--text text-link"
+                  class="link link--text text-link ring-size-guide-btn"
                   data-ring-size-modal-trigger
-                  style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+                  style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: #111111;"
                 >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                  </svg>
                   Ring Size Guide
                 </button>
               {% endif %}
             </div>
-            <div class="select">
+            <div class="select ring-size-select-container">
               {%- if picker_type == 'swatch_dropdown' -%}
                 <span
                   data-selected-value
@@ -330,11 +347,14 @@
               {%- endif -%}
               <select
                 id="Option-{{ section.id }}-{{ forloop.index0 }}"
-                class="select__select"
+                class="select__select ring-size-select-field"
                 name="options[{{ option.name | escape }}]"
                 form="{{ product_form_id }}"
                 data-option-position="{{ option.position }}"
               >
+                {% if is_size_opt %}
+                  <option value="" disabled selected hidden>Choose ring size</option>
+                {% endif %}
                 {% render 'product-variant-options',
                   product: product,
                   option: option,
@@ -370,29 +390,32 @@
     -%}
 
     {%- if has_size_option == false and is_ring_product -%}
-      <div class="product-form__input product-form__input--dropdown">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
-          <label class="form__label" for="Option-{{ section.id }}-ring-size" style="margin-bottom: 0;">
-            Ring size
+      <div class="product-form__input product-form__input--dropdown product-form__input--ring-size" style="margin: 1.5rem 0 1.8rem 0; position: relative; clear: both;">
+        <div class="ring-size-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; width: 100%;">
+          <label class="form__label ring-size-label" for="Option-{{ section.id }}-ring-size" style="margin: 0; font-size: 1.5rem; font-weight: 500; color: #111111; display: inline-block;">
+            Ring Size (US)
           </label>
           <button
             type="button"
-            class="link link--text text-link"
+            class="link link--text text-link ring-size-guide-btn"
             data-ring-size-modal-trigger
-            style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+            style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: #111111;"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+            </svg>
             Ring Size Guide
           </button>
         </div>
-        <div class="select">
+        <div class="select ring-size-select-container">
           <select
             id="Option-{{ section.id }}-ring-size"
-            class="select__select"
+            class="select__select ring-size-select-field"
             name="properties[Ring size]"
             form="{{ product_form_id }}"
           >
-            <option value="3" selected>3</option>
+            <option value="" disabled selected hidden>Choose ring size</option>
+            <option value="3">3</option>
             <option value="3.5">3.5</option>
             <option value="4">4</option>
             <option value="4.5">4.5</option>
@@ -420,23 +443,48 @@
     {%- endif -%}
 
     <!-- RING SIZE GUIDE POPUP MODAL -->
-    <div id="RingSizeGuideModalOverlay-{{ section.id }}" class="rsg-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 1.5rem;">
-      <div class="rsg-modal-card" style="background: #ffffff; width: 100%; max-width: 720px; max-height: 88vh; overflow-y: auto; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; padding: 2.5rem 2rem; color: #111111;">
-        <button type="button" class="rsg-modal-close" style="position: absolute; top: 1.5rem; right: 1.5rem; background: #f3f4f6; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 2rem; line-height: 1; color: #111;">&times;</button>
+    <div
+      id="RingSizeGuideModalOverlay-{{ section.id }}"
+      class="rsg-modal-overlay"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 1.5rem;"
+    >
+      <div
+        class="rsg-modal-card"
+        style="background: #ffffff; width: 100%; max-width: 720px; max-height: 88vh; overflow-y: auto; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; padding: 2.5rem 2rem; color: #111111;"
+      >
+        <button
+          type="button"
+          class="rsg-modal-close"
+          style="position: absolute; top: 1.5rem; right: 1.5rem; background: #f3f4f6; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 2rem; line-height: 1; color: #111;"
+        >
+          &times;
+        </button>
         <div style="text-align: center; margin-bottom: 2rem;">
-          <span style="font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; background: #111111; color: #ffffff; padding: 0.3rem 1rem; border-radius: 20px;">Sizing Guide</span>
-          <h2 style="font-size: 2.2rem; font-weight: 600; margin: 1rem 0 0.5rem; color: #111111;">Ring Size Guide & Conversion</h2>
+          <span style="font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; background: #111111; color: #ffffff; padding: 0.3rem 1rem; border-radius: 20px;"
+            >Sizing Guide</span
+          >
+          <h2 style="font-size: 2.2rem; font-weight: 600; margin: 1rem 0 0.5rem; color: #111111;">
+            Ring Size Guide & Conversion
+          </h2>
           <p style="font-size: 1.35rem; color: #666666; margin: 0;">Find your exact US and Australian ring size.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.8rem;">
           <div style="background: #f9fafb; padding: 1.2rem; border-radius: 10px; border: 1px solid #e5e7eb;">
-            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;">1. Measure Diameter</strong>
-            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">Measure inside width across existing ring in mm.</p>
+            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;"
+              >1. Measure Diameter</strong
+            >
+            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">
+              Measure inside width across existing ring in mm.
+            </p>
           </div>
           <div style="background: #f9fafb; padding: 1.2rem; border-radius: 10px; border: 1px solid #e5e7eb;">
-            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;">2. Measure Finger</strong>
-            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">Wrap a paper strip around finger and measure length in mm.</p>
+            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;"
+              >2. Measure Finger</strong
+            >
+            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">
+              Wrap a paper strip around finger and measure length in mm.
+            </p>
           </div>
         </div>
 
@@ -452,32 +500,154 @@
               </tr>
             </thead>
             <tbody>
-              <tr><td style="padding: 0.7rem;">3</td><td>F</td><td>44</td><td>14.1 mm</td><td>44.2 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">3.5</td><td>G</td><td>45</td><td>14.5 mm</td><td>45.5 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">4</td><td>H</td><td>47</td><td>14.9 mm</td><td>46.8 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">4.5</td><td>I</td><td>48</td><td>15.3 mm</td><td>48.0 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">5</td><td>J</td><td>49</td><td>15.7 mm</td><td>49.3 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">5.5</td><td>K</td><td>50</td><td>16.1 mm</td><td>50.6 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">6</td><td>L</td><td>52</td><td>16.5 mm</td><td>51.9 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">6.5</td><td>M</td><td>53</td><td>16.9 mm</td><td>53.1 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">7</td><td>N</td><td>54</td><td>17.3 mm</td><td>54.4 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">7.5</td><td>O</td><td>56</td><td>17.7 mm</td><td>55.7 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">8</td><td>P</td><td>57</td><td>18.1 mm</td><td>57.0 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">8.5</td><td>Q</td><td>58</td><td>18.5 mm</td><td>58.3 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">9</td><td>R</td><td>60</td><td>19.0 mm</td><td>59.5 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">9.5</td><td>S</td><td>61</td><td>19.4 mm</td><td>60.8 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">10</td><td>T</td><td>62</td><td>19.8 mm</td><td>62.1 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">10.5</td><td>U</td><td>64</td><td>20.2 mm</td><td>63.4 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">11</td><td>V</td><td>65</td><td>20.6 mm</td><td>64.6 mm</td></tr>
-              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">11.5</td><td>W</td><td>66</td><td>21.0 mm</td><td>65.9 mm</td></tr>
-              <tr><td style="padding: 0.7rem;">12</td><td>X</td><td>68</td><td>21.4 mm</td><td>67.2 mm</td></tr>
+              <tr>
+                <td style="padding: 0.7rem;">3</td>
+                <td>F</td>
+                <td>44</td>
+                <td>14.1 mm</td>
+                <td>44.2 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">3.5</td>
+                <td>G</td>
+                <td>45</td>
+                <td>14.5 mm</td>
+                <td>45.5 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">4</td>
+                <td>H</td>
+                <td>47</td>
+                <td>14.9 mm</td>
+                <td>46.8 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">4.5</td>
+                <td>I</td>
+                <td>48</td>
+                <td>15.3 mm</td>
+                <td>48.0 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">5</td>
+                <td>J</td>
+                <td>49</td>
+                <td>15.7 mm</td>
+                <td>49.3 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">5.5</td>
+                <td>K</td>
+                <td>50</td>
+                <td>16.1 mm</td>
+                <td>50.6 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">6</td>
+                <td>L</td>
+                <td>52</td>
+                <td>16.5 mm</td>
+                <td>51.9 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">6.5</td>
+                <td>M</td>
+                <td>53</td>
+                <td>16.9 mm</td>
+                <td>53.1 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">7</td>
+                <td>N</td>
+                <td>54</td>
+                <td>17.3 mm</td>
+                <td>54.4 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">7.5</td>
+                <td>O</td>
+                <td>56</td>
+                <td>17.7 mm</td>
+                <td>55.7 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">8</td>
+                <td>P</td>
+                <td>57</td>
+                <td>18.1 mm</td>
+                <td>57.0 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">8.5</td>
+                <td>Q</td>
+                <td>58</td>
+                <td>18.5 mm</td>
+                <td>58.3 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">9</td>
+                <td>R</td>
+                <td>60</td>
+                <td>19.0 mm</td>
+                <td>59.5 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">9.5</td>
+                <td>S</td>
+                <td>61</td>
+                <td>19.4 mm</td>
+                <td>60.8 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">10</td>
+                <td>T</td>
+                <td>62</td>
+                <td>19.8 mm</td>
+                <td>62.1 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">10.5</td>
+                <td>U</td>
+                <td>64</td>
+                <td>20.2 mm</td>
+                <td>63.4 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">11</td>
+                <td>V</td>
+                <td>65</td>
+                <td>20.6 mm</td>
+                <td>64.6 mm</td>
+              </tr>
+              <tr style="background: #fbfbfb;">
+                <td style="padding: 0.7rem;">11.5</td>
+                <td>W</td>
+                <td>66</td>
+                <td>21.0 mm</td>
+                <td>65.9 mm</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.7rem;">12</td>
+                <td>X</td>
+                <td>68</td>
+                <td>21.4 mm</td>
+                <td>67.2 mm</td>
+              </tr>
             </tbody>
           </table>
         </div>
 
         <div style="margin-top: 1.8rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-          <a href="/pages/contact" style="font-size: 1.3rem; color: #111; font-weight: 600; text-decoration: underline;">Need assistance? Contact our jewellery experts</a>
-          <button type="button" class="button button--secondary rsg-modal-close-btn" style="min-height: 38px; padding: 0 1.8rem; font-size: 1.3rem;">Close</button>
+          <a href="/pages/contact" style="font-size: 1.3rem; color: #111; font-weight: 600; text-decoration: underline;"
+            >Need assistance? Contact our jewellery experts</a
+          >
+          <button
+            type="button"
+            class="button button--secondary rsg-modal-close-btn"
+            style="min-height: 38px; padding: 0 1.8rem; font-size: 1.3rem;"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
@@ -533,7 +703,8 @@
     }
 
     // 4. Find matching variant from data-product-variants or window.allProductVariants
-    const variants = window.allProductVariants || (variantSelects.getVariantData ? variantSelects.getVariantData() : []);
+    const variants =
+      window.allProductVariants || (variantSelects.getVariantData ? variantSelects.getVariantData() : []);
     if (variants && variants.length) {
       const otherSelects = Array.from(variantSelects.querySelectorAll('select')).filter(
         (s) => parseInt(s.dataset.optionPosition, 10) > 2
@@ -544,7 +715,7 @@
       // Find exact variant with current ring size
       let matched = variants.find((v) => {
         const match1 = v.options[0] === opt1Val;
-        const match2 = isSilver ? true : (opt2Val ? v.options[1] === opt2Val : true);
+        const match2 = isSilver ? true : opt2Val ? v.options[1] === opt2Val : true;
         const match3 = currentRingSize ? v.options[2] === currentRingSize : true;
         return match1 && match2 && match3;
       });
@@ -553,7 +724,7 @@
       if (!matched) {
         const candidate = variants.find((v) => {
           const match1 = v.options[0] === opt1Val;
-          const match2 = isSilver ? true : (opt2Val ? v.options[1] === opt2Val : true);
+          const match2 = isSilver ? true : opt2Val ? v.options[1] === opt2Val : true;
           return match1 && match2;
         });
 
