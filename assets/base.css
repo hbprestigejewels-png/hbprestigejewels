@@ -3713,3 +3713,16 @@ details-disclosure>details {
 .gokwik-buynow-button {
   border-radius: 20px !important;
 }
+
+/* Global Work Sans Font Application */
+body, h1, h2, h3, h4, h5, h6,
+.h0, .h1, .h2, .h3, .h4, .h5,
+p, span, a, input, button, select, textarea, label,
+.price, .price-item, .button, .card__heading,
+.header, .footer, .announcement-bar, .top-header,
+.collection-list-title, .rich-text, .image-with-text,
+.product__title, .banner__heading, .mega-menu,
+.category-carousel__card-title, .category-carousel__title,
+.facet-filters, .facets__heading, .cart, .modal__content {
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}

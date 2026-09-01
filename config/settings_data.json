@@ -3,9 +3,9 @@
     "logo": "shopify://shop_images/A_polished_gold_monogram_logo_featuring_the_letters_H_and_B_with_a_diamond_icon_above_shown_on_a_plain_white_background..png",
     "logo_width": 50,
     "favicon": "shopify://shop_images/hb_prestige_jewels_Logo.png",
-    "type_header_font": "cormorant_i5",
+    "type_header_font": "work_sans_n6",
     "heading_scale": 100,
-    "type_body_font": "poppins_n4",
+    "type_body_font": "work_sans_n4",
     "body_scale": 100,
     "page_width": 1300,
     "spacing_sections": 0,
@@ -477,8 +477,8 @@
   },
   "platform_customizations": {
     "custom_css": [
-      ".collection-list-title.inline-richtext {font-family: \"Cormorant\", serif; font-style: italic; font-weight: 500; font-size: 40px; line-height: 15px; color: rgb(32, 32, 37);}",
-      "@media (max-width: 749px) {.collection-list-title.inline-richtext {font-size: 30px; line-height: 36px; font-weight: 500; }}"
+      ".collection-list-title.inline-richtext {font-family: \"Work Sans\", sans-serif; font-style: normal; font-weight: 600; font-size: 38px; line-height: 1.2; color: rgb(32, 32, 37);}",
+      "@media (max-width: 749px) {.collection-list-title.inline-richtext {font-size: 28px; line-height: 34px; font-weight: 600; }}"
     ]
   }
 }
