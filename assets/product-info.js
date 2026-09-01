@@ -234,38 +234,36 @@ if (!customElements.get('product-info')) {
         const priceEl = priceWrapper.querySelector('.price');
         if (!priceEl) return;
 
+        const calcCompareAtPrice = (compareAtPrice && compareAtPrice > price)
+          ? compareAtPrice
+          : Math.round(price * 100 / 70);
+        const discountPercent = Math.round((calcCompareAtPrice - price) * 100 / calcCompareAtPrice);
+
         // Toggle sale/sold-out classes
         priceEl.classList.toggle('price--sold-out', !available);
-        priceEl.classList.toggle('price--on-sale', !!isOnSale);
+        priceEl.classList.add('price--on-sale');
 
         const formattedPrice = formatMoney(price);
-        const formattedCompare = compareAtPrice ? formatMoney(compareAtPrice) : null;
+        const formattedCompare = formatMoney(calcCompareAtPrice);
 
-        // Update price text in sale container (.price__sale) and regular container
+        // Update price text in sale container (.price__sale)
         const saleContainer = priceEl.querySelector('.price__sale');
-        const regularContainer = priceEl.querySelector('.price__regular');
+        if (saleContainer) saleContainer.style.display = '';
 
-        if (isOnSale) {
-          // Show sale price
-          const salePriceEl = saleContainer?.querySelector('.price-item--sale');
-          if (salePriceEl) salePriceEl.textContent = formattedPrice;
+        const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale, .price-item--sale');
+        if (salePriceEl) salePriceEl.textContent = formattedPrice;
 
-          // Show compare-at (strikethrough)
-          const compareEl = saleContainer?.querySelector('s.price-item--regular');
-          if (compareEl && formattedCompare) {
-            compareEl.textContent = formattedCompare;
-            compareEl.closest('span')?.classList.remove('hidden');
-          }
+        // Show compare-at (strikethrough)
+        const compareEls = priceEl.querySelectorAll('s.price-item--regular, .price__sale s');
+        compareEls.forEach((el) => {
+          el.textContent = formattedCompare;
+          el.closest('span')?.classList.remove('hidden');
+        });
 
-          if (saleContainer) saleContainer.style.display = '';
-          if (regularContainer) regularContainer.style.display = 'none';
-        } else {
-          // Regular price
-          const regularPriceEl = regularContainer?.querySelector('.price-item--regular:not(s)');
-          if (regularPriceEl) regularPriceEl.textContent = formattedPrice;
-
-          if (regularContainer) regularContainer.style.display = '';
-          if (saleContainer) saleContainer.style.display = 'none';
+        // Update discount badge
+        const discountBadgeEl = priceEl.querySelector('[data-discount-badge], .price__badge-discount');
+        if (discountBadgeEl) {
+          discountBadgeEl.textContent = `${discountPercent}% OFF`;
         }
       }
 

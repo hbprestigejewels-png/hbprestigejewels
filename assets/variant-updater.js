@@ -111,48 +111,33 @@
       if (!priceEl) return;
 
       const price = variant.price;
-      const compareAtPrice = variant.compare_at_price;
+      const compareAtPrice = (variant.compare_at_price && variant.compare_at_price > price)
+        ? variant.compare_at_price
+        : Math.round(price * 100 / 70);
+      const discountPercent = Math.round((compareAtPrice - price) * 100 / compareAtPrice);
       const available = variant.available;
-      const isOnSale = compareAtPrice && compareAtPrice > price;
 
       // Update price classes
       priceEl.classList.toggle('price--sold-out', !available);
-      priceEl.classList.toggle('price--on-sale', !!isOnSale);
+      priceEl.classList.add('price--on-sale');
 
-      // Regular price (shown when not on sale)
-      const regularPriceEls = priceEl.querySelectorAll('.price__regular .price-item--regular');
-      regularPriceEls.forEach((el) => {
-        el.textContent = formatMoney(price);
-      });
-
-      // Sale price
-      const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale');
+      // Sale / Selling price
+      const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale, .price-item--sale');
       if (salePriceEl) {
         salePriceEl.textContent = formatMoney(price);
       }
 
       // Compare at price (strikethrough)
-      const compareEls = priceEl.querySelectorAll('.price-item--regular s, s.price-item--regular');
+      const compareEls = priceEl.querySelectorAll('.price-item--regular s, s.price-item--regular, .price__sale s');
       compareEls.forEach((el) => {
-        if (isOnSale) {
-          el.textContent = formatMoney(compareAtPrice);
-          el.closest('span')?.classList.remove('hidden');
-        } else {
-          el.closest('span')?.classList.add('hidden');
-        }
+        el.textContent = formatMoney(compareAtPrice);
+        el.closest('span')?.classList.remove('hidden');
       });
 
-      // Show/hide sale vs regular containers
-      const saleContainer = priceEl.querySelector('.price__sale');
-      const regularContainer = priceEl.querySelector('.price__regular');
-      if (saleContainer && regularContainer) {
-        if (isOnSale) {
-          regularContainer.style.display = 'none';
-          saleContainer.style.display = '';
-        } else {
-          regularContainer.style.display = '';
-          saleContainer.style.display = 'none';
-        }
+      // Discount badge
+      const discountBadgeEl = priceEl.querySelector('[data-discount-badge], .price__badge-discount');
+      if (discountBadgeEl) {
+        discountBadgeEl.textContent = `${discountPercent}% OFF`;
       }
     }
 

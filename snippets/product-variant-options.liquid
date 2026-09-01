@@ -146,14 +146,14 @@
     >
       <div class="variant-metal-swatch__box">
         {% if custom_swatch_image != blank %}
-          <img
+          <Img
             src="{{ custom_swatch_image | image_url: width: 120 }}"
             alt="{{ value | escape }}"
             loading="lazy"
             class="swatch-custom-img"
           >
         {% elsif matched_variant and matched_variant.featured_media %}
-          <img
+          <Img
             src="{{ matched_variant.featured_media | image_url: width: 120 }}"
             alt="{{ value | escape }}"
             loading="lazy"
