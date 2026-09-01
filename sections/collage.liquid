@@ -1,12 +1,12 @@
-{% render 'lazy-stylesheet', file: 'collage.css' %}
+{% render 'stylesheet-async', file: 'collage.css' %}
 {% if request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  {% render 'stylesheet-async', file: 'component-card.css' %}
 {% endif %}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {% render 'stylesheet-async', file: 'component-price.css' %}
 {% endif -%}
-{%- render 'lazy-stylesheet', file: 'component-modal-video.css' -%}
-{% render 'lazy-stylesheet', file: 'component-deferred-media.css' %}
+{% render 'stylesheet-async', file: 'component-modal-video.css' %}
+{% render 'stylesheet-async', file: 'component-deferred-media.css' %}
 
 {%- style -%}
   .section-{{ section.id }}-padding {

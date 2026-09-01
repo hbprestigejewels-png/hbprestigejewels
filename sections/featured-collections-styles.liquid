@@ -1,11 +1,11 @@
 {% if request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  {% render 'stylesheet-async', file: 'component-card.css' %}
 {% endif %}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {% render 'stylesheet-async', file: 'component-price.css' %}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'component-slider.css' %}
-{% render 'lazy-stylesheet', file: 'template-collection.css' %}
+{% render 'stylesheet-async', file: 'component-slider.css' %}
+{% render 'stylesheet-async', file: 'template-collection.css' %}
 
 <link rel="stylesheet" href="{{ 'component-deferred-media.css' | asset_url }}" media="print" onload="this.media='all'">
 
@@ -568,20 +568,7 @@
         cursor:pointer;
         opacity:.5;
         transition:.3s;
-        padding:14px;
-        min-width:36px;
-        min-height:36px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    }
-    .featured-collections-styles .slider-dot::after {
-        content:'';
-        display:block;
-        width:8px;
-        height:8px;
-        border-radius:50%;
-        background:inherit;
+        padding:0;
     }
 
     .featured-collections-styles .slider-dot.active{
@@ -615,20 +602,7 @@
           background:#c4c4c4;
           cursor:pointer;
           transition:.3s;
-          padding:14px;
-          min-width:36px;
-          min-height:36px;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-      }
-      .featured-collections-styles .slider-dot::after {
-          content:'';
-          display:block;
-          width:8px;
-          height:8px;
-          border-radius:50%;
-          background:inherit;
+          padding:0;
       }
 
       .featured-collections-styles .slider-dot.active{
@@ -689,25 +663,24 @@
                     "
                   >
                     <div class="media">
-                      {%- if block.settings.collection_image != blank -%}
-                        {%- assign image = block.settings.collection_image -%}
-                        {%- assign image_widths = '165,360,535,750,1070,1500' | split: ',' -%}
-                        <img
-                          srcset="
-                            {% for width in image_widths %}
-                              {%- if image.width >= width -%}
-                                {{ image | image_url: width: width }} {{ width }}w{% if forloop.last == false %},{% endif %}
-                              {%- endif -%}
-                            {% endfor %}
-                          "
-                          src="{{ image | image_url: width: 535 }}"
-                          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 3 }}px, (min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 35px)"
-                          alt="{{ image.alt | default: block.settings.collection_title | escape }}"
-                          loading="lazy"
-                          width="{{ image.width }}"
-                          height="{{ image.height }}"
-                          class="motion-reduce"
-                        >
+                        {%- if block.settings.collection_image != blank -%}
+                          {%- assign image = block.settings.collection_image -%}
+                          <img
+                            srcset="
+                              {%- if image.width >= 165 -%}{{ image | image_url: width: 165, format: 'webp' }} 165w,{%- endif -%}
+                              {%- if image.width >= 360 -%}{{ image | image_url: width: 360, format: 'webp' }} 360w,{%- endif -%}
+                              {%- if image.width >= 535 -%}{{ image | image_url: width: 535, format: 'webp' }} 535w,{%- endif -%}
+                              {%- if image.width >= 750 -%}{{ image | image_url: width: 750, format: 'webp' }} 750w{%- endif -%}
+                            "
+                            src="{{ image | image_url: width: 360, format: 'webp' }}"
+                            sizes="(min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(50vw - 20px)"
+                            alt="{{ image.alt | default: block.settings.collection_title | escape }}"
+                            loading="lazy"
+                            decoding="async"
+                            width="{{ image.width }}"
+                            height="{{ image.height }}"
+                            class="motion-reduce"
+                          >
                       {%- else -%}
                         <div class="placeholder-svg">
                           {{ 'collection-1' | placeholder_svg_tag }}
@@ -1093,7 +1066,7 @@
       });
     }
 
-    slider.addEventListener('scroll', updateDots);
+    slider.addEventListener('scroll', updateDots, { passive: true });
 
     dots.forEach((dot, index) => {
       dot.addEventListener('click', function () {

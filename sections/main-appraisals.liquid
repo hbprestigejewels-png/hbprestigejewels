@@ -1,0 +1,90 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{% render 'content-appraisals' %}
+
+{% schema %}
+{
+  "name": "Appraisals",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Hero Badge",
+      "default": "Certification & Valuation"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Heading",
+      "default": "Valuations & Appraisals"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Hero Subtitle",
+      "default": "Secure, certified, and independent valuation reports for insurance coverage, estate management, and official authenticity verification."
+    },
+    {
+      "type": "text",
+      "id": "card1_title",
+      "label": "Card 1 Title",
+      "default": "Insurance Replacement Value"
+    },
+    {
+      "type": "textarea",
+      "id": "card1_desc",
+      "label": "Card 1 Description",
+      "default": "Insurance companies require an official valuation report to cover your valuable jewellery against loss, theft, or damage at its current retail replacement cost."
+    },
+    {
+      "type": "text",
+      "id": "card2_title",
+      "label": "Card 2 Title",
+      "default": "Certified Independent Valuers"
+    },
+    {
+      "type": "textarea",
+      "id": "card2_desc",
+      "label": "Card 2 Description",
+      "default": "Our valuations are conducted by registered, independent third-party NCJV/GIA accredited gemological valuers, guaranteeing unbiased objectivity."
+    },
+    {
+      "type": "text",
+      "id": "card3_title",
+      "label": "Card 3 Title",
+      "default": "Detailed Gemological Specs"
+    },
+    {
+      "type": "textarea",
+      "id": "card3_desc",
+      "label": "Card 3 Description",
+      "default": "Every report provides itemized technical descriptions: metal purity, total diamond weight, colour grade, clarity grade, cut quality, and retail estimate."
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Box Heading",
+      "default": "Request an Appraisal or Valuation"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_desc",
+      "label": "CTA Box Subtitle",
+      "default": "Need a valuation certificate for your recent purchase or custom bespoke piece? Contact our specialists today."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Request Appraisal Assistance"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ]
+}
+{% endschema %}

@@ -1,7 +1,7 @@
-{% render 'lazy-stylesheet', file: 'section-image-banner.css' %}
-{% render 'lazy-stylesheet', file: 'component-newsletter.css' %}
-{% render 'lazy-stylesheet', file: 'newsletter-section.css' %}
-{% render 'lazy-stylesheet', file: 'section-email-signup-banner.css' %}
+{% render 'stylesheet-async', file: 'section-image-banner.css' %}
+{% render 'stylesheet-async', file: 'component-newsletter.css' %}
+{% render 'stylesheet-async', file: 'newsletter-section.css' %}
+{% render 'stylesheet-async', file: 'section-email-signup-banner.css' %}
 
 {%- style -%}
   #Banner-{{ section.id }}::after {
@@ -43,11 +43,12 @@
             {%- if section.settings.image.width >= 2000 -%}{{ section.settings.image | image_url: width: 2000 }} 2000w,{%- endif -%}
             {%- if section.settings.image.width >= 3000 -%}{{ section.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
             {%- if section.settings.image.width >= 3840 -%}{{ section.settings.image | image_url: width: 3840 }} 3840w,{%- endif -%}
-            {{ section.settings.image | image_url }} {{ section.settings.image.width }}w
+            {{ section.settings.image | image_url: width: 1500 }} {{ section.settings.image.width }}w
           "
           sizes="100vw"
           src="{{ section.settings.image | image_url: width: 1500 }}"
           loading="lazy"
+          decoding="async"
           alt="{{ section.settings.image.alt | escape }}"
           width="{{ section.settings.image.width }}"
           height="{{ section.settings.image.width | divided_by: section.settings.image.aspect_ratio }}"

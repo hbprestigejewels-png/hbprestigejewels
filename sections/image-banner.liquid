@@ -1,4 +1,4 @@
-{% render 'lazy-stylesheet', file: 'section-image-banner.css' %}
+<link rel="stylesheet" href="{{ 'section-image-banner.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
   {%- style -%}
@@ -27,11 +27,9 @@
   #Banner-{{ section.id }}::after {
     opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
   }
-{%- endstyle -%}
-
-{%- liquid
-  assign full_width = '100vw'
-  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+{%- endstyle -%}  {%- liquid
+    assign full_width = '100vw'
+    assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000'
 
   if section.settings.image_behavior == 'ambient'
     assign half_width = '60vw'
@@ -72,7 +70,7 @@
       -%}
       {{
         section.settings.image
-        | image_url: width: 3840
+        | image_url: width: 1500
         | image_tag:
           width: section.settings.image.width,
           height: image_height,
@@ -106,7 +104,7 @@
       -%}
       {{
         section.settings.image_2
-        | image_url: width: 3840
+        | image_url: width: 1500
         | image_tag:
           width: section.settings.image_2.width,
           height: image_height_2,

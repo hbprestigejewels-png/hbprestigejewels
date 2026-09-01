@@ -4,7 +4,7 @@
   Compatible with Dawn theme
 {% endcomment %}
 
-{% comment %} {% render 'lazy-stylesheet', file: 'section-shop-stone-shape.css' %} {% endcomment %}
+{% comment %} {{ 'section-shop-stone-shape.css' | asset_url | stylesheet_tag }} {% endcomment %}
 
 <div
   class="shop-stone-shape-section"
@@ -22,22 +22,26 @@
           {% if section.blocks.size > 0 and section.blocks.first.settings.shape_image != blank %}
             <img
               src="{{ section.blocks.first.settings.shape_image | image_url: width: 800 }}"
-              alt="Featured stone shape"
+              alt="{{ section.blocks.first.settings.shape_image.alt | default: 'Featured stone shape' | escape }}"
               class="shop-stone-shape-featured-img"
               id="featured-stone-image"
-              loading="eager"
-              width="800"
-              height="800"
+              loading="lazy"
+              decoding="async"
+              sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+              width="{{ section.blocks.first.settings.shape_image.width | default: 800 }}"
+              height="{{ section.blocks.first.settings.shape_image.height | default: 800 }}"
             >
           {% elsif section.settings.default_featured_image != blank %}
             <img
               src="{{ section.settings.default_featured_image | image_url: width: 800 }}"
-              alt="Featured stone shape"
+              alt="{{ section.settings.default_featured_image.alt | default: 'Featured stone shape' | escape }}"
               class="shop-stone-shape-featured-img"
               id="featured-stone-image"
-              loading="eager"
-              width="800"
-              height="800"
+              loading="lazy"
+              decoding="async"
+              sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+              width="{{ section.settings.default_featured_image.width | default: 800 }}"
+              height="{{ section.settings.default_featured_image.height | default: 800 }}"
             >
           {% else %}
             <div class="shop-stone-shape-placeholder">
@@ -68,6 +72,7 @@
                     alt="{{ shape.icon_image | escape }}"
                     class="shop-stone-shape-icon"
                     loading="lazy"
+                    decoding="async"
                     width="100"
                     height="100"
                   >

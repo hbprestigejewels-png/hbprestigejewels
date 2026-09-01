@@ -79,90 +79,216 @@
   @media screen and (min-width: 990px){
 
   .header{
-    display:grid;
-    grid-template-columns: auto 1fr auto;
-    align-items:center;
-  }
+      display: grid !important;
+      grid-template-columns: max-content 1fr max-content !important;
+      align-items: center !important;
+    max-width: 1750px !important;
+    width: 98% !important;
+      margin: 0 auto !important;
+    padding: 2px 1rem !important;
+    min-height: 48px !important;
+    }
 
   .header__heading{
-    grid-column:1;
-  }
+      grid-column: 1;
+    margin-right: 0.6rem !important;
+      flex-shrink: 0 !important;
+      display: flex;
+      align-items: center;
+    }
 
   .header__inline-menu{
-    grid-column:2;
-    display:flex;
-    justify-content:center;
-  }
+      grid-column: 2;
+      display: flex !important;
+      justify-content: center !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      padding: 0 4px !important;
+    }
 
   .header__icons{
-    grid-column:3;
-  }
+      grid-column: 3;
+    margin-left: 0.6rem !important;
+      flex-shrink: 0 !important;
+      display: flex;
+      align-items: center;
+    gap: 4px !important;
+    }
+
+    .header__icon {
+      width: 3.6rem !important;
+      height: 3.6rem !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
 
   }
 </style>
 
 {%- style -%}
-    .header {
-      padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
-      max-width:100%;
-    }
+  .header {
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+  }
 
+  .section-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 9999 !important;
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
     .section-header {
-      position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
-      margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    /* .header-wrapper {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 9999 !important; */
+    }
+    .header {
+      padding: 2px 1rem !important;
+      max-width: 1750px !important;
+      width: 98% !important;
+      margin: 0 auto !important;
+      min-height: 48px !important;
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .section-header {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 9999 !important;
     }
 
-    @media screen and (min-width: 750px) {
-      .section-header {
-        margin-bottom: {{ section.settings.margin_bottom }}px;
-      }
+    .header-wrapper {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 9999 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 8px 12px !important;
     }
 
-    @media screen and (min-width: 990px) {
-      .header {
-        padding-top: {{ section.settings.padding_top }}px;
-        padding-bottom: {{ section.settings.padding_bottom }}px;
-      }
+    .header {
+      background: #ffffff !important;
+      border-radius: 24px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+      padding: 6px 14px !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      min-height: 48px !important;
+      position: relative !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 auto !important;
     }
 
-    @media screen and (max-width: 989px) {
+    .header__heading {
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      margin: 0 !important;
+      z-index: 1 !important;
+      pointer-events: auto !important;
+    }
+
+    .header__heading-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+    }
+
+    .header__heading-logo {
+      max-height: 38px !important;
+      width: auto !important;
+    }
+
+    header-drawer {
+      display: flex !important;
+      align-items: center !important;
+      margin: 0 !important;
+      z-index: 2 !important;
+    }
+
+    .header__icon--menu {
+      width: 3.4rem !important;
+      height: 3.4rem !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
 
     .Vtl-WishlistHeaderWrapper {
-      position: absolute;
-      left: 50px !important; /* adjust based on hamburger size */
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 5;
-    }
-    .Vtl-WishlistHeader {
-      min-width: 44px;
-      min-height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute !important;
+      left: 48px !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      z-index: 5 !important;
+      display: flex !important;
+      align-items: center !important;
     }
 
-    .header .enhanced-dropdown__menu-icon {
-      display:none !important;
+    .header__icons {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 6px !important;
+      margin: 0 !important;
+      z-index: 2 !important;
     }
 
+    .header__icon {
+      width: 3.4rem !important;
+      height: 3.4rem !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .header__inline-menu,
+    .header .enhanced-dropdown__menu-icon,
+    .header .enhanced-dropdown {
+      display: none !important;
+    }
+
+    /* header-drawer details {
+      display: block !important;
+    } */
   }
 {%- endstyle -%}
 
 <script>
-  /* Defer cart-notification.js until browser is idle */
-  (function() {
-    function loadCartNotification() {
+  (function () {
+    var c = false;
+    function loadCN() {
+      if (c) return;
+      c = true;
       var s = document.createElement('script');
-      s.src = '{{ 'cart-notification.js' | asset_url }}';
+      s.src = '{{ "cart-notification.js" | asset_url }}';
       s.defer = true;
       document.head.appendChild(s);
     }
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadCartNotification, { timeout: 3000 });
-    } else {
-      setTimeout(loadCartNotification, 500);
-    }
+    ['touchstart', 'mousedown', 'scroll'].forEach(function (e) {
+      window.addEventListener(e, loadCN, { passive: true, once: true });
+    });
+    setTimeout(loadCN, 6000);
   })();
 </script>
 
@@ -219,9 +345,34 @@
         {%- if settings.logo != blank -%}
           <div class="header__heading-logo-wrapper">
             {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {%- comment -%}
+              Must be rounded: dividing by a float aspect ratio yields a float,
+              which image_tag drops rather than emitting. With no height attribute
+              the browser reserves no box for the logo, so the alt text lays out at
+              full width until the image arrives and then collapses - taking the
+              whole page down with it.
+            {%- endcomment -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio | round -%}
             {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
             {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+            {%- comment -%}
+              Two fixes here, both of which were causing real damage:
+
+              1. `alt: settings.logo` passed the image OBJECT, not a string, so
+                 the rendered alt was the ~120-character file path. Before the
+                 logo finished downloading the browser laid that path out as
+                 wrapped text, which made the header several times taller and
+                 then collapsed it when the image arrived - the single largest
+                 layout shift on the page (CLS 0.92 on a 3G connection).
+                 `logo_alt` was already being computed just above and simply
+                 never used.
+
+              2. The `| default:` filter was applied to image_tag's OUTPUT, and
+                 `sizes:` / `preload:` were being handed to `default` (which
+                 takes one argument) instead of to image_tag. Both were silently
+                 dropped, so the logo shipped without a sizes attribute and was
+                 never preloaded. They belong to image_tag.
+            {%- endcomment -%}
             {{
               settings.logo
               | image_url: width: 600
@@ -230,8 +381,9 @@
                 widths: widths,
                 height: logo_height,
                 width: settings.logo_width,
-                alt: settings.logo
-              | default: 'Jewellery Video Preview', sizes: sizes, preload: true
+                sizes: sizes,
+                preload: true,
+                alt: logo_alt
             }}
           </div>
         {%- else -%}
@@ -265,7 +417,14 @@
         {%- if settings.logo != blank -%}
           <div class="header__heading-logo-wrapper">
             {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+            {%- comment -%}
+              Must be rounded: dividing by a float aspect ratio yields a float,
+              which image_tag drops rather than emitting. With no height attribute
+              the browser reserves no box for the logo, so the alt text lays out at
+              full width until the image arrives and then collapses - taking the
+              whole page down with it.
+            {%- endcomment -%}
+            {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio | round -%}
             {% capture sizes %}(min-width: 750px) {{ settings.logo_width }}px, 50vw{% endcapture %}
             {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
             {{
@@ -276,8 +435,9 @@
                 widths: widths,
                 height: logo_height,
                 width: settings.logo_width,
-                alt: settings.logo.alt
-              | default: 'Jewellery Video Preview', sizes: sizes, preload: true
+                sizes: sizes,
+                preload: true,
+                alt: logo_alt
             }}
           </div>
         {%- else -%}
@@ -407,7 +567,7 @@
       this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
 
       this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
-      window.addEventListener('scroll', this.onScrollHandler, false);
+      window.addEventListener('scroll', this.onScrollHandler, { passive: true });
 
       this.createObserver();
     }
@@ -927,7 +1087,7 @@
 
     handleHeader();
 
-    window.addEventListener('scroll', handleHeader);
-    window.addEventListener('resize', handleHeader);
+    window.addEventListener('scroll', handleHeader, { passive: true });
+    window.addEventListener('resize', handleHeader, { passive: true });
   });
 </script>

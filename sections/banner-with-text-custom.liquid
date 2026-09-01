@@ -14,6 +14,7 @@ font-family: {{ section.settings.font_family }};">
 src="{{ section.settings.image | image_url: width: 1200 }}"
 alt="{{ section.settings.heading }}"
 loading="lazy"
+decoding="async"
 width="900"
 height="600">
 {% endif %}
@@ -58,6 +59,7 @@ border-color: {{ section.settings.button_bg }};
 </div>
 </div>
 </div>
+</section>
 
 <style>
 

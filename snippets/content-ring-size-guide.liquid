@@ -1,0 +1,455 @@
+<style>
+  .ring-size-guide-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem;
+    font-family: var(--font-body-family);
+  }
+
+  .rsg-hero {
+    text-align: center;
+    padding: 3rem 1rem 2.5rem;
+    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
+    border-radius: 16px;
+    margin-bottom: 3rem;
+    border: 1px solid #ebecee;
+  }
+
+  .rsg-badge {
+    display: inline-block;
+    background: #111111;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1.4rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+  }
+
+  .rsg-hero__title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.6rem, 4vw, 4.2rem);
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .rsg-hero__subtitle {
+    font-size: 1.5rem;
+    color: #555555;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .rsg-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .rsg-method-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 2.2rem 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rsg-method-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    border-color: #d1d5db;
+  }
+
+  .rsg-method-card__step-num {
+    width: 36px;
+    height: 36px;
+    background: #f3f4f6;
+    color: #111111;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .rsg-method-card__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 1rem;
+    color: #111111;
+  }
+
+  .rsg-method-card__list {
+    padding-left: 1.5rem;
+    margin: 0;
+    color: #4b5563;
+    font-size: 1.35rem;
+    line-height: 1.7;
+  }
+
+  .rsg-method-card__list li {
+    margin-bottom: 0.6rem;
+  }
+
+  .rsg-chart-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .rsg-chart-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .rsg-chart-header__title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0;
+  }
+
+  .rsg-search-box {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .rsg-search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1.3rem;
+    width: 100%;
+    color: #111111;
+  }
+
+  .rsg-table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #ebecee;
+  }
+
+  .rsg-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 1.35rem;
+  }
+
+  .rsg-table th {
+    background: #f9fafb;
+    color: #111111;
+    font-weight: 600;
+    padding: 1.2rem 1rem;
+    border-bottom: 2px solid #e5e7eb;
+    white-space: nowrap;
+  }
+
+  .rsg-table td {
+    padding: 1rem 0.8rem;
+    border-bottom: 1px solid #f3f4f6;
+    color: #374151;
+    transition: background-color 0.15s ease;
+  }
+
+  .rsg-table tr:hover td {
+    background-color: #f8fafc;
+  }
+
+  .rsg-table tr.highlighted td {
+    background-color: #fff8e6 !important;
+    font-weight: 600;
+    color: #b45309;
+  }
+
+  .rsg-tips-section {
+    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
+    border-radius: 16px;
+    border: 1px solid #ebecee;
+    padding: 2.5rem 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .rsg-tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.8rem;
+    margin-top: 1.5rem;
+  }
+
+  .rsg-tip-item {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  .rsg-tip-item__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .rsg-tip-item__desc {
+    font-size: 1.3rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .rsg-cta-box {
+    text-align: center;
+    background: #111111;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 3rem 2rem;
+  }
+
+  .rsg-cta-box h3 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin: 0 0 0.8rem;
+  }
+
+  .rsg-cta-box p {
+    color: #9ca3af;
+    font-size: 1.4rem;
+    max-width: 550px;
+    margin: 0 auto 1.8rem;
+  }
+
+  .rsg-cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .rsg-btn {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .rsg-btn--primary {
+    background: #ffffff;
+    color: #111111;
+  }
+
+  .rsg-btn--primary:hover {
+    background: #e5e7eb;
+  }
+
+  .rsg-btn--secondary {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #4b5563;
+  }
+
+  .rsg-btn--secondary:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  @media screen and (max-width: 768px) {
+    .rsg-chart-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .rsg-search-box {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="ring-size-guide-container">
+  <div class="rsg-hero">
+    <span class="rsg-badge">{{ section.settings.badge | default: 'Sizing & Measurement' }}</span>
+    <h1 class="rsg-hero__title">{{ section.settings.title | default: 'Official Ring Size Guide' }}</h1>
+    <p class="rsg-hero__subtitle">
+      {{ section.settings.subtitle | default: 'Ensure a flawless fit for your engagement ring or wedding band with our accurate international sizing chart and step-by-step measurement techniques.' }}
+    </p>
+  </div>
+
+  <div class="rsg-methods-grid">
+    <div class="rsg-method-card">
+      <div class="rsg-method-card__step-num">1</div>
+      <h3 class="rsg-method-card__title">{{ section.settings.method1_title | default: 'Measure an Existing Ring' }}</h3>
+      <ol class="rsg-method-card__list">
+        <li>Select a ring that comfortably fits the intended finger.</li>
+        <li>Place the ring flat on a ruler with millimeter (mm) markings.</li>
+        <li>Measure the straight <strong>inside diameter</strong> from inner wall to inner wall.</li>
+        <li>Match your measurement with the Diameter column in our chart below.</li>
+      </ol>
+    </div>
+
+    <div class="rsg-method-card">
+      <div class="rsg-method-card__step-num">2</div>
+      <h3 class="rsg-method-card__title">{{ section.settings.method2_title | default: 'Measure Your Finger' }}</h3>
+      <ol class="rsg-method-card__list">
+        <li>Wrap a thin strip of paper or string around the base of your finger.</li>
+        <li>Ensure a snug, comfortable fit that can slide over your knuckle.</li>
+        <li>Mark the exact spot where the paper strip meets with a pen.</li>
+        <li>Measure the paper length in mm (Circumference) and find your size.</li>
+      </ol>
+    </div>
+
+    <div class="rsg-method-card">
+      <div class="rsg-method-card__step-num">3</div>
+      <h3 class="rsg-method-card__title">{{ section.settings.method3_title | default: 'Order a Ring Sizer' }}</h3>
+      <ol class="rsg-method-card__list">
+        <li>Contact our team to request a physical ring measurement gauge.</li>
+        <li>Try different sizes throughout the day for maximum comfort.</li>
+        <li>If you are between two sizes, we recommend selecting the larger size.</li>
+        <li>Our jewellery specialists provide complimentary sizing advice.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="rsg-chart-section">
+    <div class="rsg-chart-header">
+      <h2 class="rsg-chart-header__title">International Ring Size Conversion Chart</h2>
+      <div class="rsg-search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px; opacity: 0.6;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="rsg-filter-input" placeholder="Search size (e.g. 7, N, 17.3mm)..." aria-label="Search ring size">
+      </div>
+    </div>
+
+    <div class="rsg-table-wrapper">
+      <table class="rsg-table" id="rsg-size-table">
+        <thead>
+          <tr>
+            <th>US / Canada</th>
+            <th>UK / Australia / NZ</th>
+            <th>EU / ISO</th>
+            <th>Inside Diameter (mm)</th>
+            <th>Inside Circumference (mm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>3</td><td>F</td><td>44</td><td>14.1 mm</td><td>44.2 mm</td></tr>
+          <tr><td>3.5</td><td>G</td><td>45</td><td>14.5 mm</td><td>45.5 mm</td></tr>
+          <tr><td>4</td><td>H</td><td>47</td><td>14.9 mm</td><td>46.8 mm</td></tr>
+          <tr><td>4.5</td><td>I</td><td>48</td><td>15.3 mm</td><td>48.0 mm</td></tr>
+          <tr><td>5</td><td>J</td><td>49</td><td>15.7 mm</td><td>49.3 mm</td></tr>
+          <tr><td>5.5</td><td>K</td><td>50</td><td>16.1 mm</td><td>50.6 mm</td></tr>
+          <tr><td>6</td><td>L</td><td>52</td><td>16.5 mm</td><td>51.9 mm</td></tr>
+          <tr><td>6.5</td><td>M</td><td>53</td><td>16.9 mm</td><td>53.1 mm</td></tr>
+          <tr><td>7</td><td>N</td><td>54</td><td>17.3 mm</td><td>54.4 mm</td></tr>
+          <tr><td>7.5</td><td>O</td><td>56</td><td>17.7 mm</td><td>55.7 mm</td></tr>
+          <tr><td>8</td><td>P</td><td>57</td><td>18.1 mm</td><td>57.0 mm</td></tr>
+          <tr><td>8.5</td><td>Q</td><td>58</td><td>18.5 mm</td><td>58.3 mm</td></tr>
+          <tr><td>9</td><td>R</td><td>60</td><td>19.0 mm</td><td>59.5 mm</td></tr>
+          <tr><td>9.5</td><td>S</td><td>61</td><td>19.4 mm</td><td>60.8 mm</td></tr>
+          <tr><td>10</td><td>T</td><td>62</td><td>19.8 mm</td><td>62.1 mm</td></tr>
+          <tr><td>10.5</td><td>U</td><td>64</td><td>20.2 mm</td><td>63.4 mm</td></tr>
+          <tr><td>11</td><td>V</td><td>65</td><td>20.6 mm</td><td>64.6 mm</td></tr>
+          <tr><td>11.5</td><td>W</td><td>66</td><td>21.0 mm</td><td>65.9 mm</td></tr>
+          <tr><td>12</td><td>X</td><td>68</td><td>21.4 mm</td><td>67.2 mm</td></tr>
+          <tr><td>12.5</td><td>Y</td><td>69</td><td>21.8 mm</td><td>68.5 mm</td></tr>
+          <tr><td>13</td><td>Z</td><td>70</td><td>22.2 mm</td><td>69.7 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="rsg-tips-section">
+    <h2 style="font-size: 2rem; font-weight: 600; margin: 0; color: #111111;">Expert Sizing Tips</h2>
+    <div class="rsg-tips-grid">
+      <div class="rsg-tip-item">
+        <h4 class="rsg-tip-item__title">⏰ Time of Day</h4>
+        <p class="rsg-tip-item__desc">Fingers naturally expand throughout the day. Measure in the evening when your hands are warm for the most accurate fit.</p>
+      </div>
+      <div class="rsg-tip-item">
+        <h4 class="rsg-tip-item__title">📐 Knuckle Consideration</h4>
+        <p class="rsg-tip-item__desc">If your knuckle is noticeably larger than your finger base, measure both and choose a size in between so the ring slides on comfortably.</p>
+      </div>
+      <div class="rsg-tip-item">
+        <h4 class="rsg-tip-item__title">💍 Band Width Impact</h4>
+        <p class="rsg-tip-item__desc">Wider bands (5mm or thicker) fit more snugly than delicate bands. We recommend selecting a half-size larger for wider designs.</p>
+      </div>
+      <div class="rsg-tip-item">
+        <h4 class="rsg-tip-item__title">✨ Complimentary Resizing</h4>
+        <p class="rsg-tip-item__desc">Unsure of the exact size? Don't worry! HB Prestige Jewels offers complimentary resizing services on all custom rings.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rsg-cta-box">
+    <h3>{{ section.settings.cta_title | default: 'Need Personalized Sizing Advice?' }}</h3>
+    <p>{{ section.settings.cta_desc | default: 'Our experienced gemologists and jewellery specialists are here to guide you to the perfect size.' }}</p>
+    <div class="rsg-cta-buttons">
+      <a href="https://wa.me/{{ section.settings.whatsapp_number | default: '919723328111' }}" target="_blank" class="rsg-btn rsg-btn--primary">Chat on WhatsApp</a>
+      <a href="/pages/contact" class="rsg-btn rsg-btn--secondary">Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    function initSearch() {
+      const searchInput = document.getElementById('rsg-filter-input');
+      const table = document.getElementById('rsg-size-table');
+      if (!searchInput || !table) return;
+
+      searchInput.addEventListener('input', function () {
+        const query = this.value.trim().toLowerCase();
+        const rows = table.querySelectorAll('tbody tr');
+
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          if (!query) {
+            row.classList.remove('highlighted');
+            row.style.display = '';
+          } else if (text.includes(query)) {
+            row.classList.add('highlighted');
+            row.style.display = '';
+          } else {
+            row.classList.remove('highlighted');
+            row.style.display = 'none';
+          }
+        });
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSearch);
+    } else {
+      initSearch();
+    }
+  })();
+</script>

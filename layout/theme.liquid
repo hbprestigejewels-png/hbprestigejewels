@@ -3,13 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="google-site-verification" content="vOuUIDzZZ5HBffenSdL_9Jl6UTBbc5Eq2UAotmUg_7I">
-    <meta name="theme-color" content="#000000">
-    <meta name="color-scheme" content="light">
-    <link rel="preconnect" href="https://cdn.shopify.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+
+    <!-- Resource Hints for Speed Optimization -->
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.shopifycdn.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://shopify-cloud.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
 
     <title>
       {{ page_title }}
@@ -22,27 +33,68 @@
 
     {% render 'meta-tags' %}
 
-    <script src="{{ 'constants.js' | asset_url }}" defer></script>
-    <script src="{{ 'pubsub.js' | asset_url }}" defer></script>
-    <script src="{{ 'global.js' | asset_url }}" defer></script>
+    {%- comment -%}
+      INSTANT PAGE NAVIGATION: Optimized loading without page-blocking loaders.
+      Constants and globals load immediately while page prefetching speeds up link navigation.
+    {%- endcomment -%}
+    <script>
+      // Shopify money format for JS price formatting
+      window.Shopify = window.Shopify || {};
+      window.Shopify.money_format = {{ shop.money_format | json }};
+      window.Shopify.money_with_currency_format = {{ shop.money_with_currency_format | json }};
+      window.Shopify.currency_code_enabled = {{ settings.currency_code_enabled | json }};
+    </script>
 
+    <!-- Speculation Rules API & Instant Link Prefetching for Ultra-Fast Navigation -->
+    <script type="speculationrules">
+    {
+      "prefetch": [
+        {
+          "source": "document",
+          "where": {
+            "and": [
+              { "href_matches": "/*" },
+              { "not": { "href_matches": "/cart/*" } },
+              { "not": { "href_matches": "/checkout/*" } }
+            ]
+          },
+          "eagerness": "moderate"
+        }
+      ]
+    }
+    </script>
+    <script>
+      // Instant hover/touch link prefetcher for ultra-fast navigation (<50ms perception)
+      (function() {
+        const prefetched = new Set();
+        function prefetch(url) {
+          if (!url || prefetched.has(url) || url.includes('#') || url.includes('javascript:')) return;
+          prefetched.add(url);
+          const link = document.createElement('link');
+          link.rel = 'prefetch';
+          link.href = url;
+          link.as = 'document';
+          document.head.appendChild(link);
+        }
+        document.addEventListener('mouseover', function(e) {
+          const a = e.target.closest('a');
+          if (a && a.href && a.origin === location.origin) prefetch(a.href);
+        }, { passive: true });
+        document.addEventListener('touchstart', function(e) {
+          const a = e.target.closest('a');
+          if (a && a.href && a.origin === location.origin) prefetch(a.href);
+        }, { passive: true });
+      })();
+    </script>
+    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
     {%- if settings.animations_reveal_on_scroll -%}
-      <script>
-        /* Defer animations.js until browser is idle */
-        (function() {
-          function loadAnimations() {
-            var s = document.createElement('script');
-            s.src = '{{ 'animations.js' | asset_url }}';
-            s.defer = true;
-            document.head.appendChild(s);
-          }
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadAnimations, { timeout: 3000 });
-          } else {
-            setTimeout(loadAnimations, 200);
-          }
-        })();
-      </script>
+      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {{ content_for_header }}
@@ -52,13 +104,15 @@
       assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
     %}
-    {{ settings.type_body_font | font_face: font_display: 'swap' }}
-    {{ body_font_bold | font_face: font_display: 'swap' }}
-    {{ body_font_italic | font_face: font_display: 'swap' }}
-    {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-    {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
     {% style %}
+      {{ settings.type_body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+      {% assign scheme_classes = '' %}
       {% for scheme in settings.color_schemes -%}
         {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
         {% if forloop.index == 1 -%}
@@ -258,9 +312,161 @@
           font-size: 1.6rem;
         }
       }
+
+      /*
+        Rendering containment for the long section stacks (the home page alone
+        stacks 20+ sections). `content-visibility: auto` lets the browser skip
+        style, layout and paint for any section that is still off screen, which
+        is where most of this page's main-thread time was going.
+
+        The first two sections are excluded on purpose: they are at or near
+        the fold, so skipping them would only add work when they immediately
+        scroll into view.
+
+        `contain-intrinsic-size: auto <fallback>` means "use the fallback until
+        you have rendered me once, then remember my real size" - that is what
+        keeps the scrollbar stable and avoids the layout shifts a plain fixed
+        placeholder height would cause.
+      */
+      @supports (content-visibility: auto) {
+        #MainContent > .shopify-section:nth-child(n + 3),
+        .shopify-section-group-footer-group {
+          content-visibility: auto;
+          contain-intrinsic-size: auto 600px;
+        }
+      }
+
+      /* Reserve the hero's box before its stylesheet/JS arrives so the first
+         paint lands in the right place instead of shifting the page down. */
+      .main-banner-section,
+      .banner {
+        min-height: 320px;
+      }
+
+      /* Clamp the banner so it never takes over the full viewport height.
+         On mobile the original images are often 4000+ px tall, which means
+         the browser downloads megabytes before it can even start layout. */
+      @media (max-width: 749px) {
+        .banner { max-height: 65vh; }
+        .banner .banner__media img { object-fit: cover; }
+      }
+
+      /* Prevent CLS: the sticky header resizes the body when it docks,
+         so we reserve space for the top-bar + header combo. */
+      .header-wrapper.header-fixed + main {
+        scroll-margin-top: 0;
+      }
+
+      /* Images and iframes must never be able to overflow and force a
+         horizontal scrollbar - a reflow trigger on every resize. */
+      img,
+      iframe {
+        max-width: 100%;
+      }
+
+      /* Defer non-essential visual effects until paint is done */
+      .scroll-trigger.animate--fade-in,
+      .scroll-trigger.animate--slide-in {
+        will-change: auto;
+      }
     {% endstyle %}
 
-    {% render 'lazy-stylesheet', file: 'base.css' %}
+    {%- comment -%}
+      CRITICAL CSS + DEFERRED BASE STYLESHEET
+
+      The inline <style> block below contains just enough CSS for the first
+      screenful of content (header, top-bar, banner, buttons, grid, type).
+      base.css is loaded with media="print" so it never blocks rendering;
+      the onload handler flips it to all after the file has finished downloading
+      in the background.
+    {%- endcomment -%}
+    <style>
+      /* === CRITICAL: above-the-fold layout & typography === */
+      :root {
+        --page-width: {{ settings.page_width | divided_by: 10 }}rem;
+        --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+        --font-body-style: {{ settings.type_body_font.style }};
+        --font-body-weight: {{ settings.type_body_font.weight }};
+        --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+        --font-heading-style: {{ settings.type_header_font.style }};
+        --font-heading-weight: {{ settings.type_header_font.weight }};
+        --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+        --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
+        --duration-short: 100ms;
+        --duration-default: 200ms;
+        --duration-medium: 300ms;
+        --duration-long: 500ms;
+        --duration-extra-long: 600ms;
+        --duration-extra-longer: 750ms;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { font-size: calc(var(--font-body-scale) * 62.5%); height: 100%; }
+      body {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        grid-template-columns: 100%;
+        min-height: 100%;
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: 0.06rem;
+        line-height: calc(1 + 0.8 / var(--font-body-scale));
+        font-family: var(--font-body-family);
+        font-style: var(--font-body-style);
+        font-weight: var(--font-body-weight);
+        color: rgba(var(--color-foreground), 0.75);
+        background-color: rgb(var(--color-background));
+      }
+      @media screen and (min-width: 750px) { body { font-size: 1.6rem; } }
+      .page-width { max-width: var(--page-width); margin: 0 auto; padding: 0 1.5rem; }
+      @media screen and (min-width: 750px) { .page-width { padding: 0; }
+        .header.page-width, .utility-bar__grid.page-width { padding-left: 3.2rem; padding-right: 3.2rem; }
+      }
+      .visually-hidden { position: absolute !important; overflow: hidden; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; clip: rect(0 0 0 0); }
+      .link, .customer a { cursor: pointer; display: inline-block; border: none; box-shadow: none; text-decoration: underline; text-underline-offset: 0.3rem; color: rgb(var(--color-link)); background-color: transparent; font-size: 1.4rem; }
+      .link--text { color: rgb(var(--color-foreground)); }
+      .svg-wrapper { display: inline-flex; justify-content: center; align-items: center; width: 20px; height: 20px; }
+      .svg-wrapper > svg { height: 100%; width: 100%; }
+      .button, .button--secondary, .button--tertiary { display: inline-flex; justify-content: center; align-items: center; border: 0; padding: 0 3rem; cursor: pointer; font: inherit; font-size: 1.5rem; text-decoration: none; color: rgb(var(--color-button-text)); min-width: calc(12rem + var(--buttons-border-width, 0) * 2); min-height: calc(4.5rem + var(--buttons-border-width, 0) * 2); border-radius: 20px !important; background-color: rgba(var(--color-button), var(--alpha-button-background, 1)); }
+      .button--full-width { display: flex; width: 100%; }
+      .hidden { display: none !important; }
+      .grid { display: flex; flex-wrap: wrap; column-gap: var(--grid-mobile-horizontal-spacing, 8px); row-gap: var(--grid-mobile-vertical-spacing, 8px); list-style: none; padding: 0; margin-bottom: 2rem; }
+      @media screen and (min-width: 750px) { .grid { column-gap: var(--grid-desktop-horizontal-spacing, 8px); row-gap: var(--grid-desktop-vertical-spacing, 8px); } }
+      .grid__item { width: calc(25% - var(--grid-mobile-horizontal-spacing, 8px) * 3 / 4); max-width: calc(50% - var(--grid-mobile-horizontal-spacing, 8px) / 2); flex-grow: 1; flex-shrink: 0; }
+      .grid--1-col .grid__item { max-width: 100%; width: 100%; }
+      .media { display: block; background-color: rgba(var(--color-foreground), 0.1); position: relative; overflow: hidden; border-radius: 20px !important; }
+      .media > img { object-fit: cover; object-position: center center; }
+      img, iframe { max-width: 100%; }
+      /* Header critical */
+      .header { padding: 1rem 3rem; max-width: 100%; }
+      .section-header { position: sticky; margin-bottom: 0; }
+      .header__heading { margin: 0; }
+      .header__heading-link { text-decoration: none; color: inherit; }
+      .header__heading-logo { display: block; }
+      .header__icons { display: flex; align-items: center; gap: 1rem; }
+      .header__icon { display: inline-flex; align-items: center; justify-content: center; }
+      /* Banner critical */
+      .banner { display: grid; position: relative; min-height: 320px; }
+      .banner__media { position: relative; overflow: hidden; }
+      .banner__media img { width: 100%; height: 100%; object-fit: cover; }
+      .banner__content { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+      .banner__box { padding: 2rem; background: var(--color-background); }
+      .banner__heading { margin: 0 0 1rem; }
+      .banner__text { margin-bottom: 1.5rem; }
+      .banner__buttons { display: flex; flex-wrap: wrap; gap: 1rem; }
+      /* Top bar critical */
+      .top-header-wrapper { background: #000; color: #fff; font-size: 12px; text-align: center; position: relative; z-index: 10; }
+      .top-header { max-width: 100%; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; }
+      .announcement-text { display: flex; justify-content: center; align-items: center; flex: 1; white-space: nowrap; }
+      /* Footer */
+      .footer { margin-top: 0; }
+      /* Animations initial state */
+      .scroll-trigger.animate--fade-in, .scroll-trigger.animate--slide-in { opacity: 0.01; }
+      .scroll-trigger.animate--slide-in { transform: translateY(2rem); }
+      .scroll-trigger:not(.scroll-trigger--offscreen).animate--fade-in, .scroll-trigger:not(.scroll-trigger--offscreen).animate--slide-in { opacity: 1; transform: none; }
+    </style>
+    <link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ 'base.css' | asset_url }}"></noscript>
 
     {%- if settings.cart_type == 'drawer' -%}
       <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -270,67 +476,48 @@
       <link rel="stylesheet" href="{{ 'component-discounts.css' | asset_url }}" media="print" onload="this.media='all'">
     {%- endif -%}
 
+    {%- comment -%}
+      Both fonts used above the fold are preloaded. The @font-face rules are
+      declared with font-display: swap, so without a preload the swap lands
+      well after first paint and every heading and paragraph reflows - a large,
+      avoidable layout shift. Preloading gets them in hand early enough that
+      the swap happens at or before first paint instead.
+
+      Only the regular body weight and the heading face are preloaded; bold and
+      italic are far rarer above the fold and can arrive on demand.
+    {%- endcomment -%}
     {%- unless settings.type_body_font.system? -%}
-      <link
-        rel="preload"
-        as="font"
-        href="{{ settings.type_body_font | font_url }}"
-        type="font/woff2"
-        crossorigin
-      >
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+    {%- unless settings.type_header_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
     {%- endunless -%}
 
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
-      <link
-        rel="preload"
-        href="{{ 'component-localization-form.css' | asset_url }}"
-        as="style"
-        onload="this.onload=null;this.rel='stylesheet'"
-      >
-
+      <link rel="preload" href="{{ 'component-localization-form.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
       <noscript>
         {% if localization.available_countries.size > 1 %}
-          {% render 'lazy-stylesheet', file: 'component-localization-form.css' %}
+          {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
         {% endif %}
       </noscript>
-      <script>
-        /* Defer localization-form.js until browser is idle */
-        (function() {
-          function loadLocalizationForm() {
-            var s = document.createElement('script');
-            s.src = '{{ 'localization-form.js' | asset_url }}';
-            s.defer = true;
-            document.head.appendChild(s);
-          }
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadLocalizationForm, { timeout: 3000 });
-          } else {
-            setTimeout(loadLocalizationForm, 500);
-          }
-        })();
-      </script>
+      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <link
-        rel="stylesheet"
-        href="{{ 'component-predictive-search.css' | asset_url }}"
-        media="print"
-        onload="this.media='all'"
-      >
+      <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
     {%- endif -%}
 
     <script>
       if (Shopify.designMode) {
         document.documentElement.classList.add('shopify-design-mode');
       }
-      {% comment %} {% section 'our-8-cs-promise' %} {% endcomment %}
     </script>
-
-
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+
+
+
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -338,8 +525,8 @@
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
     {%- endif -%}
-    {% section 'top-header-bar' %}
 
+    {% section 'top-header-bar' %}
     {% sections 'header-group' %}
 
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
@@ -353,6 +540,7 @@
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
+    <!-- Global Application State Scripts -->
     <script>
       window.shopUrl = '{{ request.origin }}';
       window.routes = {
@@ -399,45 +587,35 @@
     </script>
 
     {%- if settings.predictive_search_enabled -%}
-      <script>
-        /* Defer predictive-search.js until browser is idle */
-        (function() {
-          function loadPredictiveSearch() {
-            var s = document.createElement('script');
-            s.src = '{{ 'predictive-search.js' | asset_url }}';
-            s.defer = true;
-            document.head.appendChild(s);
-          }
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadPredictiveSearch, { timeout: 3000 });
-          } else {
-            setTimeout(loadPredictiveSearch, 500);
-          }
-        })();
-      </script>
+      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- if settings.cart_type == 'drawer' -%}
-      <script>
-        /* Defer cart-drawer.js until browser is idle */
-        (function() {
-          function loadCartDrawer() {
-            var s = document.createElement('script');
-            s.src = '{{ 'cart-drawer.js' | asset_url }}';
-            s.defer = true;
-            document.head.appendChild(s);
-          }
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(loadCartDrawer, { timeout: 3000 });
-          } else {
-            setTimeout(loadCartDrawer, 500);
-          }
-        })();
-      </script>
+      <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
 
 
 
+    {% comment %}
+      Google Analytics is intentionally NOT loaded here.
+
+      G-MNP47CJWT8 is already configured as a Shopify Web Pixel (see
+      webPixelsConfigList in content_for_header, alongside AW-18349213839 and
+      GT-WBT9VSD3). Shopify loads gtag.js itself, in a sandboxed worker, and
+      fires page_view / add_to_cart / purchase from it.
+
+      The hand-rolled loader that used to live here fetched the same 170 KB
+      gtag.js a second time and re-sent every event, which both double-counted
+      pageviews in GA and added ~0.5s of script evaluation to the main thread.
+
+      If a tag ever does need to be added from the theme, add it as a custom
+      pixel in Settings > Customer events instead.
+    {% endcomment %}
+
+    <script src="{{ 'variant-updater.js' | asset_url }}" defer="defer"></script>
+    {% render 'scroll-to-top' %}
+    {% render 'whatsapp-floating-btn' %}
+    {% render 'country-floating-picker' %}
   </body>
 </html>

@@ -1,27 +1,27 @@
-{% render 'lazy-stylesheet', file: 'component-card.css' %}
+{% render 'stylesheet-async', file: 'component-card.css' %}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
-{% endif -%}{% render 'lazy-stylesheet', file: 'component-slider.css' %}
-{% render 'lazy-stylesheet', file: 'template-collection.css' %}
+  {% render 'stylesheet-async', file: 'component-price.css' %}
+{% endif -%}{% render 'stylesheet-async', file: 'component-slider.css' %}
+{% render 'stylesheet-async', file: 'template-collection.css' %}
 
 {% if section.settings.image_shape == 'blob' %}
-  {% render 'lazy-stylesheet', file: 'mask-blobs.css' %}
+  {% render 'stylesheet-async', file: 'mask-blobs.css' %}
 {%- endif -%}
 
 {%- unless section.settings.quick_add == 'none' -%}
-  {% render 'lazy-stylesheet', file: 'quick-add.css' %}
-  <script src="{{ 'product-form.js' | asset_url }}" defer></script>
+  {% render 'stylesheet-async', file: 'quick-add.css' %}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
 {%- if section.settings.quick_add == 'standard' -%}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
-  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer></script>
-  <script src="{{ 'quantity-popover.js' | asset_url }}" defer></script>
-  <script src="{{ 'price-per-item.js' | asset_url }}" defer></script>
-  <script src="{{ 'quick-order-list.js' | asset_url }}" defer></script>
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- style -%}

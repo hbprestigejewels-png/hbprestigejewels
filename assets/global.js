@@ -742,19 +742,62 @@ class SliderComponent extends HTMLElement {
     const resizeObserver = new ResizeObserver((entries) => this.initPages());
     resizeObserver.observe(this.slider);
 
-    this.slider.addEventListener('scroll', this.update.bind(this));
+    this.slider.addEventListener('scroll', this.update.bind(this), { passive: true });
     this.prevButton.addEventListener('click', this.onButtonClick.bind(this));
     this.nextButton.addEventListener('click', this.onButtonClick.bind(this));
+
+    // Pointer & Touch Swipe Support
+    let isDragging = false;
+    let startX = 0;
+    let scrollStart = 0;
+
+    this.slider.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      isDragging = true;
+      startX = e.clientX;
+      scrollStart = this.slider.scrollLeft;
+    }, { passive: true });
+
+    this.slider.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const diffX = e.clientX - startX;
+      this.slider.scrollLeft = scrollStart - diffX;
+    }, { passive: true });
+
+    const endDrag = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      this.snapToNearestSlide();
+    };
+
+    this.slider.addEventListener('pointerup', endDrag, { passive: true });
+    this.slider.addEventListener('pointercancel', endDrag, { passive: true });
   }
 
   initPages() {
-    this.sliderItemsToShow = Array.from(this.sliderItems).filter((element) => element.clientWidth > 0);
-    if (this.sliderItemsToShow.length < 2) return;
-    this.sliderItemOffset = this.sliderItemsToShow[1].offsetLeft - this.sliderItemsToShow[0].offsetLeft;
-    this.slidesPerPage = Math.floor(
-      (this.slider.clientWidth - this.sliderItemsToShow[0].offsetLeft) / this.sliderItemOffset
-    );
-    this.totalPages = this.sliderItemsToShow.length - this.slidesPerPage + 1;
+    this.sliderItems = this.querySelectorAll('[id^="Slide-"]');
+    this.sliderItemsToShow = Array.from(this.sliderItems).filter((element) => {
+      return element.offsetWidth > 0 || element.clientWidth > 0 || element.style.display !== 'none';
+    });
+
+    if (this.sliderItemsToShow.length === 0) {
+      this.sliderItemsToShow = Array.from(this.sliderItems);
+    }
+
+    if (this.sliderItemsToShow.length < 2) {
+      this.totalPages = this.sliderItemsToShow.length || 1;
+      this.sliderItemOffset = this.slider.clientWidth || 300;
+      this.update();
+      return;
+    }
+
+    const firstItem = this.sliderItemsToShow[0];
+    const secondItem = this.sliderItemsToShow[1];
+    this.sliderItemOffset = (secondItem.offsetLeft - firstItem.offsetLeft) || firstItem.clientWidth || this.slider.clientWidth || 300;
+
+    const visibleWidth = this.slider.clientWidth || window.innerWidth;
+    this.slidesPerPage = Math.max(1, Math.floor((visibleWidth - firstItem.offsetLeft) / this.sliderItemOffset));
+    this.totalPages = Math.max(1, this.sliderItemsToShow.length - this.slidesPerPage + 1);
     this.update();
   }
 
@@ -763,20 +806,36 @@ class SliderComponent extends HTMLElement {
     this.initPages();
   }
 
+  snapToNearestSlide() {
+    if (!this.sliderItemOffset || this.sliderItemOffset <= 0) return;
+    const targetPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset);
+    const targetPosition = targetPage * this.sliderItemOffset;
+    this.slider.scrollTo({ left: targetPosition, behavior: 'smooth' });
+  }
+
   update() {
-    // Temporarily prevents unneeded updates resulting from variant changes
-    // This should be refactored as part of https://github.com/Shopify/dawn/issues/2057
     if (!this.slider || !this.nextButton) return;
 
     const previousPage = this.currentPage;
-    this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+    const offset = this.sliderItemOffset && this.sliderItemOffset > 0 ? this.sliderItemOffset : this.slider.clientWidth;
 
-    if (this.currentPageElement && this.pageTotalElement) {
-      this.currentPageElement.textContent = this.currentPage;
-      this.pageTotalElement.textContent = this.totalPages;
+    if (offset > 0) {
+      this.currentPage = Math.min(
+        this.totalPages || this.sliderItemsToShow.length,
+        Math.max(1, Math.round(this.slider.scrollLeft / offset) + 1)
+      );
+    } else {
+      this.currentPage = 1;
     }
 
-    if (this.currentPage != previousPage) {
+    const safeTotal = this.totalPages && !isNaN(this.totalPages) ? this.totalPages : (this.sliderItemsToShow.length || 1);
+
+    if (this.currentPageElement && this.pageTotalElement) {
+      this.currentPageElement.textContent = isNaN(this.currentPage) ? 1 : this.currentPage;
+      this.pageTotalElement.textContent = safeTotal;
+    }
+
+    if (this.currentPage !== previousPage) {
       this.dispatchEvent(
         new CustomEvent('slideChanged', {
           detail: {
@@ -803,6 +862,7 @@ class SliderComponent extends HTMLElement {
   }
 
   isSlideVisible(element, offset = 0) {
+    if (!element) return false;
     const lastVisibleSlide = this.slider.clientWidth + this.slider.scrollLeft - offset;
     return element.offsetLeft + element.clientWidth <= lastVisibleSlide && element.offsetLeft >= this.slider.scrollLeft;
   }
@@ -810,16 +870,18 @@ class SliderComponent extends HTMLElement {
   onButtonClick(event) {
     event.preventDefault();
     const step = event.currentTarget.dataset.step || 1;
+    const offset = this.sliderItemOffset && this.sliderItemOffset > 0 ? this.sliderItemOffset : this.slider.clientWidth;
     this.slideScrollPosition =
       event.currentTarget.name === 'next'
-        ? this.slider.scrollLeft + step * this.sliderItemOffset
-        : this.slider.scrollLeft - step * this.sliderItemOffset;
+        ? this.slider.scrollLeft + step * offset
+        : this.slider.scrollLeft - step * offset;
     this.setSlidePosition(this.slideScrollPosition);
   }
 
   setSlidePosition(position) {
     this.slider.scrollTo({
       left: position,
+      behavior: 'smooth'
     });
   }
 }
@@ -843,7 +905,7 @@ class SlideshowComponent extends SliderComponent {
 
     this.sliderControlLinksArray = Array.from(this.sliderControlWrapper.querySelectorAll('.slider-counter__link'));
     this.sliderControlLinksArray.forEach((link) => link.addEventListener('click', this.linkToSlide.bind(this)));
-    this.slider.addEventListener('scroll', this.setSlideVisibility.bind(this));
+    this.slider.addEventListener('scroll', this.setSlideVisibility.bind(this), { passive: true });
     this.setSlideVisibility();
 
     if (this.announcementBarSlider) {
@@ -1051,7 +1113,7 @@ class SlideshowComponent extends SliderComponent {
     const slideScrollPosition =
       this.slider.scrollLeft +
       this.sliderFirstItemNode.clientWidth *
-        (this.sliderControlLinksArray.indexOf(event.currentTarget) + 1 - this.currentPage);
+      (this.sliderControlLinksArray.indexOf(event.currentTarget) + 1 - this.currentPage);
     this.slider.scrollTo({
       left: slideScrollPosition,
     });
@@ -1059,6 +1121,198 @@ class SlideshowComponent extends SliderComponent {
 }
 
 customElements.define('slideshow-component', SlideshowComponent);
+
+class VariantSelects extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.addEventListener('change', (event) => {
+      const target = this.getInputForEventTarget(event.target);
+      this.updateSelectionMetadata(event);
+
+      const currentVariant = this.currentVariant;
+      publish(PUB_SUB_EVENTS.optionValueSelectionChange, {
+        data: {
+          event,
+          target,
+          selectedOptionValues: this.selectedOptionValues,
+          currentVariant: currentVariant,
+          variantId: currentVariant?.id,
+        },
+      });
+    });
+  }
+
+  updateSelectionMetadata({ target }) {
+    const { value, tagName } = target;
+
+    if (tagName === 'SELECT' && target.selectedOptions.length) {
+      Array.from(target.options).forEach((option) => {
+        option.removeAttribute('selected');
+      });
+      target.selectedOptions[0].setAttribute('selected', 'selected');
+
+      const swatchValue = target.selectedOptions[0].dataset.optionSwatchValue;
+      const selectedDropdownSwatchValue = target
+        .closest('.product-form__input')
+        ?.querySelector('[data-selected-value] > .swatch');
+      if (selectedDropdownSwatchValue) {
+        if (swatchValue) {
+          selectedDropdownSwatchValue.style.setProperty('--swatch--background', swatchValue);
+          selectedDropdownSwatchValue.classList.remove('swatch--unavailable');
+        } else {
+          selectedDropdownSwatchValue.style.setProperty('--swatch--background', 'unset');
+          selectedDropdownSwatchValue.classList.add('swatch--unavailable');
+        }
+
+        selectedDropdownSwatchValue.style.setProperty(
+          '--swatch-focal-point',
+          target.selectedOptions[0].dataset.optionSwatchFocalPoint || 'unset'
+        );
+      }
+    } else if (tagName === 'INPUT' && target.type === 'radio') {
+      const selectedSwatchValue = target.closest(`.product-form__input`)?.querySelector('[data-selected-value]');
+      if (selectedSwatchValue) selectedSwatchValue.innerHTML = value;
+    }
+  }
+
+  getInputForEventTarget(target) {
+    return target.tagName === 'SELECT' ? target.selectedOptions[0] : target;
+  }
+
+  getVariantData() {
+    this.variantData =
+      this.variantData ||
+      JSON.parse(this.querySelector('script[data-product-variants]')?.textContent || 'null') ||
+      [];
+    return this.variantData;
+  }
+
+  get options() {
+    // Build options array indexed by option position (1-based from Shopify)
+    // so the order matches product.variants[].options regardless of DOM order
+    const byPosition = {};
+
+    // Radio inputs (button/swatch picker) – has data-option-position
+    this.querySelectorAll('fieldset input[type="radio"]:checked').forEach((input) => {
+      const pos = parseInt(input.dataset.optionPosition, 10);
+      if (pos) byPosition[pos] = input.value;
+    });
+
+    // Select dropdowns – derive position from the order of <select> elements
+    // Each select corresponds to one option in product options order
+    this.querySelectorAll('select').forEach((select) => {
+      // Try data-option-position on select or its options
+      let pos = parseInt(select.dataset.optionPosition, 10);
+      if (!pos) {
+        // Fall back: find from option id like "Option-SECTIONID-0" → position = index+1
+        const match = select.id?.match(/-(\d+)$/);
+        if (match) pos = parseInt(match[1], 10) + 1;
+      }
+      if (pos && select.value) {
+        byPosition[pos] = select.value;
+      }
+    });
+
+    // If we couldn't resolve positions, fall back to DOM order
+    if (!Object.keys(byPosition).length) {
+      const fieldsetVals = Array.from(this.querySelectorAll('fieldset')).map((f) =>
+        Array.from(f.querySelectorAll('input')).find((r) => r.checked)?.value
+      );
+      const selectVals = Array.from(this.querySelectorAll('select')).map((s) => s.value);
+      return [...fieldsetVals, ...selectVals].filter((v) => v !== undefined);
+    }
+
+    // Return in ascending position order
+    return Object.keys(byPosition)
+      .sort((a, b) => a - b)
+      .map((k) => byPosition[k]);
+  }
+
+  get currentVariant() {
+    const variants = this.getVariantData();
+    if (!variants || !variants.length) {
+      const single = this.querySelector('script[data-selected-variant]')?.textContent;
+      return single ? JSON.parse(single) : null;
+    }
+    const currentOptions = this.options;
+    return (
+      variants.find((variant) => {
+        return !variant.options
+          .map((option, index) => {
+            return currentOptions[index] === option;
+          })
+          .includes(false);
+      }) || null
+    );
+  }
+
+  get selectedOptionValues() {
+    const selectValues = Array.from(this.querySelectorAll('select')).map(
+      (select) => select.selectedOptions[0]?.dataset.optionValueId
+    );
+    const radioValues = Array.from(this.querySelectorAll('fieldset input:checked')).map(
+      (input) => input.dataset.optionValueId
+    );
+    return [...selectValues, ...radioValues].filter(Boolean);
+  }
+}
+
+customElements.define('variant-selects', VariantSelects);
+
+class ProductRecommendations extends HTMLElement {
+  observer = undefined;
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.initializeRecommendations(this.dataset.productId);
+  }
+
+  initializeRecommendations(productId) {
+    this.observer?.unobserve(this);
+    this.observer = new IntersectionObserver(
+      (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+        this.loadRecommendations(productId);
+      },
+      { rootMargin: '0px 0px 400px 0px' }
+    );
+    this.observer.observe(this);
+  }
+
+  loadRecommendations(productId) {
+    fetch(`${this.dataset.url}&product_id=${productId}&section_id=${this.dataset.sectionId}`)
+      .then((response) => response.text())
+      .then((text) => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('product-recommendations');
+
+        if (recommendations?.innerHTML.trim().length) {
+          this.innerHTML = recommendations.innerHTML;
+        }
+
+        if (!this.querySelector('slideshow-component') && this.classList.contains('complementary-products')) {
+          this.remove();
+        }
+
+        if (html.querySelector('.grid__item')) {
+          this.classList.add('product-recommendations--loaded');
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+}
+
+customElements.define('product-recommendations', ProductRecommendations);
 
 class AccountIcon extends HTMLElement {
   constructor() {
@@ -1079,6 +1333,173 @@ class AccountIcon extends HTMLElement {
 }
 
 customElements.define('account-icon', AccountIcon);
+
+class BulkAdd extends HTMLElement {
+  static ASYNC_REQUEST_DELAY = 250;
+
+  constructor() {
+    super();
+    this.queue = [];
+    this.setRequestStarted(false);
+    this.ids = [];
+  }
+
+  startQueue(id, quantity) {
+    this.queue.push({ id, quantity });
+
+    const interval = setInterval(() => {
+      if (this.queue.length > 0) {
+        if (!this.requestStarted) {
+          this.sendRequest(this.queue);
+        }
+      } else {
+        clearInterval(interval);
+      }
+    }, BulkAdd.ASYNC_REQUEST_DELAY);
+  }
+
+  sendRequest(queue) {
+    this.setRequestStarted(true);
+    const items = {};
+
+    queue.forEach((queueItem) => {
+      items[parseInt(queueItem.id)] = queueItem.quantity;
+    });
+    this.queue = this.queue.filter((queueElement) => !queue.includes(queueElement));
+
+    this.updateMultipleQty(items);
+  }
+
+  setRequestStarted(requestStarted) {
+    this._requestStarted = requestStarted;
+  }
+
+  get requestStarted() {
+    return this._requestStarted;
+  }
+
+  resetQuantityInput(id) {
+    const input = this.querySelector(`#Quantity-${id}`);
+    input.value = input.getAttribute('value');
+    this.isEnterPressed = false;
+  }
+
+  setValidity(event, index, message) {
+    event.target.setCustomValidity(message);
+    event.target.reportValidity();
+    this.resetQuantityInput(index);
+    event.target.select();
+  }
+
+  validateQuantity(event) {
+    const inputValue = parseInt(event.target.value);
+    const index = event.target.dataset.index;
+
+    if (inputValue < event.target.dataset.min) {
+      this.setValidity(event, index, window.quickOrderListStrings.min_error.replace('[min]', event.target.dataset.min));
+    } else if (inputValue > parseInt(event.target.max)) {
+      this.setValidity(event, index, window.quickOrderListStrings.max_error.replace('[max]', event.target.max));
+    } else if (inputValue % parseInt(event.target.step) != 0) {
+      this.setValidity(event, index, window.quickOrderListStrings.step_error.replace('[step]', event.target.step));
+    } else {
+      event.target.setCustomValidity('');
+      event.target.reportValidity();
+      event.target.setAttribute('value', inputValue);
+      this.startQueue(index, inputValue);
+    }
+  }
+
+  getSectionInnerHTML(html, selector) {
+    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+  }
+}
+
+if (!customElements.get('bulk-add')) {
+  customElements.define('bulk-add', BulkAdd);
+}
+
+class CartPerformance {
+  static #metric_prefix = "cart-performance"
+
+  static createStartingMarker(benchmarkName) {
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    return performance.mark(`${metricName}:start`);
+  }
+
+  static measureFromEvent(benchmarkName, event) {
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const startMarker = performance.mark(`${metricName}:start`, {
+      startTime: event.timeStamp
+    });
+
+    const endMarker = performance.mark(`${metricName}:end`);
+
+    performance.measure(
+      metricName,
+      `${metricName}:start`,
+      `${metricName}:end`
+    );
+  }
+
+  static measureFromMarker(benchmarkName, startMarker) {
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const endMarker = performance.mark(`${metricName}:end`);
+
+    performance.measure(
+      metricName,
+      startMarker.name,
+      `${metricName}:end`
+    );
+  }
+
+  static measure(benchmarkName, callback) {
+    const metricName = `${CartPerformance.#metric_prefix}:${benchmarkName}`
+    const startMarker = performance.mark(`${metricName}:start`);
+
+    callback();
+
+    const endMarker = performance.mark(`${metricName}:end`);
+
+    performance.measure(
+      metricName,
+      `${metricName}:start`,
+      `${metricName}:end`
+    );
+  }
+}
+
+/* ======================================================
+   Combined Speed Optimization & Script Blocker
+   ====================================================== */
+(function () {
+  'use strict';
+
+  // --- Delayed Google Tag Manager (GTAG) ---
+  let gtagLoaded = false;
+  function loadGtag() {
+    if (gtagLoaded) return;
+    gtagLoaded = true;
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-MNP47CJWT8';
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-MNP47CJWT8');
+  }
+
+  ['keydown', 'mousemove', 'wheel', 'touchstart', 'pointerdown'].forEach(function (evt) {
+    window.addEventListener(evt, loadGtag, { passive: true, once: true });
+  });
+
+  setTimeout(loadGtag, 6000);
+})();
 
 
 

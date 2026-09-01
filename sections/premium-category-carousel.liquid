@@ -1,3 +1,500 @@
+{% style %}
+.category-carousel-section {
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-x: clip;
+}
+
+.category-carousel-container {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.category-carousel-container.full-width {
+  max-width: 100%;
+  padding: 30px 0;
+}
+
+.category-carousel-container:not(.full-width) {
+  max-width: 1400px;
+  padding: 80px 20px;
+}
+
+.category-carousel__header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.category-carousel__title {
+  font-size: clamp(16px, 4vw, 22px);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+}
+
+.category-carousel__description {
+  font-size: clamp(12px, 3vw, 14px);
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.category-carousel__viewport {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  perspective: 2200px;
+  perspective-origin: 50% 50%;
+  overflow: visible;
+  padding: 0px 0 0px;
+}
+
+category-carousel-component {
+  display: block;
+  width: 100%;
+}
+
+.category-carousel__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.category-carousel__track.dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.category-carousel__card {
+  position: absolute;
+  width: 280px;
+  background: #ffffff;
+  border-radius:20px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  cursor: pointer;
+}
+
+/* ======================================== */
+/* 7 VISIBLE CARDS WITH PROPER OPACITY FADE */
+/* ======================================== */
+
+/* CENTER CARD - position 0 (fully opaque, largest) */
+.category-carousel__card[data-position="0"] {
+  transform: translateX(0) translateZ(160px) scale(1);
+  z-index: 20;
+  opacity: 1;
+  box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.35);
+}
+
+/* FIRST LEFT & RIGHT - position -1 and 1 (slightly faded) */
+.category-carousel__card[data-position="-1"] {
+  transform: translateX(-340px) translateZ(60px) scale(0.88) rotateY(20deg);
+  z-index: 18;
+  opacity: 0.85;
+}
+.category-carousel__card[data-position="1"] {
+  transform: translateX(340px) translateZ(60px) scale(0.88) rotateY(-20deg);
+  z-index: 18;
+  opacity: 0.85;
+}
+
+/* SECOND LEFT & RIGHT - position -2 and 2 (more faded) */
+.category-carousel__card[data-position="-2"] {
+  transform: translateX(-600px) translateZ(-20px) scale(0.75) rotateY(38deg);
+  z-index: 14;
+  opacity: 0.65;
+}
+.category-carousel__card[data-position="2"] {
+  transform: translateX(600px) translateZ(-20px) scale(0.75) rotateY(-38deg);
+  z-index: 14;
+  opacity: 0.65;
+}
+
+/* THIRD LEFT & RIGHT - position -3 and 3 (heavily faded, almost transparent) */
+.category-carousel__card[data-position="-3"] {
+  transform: translateX(-820px) translateZ(-120px) scale(0.62) rotateY(52deg);
+  z-index: 8;
+  opacity: 0.4;
+}
+.category-carousel__card[data-position="3"] {
+  transform: translateX(820px) translateZ(-120px) scale(0.62) rotateY(-52deg);
+  z-index: 8;
+  opacity: 0.4;
+}
+
+/* CARDS BEYOND POSITION 3 - completely hidden (not visible) */
+.category-carousel__card[data-position="-4"],
+.category-carousel__card[data-position="4"],
+.category-carousel__card[data-position="-5"],
+.category-carousel__card[data-position="5"],
+.category-carousel__card[data-position="-6"],
+.category-carousel__card[data-position="6"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(1200px) translateZ(-400px) scale(0.5);
+  visibility: hidden;
+}
+
+.category-carousel__card[data-position="-4"],
+.category-carousel__card[data-position="-5"],
+.category-carousel__card[data-position="-6"] {
+  transform: translateX(-1200px) translateZ(-400px) scale(0.5);
+}
+
+.category-carousel__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 125%;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.category-carousel__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.category-carousel__card:hover .category-carousel__image {
+  transform: scale(1.06);
+}
+
+.category-carousel__image-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #e8e8e8;
+}
+
+.category-carousel__content {
+  padding: 16px 12px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.category-carousel__card-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+  background: #fff;
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.category-carousel__card-subtitle {
+  font-size: 11px;
+  color: #888;
+  margin: 5px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation buttons */
+.category-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 35;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+.category-carousel__nav:hover {
+  background: #000000;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.category-carousel__nav:hover svg {
+  stroke: white;
+}
+
+.category-carousel__nav svg {
+  width: 22px;
+  height: 22px;
+  stroke: #111;
+  transition: stroke 0.25s;
+}
+
+.category-carousel__nav--prev {
+  left: 25px;
+}
+.category-carousel__nav--next {
+  right: 25px;
+}
+
+/* View All button */
+.category-carousel__viewall-wrap {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.category-carousel__viewall-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.category-carousel__viewall-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+/* ========== RESPONSIVE ========== */
+@media screen and (min-width: 1600px) {
+  .category-carousel__card {
+    width: 320px;
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-400px) translateZ(70px) scale(0.88);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(400px) translateZ(70px) scale(0.88);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-700px) translateZ(-10px) scale(0.75);
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(700px) translateZ(-10px) scale(0.75);
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-960px) translateZ(-140px) scale(0.62);
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(960px) translateZ(-140px) scale(0.62);
+  }
+  .category-carousel__track {
+    min-height: 560px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .category-carousel__card {
+    width: 260px;
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-310px) translateZ(50px) scale(0.88);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(310px) translateZ(50px) scale(0.88);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-550px) translateZ(-30px) scale(0.75);
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(550px) translateZ(-30px) scale(0.75);
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-750px) translateZ(-140px) scale(0.62);
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(750px) translateZ(-140px) scale(0.62);
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .category-carousel__card {
+    width: 240px;
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-280px) translateZ(40px) scale(0.86);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(280px) translateZ(40px) scale(0.86);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-490px) translateZ(-40px) scale(0.73);
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(490px) translateZ(-40px) scale(0.73);
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-670px) translateZ(-150px) scale(0.6);
+    opacity: 0.35;
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(670px) translateZ(-150px) scale(0.6);
+    opacity: 0.35;
+  }
+  .category-carousel__track {
+    min-height: 460px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .category-carousel-container {
+    padding: 60px 15px;
+  }
+  .category-carousel__card {
+    width: 210px;
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-240px) translateZ(30px) scale(0.84);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(240px) translateZ(30px) scale(0.84);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-420px) translateZ(-50px) scale(0.7);
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(420px) translateZ(-50px) scale(0.7);
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-570px) translateZ(-160px) scale(0.58);
+    opacity: 0.3;
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(570px) translateZ(-160px) scale(0.58);
+    opacity: 0.3;
+  }
+  .category-carousel__track {
+    min-height: 420px;
+  }
+  .category-carousel__nav {
+    width: 42px;
+    height: 42px;
+  }
+  .category-carousel__nav svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .category-carousel-container {
+    padding: 50px 12px;
+  }
+  .category-carousel__card {
+    width: 185px;
+  }
+  .category-carousel__card[data-position="0"] {
+    transform: translateX(0) translateZ(100px) scale(1);
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-200px) translateZ(20px) scale(0.82);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(200px) translateZ(20px) scale(0.82);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-350px) translateZ(-60px) scale(0.68);
+    opacity: 0.55;
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(350px) translateZ(-60px) scale(0.68);
+    opacity: 0.55;
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-480px) translateZ(-170px) scale(0.55);
+    opacity: 0.25;
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(480px) translateZ(-170px) scale(0.55);
+    opacity: 0.25;
+  }
+  .category-carousel__track {
+    min-height: 370px;
+  }
+  .category-carousel__card-title {
+    font-size: 15px;
+  }
+  .category-carousel__content {
+    padding: 12px 8px;
+  }
+  .category-carousel__nav--prev {
+    left: 10px;
+  }
+  .category-carousel__nav--next {
+    right: 10px;
+  }
+  .category-carousel__nav {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .category-carousel__card {
+    width: 160px;
+  }
+  .category-carousel__card[data-position="-1"] {
+    transform: translateX(-160px) translateZ(10px) scale(0.8);
+  }
+  .category-carousel__card[data-position="1"] {
+    transform: translateX(160px) translateZ(10px) scale(0.8);
+  }
+  .category-carousel__card[data-position="-2"] {
+    transform: translateX(-280px) translateZ(-70px) scale(0.65);
+    opacity: 0.5;
+  }
+  .category-carousel__card[data-position="2"] {
+    transform: translateX(280px) translateZ(-70px) scale(0.65);
+    opacity: 0.5;
+  }
+  .category-carousel__card[data-position="-3"] {
+    transform: translateX(-380px) translateZ(-180px) scale(0.52);
+    opacity: 0.2;
+  }
+  .category-carousel__card[data-position="3"] {
+    transform: translateX(380px) translateZ(-180px) scale(0.52);
+    opacity: 0.2;
+  }
+  .category-carousel__track {
+    min-height: 320px;
+  }
+  .category-carousel__card-title {
+    font-size: 13px;
+  }
+  .category-carousel__header {
+    margin-bottom: 30px;
+  }
+}
+
+/* Touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .category-carousel__nav {
+    background: rgba(255, 255, 255, 0.98);
+  }
+}
+{% endstyle %}
+
 {% comment %}
   Section: 3D Category Carousel - 7 Front Collections with Proper Fading
   Compatible with Dawn theme
@@ -6,14 +503,19 @@
 
 <div
   class="category-carousel-section"
-  style="
-    background-color: {{ section.settings.bg_color }};
-    {% if section.settings.bg_image %}background-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');{% endif %}
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  "
+  style="background-color: {{ section.settings.bg_color }}; position: relative; overflow: hidden;"
 >
+  {%- if section.settings.bg_image -%}
+    <img
+      src="{{ section.settings.bg_image | image_url: width: 1440, format: 'webp' }}"
+      alt="Category Background"
+      loading="lazy"
+      decoding="async"
+      width="1440"
+      height="600"
+      style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; pointer-events: none;"
+    >
+  {%- endif -%}
   <div class="category-carousel-container {% if section.settings.full_width %}full-width{% else %}page-width{% endif %}">
     <div class="category-carousel__header">
       {% if section.settings.title != blank %}
@@ -44,16 +546,17 @@
             >
               <div class="category-carousel__image-wrapper">
                 {% if category.image != blank %}
+                  {% assign alt_text = category.title | default: category.image.alt | default: 'Jewellery Collection' | escape %}
                   {{
                     category.image
-                    | image_url: width: 800
+                    | image_url: width: 400, format: 'webp'
                     | image_tag:
                       loading: 'lazy',
+                      decoding: 'async',
                       class: 'category-carousel__image',
-                      sizes: '(max-width: 749px) 180px, (max-width: 990px) 220px, (max-width: 1200px) 260px, 300px',
-                      widths: '400, 600, 800',
-                      alt: category.image
-                    | default: 'Jewellery Collection'
+                      sizes: '(max-width: 749px) 180px, (max-width: 990px) 220px, 300px',
+                      widths: '200, 300, 400',
+                      alt: alt_text
                   }}
 
                 {% else %}
@@ -279,503 +782,6 @@
 }
 {% endschema %}
 
-<style>
-  .category-carousel-section {
-    position: relative;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow-x: clip;
-  }
-
-  .category-carousel-container {
-    position: relative;
-    width: 100%;
-    margin: 0 auto;
-    padding: 80px 20px;
-  }
-
-  .category-carousel-container.full-width {
-    max-width: 100%;
-    padding: 30px 0;
-  }
-
-  .category-carousel-container:not(.full-width) {
-    max-width: 1400px;
-    padding: 80px 20px;
-  }
-
-  .category-carousel__header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 0 20px;
-  }
-
-  .category-carousel__title {
-    font-size: clamp(16px, 4vw, 22px);
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 0 0 12px;
-  }
-
-  .category-carousel__description {
-    font-size: clamp(12px, 3vw, 14px);
-    max-width: 650px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .category-carousel__viewport {
-    position: relative;
-    max-width: 100%;
-    margin: 0 auto;
-    perspective: 2200px;
-    perspective-origin: 50% 50%;
-    overflow: visible;
-    padding: 0px 0 0px;
-  }
-
-  category-carousel-component {
-    display: block;
-    width: 100%;
-  }
-
-  .category-carousel__track {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 500px;
-    transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .category-carousel__track.dragging {
-    transition: none;
-    cursor: grabbing;
-  }
-
-  .category-carousel__card {
-    position: absolute;
-    width: 280px;
-    background: #ffffff;
-    border-radius:20px !important;
-    overflow: hidden;
-    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-    cursor: pointer;
-  }
-
-  /* ======================================== */
-  /* 7 VISIBLE CARDS WITH PROPER OPACITY FADE */
-  /* ======================================== */
-
-  /* CENTER CARD - position 0 (fully opaque, largest) */
-  .category-carousel__card[data-position="0"] {
-    transform: translateX(0) translateZ(160px) scale(1);
-    z-index: 20;
-    opacity: 1;
-    box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.35);
-  }
-
-  /* FIRST LEFT & RIGHT - position -1 and 1 (slightly faded) */
-  .category-carousel__card[data-position="-1"] {
-    transform: translateX(-340px) translateZ(60px) scale(0.88) rotateY(20deg);
-    z-index: 18;
-    opacity: 0.85;
-  }
-  .category-carousel__card[data-position="1"] {
-    transform: translateX(340px) translateZ(60px) scale(0.88) rotateY(-20deg);
-    z-index: 18;
-    opacity: 0.85;
-  }
-
-  /* SECOND LEFT & RIGHT - position -2 and 2 (more faded) */
-  .category-carousel__card[data-position="-2"] {
-    transform: translateX(-600px) translateZ(-20px) scale(0.75) rotateY(38deg);
-    z-index: 14;
-    opacity: 0.65;
-  }
-  .category-carousel__card[data-position="2"] {
-    transform: translateX(600px) translateZ(-20px) scale(0.75) rotateY(-38deg);
-    z-index: 14;
-    opacity: 0.65;
-  }
-
-  /* THIRD LEFT & RIGHT - position -3 and 3 (heavily faded, almost transparent) */
-  .category-carousel__card[data-position="-3"] {
-    transform: translateX(-820px) translateZ(-120px) scale(0.62) rotateY(52deg);
-    z-index: 8;
-    opacity: 0.4;
-  }
-  .category-carousel__card[data-position="3"] {
-    transform: translateX(820px) translateZ(-120px) scale(0.62) rotateY(-52deg);
-    z-index: 8;
-    opacity: 0.4;
-  }
-
-  /* CARDS BEYOND POSITION 3 - completely hidden (not visible) */
-  .category-carousel__card[data-position="-4"],
-  .category-carousel__card[data-position="4"],
-  .category-carousel__card[data-position="-5"],
-  .category-carousel__card[data-position="5"],
-  .category-carousel__card[data-position="-6"],
-  .category-carousel__card[data-position="6"] {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(1200px) translateZ(-400px) scale(0.5);
-    visibility: hidden;
-  }
-
-  .category-carousel__card[data-position="-4"],
-  .category-carousel__card[data-position="-5"],
-  .category-carousel__card[data-position="-6"] {
-    transform: translateX(-1200px) translateZ(-400px) scale(0.5);
-  }
-
-  .category-carousel__image-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 125%;
-    overflow: hidden;
-    background: #f0f0f0;
-  }
-
-  .category-carousel__image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-  }
-
-  .category-carousel__card:hover .category-carousel__image {
-    transform: scale(1.06);
-  }
-
-  .category-carousel__image-placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background: #e8e8e8;
-  }
-
-  .category-carousel__content {
-    padding: 16px 12px;
-    text-align: center;
-    background: #ffffff;
-  }
-
-  .category-carousel__card-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #ffffff;
-    background: #1a1a1a;
-    margin: 0;
-    letter-spacing: 0.5px;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-
-  .category-carousel__card-subtitle {
-    font-size: 11px;
-    color: #888;
-    margin: 5px 0 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* Navigation buttons */
-  .category-carousel__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 35;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-    transition: all 0.3s ease;
-  }
-
-  .category-carousel__nav:hover {
-    background: #000000;
-    transform: translateY(-50%) scale(1.08);
-  }
-
-  .category-carousel__nav:hover svg {
-    stroke: white;
-  }
-
-  .category-carousel__nav svg {
-    width: 22px;
-    height: 22px;
-    stroke: #111;
-    transition: stroke 0.25s;
-  }
-
-  .category-carousel__nav--prev {
-    left: 25px;
-  }
-  .category-carousel__nav--next {
-    right: 25px;
-  }
-
-  /* View All button */
-  .category-carousel__viewall-wrap {
-    text-align: center;
-    margin-top: 50px;
-  }
-
-  .category-carousel__viewall-btn {
-    display: inline-block;
-    padding: 12px 32px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: 2px solid;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-  }
-
-  .category-carousel__viewall-btn:hover {
-    opacity: 0.85;
-    transform: translateY(-2px);
-  }
-
-  /* ========== RESPONSIVE ========== */
-  @media screen and (min-width: 1600px) {
-    .category-carousel__card {
-      width: 320px;
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-400px) translateZ(70px) scale(0.88);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(400px) translateZ(70px) scale(0.88);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-700px) translateZ(-10px) scale(0.75);
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(700px) translateZ(-10px) scale(0.75);
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-960px) translateZ(-140px) scale(0.62);
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(960px) translateZ(-140px) scale(0.62);
-    }
-    .category-carousel__track {
-      min-height: 560px;
-    }
-  }
-
-  @media screen and (max-width: 1300px) {
-    .category-carousel__card {
-      width: 260px;
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-310px) translateZ(50px) scale(0.88);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(310px) translateZ(50px) scale(0.88);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-550px) translateZ(-30px) scale(0.75);
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(550px) translateZ(-30px) scale(0.75);
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-750px) translateZ(-140px) scale(0.62);
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(750px) translateZ(-140px) scale(0.62);
-    }
-  }
-
-  @media screen and (max-width: 1100px) {
-    .category-carousel__card {
-      width: 240px;
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-280px) translateZ(40px) scale(0.86);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(280px) translateZ(40px) scale(0.86);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-490px) translateZ(-40px) scale(0.73);
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(490px) translateZ(-40px) scale(0.73);
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-670px) translateZ(-150px) scale(0.6);
-      opacity: 0.35;
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(670px) translateZ(-150px) scale(0.6);
-      opacity: 0.35;
-    }
-    .category-carousel__track {
-      min-height: 460px;
-    }
-  }
-
-  @media screen and (max-width: 900px) {
-    .category-carousel-container {
-      padding: 60px 15px;
-    }
-    .category-carousel__card {
-      width: 210px;
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-240px) translateZ(30px) scale(0.84);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(240px) translateZ(30px) scale(0.84);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-420px) translateZ(-50px) scale(0.7);
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(420px) translateZ(-50px) scale(0.7);
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-570px) translateZ(-160px) scale(0.58);
-      opacity: 0.3;
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(570px) translateZ(-160px) scale(0.58);
-      opacity: 0.3;
-    }
-    .category-carousel__track {
-      min-height: 420px;
-    }
-    .category-carousel__nav {
-      width: 42px;
-      height: 42px;
-    }
-    .category-carousel__nav svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    .category-carousel-container {
-      padding: 50px 12px;
-    }
-    .category-carousel__card {
-      width: 185px;
-    }
-    .category-carousel__card[data-position="0"] {
-      transform: translateX(0) translateZ(100px) scale(1);
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-200px) translateZ(20px) scale(0.82);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(200px) translateZ(20px) scale(0.82);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-350px) translateZ(-60px) scale(0.68);
-      opacity: 0.55;
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(350px) translateZ(-60px) scale(0.68);
-      opacity: 0.55;
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-480px) translateZ(-170px) scale(0.55);
-      opacity: 0.25;
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(480px) translateZ(-170px) scale(0.55);
-      opacity: 0.25;
-    }
-    .category-carousel__track {
-      min-height: 370px;
-    }
-    .category-carousel__card-title {
-      font-size: 15px;
-    }
-    .category-carousel__content {
-      padding: 12px 8px;
-    }
-    .category-carousel__nav--prev {
-      left: 10px;
-    }
-    .category-carousel__nav--next {
-      right: 10px;
-    }
-    .category-carousel__nav {
-      width: 38px;
-      height: 38px;
-    }
-  }
-
-  @media screen and (max-width: 550px) {
-    .category-carousel__card {
-      width: 160px;
-    }
-    .category-carousel__card[data-position="-1"] {
-      transform: translateX(-160px) translateZ(10px) scale(0.8);
-    }
-    .category-carousel__card[data-position="1"] {
-      transform: translateX(160px) translateZ(10px) scale(0.8);
-    }
-    .category-carousel__card[data-position="-2"] {
-      transform: translateX(-280px) translateZ(-70px) scale(0.65);
-      opacity: 0.5;
-    }
-    .category-carousel__card[data-position="2"] {
-      transform: translateX(280px) translateZ(-70px) scale(0.65);
-      opacity: 0.5;
-    }
-    .category-carousel__card[data-position="-3"] {
-      transform: translateX(-380px) translateZ(-180px) scale(0.52);
-      opacity: 0.2;
-    }
-    .category-carousel__card[data-position="3"] {
-      transform: translateX(380px) translateZ(-180px) scale(0.52);
-      opacity: 0.2;
-    }
-    .category-carousel__track {
-      min-height: 320px;
-    }
-    .category-carousel__card-title {
-      font-size: 13px;
-    }
-    .category-carousel__header {
-      margin-bottom: 30px;
-    }
-  }
-
-  /* Touch devices */
-  @media (hover: none) and (pointer: coarse) {
-    .category-carousel__nav {
-      background: rgba(255, 255, 255, 0.98);
-    }
-  }
-</style>
 
 <script>
   (function () {
@@ -831,37 +837,89 @@
             if (this.isAutoplay && this.totalCards > 1) this.startAutoplay();
           });
 
+          // Drag listeners are bound once and the window-level move/end
+          // listeners are attached only while a drag is actually in progress.
+          // Previously a non-passive touchmove sat on `window` for the whole
+          // session, so the browser had to call into JS before it could commit
+          // *any* touch scroll frame anywhere on the page.
+          this.boundDragMove = this.onDragMove.bind(this);
+          this.boundDragEnd = this.onDragEnd.bind(this);
+
           viewport.addEventListener('mousedown', this.onDragStart.bind(this));
-          viewport.addEventListener('touchstart', this.onDragStart.bind(this), { passive: false });
-
-          window.addEventListener('mousemove', this.onDragMove.bind(this));
-          window.addEventListener('touchmove', this.onDragMove.bind(this), { passive: false });
-
-          window.addEventListener('mouseup', this.onDragEnd.bind(this));
-          window.addEventListener('touchend', this.onDragEnd.bind(this));
+          viewport.addEventListener('touchstart', this.onDragStart.bind(this), { passive: true });
         }
       }
 
       onDragStart(e) {
         if (this.totalCards <= 1) return;
         this.isDragging = true;
+        this.isTouch = e.type === 'touchstart';
+        this.axisLocked = !this.isTouch; // a mouse drag is horizontal by definition
         this.startX = this.getClientX(e);
+        this.startY = this.getClientY(e);
         if (this.track) this.track.classList.add('dragging');
         this.stopAutoplay();
-        e.preventDefault();
+
+        // A touch drag must NOT preventDefault here - doing so kills vertical
+        // page scrolling for anyone whose finger lands on the carousel. The
+        // axis is decided on the first move instead.
+        if (!this.isTouch) e.preventDefault();
+
+        this.attachDragListeners();
+      }
+
+      attachDragListeners() {
+        window.addEventListener('mousemove', this.boundDragMove);
+        window.addEventListener('touchmove', this.boundDragMove, { passive: false });
+        window.addEventListener('mouseup', this.boundDragEnd);
+        window.addEventListener('touchend', this.boundDragEnd);
+        window.addEventListener('touchcancel', this.boundDragEnd);
+      }
+
+      detachDragListeners() {
+        window.removeEventListener('mousemove', this.boundDragMove);
+        window.removeEventListener('touchmove', this.boundDragMove, { passive: false });
+        window.removeEventListener('mouseup', this.boundDragEnd);
+        window.removeEventListener('touchend', this.boundDragEnd);
+        window.removeEventListener('touchcancel', this.boundDragEnd);
       }
 
       onDragMove(e) {
         if (!this.isDragging || this.totalCards <= 1) return;
+
+        // First move of a touch drag decides the axis: mostly-vertical means
+        // the user is scrolling the page, so bail out and leave the gesture
+        // alone entirely.
+        if (!this.axisLocked) {
+          const dx = Math.abs(this.getClientX(e) - this.startX);
+          const dy = Math.abs(this.getClientY(e) - this.startY);
+          if (dx < 6 && dy < 6) return; // not enough movement to judge yet
+          if (dy > dx) {
+            this.cancelDrag();
+            return;
+          }
+          this.axisLocked = true;
+        }
+
         e.preventDefault();
       }
 
+      cancelDrag() {
+        this.isDragging = false;
+        this.axisLocked = false;
+        if (this.track) this.track.classList.remove('dragging');
+        this.detachDragListeners();
+        if (this.isAutoplay && this.totalCards > 1) this.startAutoplay();
+      }
+
       onDragEnd(e) {
+        this.detachDragListeners();
         if (!this.isDragging || this.totalCards <= 1) {
           this.isDragging = false;
           return;
         }
         this.isDragging = false;
+        this.axisLocked = false;
         if (this.track) this.track.classList.remove('dragging');
 
         const endX = this.getClientX(e);
@@ -882,7 +940,14 @@
 
       getClientX(e) {
         if (e.type.includes('mouse')) return e.clientX;
-        return e.touches && e.touches[0] ? e.touches[0].clientX : 0;
+        const touch = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+        return touch ? touch.clientX : 0;
+      }
+
+      getClientY(e) {
+        if (e.type.includes('mouse')) return e.clientY;
+        const touch = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+        return touch ? touch.clientY : 0;
       }
 
       nextSlide() {

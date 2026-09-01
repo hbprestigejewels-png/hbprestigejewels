@@ -5,224 +5,304 @@
 {% endcomment %}
 
 <style>
-    /* ===== SAME STYLES (UNCHANGED - KEEP AS IS) ===== */
-    .enhanced-dropdown { position: relative; list-style: none; }
-
-    .enhanced-dropdown__trigger {
-      font-weight: 500;
-      font-size: 14px;
-      color: #1f2a3e;
-      text-decoration: none;
-      padding: 0.5rem 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      text-transform: uppercase;
+  @media screen and (max-width: 989px) {
+    .header__inline-menu,
+    nav.header__inline-menu,
+    .enhanced-dropdown,
+    .enhanced-dropdown__content,
+    .header .enhanced-dropdown__menu-icon {
+      display: none !important;
+      visibility: hidden !important;
     }
-
-    .enhanced-dropdown__trigger .enhanced-dropdown__menu-icon{
-      display:none !important;
-    }
-
-  .enhanced-dropdown__menu-icon {
-      width: 50px !important;
-      height: 20px !important;
-      object-fit: contain !important;
-      object-position: center;
-      display: block;
-      max-width: 50px;
-      max-height: 20px;
-      border-radius: 40px;
-      flex-shrink: 0;
   }
 
-  .enhanced-dropdown__content {
-      position: fixed;
-      top: 80px;
-      left: 0;
-      width: 50vw;
-      height: 80vh;
-      overflow-y:scroll;
-      padding: 2rem 0;
-      background: #fff;
-      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease;
-      z-index: 999;
-    }
-
-    details[open] .enhanced-dropdown__content {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    body {
-      overflow-x: hidden;
-    }
-
-    .enhanced-dropdown__inner {
-      width: 100%;
-      padding: 15px 20px;
-    }
-
-    .enhanced-dropdown__content {
-      min-height: 320px;
-    }
-
-    .enhanced-dropdown__grid {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      align-items: start;
-    }
-
-    .enhanced-dropdown__links {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(420px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .enhanced-dropdown__links > div {
-      position: relative;
-      padding-right: 20px;
-    }
-
-    .enhanced-dropdown__links > div:not(:nth-child(2n))::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 1px;
-      height: 100%;
-      background: #e5e5e5;
-    }
-
-    .enhanced-dropdown__section-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: black;
-      text-transform: uppercase;
-    }
-
-    .enhanced-dropdown__list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-
-      display: grid;
-      grid-auto-flow: column;     /* પહેલા column ભરાશે */
-      grid-template-rows: repeat(10, auto); /* દરેક column માં 10 items */
-      grid-auto-columns: minmax(100px, 1fr);
-
-    }
-
-    .enhanced-dropdown__list li {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .enhanced-dropdown__link {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      box-sizing: border-box;
-
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .enhanced-dropdown__menu-icon {
-      width: auto;
-      height: 20px;
-      max-width:50px;
-      flex-shrink: 0;
-      object-fit: none;
-    }
-
-    .enhanced-dropdown__link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: #333;
-      padding: 5px 0;
-      text-decoration: none;
-      font-size: 12px;
-    }
-
-    .enhanced-dropdown__images {
-      border-left: 1px solid #eee;
-      padding-left: 20px;
-    }
-
-    .enhanced-dropdown__promo-images {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .enhanced-dropdown__promo-card img {
-      width: 100%;
-      border-radius: 10px;
-      transition: .3s;
-    }
-
-    .enhanced-dropdown__promo-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .enhanced-dropdown:hover .enhanced-dropdown__trigger svg {
-      transform: rotate(180deg);
-    }
-
+  /* ===== UNIFIED TOP-LEVEL MENU STYLES WITH LUXURY HOVER ANIMATION ===== */
+  @media screen and (min-width: 990px) {
     .header__inline-menu {
-      position: relative;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+    }
+
+    .header__inline-menu .list-menu--inline {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: clamp(4px, 0.75vw, 10px) !important;
+      margin: 0 !important;
+      padding: 0 2px !important;
+      list-style: none !important;
     }
 
     .enhanced-dropdown {
-      position: static !important;
+      position: relative !important;
+      list-style: none !important;
+      flex-shrink: 0 !important;
+      padding: 2px 0 !important;
     }
+  }
 
-    .enhanced-dropdown__grid {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-    }
+  .enhanced-dropdown__trigger,
+  .enhanced-dropdown__title > a,
+  .enhanced-dropdown__title > a > span,
+  .enhanced-dropdown > a {
+    position: relative !important;
+    font-weight: 500 !important;
+    font-size: clamp(10.5px, 0.75vw, 12px) !important;
+    color: #1f2a3e !important;
+    text-decoration: none !important;
+    padding: 0.35rem 1px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.025em !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    font-family: inherit !important;
+    transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
 
-    .enhanced-dropdown__images {
-      justify-self: end;
-      padding-right: 20px;
-    }
+  /* Luxury Expanding Gold Gradient Underline */
+  .enhanced-dropdown__trigger::after,
+  .enhanced-dropdown__title > a::after,
+  .enhanced-dropdown > a::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 2px !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #c9a15a 0%, #ecd6a0 50%, #c9a15a 100%) !important;
+    border-radius: 2px !important;
+    transform: scaleX(0) !important;
+    transform-origin: center !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 
-    html, body {
-      overflow-x: hidden;
-    }
+  .enhanced-dropdown:hover .enhanced-dropdown__trigger,
+  .enhanced-dropdown:hover .enhanced-dropdown__title > a,
+  .enhanced-dropdown:hover > a {
+    color: #c9a15a !important;
+    transform: translateY(-1.5px) !important;
+  }
 
-    .enhanced-dropdown__content {
-      position: fixed;
-      top: 70px;
-      left: 0;
-      width: 100vw;
-      padding: 2rem 0;
-      background: #fff;
-      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease;
-      z-index: -999;
-    }
+  .enhanced-dropdown:hover .enhanced-dropdown__trigger::after,
+  .enhanced-dropdown:hover .enhanced-dropdown__title > a::after,
+  .enhanced-dropdown:hover > a::after,
+  .enhanced-dropdown details[open] .enhanced-dropdown__trigger::after {
+    transform: scaleX(1) !important;
+    opacity: 1 !important;
+  }
+
+  .enhanced-dropdown__trigger .enhanced-dropdown__menu-icon {
+    display: none !important;
+  }
+
+  .enhanced-dropdown__menu-icon {
+    width: 50px !important;
+    height: 20px !important;
+    object-fit: contain !important;
+    object-position: center;
+    display: block;
+    max-width: 50px;
+    max-height: 20px;
+    border-radius: 40px;
+    flex-shrink: 0;
+  }
+
+  .enhanced-dropdown__content {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 50vw;
+    height: 80vh;
+    overflow-y: scroll;
+    padding: 2rem 0;
+    background: #fff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+    z-index: 999;
+  }
+
+  details[open] .enhanced-dropdown__content {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  .enhanced-dropdown__inner {
+    width: 100%;
+    padding: 15px 20px;
+  }
+
+  .enhanced-dropdown__content {
+    min-height: 320px;
+  }
+
+  .enhanced-dropdown__grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    align-items: start;
+  }
+
+  .enhanced-dropdown__links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(420px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .enhanced-dropdown__links > div {
+    position: relative;
+    padding-right: 20px;
+  }
+
+  .enhanced-dropdown__links > div:not(:nth-child(2n))::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: #e5e5e5;
+  }
+
+  .enhanced-dropdown__section-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+  }
+
+  .enhanced-dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    grid-auto-flow: column; /* પહેલા column ભરાશે */
+    grid-template-rows: repeat(10, auto); /* દરેક column માં 10 items */
+    grid-auto-columns: minmax(100px, 1fr);
+  }
+
+  .enhanced-dropdown__list li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .enhanced-dropdown__link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .enhanced-dropdown__menu-icon {
+    width: auto;
+    height: 20px;
+    max-width: 50px;
+    flex-shrink: 0;
+    object-fit: none;
+  }
+
+  .enhanced-dropdown__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333;
+    padding: 5px 0;
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .enhanced-dropdown__images {
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+  }
+
+  .enhanced-dropdown__promo-images {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .enhanced-dropdown__promo-card img {
+    width: 100%;
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+
+  .enhanced-dropdown__promo-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .enhanced-dropdown:hover .enhanced-dropdown__trigger svg {
+    transform: rotate(180deg);
+  }
+
+  .header__inline-menu {
+    position: relative;
+  }
+
+  .enhanced-dropdown {
+    position: static !important;
+  }
+
+  .enhanced-dropdown__grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+  }
+
+  .enhanced-dropdown__images {
+    justify-self: end;
+    padding-right: 20px;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .enhanced-dropdown__content {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100vw;
+    padding: 2rem 0;
+    background: #fff;
+    box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease;
+    z-index: -999;
+  }
 </style>
 
 <nav class="header__inline-menu">
-  <ul class="list-menu list-menu--inline" role="list" style="display:flex; gap:2rem; row-gap: 0px;">
+  <ul class="list-menu list-menu--inline" role="list">
     {% for link in section.settings.menu.links %}
       <li class="enhanced-dropdown">
         {% if link.links != blank %}
@@ -247,24 +327,28 @@
                   class="enhanced-dropdown__link"
                   onclick="event.stopPropagation();"
                 >
-                  {% comment %} {% if show_icon %}
-                    <img
-                      src="{{ collection_img_url }}"
-                      class="enhanced-dropdown__menu-icon"
-                      alt="{{ link.title }}"
-                      loading="lazy"
-                      width="40"
-                      height="40"
-                    >
-                  {% endif %} {% endcomment %}
+                  {% comment %}
+                    {% if show_icon %}
+                      <img
+                        src="{{ collection_img_url }}"
+                        class="enhanced-dropdown__menu-icon"
+                        alt="{{ link.title }}"
+                        loading="lazy"
+                        width="40"
+                        height="40"
+                      >
+                    {% endif %}
+                  {% endcomment %}
 
                   <span>{{ link.title }}</span>
                 </a>
               </div>
 
-              {% comment %} <span class="enhanced-dropdown__arrow">
-                {% render 'icon-caret' %}
-              </span> {% endcomment %}
+              {% comment %}
+                <span class="enhanced-dropdown__arrow">
+                  {% render 'icon-caret' %}
+                </span>
+              {% endcomment %}
             </summary>
 
             <div class="enhanced-dropdown__content">
@@ -296,6 +380,7 @@
                               alt="{{ childlink.title }}"
                               width="40"
                               height="40"
+                              decoding="async"
                             >
                           {% endif %}
 
@@ -328,6 +413,7 @@
                                       alt="{{ grandchildlink.title }}"
                                       width="40"
                                       height="40"
+                                      decoding="async"
                                     >
                                   {% endif %}
 
@@ -359,7 +445,8 @@
                                 alt="Promo Image 1"
                                 loading="lazy"
                                 width="400"
-                                height="400"
+                                height="{{ section.settings.dropdown_image_1.height | times: 400 | divided_by: section.settings.dropdown_image_1.width }}"
+                                decoding="async"
                               >
                             </a>
                           {% endif %}
@@ -374,7 +461,8 @@
                                 alt="Promo Image 2"
                                 loading="lazy"
                                 width="400"
-                                height="400"
+                                height="{{ section.settings.dropdown_image_2.height | times: 400 | divided_by: section.settings.dropdown_image_2.width }}"
+                                decoding="async"
                               >
                             </a>
                           {% endif %}
@@ -401,7 +489,8 @@
                                         alt="{{ product.title }}"
                                         loading="lazy"
                                         width="400"
-                                        height="400"
+                                        height="{{ product.featured_image.height | times: 400 | divided_by: product.featured_image.width }}"
+                                        decoding="async"
                                       >
                                     </a>
 
@@ -425,7 +514,8 @@
                                     alt="{{ link.title }}"
                                     loading="lazy"
                                     width="400"
-                                    height="400"
+                                    height="{{ parent_collection.featured_image.height | times: 400 | divided_by: parent_collection.featured_image.width }}"
+                                    decoding="async"
                                   >
                                 </a>
                                 {% assign images_shown = images_shown | plus: 1 %}
@@ -472,6 +562,7 @@
                 alt="{{ link.title }}"
                 width="40"
                 height="40"
+                decoding="async"
               >
             {% endif %}
 
@@ -480,6 +571,104 @@
         {% endif %}
       </li>
     {% endfor %}
+
+    {% assign has_education = false %}
+    {% assign has_about = false %}
+    {% assign has_contact = false %}
+    {% for link in section.settings.menu.links %}
+      {% assign link_title_d = link.title | downcase %}
+      {% if link_title_d contains 'education' %}
+        {% assign has_education = true %}
+      {% endif %}
+      {% if link_title_d contains 'about' %}
+        {% assign has_about = true %}
+      {% endif %}
+      {% if link_title_d contains 'contact' %}
+        {% assign has_contact = true %}
+      {% endif %}
+    {% endfor %}
+
+    {% unless has_education %}
+      <li class="enhanced-dropdown">
+        <details>
+          <summary class="enhanced-dropdown__trigger">
+            <div class="enhanced-dropdown__title">
+              <a href="/pages/lab-vs-natural" class="enhanced-dropdown__link" onclick="event.stopPropagation();">
+                <span>EDUCATION</span>
+              </a>
+            </div>
+          </summary>
+          <div
+            class="enhanced-dropdown__content"
+            style="width: 280px; height: auto; min-height: unset; padding: 1.5rem 1rem; border-radius: 8px;"
+          >
+            <div class="enhanced-dropdown__inner" style="padding: 0;">
+              <ul
+                class="enhanced-dropdown__list"
+                style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.8rem;"
+              >
+                <li>
+                  <a
+                    href="/pages/lab-vs-natural"
+                    class="enhanced-dropdown__link"
+                    style="font-weight: 500; font-size: 1.4rem; color: #111111; display: block; padding: 0.6rem 1rem; border-radius: 6px; transition: background 0.15s ease;"
+                  >
+                    Natural Vs lab-Diamonds
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/pages/ring-size-guide"
+                    class="enhanced-dropdown__link"
+                    style="font-weight: 500; font-size: 1.4rem; color: #111111; display: block; padding: 0.6rem 1rem; border-radius: 6px; transition: background 0.15s ease;"
+                  >
+                    Ring Size Guide
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/pages/jewellery-care"
+                    class="enhanced-dropdown__link"
+                    style="font-weight: 500; font-size: 1.4rem; color: #111111; display: block; padding: 0.6rem 1rem; border-radius: 6px; transition: background 0.15s ease;"
+                  >
+                    Jewellery Care
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/pages/appraisals"
+                    class="enhanced-dropdown__link"
+                    style="font-weight: 500; font-size: 1.4rem; color: #111111; display: block; padding: 0.6rem 1rem; border-radius: 6px; transition: background 0.15s ease;"
+                  >
+                    Appraisal
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </li>
+    {% endunless %}
+
+    {% unless has_about %}
+      <li class="enhanced-dropdown">
+        <div class="enhanced-dropdown__title">
+          <a href="/pages/about-page" class="enhanced-dropdown__trigger">
+            <span>ABOUT US</span>
+          </a>
+        </div>
+      </li>
+    {% endunless %}
+
+    {% unless has_contact %}
+      <li class="enhanced-dropdown">
+        <div class="enhanced-dropdown__title">
+          <a href="/pages/contact" class="enhanced-dropdown__trigger">
+            <span>CONTACT US</span>
+          </a>
+        </div>
+      </li>
+    {% endunless %}
   </ul>
 </nav>
 
@@ -515,20 +704,33 @@
 
 <script>
   let lastScroll = 0;
+  let scrollQueued = false;
 
-  document.addEventListener('scroll', function () {
+  // This used to run document.querySelectorAll on *every* scroll event from a
+  // non-passive listener. It is now passive (so it can never delay a scroll
+  // frame) and the DOM work is both coalesced into one rAF per frame and
+  // skipped entirely unless a dropdown is actually open.
+  function closeOpenDropdowns() {
+    scrollQueued = false;
     const currentScroll = window.scrollY;
 
     if (Math.abs(currentScroll - lastScroll) > 10) {
-      const dropdowns = document.querySelectorAll('.enhanced-dropdown details[open]');
-
-      dropdowns.forEach((dropdown) => {
+      document.querySelectorAll('.enhanced-dropdown details[open]').forEach((dropdown) => {
         dropdown.removeAttribute('open');
       });
+      lastScroll = currentScroll;
     }
+  }
 
-    lastScroll = currentScroll;
-  });
+  document.addEventListener(
+    'scroll',
+    function () {
+      if (scrollQueued) return;
+      scrollQueued = true;
+      requestAnimationFrame(closeOpenDropdowns);
+    },
+    { passive: true }
+  );
   document.querySelectorAll('.enhanced-dropdown').forEach((dropdown) => {
     const summary = dropdown.querySelector('.enhanced-dropdown__trigger');
     const link = dropdown.querySelector('.enhanced-dropdown__link');

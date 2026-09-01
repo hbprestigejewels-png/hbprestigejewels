@@ -1,11 +1,11 @@
 {% if request.page_type == 'cart' %}
-  {% render 'lazy-stylesheet', file: 'component-cart.css' %}
+  {{ 'component-cart.css' | asset_url | stylesheet_tag }}
 {% endif -%}
-{%- render 'lazy-stylesheet', file: 'component-totals.css' -%}
+{{- 'component-totals.css' | asset_url | stylesheet_tag }}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'component-discounts.css' %}
+{{ 'component-discounts.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {

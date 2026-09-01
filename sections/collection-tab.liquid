@@ -1,6 +1,6 @@
-{% render 'lazy-stylesheet', file: 'component-card.css' %}
-{% render 'lazy-stylesheet', file: 'component-price.css' %}
-{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+{% render 'stylesheet-async', file: 'component-card.css' %}
+{% render 'stylesheet-async', file: 'component-price.css' %}
+{% render 'stylesheet-async', file: 'component-slider.css' %}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -91,7 +91,7 @@
 
               {% else %}
                 <div class="placeholder-section">
-                  <p>{{ 'sections.collection_list.onboarding_title' | t }}</p>
+                  <p>Collection</p>
                   {% for i in (1..products_to_show) %}
                     <div class="grid__item">
                       <div class="card-wrapper">
@@ -101,9 +101,9 @@
                               {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
                             </div>
                             <div class="card__content" style="padding-left: 10px;">
-                              <h3 class="card__heading">{{ 'sections.collection_list.onboarding_title' | t }}</h3>
+                              <h3 class="card__heading">Example Collection Title</h3>
                               <div class="card-information">
-                                <span class="caption-large light">{{ 'products.product.onboarding_price' | t }}</span>
+                                <span class="caption-large light">$19.99</span>
                               </div>
                             </div>
                           </div>

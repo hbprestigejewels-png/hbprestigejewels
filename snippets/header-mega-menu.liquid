@@ -90,5 +90,116 @@
         {%- endif -%}
       </li>
     {%- endfor -%}
+
+    {% assign has_education = false %}
+    {% assign has_about = false %}
+    {% assign has_contact = false %}
+    {% for link in section.settings.menu.links %}
+      {% assign link_title_d = link.title | downcase %}
+      {% if link_title_d contains 'education' %}
+        {% assign has_education = true %}
+      {% endif %}
+      {% if link_title_d contains 'about' %}
+        {% assign has_about = true %}
+      {% endif %}
+      {% if link_title_d contains 'contact' %}
+        {% assign has_contact = true %}
+      {% endif %}
+    {% endfor %}
+
+    {% unless has_education %}
+      <li>
+        <header-menu>
+          <details id="Details-HeaderMenu-Education-Mega" class="mega-menu">
+            <summary
+              id="HeaderMenu-Education-Mega"
+              class="header__menu-item list-menu__item link focus-inset"
+            >
+              <span>EDUCATION</span>
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </summary>
+            <div
+              id="MegaMenu-Content-Education"
+              class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+              tabindex="-1"
+              style="padding: 2.5rem 0;"
+            >
+              <ul class="mega-menu__list page-width" role="list" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; justify-content: center;">
+                <li style="list-style: none;">
+                  <a
+                    href="/pages/lab-vs-natural"
+                    class="mega-menu__link mega-menu__link--level-2 link"
+                    style="font-size: 1.5rem; font-weight: 600;"
+                  >
+                    Natural Vs lab-Diamonds
+                  </a>
+                  <p style="margin: 0.5rem 0 0; font-size: 1.25rem; color: #666666; line-height: 1.5;">
+                    Learn the key differences in formation, pricing, and certified quality.
+                  </p>
+                </li>
+                <li style="list-style: none;">
+                  <a
+                    href="/pages/ring-size-guide"
+                    class="mega-menu__link mega-menu__link--level-2 link"
+                    style="font-size: 1.5rem; font-weight: 600;"
+                  >
+                    Ring Size Guide
+                  </a>
+                  <p style="margin: 0.5rem 0 0; font-size: 1.25rem; color: #666666; line-height: 1.5;">
+                    Find your exact ring size with our accurate international conversion charts.
+                  </p>
+                </li>
+                <li style="list-style: none;">
+                  <a
+                    href="/pages/jewellery-care"
+                    class="mega-menu__link mega-menu__link--level-2 link"
+                    style="font-size: 1.5rem; font-weight: 600;"
+                  >
+                    Jewellery Care
+                  </a>
+                  <p style="margin: 0.5rem 0 0; font-size: 1.25rem; color: #666666; line-height: 1.5;">
+                    Essential tips to clean, protect, and safely store your fine diamond pieces.
+                  </p>
+                </li>
+                <li style="list-style: none;">
+                  <a
+                    href="/pages/appraisals"
+                    class="mega-menu__link mega-menu__link--level-2 link"
+                    style="font-size: 1.5rem; font-weight: 600;"
+                  >
+                    Appraisal
+                  </a>
+                  <p style="margin: 0.5rem 0 0; font-size: 1.25rem; color: #666666; line-height: 1.5;">
+                    Official certified valuations for insurance coverage and verification.
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </header-menu>
+      </li>
+    {% endunless %}
+
+    {% unless has_about %}
+      <li>
+        <a
+          href="/pages/about-page"
+          class="header__menu-item list-menu__item link link--text focus-inset"
+        >
+          <span>ABOUT US</span>
+        </a>
+      </li>
+    {% endunless %}
+
+    {% unless has_contact %}
+      <li>
+        <a
+          href="/pages/contact"
+          class="header__menu-item list-menu__item link link--text focus-inset"
+        >
+          <span>CONTACT US</span>
+        </a>
+      </li>
+    {% endunless %}
   </ul>
 </nav>

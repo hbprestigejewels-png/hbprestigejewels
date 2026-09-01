@@ -1,0 +1,530 @@
+<!-- FLOATING COUNTRY / CURRENCY PICKER (BOTTOM LEFT) -->
+{%- if localization.available_countries.size > 1 -%}
+  <div id="FloatingCountryPickerWrapper" class="floating-country-picker-wrapper">
+    <div class="floating-country-disclosure">
+      <!-- TRIGGER BUTTON (Matches Screenshot Pill: Flag + Currency + Arrow) -->
+      <button
+        type="button"
+        class="floating-country-btn"
+        id="FloatingCountryButton"
+        aria-expanded="false"
+        aria-label="Select Country and Currency"
+      >
+        <span class="floating-country-flag-icon">
+          <img
+            src="https://flagcdn.com/w40/{{ localization.country.iso_code | downcase }}.png"
+            alt="{{ localization.country.name }}"
+            width="20"
+            height="14"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          >
+        </span>
+        <span class="floating-country-code">{{ localization.country.currency.iso_code }}</span>
+        <svg class="floating-country-caret" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M0 0.5L5 5.5L10 0.5H0Z"/>
+        </svg>
+      </button>
+
+      <!-- DROPDOWN LIST (OPENS UPWARDS) -->
+      <div class="floating-country-dropdown" id="FloatingCountryList" style="display: none;">
+        <div class="floating-country-header">
+          <span class="floating-country-title">Select Country & Currency</span>
+          <button type="button" class="floating-country-close" id="FloatingCountryCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+
+        <!-- SEARCH FILTER -->
+        <div class="floating-country-search-box">
+          <svg class="floating-country-search-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input
+            type="text"
+            class="floating-country-search-input"
+            placeholder="Search country or currency..."
+            id="FloatingCountrySearchInput"
+            autocomplete="off"
+          >
+        </div>
+
+        <!-- POPULAR COUNTRIES -->
+        <div class="floating-country-section-label">Popular Countries</div>
+        <ul class="floating-country-items floating-country-items--popular" role="list">
+          {%- assign popular_codes = 'IN,US,AU,GB,CA,AE' | split: ',' -%}
+          {%- for p_code in popular_codes -%}
+            {%- for country in localization.available_countries -%}
+              {%- if country.iso_code == p_code -%}
+                <li class="floating-country-item" data-country-name="{{ country.name | downcase }}" data-currency="{{ country.currency.iso_code | downcase }}">
+                  <a
+                    href="#"
+                    class="floating-country-link{% if country.iso_code == localization.country.iso_code %} is-active{% endif %}"
+                    data-value="{{ country.iso_code }}"
+                  >
+                    <span class="floating-country-item-flag">
+                      <img
+                        src="https://flagcdn.com/w40/{{ country.iso_code | downcase }}.png"
+                        alt="{{ country.name }}"
+                        width="20"
+                        height="14"
+                        loading="lazy"
+                        onerror="this.style.display='none'"
+                      >
+                    </span>
+                    <span class="floating-country-item-name">{{ country.name }}</span>
+                    <span class="floating-country-item-currency">
+                      {{ country.currency.iso_code }} ({{ country.currency.symbol }})
+                    </span>
+                    {% if country.iso_code == localization.country.iso_code %}
+                      <span class="floating-country-checkmark">✓</span>
+                    {% endif %}
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        </ul>
+
+        <!-- ALL COUNTRIES -->
+        <div class="floating-country-section-label">All Countries</div>
+        <ul class="floating-country-items floating-country-items--all" role="list">
+          {%- for country in localization.available_countries -%}
+            <li class="floating-country-item" data-country-name="{{ country.name | downcase }}" data-currency="{{ country.currency.iso_code | downcase }}">
+              <a
+                href="#"
+                class="floating-country-link{% if country.iso_code == localization.country.iso_code %} is-active{% endif %}"
+                data-value="{{ country.iso_code }}"
+              >
+                <span class="floating-country-item-flag">
+                  <img
+                    src="https://flagcdn.com/w40/{{ country.iso_code | downcase }}.png"
+                    alt="{{ country.name }}"
+                    width="20"
+                    height="14"
+                    loading="lazy"
+                    onerror="this.style.display='none'"
+                  >
+                </span>
+                <span class="floating-country-item-name">{{ country.name }}</span>
+                <span class="floating-country-item-currency">
+                  {{ country.currency.iso_code }} ({{ country.currency.symbol }})
+                </span>
+                {% if country.iso_code == localization.country.iso_code %}
+                  <span class="floating-country-checkmark">✓</span>
+                {% endif %}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+
+    <!-- NATIVE FORM (HIDDEN) -->
+    {%- form 'localization', id: 'FloatingCountryForm', class: 'floating-country-native-form' -%}
+      <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}" id="FloatingCountryHiddenInput">
+    {%- endform -%}
+  </div>
+
+  <style>
+    .floating-country-picker-wrapper {
+      position: fixed;
+      bottom: 22px;
+      left: 22px;
+      z-index: 99998;
+      font-family: inherit;
+    }
+
+    .floating-country-disclosure {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* MATCHING SCREENSHOT PILL */
+    .floating-country-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ffffff;
+      color: #111111;
+      border: 1px solid rgba(0, 0, 0, 0.14);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 1.35rem;
+      font-weight: 500;
+      line-height: 1;
+      outline: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .floating-country-btn:hover {
+      border-color: #111111;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .floating-country-flag-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 0 1px rgba(0,0,0,0.3);
+    }
+
+    .floating-country-flag-icon img {
+      display: block;
+      object-fit: cover;
+    }
+
+    .floating-country-code {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: 0.02em;
+    }
+
+    .floating-country-caret {
+      width: 8px;
+      height: 5px;
+      color: #444444;
+      transition: transform 0.25s ease;
+    }
+
+    .floating-country-btn.is-active .floating-country-caret {
+      transform: rotate(180deg);
+    }
+
+    /* DROPDOWN POPUP (OPENS UPWARDS) */
+    .floating-country-dropdown {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 0;
+      width: 320px;
+      max-width: 90vw;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: floatCountryFadeUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 999999;
+    }
+
+    @keyframes floatCountryFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .floating-country-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid #f3f4f6;
+      background: #fafafa;
+    }
+
+    .floating-country-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #111111;
+    }
+
+    .floating-country-close {
+      background: #f3f4f6;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+      color: #555;
+      padding: 0;
+      transition: all 0.2s ease;
+    }
+
+    .floating-country-close:hover {
+      background: #e5e7eb;
+      color: #000;
+      transform: scale(1.08);
+    }
+
+    /* SEARCH INPUT */
+    .floating-country-search-box {
+      position: relative;
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+    }
+
+    .floating-country-search-icon {
+      position: absolute;
+      left: 22px;
+      width: 14px;
+      height: 14px;
+      color: #888888;
+      pointer-events: none;
+    }
+
+    .floating-country-search-input {
+      width: 100%;
+      padding: 8px 10px 8px 32px;
+      font-size: 1.25rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+      font-family: inherit;
+      background: #fdfdfd;
+    }
+
+    .floating-country-search-input:focus {
+      border-color: #111111;
+      background: #ffffff;
+    }
+
+    .floating-country-section-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888888;
+      padding: 8px 14px 4px;
+      background: #ffffff;
+    }
+
+    /* COUNTRY ITEMS LIST */
+    .floating-country-items {
+      list-style: none;
+      margin: 0;
+      padding: 4px 0;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .floating-country-items--all {
+      max-height: 200px;
+      border-top: 1px solid #f5f5f5;
+    }
+
+    .floating-country-item {
+      margin: 0;
+      padding: 0;
+    }
+
+    .floating-country-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      text-decoration: none;
+      color: #333333;
+      font-size: 1.3rem;
+      transition: background 0.15s ease;
+    }
+
+    .floating-country-link:hover,
+    .floating-country-link.is-active {
+      background: #f4f6f8;
+      color: #000000;
+    }
+
+    .floating-country-item-flag {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .floating-country-item-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    .floating-country-item-currency {
+      color: #777777;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .floating-country-checkmark {
+      color: #111111;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    .floating-country-native-form {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .floating-country-picker-wrapper {
+        bottom: 16px;
+        left: 16px;
+      }
+      .floating-country-btn {
+        padding: 5px 8px;
+        font-size: 1.25rem;
+      }
+      .floating-country-dropdown {
+        width: 290px;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('FloatingCountryButton');
+      const dropdown = document.getElementById('FloatingCountryList');
+      const closeBtn = document.getElementById('FloatingCountryCloseBtn');
+      const searchInput = document.getElementById('FloatingCountrySearchInput');
+      const form = document.getElementById('FloatingCountryForm');
+      const hiddenInput = document.getElementById('FloatingCountryHiddenInput');
+      const wrapper = document.getElementById('FloatingCountryPickerWrapper');
+
+      if (!btn || !dropdown) return;
+
+      function openMenu() {
+        dropdown.style.display = 'flex';
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-expanded', 'true');
+        if (searchInput) {
+          setTimeout(() => searchInput.focus(), 60);
+        }
+      }
+
+      function closeMenu() {
+        dropdown.style.display = 'none';
+        btn.classList.remove('is-active');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+
+      function toggleMenu(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      }
+
+      btn.addEventListener('click', toggleMenu);
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeMenu();
+        });
+      }
+
+      // Close when clicking anywhere outside
+      document.addEventListener('click', function (e) {
+        if (wrapper && !wrapper.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          closeMenu();
+        }
+      });
+
+      // Filter search
+      if (searchInput) {
+        searchInput.addEventListener('input', function () {
+          const query = this.value.toLowerCase().trim();
+          const items = dropdown.querySelectorAll('.floating-country-item');
+          items.forEach(item => {
+            const name = item.getAttribute('data-country-name') || '';
+            const curr = item.getAttribute('data-currency') || '';
+            if (name.includes(query) || curr.includes(query)) {
+              item.style.display = '';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      }
+
+      // Submit on country select & save user preference
+      dropdown.querySelectorAll('.floating-country-link').forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const countryCode = this.getAttribute('data-value');
+          if (countryCode && hiddenInput && form) {
+            localStorage.setItem('hb_user_selected_country', countryCode);
+            hiddenInput.value = countryCode;
+            closeMenu();
+            form.submit();
+          }
+        });
+      });
+
+      // =========================================================================
+      // IP-BASED AUTOMATIC COUNTRY DETECTION (Geo-IP)
+      // =========================================================================
+      async function autoDetectCountryByIP() {
+        // If user already manually selected or auto-detected in this browser, skip
+        if (localStorage.getItem('hb_user_selected_country')) return;
+
+        try {
+          // Free Geo-IP lookup
+          const response = await fetch('https://ipapi.co/json/');
+          if (!response.ok) return;
+          const geoData = await response.json();
+          const detectedCountry = (geoData.country_code || geoData.country || '').toUpperCase();
+
+          if (detectedCountry) {
+            const currentCountry = '{{ localization.country.iso_code }}';
+            // Save detection so it doesn't loop
+            localStorage.setItem('hb_user_selected_country', detectedCountry);
+
+            if (detectedCountry !== currentCountry) {
+              const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
+              if (matchingLink && hiddenInput && form) {
+                console.log(`🌐 GeoIP detected country: ${detectedCountry}. Automatically switching currency...`);
+                hiddenInput.value = detectedCountry;
+                form.submit();
+              }
+            }
+          }
+        } catch (error) {
+          // Fail silently on ad-blocker or offline
+          console.log('GeoIP auto-detection skipped:', error);
+        }
+      }
+
+      // Run Geo-IP on page load
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(autoDetectCountryByIP, 800);
+      } else {
+        window.addEventListener('DOMContentLoaded', () => setTimeout(autoDetectCountryByIP, 800));
+      }
+    })();
+  </script>
+{%- endif -%}

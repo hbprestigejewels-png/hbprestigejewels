@@ -1,0 +1,266 @@
+<style>
+  .appraisals-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+    font-family: var(--font-body-family);
+    color: #1f2937;
+  }
+
+  .appr-hero {
+    text-align: center;
+    padding: 3.5rem 1.5rem 3rem;
+    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
+    border-radius: 16px;
+    margin-bottom: 3.5rem;
+    border: 1px solid #ebecee;
+  }
+
+  .appr-badge {
+    display: inline-block;
+    background: #111111;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1.4rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+  }
+
+  .appr-hero__title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.6rem, 4.2vw, 4.2rem);
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .appr-hero__subtitle {
+    font-size: 1.5rem;
+    color: #4b5563;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  .appr-grid-3col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.2rem;
+    margin-bottom: 4rem;
+  }
+
+  .appr-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .appr-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .appr-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .appr-card__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 0.8rem;
+  }
+
+  .appr-card__text {
+    font-size: 1.35rem;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .appr-process-box {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .appr-process-box__title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+
+  .appr-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .appr-step {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 1.8rem 1.5rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  .appr-step__num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #111111;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .appr-step__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 0.6rem;
+  }
+
+  .appr-step__desc {
+    font-size: 1.3rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .appr-cta-box {
+    background: #111111;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+  }
+
+  .appr-cta-box h3 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin: 0 0 1rem;
+  }
+
+  .appr-cta-box p {
+    color: #9ca3af;
+    font-size: 1.45rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  .appr-btn {
+    display: inline-block;
+    background: #ffffff;
+    color: #111111;
+    font-weight: 600;
+    padding: 0.9rem 2.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.35rem;
+    transition: background 0.2s ease;
+  }
+
+  .appr-btn:hover {
+    background: #e5e7eb;
+  }
+
+  @media screen and (max-width: 768px) {
+    .appraisals-page-container {
+      padding: 2rem 1.5rem 4rem;
+    }
+  }
+</style>
+
+<div class="appraisals-page-container">
+  <div class="appr-hero">
+    <span class="appr-badge">{{ section.settings.badge | default: 'Certification & Valuation' }}</span>
+    <h1 class="appr-hero__title">{{ section.settings.title | default: 'Valuations & Appraisals' }}</h1>
+    <p class="appr-hero__subtitle">
+      {{ section.settings.subtitle | default: 'Secure, certified, and independent valuation reports for insurance coverage, estate management, and official authenticity verification.' }}
+    </p>
+  </div>
+
+  <div class="appr-grid-3col">
+    <div class="appr-card">
+      <div class="appr-card__icon">🛡️</div>
+      <h3 class="appr-card__title">{{ section.settings.card1_title | default: 'Insurance Replacement Value' }}</h3>
+      <p class="appr-card__text">
+        {{ section.settings.card1_desc | default: 'Insurance companies require an official valuation report to cover your valuable jewellery against loss, theft, or damage at its current retail replacement cost.' }}
+      </p>
+    </div>
+
+    <div class="appr-card">
+      <div class="appr-card__icon">⚖️</div>
+      <h3 class="appr-card__title">{{ section.settings.card2_title | default: 'Certified Independent Valuers' }}</h3>
+      <p class="appr-card__text">
+        {{ section.settings.card2_desc | default: 'Our valuations are conducted by registered, independent third-party NCJV/GIA accredited gemological valuers, guaranteeing unbiased objectivity.' }}
+      </p>
+    </div>
+
+    <div class="appr-card">
+      <div class="appr-card__icon">📜</div>
+      <h3 class="appr-card__title">{{ section.settings.card3_title | default: 'Detailed Gemological Specs' }}</h3>
+      <p class="appr-card__text">
+        {{ section.settings.card3_desc | default: 'Every report provides itemized technical descriptions: metal purity, total diamond weight, colour grade, clarity grade, cut quality, and retail estimate.' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="appr-process-box">
+    <h2 class="appr-process-box__title">How the Valuation Process Works</h2>
+    <div class="appr-steps-grid">
+      <div class="appr-step">
+        <div class="appr-step__num">1</div>
+        <h4 class="appr-step__title">Gemological Assessment</h4>
+        <p class="appr-step__desc">The diamond and precious metal settings are carefully measured and evaluated under high-magnification microscopes.</p>
+      </div>
+
+      <div class="appr-step">
+        <div class="appr-step__num">2</div>
+        <h4 class="appr-step__title">Market Rate Analysis</h4>
+        <p class="appr-step__desc">Current Australian and international bullion, diamond, and craftsmanship market rates are calculated.</p>
+      </div>
+
+      <div class="appr-step">
+        <div class="appr-step__num">3</div>
+        <h4 class="appr-step__title">Official Certificate</h4>
+        <p class="appr-step__desc">You receive an embossed, tamper-proof official valuation document ready to submit to your insurance provider.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="appr-cta-box">
+    <h3>{{ section.settings.cta_title | default: 'Request an Appraisal or Valuation' }}</h3>
+    <p>{{ section.settings.cta_desc | default: 'Need a valuation certificate for your recent purchase or custom bespoke piece? Contact our specialists today.' }}</p>
+    <a href="{{ section.settings.cta_link | default: '/pages/contact' }}" class="appr-btn">
+      {{ section.settings.cta_text | default: 'Request Appraisal Assistance' }}
+    </a>
+  </div>
+</div>

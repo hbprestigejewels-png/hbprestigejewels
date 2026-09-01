@@ -1,8 +1,8 @@
-{% render 'lazy-stylesheet', file: 'component-article-card.css' %}
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
 {% if request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'section-main-blog.css' %}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
 

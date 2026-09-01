@@ -115,7 +115,7 @@
   {%- endif -%}
 
   {%- if show_pickup_availability -%}
-    {% render 'lazy-stylesheet', file: 'component-pickup-availability.css' %}
+    {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
 
     {%- assign pick_up_availabilities = product.selected_or_first_available_variant.store_availabilities
       | where: 'pick_up_enabled', true
@@ -146,6 +146,6 @@
       </template> {% endcomment %}
     {% comment %} </pickup-availability> {% endcomment %}
 
-    <script src="{{ 'pickup-availability.js' | asset_url }}" defer></script>
+    <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 </div>

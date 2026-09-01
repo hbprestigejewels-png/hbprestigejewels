@@ -485,22 +485,27 @@ a.product__text {
   height: 1.4rem;
 }
 
+.product__inbox-zoom-wrapper .product__media-toggle {
+  pointer-events: none !important;
+}
+
 .product__media-icon,
 .thumbnail__badge {
-  background-color: rgb(var(--color-background));
-  border-radius: 50%;
-  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
-  color: rgb(var(--color-foreground));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3rem;
-  width: 3rem;
-  position: absolute;
-  right: 1.2rem;
-  top: 1.2rem;
-  z-index: 1;
-  transition: color var(--duration-short) ease, opacity var(--duration-short) ease;
+  background-color: #ffffff !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #000000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 3.6rem !important;
+  width: 3.6rem !important;
+  position: absolute !important;
+  right: 1.5rem !important;
+  top: 1.5rem !important;
+  z-index: 10 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+  transition: color var(--duration-short) ease, opacity var(--duration-short) ease, transform 0.2s ease !important;
 }
 
 .product__media-video .product__media-icon {
@@ -1516,8 +1521,32 @@ a.product__text {
     border: 0.1rem solid rgb(var(--color-background));
   }
 
-  .recipient-form > input[type='checkbox']:checked + label .icon-checkmark {
-    border: none;
+@media screen and (max-width: 749px) {
+  .product__media-wrapper {
+    padding-top: 1rem !important;
+  }
+
+  .product__media-wrapper .product__media-list {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .product__media-wrapper .product__media-list::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .product__media-wrapper .product__media-list .product__media-item {
+    display: block !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
   }
 }
 

@@ -1,3 +1,219 @@
+{% style %}
+  .sustainable-trends-section {
+    width: 100%;
+    overflow: hidden;
+    padding-left: 15px;
+  }
+
+  .sustainable-trends-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .sustainable-trends-grid {
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .sustainable-trends-content {
+      flex: 1;
+    }
+
+    .sustainable-trends-images {
+      flex: 1;
+    }
+  }
+
+  .content-inner {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  @media screen and (min-width: 990px) {
+    .content-inner {
+      margin: 0 0 0 0;
+    }
+  }
+
+  .section-heading {
+    font-family: var(--font-heading-family);
+    font-size: calc(var(--font-heading-scale) * 3rem);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.2;
+    color: #000;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-heading {
+      font-size: calc(var(--font-heading-scale) * 3.6rem);
+    }
+  }
+
+  .section-description {
+    font-family: var(--font-body-family);
+    font-size: 1.5rem;
+    line-height: 1.5;
+    margin-bottom: 2.5rem;
+    color: #4a4a4a;
+  }
+
+  .sustainable-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid #000;
+    background: transparent;
+    color: #000;
+    border-radius:20px !important;
+  }
+
+  .sustainable-btn:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  /* Image Stack Overlap Effect - Cadiant Style */
+  .image-stack {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 550px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .image-stack {
+      min-height: 600px;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    .image-stack {
+      min-height: 650px;
+    }
+  }
+
+  .image-stack__item {
+    position: absolute;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Back image (larger, bottom-right) - 3:4 aspect ratio */
+  .image-stack__item--back {
+    width: 72%;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    border-radius:20px !important;
+  }
+
+  .image-stack__item--back .stack-image {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Front image (overlapping, top-left) - 4:5 aspect ratio */
+  .image-stack__item--front {
+    width: 62%;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    border-radius:20px !important;
+  }
+
+  .image-stack__item--front .stack-image {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* Desktop fine-tuning */
+  @media screen and (min-width: 990px) {
+    .image-stack__item--back {
+      width: 68%;
+    }
+
+    .image-stack__item--front {
+      width: 58%;
+    }
+  }
+
+  /* Placeholder styling */
+  .placeholder-image {
+    background-color: #e8e8e8;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-svg {
+    width: 80%;
+    height: auto;
+    fill: #9ca3af;
+  }
+
+  /* Mobile adjustments */
+  @media screen and (max-width: 749px) {
+    .sustainable-trends-section {
+      padding-top: 40px !important;
+      padding-bottom: 40px !important;
+    }
+
+    .section-heading {
+      font-size: 2.6rem;
+    }
+
+    .image-stack {
+      min-height: 420px;
+      margin-top: 2rem;
+    }
+
+    .image-stack__item--back {
+      width: 75%;
+    }
+
+    .image-stack__item--front {
+      width: 65%;
+    }
+
+    .stack-video{
+    width:100%;
+    height:300px !important;
+    object-fit:cover;
+    display:block;
+    border-radius:20px;
+}
+  }
+
+.stack-image,
+.stack-video{
+    width:100%;
+    height:500px ;
+    object-fit:cover;
+    display:block;
+    border-radius:20px;
+}
+{% endstyle %}
+
 {%- liquid
   # Section settings with defaults
   assign section_padding_top = section.settings.padding_top | default: 80
@@ -41,10 +257,9 @@
       <!-- Images Column with Overlap Effect - Cadiant Style -->
       <div class="sustainable-trends-images">
         <div class="image-stack">
-          {% if image_1 != blank %}
+          {% if image_1 != blank or front_media_type == 'video' and video_1 != blank %}
             <div class="image-stack__item image-stack__item--front">
               {% if front_media_type == 'video' and video_1 != blank %}
-                <div role="img" aria-label="HB Prestige Jewels Video">
                 {{
                   video_1
                   | video_tag:
@@ -53,16 +268,15 @@
                     muted: section.settings.front_video_muted,
                     controls: section.settings.front_video_controls,
                     playsinline: true,
-                    preload: 'none',
                     class: 'stack-video'
                 }}
-                </div>
 
               {% elsif image_1 != blank %}
+                {% assign alt_1 = image_1.alt | default: 'HB Prestige Jewels' | escape %}
                 {{
                   image_1
-                  | image_url: width: 800
-                  | image_tag: class: 'stack-image', alt: 'hb prestige jewels', loading: 'lazy'
+                  | image_url: width: 600, format: 'webp'
+                  | image_tag: class: 'stack-image', loading: 'lazy', decoding: 'async', alt: alt_1
                 }}
               {% endif %}
             </div>
@@ -72,17 +286,14 @@
                 'image'
                 | placeholder_svg_tag: 'stack-image placeholder-svg',
                   role: 'img',
-                  aria_label: 'Product image placeholder',
-                  alt: section.settings.image.alt
-                | default: 'hb prestige jewels'
+                  aria_label: 'Product image placeholder'
               }}
             </div>
           {% endif %}
 
-          {% if image_2 != blank %}
+          {% if image_2 != blank or back_media_type == 'video' and video_2 != blank %}
             <div class="image-stack__item image-stack__item--back">
               {% if back_media_type == 'video' and video_2 != blank %}
-                <div role="img" aria-label="HB Prestige Jewels Video">
                 {{
                   video_2
                   | video_tag:
@@ -91,16 +302,15 @@
                     muted: section.settings.back_video_muted,
                     controls: section.settings.back_video_controls,
                     playsinline: true,
-                    preload: 'none',
                     class: 'stack-video'
                 }}
-                </div>
 
               {% elsif image_2 != blank %}
+                {% assign alt_2 = image_2.alt | default: 'HB Prestige Jewels' | escape %}
                 {{
                   image_2
-                  | image_url: width: 1000
-                  | image_tag: class: 'stack-image', alt: 'Jewellery Video Preview', loading: 'lazy'
+                  | image_url: width: 600, format: 'webp'
+                  | image_tag: class: 'stack-image', loading: 'lazy', decoding: 'async', alt: alt_2
                 }}
               {% endif %}
             </div>
@@ -110,8 +320,7 @@
                 'image'
                 | placeholder_svg_tag: 'stack-image placeholder-svg',
                   role: 'img',
-                  aria_label: 'Product image placeholder',
-                  alt: section.settings.image.alt | default:"hb prestige jewels"
+                  aria_label: 'Product image placeholder'
               }}
             </div>
           {% endif %}
@@ -287,218 +496,3 @@
 }
 {% endschema %}
 
-{% style %}
-    .sustainable-trends-section {
-      width: 100%;
-      overflow: hidden;
-      padding-left: 15px;
-    }
-
-    .sustainable-trends-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
-    }
-
-    @media screen and (min-width: 990px) {
-      .sustainable-trends-grid {
-        flex-direction: row;
-        align-items: center;
-        gap: 2rem;
-      }
-
-      .sustainable-trends-content {
-        flex: 1;
-      }
-
-      .sustainable-trends-images {
-        flex: 1;
-      }
-    }
-
-    .content-inner {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    @media screen and (min-width: 990px) {
-      .content-inner {
-        margin: 0 0 0 0;
-      }
-    }
-
-    .section-heading {
-      font-family: var(--font-heading-family);
-      font-size: calc(var(--font-heading-scale) * 3rem);
-      margin: 0 0 1.5rem 0;
-      line-height: 1.2;
-      color: #000;
-    }
-
-    @media screen and (min-width: 750px) {
-      .section-heading {
-        font-size: calc(var(--font-heading-scale) * 3.6rem);
-      }
-    }
-
-    .section-description {
-      font-family: var(--font-body-family);
-      font-size: 1.5rem;
-      line-height: 1.5;
-      margin-bottom: 2.5rem;
-      color: #4a4a4a;
-    }
-
-    .sustainable-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem 2.5rem;
-      font-size: 1.4rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: 1px solid #000;
-      background: transparent;
-      color: #000;
-      border-radius:20px !important;
-    }
-
-    .sustainable-btn:hover {
-      background: #000;
-      color: #fff;
-    }
-
-    /* Image Stack Overlap Effect - Cadiant Style */
-    .image-stack {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 550px;
-    }
-
-    @media screen and (min-width: 750px) {
-      .image-stack {
-        min-height: 600px;
-      }
-    }
-
-    @media screen and (min-width: 1200px) {
-      .image-stack {
-        min-height: 650px;
-      }
-    }
-
-    .image-stack__item {
-      position: absolute;
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    /* Back image (larger, bottom-right) - 3:4 aspect ratio */
-    .image-stack__item--back {
-      width: 72%;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      border-radius:20px !important;
-    }
-
-    .image-stack__item--back .stack-image {
-      aspect-ratio: 4 / 5;
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-    }
-
-    /* Front image (overlapping, top-left) - 4:5 aspect ratio */
-    .image-stack__item--front {
-      width: 62%;
-      left: 0;
-      top: 0;
-      z-index: 2;
-      border-radius:20px !important;
-    }
-
-    .image-stack__item--front .stack-image {
-      aspect-ratio: 4 / 5;
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-    }
-
-    /* Desktop fine-tuning */
-    @media screen and (min-width: 990px) {
-      .image-stack__item--back {
-        width: 68%;
-      }
-
-      .image-stack__item--front {
-        width: 58%;
-      }
-    }
-
-    /* Placeholder styling */
-    .placeholder-image {
-      background-color: #e8e8e8;
-      width: 100%;
-      height: 100%;
-      min-height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .placeholder-svg {
-      width: 80%;
-      height: auto;
-      fill: #9ca3af;
-    }
-
-    /* Mobile adjustments */
-    @media screen and (max-width: 749px) {
-      .sustainable-trends-section {
-        padding-top: 40px !important;
-        padding-bottom: 40px !important;
-      }
-
-      .section-heading {
-        font-size: 2.6rem;
-      }
-
-      .image-stack {
-        min-height: 420px;
-        margin-top: 2rem;
-      }
-
-      .image-stack__item--back {
-        width: 75%;
-      }
-
-      .image-stack__item--front {
-        width: 65%;
-      }
-
-      .stack-video{
-      width:100%;
-      height:300px !important;
-      object-fit:cover;
-      display:block;
-      border-radius:20px;
-  }
-    }
-
-  .stack-image,
-  .stack-video{
-      width:100%;
-      height:500px ;
-      object-fit:cover;
-      display:block;
-      border-radius:20px;
-  }
-{% endstyle %}

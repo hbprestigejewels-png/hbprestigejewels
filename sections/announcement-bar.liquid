@@ -1,5 +1,5 @@
-{% render 'lazy-stylesheet', file: 'component-slideshow.css' %}
-{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+<link rel="stylesheet" href="{{ 'component-slideshow.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- liquid
   assign social_icons = true
@@ -15,7 +15,7 @@
 -%}
 
 {% if social_icons %}
-  {% render 'lazy-stylesheet', file: 'component-list-social.css' %}
+  <link rel="stylesheet" href="{{ 'component-list-social.css' | asset_url }}" media="print" onload="this.media='all'">
 {% endif %}
 
 <div
@@ -128,7 +128,7 @@
         </div>
       </slideshow-component>
       {%- if request.design_mode -%}
-        <script src="{{ 'theme-editor.js' | asset_url }}" defer></script>
+        <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
         <style>
           /* theme editor power preview fix */
           .announcement-bar-slider .slider__slide[aria-hidden='true'] {

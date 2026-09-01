@@ -1,14 +1,14 @@
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'quick-order-list.css' %}
+{{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
 {% if request.page_type == 'product' %}
-  {% render 'lazy-stylesheet', file: 'quantity-popover.css' %}
+  {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {% endif %}
 
-<script src="{{ 'quantity-popover.js' | asset_url }}" defer></script>
-<script src="{{ 'price-per-item.js' | asset_url }}" defer></script>
-<script src="{{ 'quick-order-list.js' | asset_url }}" defer></script>
+<script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {

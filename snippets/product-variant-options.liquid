@@ -91,6 +91,37 @@
           break
         endif
       endfor
+
+      assign custom_swatch_image = null
+      assign val_key = value_downcase | replace: ' ', '_' | replace: '-', '_'
+
+      if val_key contains '925' or val_key contains 'silver'
+        assign custom_swatch_image = block.settings.swatch_925_silver
+      elsif val_key contains '10k_yellow' or val_key contains '10k_gold'
+        assign custom_swatch_image = block.settings.swatch_10k_yellow
+      elsif val_key contains '10k_rose'
+        assign custom_swatch_image = block.settings.swatch_10k_rose
+      elsif val_key contains '10k_white'
+        assign custom_swatch_image = block.settings.swatch_10k_white
+      elsif val_key contains '14k_yellow' or val_key contains '14k_gold'
+        assign custom_swatch_image = block.settings.swatch_14k_yellow
+      elsif val_key contains '14k_rose'
+        assign custom_swatch_image = block.settings.swatch_14k_rose
+      elsif val_key contains '14k_white'
+        assign custom_swatch_image = block.settings.swatch_14k_white
+      elsif val_key contains '18k_yellow' or val_key contains '18k_gold'
+        assign custom_swatch_image = block.settings.swatch_18k_yellow
+      elsif val_key contains '18k_rose'
+        assign custom_swatch_image = block.settings.swatch_18k_rose
+      elsif val_key contains '18k_white'
+        assign custom_swatch_image = block.settings.swatch_18k_white
+      elsif val_key contains 'yellow'
+        assign custom_swatch_image = block.settings.swatch_yellow_gold
+      elsif val_key contains 'rose'
+        assign custom_swatch_image = block.settings.swatch_rose_gold
+      elsif val_key contains 'white'
+        assign custom_swatch_image = block.settings.swatch_white_gold
+      endif
     -%}
 
     <input
@@ -109,58 +140,28 @@
       {{ input_dataset }}
     >
 
-    <label for="{{ input_id }}" class="variant-box">
-      <div class="variant-box-image">
-        {% assign option_name_downcase = option.name | downcase %}
-        {% assign value_downcase = value | downcase %}
-        {% assign custom_image = '' %}
-
-        {% if option_name_downcase == 'carat' %}
-          {% if value_downcase contains '18k rose' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/18k_rose.webp?v=1777545004' %}
-
-          {% elsif value_downcase contains '18k silver' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/18k_silver.webp?v=1777545026' %}
-
-          {% elsif value_downcase contains '18k gold' or value_downcase contains '18 gold' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/18k_gold.webp?v=1777545156' %}
-
-          {% elsif value_downcase contains '14k gold' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/14k_gold.webp?v=1777545121' %}
-
-          {% elsif value_downcase contains '14k rose' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/14k_rose.webp?v=1777545173' %}
-
-          {% elsif value_downcase contains '14k silver' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/14k_silver.webp?v=1777545190' %}
-
-          {% elsif value_downcase contains '9k rose' %}
-            {% assign custom_image = 'https://cdn.shopify.com/s/files/1/0743/0825/5844/files/9k_gold.webp?v=1777545224' %}
-          {% endif %}
-        {% endif %}
-
-        {% if custom_image != '' %}
+    <label
+      for="{{ input_id }}"
+      class="variant-metal-swatch{% if value_downcase contains 'silver' or value_downcase contains 'white' or value_downcase contains '925' %} swatch--white-silver{% elsif value_downcase contains 'rose' %} swatch--rose-gold{% elsif value_downcase contains 'yellow' or value_downcase contains 'gold' %} swatch--yellow-gold{% endif %}"
+    >
+      <div class="variant-metal-swatch__box">
+        {% if custom_swatch_image != blank %}
           <img
-            src="{{ custom_image }}"
-            alt="{{ escaped_value }}"
+            src="{{ custom_swatch_image | image_url: width: 120 }}"
+            alt="{{ value | escape }}"
             loading="lazy"
-            width="40"
-            height="40"
+            class="swatch-custom-img"
           >
         {% elsif matched_variant and matched_variant.featured_media %}
           <img
             src="{{ matched_variant.featured_media | image_url: width: 120 }}"
-            alt="{{ escaped_value }}"
+            alt="{{ value | escape }}"
             loading="lazy"
-            width="40"
-            height="40"
+            class="swatch-custom-img"
           >
+        {% else %}
+          <span class="swatch-label-text">{{ value }}</span>
         {% endif %}
-      </div>
-
-      <!-- TEXT BELOW -->
-      <div class="variant-box-label">
-        {{ value }}
       </div>
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}

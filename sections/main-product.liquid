@@ -9,22 +9,22 @@
     data-zoom-on-hover
   {% endif %}
 >
-  {% render 'lazy-stylesheet', file: 'section-main-product.css' %}
-  {% render 'lazy-stylesheet', file: 'component-accordion.css' %}
+  {{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
   {% if request.page_type == 'product' or request.page_type == 'collection' %}
-    {% render 'lazy-stylesheet', file: 'component-price.css' %}
+    {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {% endif %}
-  {% render 'lazy-stylesheet', file: 'component-slider.css' %}
-  {% render 'lazy-stylesheet', file: 'component-rating.css' %}
-  {% render 'lazy-stylesheet', file: 'component-deferred-media.css' %}
+  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
-    {% render 'lazy-stylesheet', file: 'component-product-variant-picker.css' %}
-    {% render 'lazy-stylesheet', file: 'component-swatch-input.css' %}
-    {% render 'lazy-stylesheet', file: 'component-swatch.css' %}
+    {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
+    {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
   {% endunless %}
   {%- if product.quantity_price_breaks_configured? -%}
-    {% render 'lazy-stylesheet', file: 'component-volume-pricing.css' %}
+    {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
   {%- style -%}
@@ -41,24 +41,23 @@
     }
   {%- endstyle -%}
 
-  <script src="{{ 'product-info.js' | asset_url }}" defer></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer></script>
-  <script src="{{ 'product-elements.js' | asset_url }}" defer></script>
+  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
-    <script src="{{ 'show-more.js' | asset_url }}" defer></script>
-    <script src="{{ 'price-per-item.js' | asset_url }}" defer></script>
+    <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 
   {% if section.settings.image_zoom == 'hover' %}
-    <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer></script>
+    <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
   {% endif %}
   {%- if request.design_mode -%}
-    <script src="{{ 'theme-editor.js' | asset_url }}" defer></script>
+    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 
   {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
   {%- if first_3d_model -%}
-    {% render 'lazy-stylesheet', file: 'component-product-model.css' %}
+    {{ 'component-product-model.css' | asset_url | stylesheet_tag }}
     <link
       id="ModelViewerStyle"
       rel="stylesheet"
@@ -763,12 +762,12 @@
                     </aside>
                   {%- endif -%}
                   {% if request.page_type == 'collection' %}
-                    {% render 'lazy-stylesheet', file: 'component-card.css' %}
+                    {{ 'component-card.css' | asset_url | stylesheet_tag }}
                   {% endif %}
-                  {% render 'lazy-stylesheet', file: 'component-complementary-products.css' %}
+                  {{ 'component-complementary-products.css' | asset_url | stylesheet_tag }}
                   {%- if block.settings.enable_quick_add -%}
-                    {% render 'lazy-stylesheet', file: 'quick-add.css' %}
-                    <script src="{{ 'quick-add.js' | asset_url }}" defer></script>
+                    {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+                    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                   {%- endif -%}
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
@@ -812,8 +811,8 @@
     {%- endfor -%}
 
     {%- if product.media.size > 0 -%}
-      <script src="{{ 'product-modal.js' | asset_url }}" defer></script>
-      <script src="{{ 'media-gallery.js' | asset_url }}" defer></script>
+      <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- if first_3d_model -%}
@@ -1003,6 +1002,75 @@
             }
           ],
           "default": "circle"
+        },
+        {
+          "type": "header",
+          "content": "Custom Material & Color Swatch Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_925_silver",
+          "label": "925 Sterling Silver Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_10k_yellow",
+          "label": "10K Yellow Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_10k_rose",
+          "label": "10K Rose Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_10k_white",
+          "label": "10K White Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_14k_yellow",
+          "label": "14K Yellow Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_14k_rose",
+          "label": "14K Rose Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_14k_white",
+          "label": "14K White Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_18k_yellow",
+          "label": "18K Yellow Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_18k_rose",
+          "label": "18K Rose Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_18k_white",
+          "label": "18K White Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_yellow_gold",
+          "label": "Yellow Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_rose_gold",
+          "label": "Rose Gold Swatch Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "swatch_white_gold",
+          "label": "White Gold Swatch Image"
         }
       ]
     },
@@ -2453,7 +2521,7 @@
 
       update();
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onResize);
+      window.addEventListener('resize', onResize, { passive: true });
     }
 
     // પહેલી load વખતે

@@ -86,11 +86,7 @@
         </li>
       {%- endif -%}
       {%- for media in product.media -%}
-        {% if media_position >= limit
-          or media_position >= 1
-          and section.settings.hide_variants
-          and variant_images contains media.src
-        %}
+        {% if limit and media_position >= limit %}
           {% continue %}
         {% endif %}
 

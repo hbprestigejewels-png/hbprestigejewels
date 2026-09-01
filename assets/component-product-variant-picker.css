@@ -34,7 +34,7 @@ variant-selects {
   width: 1px;
 }
 
-.product-form__input input[type='radio']:not(.disabled):not(.visually-disabled) + label > .label-unavailable {
+.product-form__input input[type='radio']:not(.disabled):not(.visually-disabled)+label>.label-unavailable {
   display: none;
 }
 
@@ -43,7 +43,7 @@ variant-selects {
   margin-bottom: 1.6rem;
 }
 
-.product-form__input--dropdown .dropdown-swatch + select {
+.product-form__input--dropdown .dropdown-swatch+select {
   padding-left: calc(2.4rem + var(--swatch-input--size));
 }
 
@@ -57,7 +57,7 @@ variant-selects {
 }
 
 /* Custom styles for Pill display type */
-.product-form__input--pill input[type='radio'] + label {
+.product-form__input--pill input[type='radio']+label {
   /* border: var(--variant-pills-border-width) solid rgba(var(--color-foreground), var(--variant-pills-border-opacity)); */
   background-color: rgb(var(--color-background));
   color: rgba(var(--color-foreground));
@@ -75,7 +75,7 @@ variant-selects {
   position: relative;
 }
 
-.product-form__input--pill input[type='radio'] + label:before {
+.product-form__input--pill input[type='radio']+label:before {
   content: '';
   position: absolute;
   top: calc(var(--variant-pills-border-width) * -1);
@@ -84,51 +84,51 @@ variant-selects {
   left: calc(var(--variant-pills-border-width) * -1);
   z-index: -1;
   border-radius: var(--variant-pills-radius);
-  box-shadow: var(--variant-pills-shadow-horizontal-offset) var(--variant-pills-shadow-vertical-offset)
-    var(--variant-pills-shadow-blur-radius) rgba(var(--color-shadow), var(--variant-pills-shadow-opacity));
+  box-shadow: var(--variant-pills-shadow-horizontal-offset) var(--variant-pills-shadow-vertical-offset) var(--variant-pills-shadow-blur-radius) rgba(var(--color-shadow), var(--variant-pills-shadow-opacity));
 }
 
-.product-form__input--pill input[type='radio'] + label:hover {
+.product-form__input--pill input[type='radio']+label:hover {
   border-color: rgb(var(--color-foreground));
 }
 
-.product-form__input--pill input[type='radio']:checked + label {
+.product-form__input--pill input[type='radio']:checked+label {
   /* background-color: rgb(var(--color-foreground)); */
   color: rgb(var(--color-background));
 }
 
 @media screen and (forced-colors: active) {
-  .product-form__input--pill input[type='radio']:checked + label {
+  .product-form__input--pill input[type='radio']:checked+label {
     text-decoration: underline;
   }
 
-  .product-form__input--pill input[type='radio']:focus-visible + label {
+  .product-form__input--pill input[type='radio']:focus-visible+label {
     outline: transparent solid 1px;
     outline-offset: 2px;
   }
 }
 
-.product-form__input--pill input[type='radio']:checked + label::selection {
+.product-form__input--pill input[type='radio']:checked+label::selection {
   background-color: rgba(var(--color-background), 0.3);
 }
 
-.product-form__input--pill input[type='radio']:disabled + label,
-.product-form__input--pill input[type='radio'].disabled + label {
+.product-form__input--pill input[type='radio']:disabled+label,
+.product-form__input--pill input[type='radio'].disabled+label {
   border-color: rgba(var(--color-foreground), 0.1);
   color: rgba(var(--color-foreground), 0.6);
   text-decoration: line-through;
 }
 
-.product-form__input--pill input[type='radio'].disabled:checked + label,
-.product-form__input--pill input[type='radio']:disabled:checked + label {
+.product-form__input--pill input[type='radio'].disabled:checked+label,
+.product-form__input--pill input[type='radio']:disabled:checked+label {
   color: rgba(var(--color-background), 0.6);
 }
-.product-form__input--pill input[type='radio']:focus-visible + label {
+
+.product-form__input--pill input[type='radio']:focus-visible+label {
   box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
 }
 
 /* Fallback */
-.product-form__input--pill input[type='radio'].focused + label {
+.product-form__input--pill input[type='radio'].focused+label {
   box-shadow: 0 0 0 0.3rem rgb(var(--color-background)), 0 0 0 0.5rem rgba(var(--color-foreground), 0.55);
 }
 
@@ -138,17 +138,18 @@ variant-selects {
   flex-wrap: wrap;
 }
 
-.product-form__input--swatch .swatch-input__input + .swatch-input__label {
+.product-form__input--swatch .swatch-input__input+.swatch-input__label {
   --swatch-input--size: 3.6rem;
 
   margin: 0.7rem 1.2rem 0.2rem 0;
 }
 
 @media screen and (min-width: 750px) {
-  .product-form__input--swatch .swatch-input__input + .swatch-input__label {
+  .product-form__input--swatch .swatch-input__input+.swatch-input__label {
     --swatch-input--size: 2.8rem;
   }
 }
+
 /* End custom styles for Swatch display type */
 
 
@@ -212,7 +213,7 @@ variant-selects {
 }
 
 /* 🔥 ACTIVE */
-input[type="radio"]:checked + .variant-box .variant-box-image {
+input[type="radio"]:checked+.variant-box .variant-box-image {
   border: 1px solid #000;
 }
 
@@ -235,4 +236,200 @@ input[type="radio"]:checked + .variant-box .variant-box-image {
 /* Hover arrows */
 .variant-arrow:hover {
   background: #f5f5f5;
+}
+
+/* ============================================================
+   Metal & Material Swatch Styling (matching screenshot design)
+   ============================================================ */
+.product-form__input--pill {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.6rem;
+}
+
+.form__label-selected-val {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-left: 4px;
+}
+
+.variant-metal-swatch {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+.variant-metal-swatch__box {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Glassy Specular Highlight on top half */
+.variant-metal-swatch__box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.variant-metal-swatch.swatch--white-silver .variant-metal-swatch__box {
+  background: linear-gradient(30deg, rgb(179, 178, 175) 0px, rgb(247, 247, 247) 55%, rgb(247, 247, 247) 60%, rgb(179, 178, 175)) !important;
+  border: 1px solid #b8bfc7;
+  color: #1a1a1a;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.variant-metal-swatch.swatch--yellow-gold .variant-metal-swatch__box {
+  background: linear-gradient(30deg, rgb(225, 185, 79) 0px, rgb(252, 241, 213) 55%, rgb(252, 241, 213) 60%, rgb(225, 185, 79)) !important;
+  border: 1px solid #c99330;
+  color: #1a1a1a;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.85), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.variant-metal-swatch.swatch--rose-gold .variant-metal-swatch__box {
+  background: linear-gradient(30deg, rgb(236, 138, 85) 0px, rgb(252, 237, 226) 55%, rgb(252, 237, 226) 60%, rgb(236, 138, 85)) !important;
+  border: 1px solid #c45391;
+  color: #1a1a1a;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.85), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.variant-metal-swatch .swatch-custom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.variant-metal-swatch .swatch-label-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* ACTIVE / CHECKED STATE (Exact outline matching reference image) */
+input[type="radio"]:checked+.variant-metal-swatch .variant-metal-swatch__box {
+  border: 1.5px solid #111111 !important;
+  box-shadow: 0 0 0 1px #111111 !important;
+}
+
+/* Hover state */
+.variant-metal-swatch:hover .variant-metal-swatch__box {
+  filter: brightness(0.96);
+}
+
+.combined-metal-swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  row-gap: 8px;
+  margin-top: 8px;
+}
+
+.product-form__input--combined-metal input[type="radio"] {
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+  height: 1px;
+  width: 1px;
+}
+
+/* DISABLED SWATCH STATE */
+input[type="radio"]:disabled+.variant-metal-swatch,
+.variant-metal-swatch.is-disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(0.8);
+  position: relative;
+}
+
+input[type="radio"]:disabled+.variant-metal-swatch::after,
+.variant-metal-swatch.is-disabled::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  right: 2px;
+  height: 1.5px;
+  background-color: #555555;
+  transform: rotate(-45deg);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   RING SIZE GUIDE POPUP MODAL (PERFECT VIEWPORT CENTERING)
+   ========================================================================== */
+.rsg-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  z-index: 2147483647 !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1.5rem !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.rsg-modal-overlay.is-open {
+  display: flex !important;
+}
+
+.rsg-modal-card {
+  position: relative !important;
+  background: #ffffff !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  max-height: 88vh !important;
+  overflow-y: auto !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45) !important;
+  padding: 2.5rem 2rem !important;
+  color: #111111 !important;
+  box-sizing: border-box !important;
+  margin: auto !important;
+  animation: rsgModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes rsgModalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }

@@ -21,7 +21,7 @@ if (!customElements.get('quick-order-list')) {
           this.totalBarPosition = window.innerHeight - this.totalBar.offsetHeight;
 
           this.handleResize = this.handleResize.bind(this);
-          window.addEventListener('resize', this.handleResize);
+          window.addEventListener('resize', this.handleResize, { passive: true });
         }
 
         this.querySelector('form').addEventListener('submit', (event) => event.preventDefault());

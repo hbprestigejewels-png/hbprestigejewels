@@ -1,0 +1,78 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{% render 'content-lab-vs-natural' %}
+
+{% schema %}
+{
+  "name": "Lab vs Natural",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Hero Badge",
+      "default": "Diamond Education"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Heading",
+      "default": "Natural vs. Lab-Grown Diamonds"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Hero Subtitle",
+      "default": "Everything you need to know about the science, beauty, value, and authenticity of natural and lab-created diamonds."
+    },
+    {
+      "type": "text",
+      "id": "lab_title",
+      "label": "Lab-Grown Section Title",
+      "default": "Lab-Grown Diamonds"
+    },
+    {
+      "type": "textarea",
+      "id": "lab_desc",
+      "label": "Lab-Grown Description",
+      "default": "Lab-grown diamonds are 100% real diamonds created in highly controlled laboratory environments replicating the exact natural formation processes."
+    },
+    {
+      "type": "text",
+      "id": "natural_title",
+      "label": "Natural Section Title",
+      "default": "Natural Diamonds"
+    },
+    {
+      "type": "textarea",
+      "id": "natural_desc",
+      "label": "Natural Description",
+      "default": "Natural diamonds formed deep inside the Earth billions of years ago under extreme heat and pressure, celebrated for their geological rarity and timeless legacy."
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Box Heading",
+      "default": "Still Choosing the Right Diamond?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_desc",
+      "label": "CTA Box Subtitle",
+      "default": "Our dedicated jewellery specialists are available to guide you through cut, carat, and certification with total transparency."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Book a Consultation"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ]
+}
+{% endschema %}

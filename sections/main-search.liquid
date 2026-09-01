@@ -1,20 +1,20 @@
-{% render 'lazy-stylesheet', file: 'template-collection.css' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+  {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'component-search.css' %}
+{{ 'component-search.css' | asset_url | stylesheet_tag }}
 
 {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-  {% render 'lazy-stylesheet', file: 'component-facets.css' %}
-  <script src="{{ 'facets.js' | asset_url }}" defer></script>
+  {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {% if section.settings.image_shape == 'blob' %}
-  {% render 'lazy-stylesheet', file: 'mask-blobs.css' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
-<script src="{{ 'main-search.js' | asset_url }}" defer></script>
+<script src="{{ 'main-search.js' | asset_url }}" defer="defer"></script>
 
 <style>
   .template-search__header {

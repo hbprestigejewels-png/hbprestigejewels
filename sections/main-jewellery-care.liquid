@@ -1,0 +1,102 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{% render 'content-jewellery-care' %}
+
+{% schema %}
+{
+  "name": "Jewellery Care Guide",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Hero Badge",
+      "default": "Jewellery Maintenance"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Heading",
+      "default": "Jewellery Care & Maintenance Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Hero Subtitle",
+      "default": "Learn how to protect, clean, and safely store your gold, platinum, and diamond fine jewellery to preserve its timeless brilliance for generations."
+    },
+    {
+      "type": "text",
+      "id": "card1_title",
+      "label": "Card 1 Title",
+      "default": "Daily Habits & Wear"
+    },
+    {
+      "type": "textarea",
+      "id": "card1_desc",
+      "label": "Card 1 Description",
+      "default": "Remove your rings and fine jewellery before showering, swimming in chlorinated pools, exercising, or doing heavy household chores to prevent accidental impacts and snagging."
+    },
+    {
+      "type": "text",
+      "id": "card2_title",
+      "label": "Card 2 Title",
+      "default": "Avoid Harsh Chemicals"
+    },
+    {
+      "type": "textarea",
+      "id": "card2_desc",
+      "label": "Card 2 Description",
+      "default": "Apply lotions, perfumes, hairsprays, and cosmetics before putting on your jewellery. Chemical residues can create a dull film over diamonds and gemstones."
+    },
+    {
+      "type": "text",
+      "id": "card3_title",
+      "label": "Card 3 Title",
+      "default": "Safe Individual Storage"
+    },
+    {
+      "type": "textarea",
+      "id": "card3_desc",
+      "label": "Card 3 Description",
+      "default": "Store each piece separately in a soft velvet pouch or compartmented jewellery box. Because diamonds can scratch other gemstones and metals, avoid letting pieces rub together."
+    },
+    {
+      "type": "text",
+      "id": "card4_title",
+      "label": "Card 4 Title",
+      "default": "Regular Inspections"
+    },
+    {
+      "type": "textarea",
+      "id": "card4_desc",
+      "label": "Card 4 Description",
+      "default": "Have your diamond rings inspected annually by a professional jeweller to check prong security, stone tightness, and setting integrity."
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Box Heading",
+      "default": "Need Professional Cleaning or Sizing?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_desc",
+      "label": "CTA Box Subtitle",
+      "default": "Our master craftsmen provide complimentary professional cleaning, inspection, and rhodium polishing."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Contact Customer Support"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ]
+}
+{% endschema %}

@@ -1,41 +1,41 @@
-{% render 'lazy-stylesheet', file: 'video-section.css' %}
-{% render 'lazy-stylesheet', file: 'component-deferred-media.css' %}
+{% render 'stylesheet-async', file: 'video-section.css' %}
+{% render 'stylesheet-async', file: 'component-deferred-media.css' %}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-    border-radius: 20px !important;
-    overflow: hidden;
-  }
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+        padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  border-radius: 20px !important;
+      overflow: hidden;
+      }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      @media screen and (min-width: 750px) {
+        .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+        }
+      }
+
+      .video-section video,
+    .video-section iframe {
+      width: 100%;
+      height: 700px;
+      display: block;
+      object-fit: cover;
     }
-  }
 
-  .video-section video,
-  .video-section iframe {
-    width: 100%;
-    height: 700px;
-    display: block;
-    object-fit: cover;
-  }
+    .video-section {
+      width: 100%;
+    }
 
-  .video-section {
-    width: 100%;
-  }
+    .video-section.isolate {
+      max-width: 100%;
+    }
 
-  .video-section.isolate {
-    max-width: 100%;
-  }
-
-  .video-section.page-width {
-    max-width: 100%;
-    padding: 0;
-  }
+    .video-section.page-width {
+      max-width: 100%;
+      padding: 0;
+    }
 {%- endstyle -%}
 
 {%- liquid
@@ -74,119 +74,72 @@
         </div>
       {%- endunless -%}
     </div>
+    {% comment %}
+      {% if section.settings.video != blank %}
+      {{
+        section.settings.video
+        | video_tag:
+          image_size: '2000x',
+          autoplay: section.settings.enable_autoplay,
+          loop: section.settings.enable_video_looping,
+          muted: section.settings.mute_video,
+          controls: true,
+          playsinline: true,
+          preload: 'auto'
+      }}
+    {% endcomment %}
 
-    {%- if section.settings.video_url != blank -%}
-      {%- comment -%} YouTube / Vimeo — deferred click-to-play {%- endcomment -%}
-      <deferred-media
-        class="deferred-media media global-media-settings"
-        style="padding-top: 56.25%;"
-        data-media-id="{{ video_id }}"
-      >
-        <button
-          id="Deferred-Poster-Modal-{{ section.id }}"
-          class="deferred-media__poster"
-          type="button"
-          aria-label="{{ alt | escape }}"
+    {% if section.settings.video_url != blank %}
+      {% if section.settings.video_url.type == 'youtube' %}
+        <iframe
+          width="100%"
+          height="700"
+          src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?autoplay={% if section.settings.enable_autoplay %}1{% else %}0{% endif %}&mute={% if section.settings.mute_video %}1{% else %}0{% endif %}&loop={% if section.settings.enable_video_looping %}1{% else %}0{% endif %}&playlist={{ section.settings.video_url.id }}&playsinline=1&rel=0"
+          title="YouTube video"
+          frameborder="0"
+          {% comment %}
+            A YouTube/Vimeo embed pulls roughly a megabyte of third-party JS.
+            Without loading="lazy" that happened on every page load even when
+            the video sat far below the fold.
+          {% endcomment %}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
         >
-          <span class="deferred-media__poster-button motion-reduce">
-            <span class="svg-wrapper">
-              {{- 'icon-play.svg' | inline_asset_content -}}
-            </span>
-          </span>
+        </iframe>
 
-          {%- if poster != blank -%}
-            {{
-              poster
-              | image_url: width: 1920
-              | image_tag:
-                sizes: sizes,
-                widths: '750, 1100, 1500, 1920',
-                alt: alt,
-                loading: 'lazy'
-            }}
-          {%- else -%}
-            {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-          {%- endif -%}
-        </button>
-
-        <template>
-          {%- if section.settings.video_url.type == 'youtube' -%}
-            <iframe
-              src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?autoplay=1&mute={% if section.settings.mute_video %}1{% else %}0{% endif %}&loop={% if section.settings.enable_video_looping %}1{% else %}0{% endif %}&playlist={{ section.settings.video_url.id }}&playsinline=1&rel=0&enablejsapi=1"
-              class="js-youtube"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              title="{{ alt | escape }}"
-              style="display: block; width: 100%; height: 700px;"
-            ></iframe>
-          {%- elsif section.settings.video_url.type == 'vimeo' -%}
-            <iframe
-              src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}?autoplay=1&muted={% if section.settings.mute_video %}1{% else %}0{% endif %}&loop={% if section.settings.enable_video_looping %}1{% else %}0{% endif %}"
-              class="js-vimeo"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowfullscreen
-              title="{{ alt | escape }}"
-              style="display: block; width: 100%; height: 700px;"
-            ></iframe>
-          {%- endif -%}
-        </template>
-      </deferred-media>
-
-    {%- elsif section.settings.video != blank -%}
-      {%- comment -%} Shopify-hosted video — deferred click-to-play {%- endcomment -%}
-      <deferred-media
-        class="deferred-media media global-media-settings"
-        style="padding-top: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
-        data-media-id="{{ section.settings.video.id }}"
-      >
-        <button
-          id="Deferred-Poster-Modal-{{ section.id }}"
-          class="deferred-media__poster"
-          type="button"
-          aria-label="{{ alt | escape }}"
+      {% elsif section.settings.video_url.type == 'vimeo' %}
+        <iframe
+          width="100%"
+          height="700"
+          src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}?autoplay={% if section.settings.enable_autoplay %}1{% else %}0{% endif %}&muted={% if section.settings.mute_video %}1{% else %}0{% endif %}&loop={% if section.settings.enable_video_looping %}1{% else %}0{% endif %}"
+          title="Vimeo video"
+          frameborder="0"
+          {% comment %}
+            A YouTube/Vimeo embed pulls roughly a megabyte of third-party JS.
+            Without loading="lazy" that happened on every page load even when
+            the video sat far below the fold.
+          {% endcomment %}
+          loading="lazy"
+          allow="autoplay; fullscreen"
+          allowfullscreen
         >
-          <span class="deferred-media__poster-button motion-reduce">
-            <span class="svg-wrapper">
-              {{- 'icon-play.svg' | inline_asset_content -}}
-            </span>
-          </span>
+        </iframe>
+      {% endif %}
+    {% endif %}
 
-          {%- if poster != blank -%}
-            {{
-              poster
-              | image_url: width: 1920
-              | image_tag:
-                sizes: sizes,
-                widths: '750, 1100, 1500, 1920',
-                alt: alt,
-                loading: 'lazy'
-            }}
-          {%- else -%}
-            {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-          {%- endif -%}
-        </button>
-
-        <template>
-          {{
-            section.settings.video
-            | video_tag:
-              image_size: '1920x',
-              autoplay: true,
-              loop: section.settings.enable_video_looping,
-              muted: section.settings.mute_video,
-              controls: true,
-              playsinline: true,
-              preload: 'none'
-          }}
-        </template>
-      </deferred-media>
-    {%- else -%}
-      {%- comment -%} No video set — show placeholder {%- endcomment -%}
-      <div class="media global-media-settings" style="padding-top: 56.25%;">
-        {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
-      </div>
-    {%- endif -%}
-
+    {% if section.settings.video != blank %}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: section.settings.enable_autoplay,
+          muted: section.settings.mute_video,
+          loop: section.settings.enable_video_looping,
+          controls: true,
+          playsinline: true,
+          preload: 'auto'
+      }}
+    {% endif %}
   </div>
 </div>
 

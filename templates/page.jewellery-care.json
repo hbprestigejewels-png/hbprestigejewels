@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-jewellery-care",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

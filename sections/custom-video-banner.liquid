@@ -10,7 +10,7 @@
     loop
     playsinline
     preload="metadata"
-    poster="{{ section.settings.poster | image_url }}"
+    poster="{% if section.settings.poster != blank %}{{ section.settings.poster | image_url: width: 1200, format: 'webp' }}{% endif %}"
   >
     <source src="{{ section.settings.video_url }}" type="video/mp4">
   </video>

@@ -1,8 +1,8 @@
-{% render 'lazy-stylesheet', file: 'section-collection-list.css' %}
+{% render 'stylesheet-async', file: 'section-collection-list.css' %}
 {% if request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  {% render 'stylesheet-async', file: 'component-card.css' %}
 {% endif %}
-{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+{% render 'stylesheet-async', file: 'component-slider.css' %}
 
 {%- style -%}
   .section-{{ section.id }}-padding {

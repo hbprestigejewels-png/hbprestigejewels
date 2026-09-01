@@ -1,4 +1,4 @@
-{% render 'lazy-stylesheet', file: 'our-8-cs-promise.css' %}
+{% render 'stylesheet-async', file: 'our-8-cs-promise.css' %}
 
 <div class="our-8-cs-promise section-{{ section.id }}">
   <div class="page-width">
@@ -97,9 +97,10 @@
                   src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_3.png?v=1774261453"
                   alt="Sparkle"
                   class="icon"
-                  width="32"
-                  height="32"
                   loading="lazy"
+                  decoding="async"
+                  width="40"
+                  height="40"
                 >
               </span>
             </span>
@@ -114,76 +115,84 @@
                 <span class="button-icon">
                   {% case i %}
                     {% when 1 %}
-                  <img
+                      <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/rgb.png?v=1774261452"
                         alt="Art"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 2 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_6.png?v=1774261453"
                         alt="Diamond"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 3 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_1.png?v=1774261453"
                         alt="Sparkle"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 4 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/engagement-ring.png?v=1774261453"
                         alt="Pencil"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 5 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_1.png?v=1774261453"
                         alt="Tools"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 6 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_2.png?v=1774261453"
                         alt="Heart"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 7 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/diamond_5_1.png?v=1774261453"
                         alt="Money"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                     {% when 8 %}
                       <img
                         src="https://cdn.shopify.com/s/files/1/0743/0825/5844/files/relationship.png?v=1774261453"
                         alt="Handshake"
                         class="icon"
-                        width="32"
-                        height="32"
                         loading="lazy"
+                        decoding="async"
+                        width="40"
+                        height="40"
                       >
                   {% endcase %}
                 </span>
@@ -239,6 +248,16 @@
                     | image_tag: width: 464, height: 464, loading: 'lazy', alt: section.settings.intro_image.alt
                     | default: 'Jewellery Collection'
                   }}
+                {% else %}
+                  {% comment %}
+                    <Img
+                      src="{{ '8Cs_thumbnail_image.svg' | asset_url }}"
+                      width="464"
+                      height="464"
+                      loading="lazy"
+                      alt="Intro"
+                    >
+                  {% endcomment %}
                 {% endif %}
               {% endif %}
             </div>
@@ -492,19 +511,4 @@
 }
 {% endschema %}
 
-<script>
-  /* Defer our-8-cs-promise.js until browser is idle */
-  (function() {
-    function loadOur8Cs() {
-      var s = document.createElement('script');
-      s.src = '{{ 'our-8-cs-promise.js' | asset_url }}';
-      s.defer = true;
-      document.head.appendChild(s);
-    }
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(loadOur8Cs, { timeout: 3000 });
-    } else {
-      setTimeout(loadOur8Cs, 500);
-    }
-  })();
-</script>
+<script src="{{ 'our-8-cs-promise.js' | asset_url }}" defer></script>

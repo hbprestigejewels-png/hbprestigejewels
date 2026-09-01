@@ -1,5 +1,5 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-{% render 'lazy-stylesheet', file: 'component-collection-hero.css' %}
+{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   @media screen and (max-width: 749px) {

@@ -541,7 +541,7 @@
           {{ shop.name }}
         {% endif %}
       </div>
-      <button class="premium-drawer__close" data-drawer-close aria-label="{{ 'general.common.close' | t }}">
+      <button class="premium-drawer__close" data-drawer-close aria-label="{{ 'accessibility.close' | t }}">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <path d="M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -579,12 +579,13 @@
                               <span class="premium-nav__content">
                                 {% if childlink.type == 'collection_link' and childlink.object.featured_image %}
                                   <img
-                                    src="{{ childlink.object.featured_image | image_url: width: 60 }}"
+                                    src="{{ childlink.object.featured_image | image_url: width: 60, height: 60, crop: 'center' }}"
                                     class="premium-nav__image"
                                     alt="{{ childlink.title }}"
-                                    width="14"
-                                    height="14"
                                     loading="lazy"
+                                    width="60"
+                                    height="60"
+                                    decoding="async"
                                   >
                                 {% endif %}
 
@@ -622,13 +623,14 @@
                                           and grandchildlink.object.featured_image
                                         %}
                                           <img
-                                            src="{{ grandchildlink.object.featured_image | image_url: width: 60 }}"
+                                            src="{{ grandchildlink.object.featured_image | image_url: width: 60, height: 60, crop: 'center' }}"
                                             class="premium-nav__image"
                                             alt="{{ grandchildlink.title }}"
-                                            width="14"
-                                            height="14"
                                             loading="lazy"
-                                         >
+                                            width="60"
+                                            height="60"
+                                            decoding="async"
+                                          >
                                         {% endif %}
                                         <span>{{ grandchildlink.title | escape }}</span>
                                       </span>
@@ -667,6 +669,85 @@
             {%- endif -%}
           </li>
         {%- endfor -%}
+
+        {% assign has_education = false %}
+        {% assign has_about = false %}
+        {% assign has_contact = false %}
+        {% for link in section.settings.menu.links %}
+          {% assign link_title_d = link.title | downcase %}
+          {% if link_title_d contains 'education' %}
+            {% assign has_education = true %}
+          {% endif %}
+          {% if link_title_d contains 'about' %}
+            {% assign has_about = true %}
+          {% endif %}
+          {% if link_title_d contains 'contact' %}
+            {% assign has_contact = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% unless has_education %}
+          <li class="premium-nav__item">
+            <details class="premium-nav__details">
+              <summary class="premium-nav__summary">
+                <span>EDUCATION</span>
+                <span class="premium-nav__chevron">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </summary>
+              <div class="premium-nav__submenu">
+                <ul class="premium-nav__list" role="list">
+                  <li class="premium-nav__item">
+                    <a href="/pages/lab-vs-natural" class="premium-nav__link">
+                      <span class="premium-nav__content">
+                        <span>Natural Vs lab-Diamonds</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="premium-nav__item">
+                    <a href="/pages/ring-size-guide" class="premium-nav__link">
+                      <span class="premium-nav__content">
+                        <span>Ring Size Guide</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="premium-nav__item">
+                    <a href="/pages/jewellery-care" class="premium-nav__link">
+                      <span class="premium-nav__content">
+                        <span>Jewellery Care</span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="premium-nav__item">
+                    <a href="/pages/appraisals" class="premium-nav__link">
+                      <span class="premium-nav__content">
+                        <span>Appraisal</span>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </details>
+          </li>
+        {% endunless %}
+
+        {% unless has_about %}
+          <li class="premium-nav__item">
+            <a href="/pages/about-page" class="premium-nav__link">
+              ABOUT US
+            </a>
+          </li>
+        {% endunless %}
+
+        {% unless has_contact %}
+          <li class="premium-nav__item">
+            <a href="/pages/contact" class="premium-nav__link">
+              CONTACT US
+            </a>
+          </li>
+        {% endunless %}
       </ul>
     </div>
 

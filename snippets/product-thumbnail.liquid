@@ -30,6 +30,15 @@
     assign lazy = 'lazy'
   endunless
 
+  # The one image that is NOT lazy-loaded is the gallery's first frame, which is
+  # the Largest Contentful Paint element on every product page. Telling the
+  # browser so lets it start that fetch ahead of the other ~30 requests the page
+  # kicks off, instead of at default priority somewhere in the queue.
+  assign fetch_priority = 'auto'
+  if lazy_load == false
+    assign fetch_priority = 'high'
+  endif
+
   assign desktop_columns = 1
   if desktop_layout == 'columns' and media_count > 1
     assign desktop_columns = 2
@@ -53,12 +62,52 @@
   class="product-media-container media-type-{{ media.media_type }} media-fit-{{ media_fit }} global-media-settings gradient{% if constrain_to_viewport %} constrain-height{% endif %}"
   style="--ratio: {{ media.aspect_ratio | default: 1.0 }}; --preview-ratio: {{ media.preview_image.aspect_ratio | default: 1.0 }};"
 >
+{%- if media.media_type == 'image' -%}
+  <modal-opener
+    class="product__modal-opener product__modal-opener--image product__inbox-zoom-wrapper"
+    data-modal="#ProductModal-{{ modal_id }}"
+    data-zoom-src="{{ media.preview_image | image_url: width: 2500 }}"
+  >
+    <span
+      class="product__media-icon motion-reduce quick-add-hidden product__media-icon--{{ section.settings.image_zoom }}"
+      aria-hidden="true"
+    >
+      <span class="svg-wrapper">
+        {{- 'icon-zoom.svg' | inline_asset_content -}}
+      </span>
+    </span>
+    <div class="product__media media media--transparent">
+      {{
+        media.preview_image
+        | image_url: width: 1946
+        | image_tag:
+          class: image_class,
+          loading: lazy,
+          fetchpriority: fetch_priority,
+          decoding: 'async',
+          sizes: sizes,
+          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
+          alt: section.settings.image.alt
+        | default: 'Jewellery Collection'
+      }}
+    </div>
+    <button
+      class="product__media-toggle quick-add-hidden product__media-zoom-{{ section.settings.image_zoom }}"
+      type="button"
+      aria-label="{{ 'products.product.media.open_media' | t: index: position }}"
+    >
+      <span class="visually-hidden">
+        {{ 'products.product.media.open_media' | t: index: position }}
+      </span>
+    </button>
+  </modal-opener>
+{%- else -%}
   <modal-opener
     class="product__modal-opener product__modal-opener--{{ media.media_type }}"
     data-modal="#ProductModal-{{ modal_id }}"
   >
     <span
-      class="product__media-icon motion-reduce quick-add-hidden{% if media.media_type == 'image' %} product__media-icon--{{ section.settings.image_zoom }}{% endif %}"
+      class="product__media-icon motion-reduce quick-add-hidden"
       aria-hidden="true"
     >
       {% case media.media_type %}
@@ -70,20 +119,17 @@
           <span class="svg-wrapper">
             {{- 'icon-3d-model.svg' | inline_asset_content -}}
           </span>
-        {% else %}
-          <span class="svg-wrapper">
-            {{- 'icon-zoom.svg' | inline_asset_content -}}
-          </span>
       {% endcase %}
     </span>
     <div class="product__media media media--transparent">
-      {% comment %} {%- render 'loading-spinner' -%} {% endcomment %}
       {{
         media.preview_image
         | image_url: width: 1946
         | image_tag:
           class: image_class,
           loading: lazy,
+          fetchpriority: fetch_priority,
+          decoding: 'async',
           sizes: sizes,
           widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
           alt: section.settings.image.alt
@@ -91,7 +137,7 @@
       }}
     </div>
     <button
-      class="product__media-toggle quick-add-hidden product__media-zoom-{{ section.settings.image_zoom }}"
+      class="product__media-toggle quick-add-hidden"
       type="button"
       aria-haspopup="dialog"
       data-media-id="{{ media.id }}"
@@ -101,6 +147,7 @@
       </span>
     </button>
   </modal-opener>
+{%- endif -%}
 
   {%- if media.media_type != 'image' -%}
     {%- if media.media_type == 'model' -%}
@@ -127,6 +174,7 @@
         | image_url: width: 1946
         | image_tag:
           loading: lazy,
+          decoding: 'async',
           sizes: sizes,
           widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
           alt: section.settings.image.alt

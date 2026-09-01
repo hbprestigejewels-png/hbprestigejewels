@@ -1,30 +1,29 @@
-{% render 'lazy-stylesheet', file: 'template-collection.css' %}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {% if request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-card.css' %}
+  {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {% endif %}
 {% if request.page_type == 'product' or request.page_type == 'collection' %}
-  {% render 'lazy-stylesheet', file: 'component-price.css' %}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {% endif %}
 
 {% if section.settings.image_shape == 'blob' %}
-  {% render 'lazy-stylesheet', file: 'mask-blobs.css' %}
+  {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
 {%- unless section.settings.quick_add == 'none' -%}
-  {% render 'lazy-stylesheet', file: 'quick-add.css' %}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
 {%- endunless -%}
 
 {%- if section.settings.quick_add == 'standard' -%}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer></script>
-  <script src="{{ 'product-elements.js' | asset_url }}" defer></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- if section.settings.quick_add == 'bulk' -%}
-  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer></script>
-  <script src="{{ 'quantity-popover.js' | asset_url }}" defer></script>
-  <script src="{{ 'price-per-item.js' | asset_url }}" defer></script>
-  <script src="{{ 'quick-order-list.js' | asset_url }}" defer></script>
+  <script src="{{ 'quick-add-bulk.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- style -%}
@@ -103,8 +102,8 @@
     {%- endif -%}
 
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
-      {% render 'lazy-stylesheet', file: 'component-facets.css' %}
-      <script src="{{ 'facets.js' | asset_url }}" defer></script>
+      {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
           aria-labelledby="verticalTitle"

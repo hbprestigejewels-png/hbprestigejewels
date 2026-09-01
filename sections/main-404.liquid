@@ -1,23 +1,92 @@
-<style type="text/css">
-  .template-404 .title + * {
-    margin-top: 1rem;
-  }
+<div id="edu-dynamic-router">
+  <div id="edu-ring-size-guide" style="display: none;">
+    {% render 'content-ring-size-guide' %}
+  </div>
+  <div id="edu-lab-vs-natural" style="display: none;">
+    {% render 'content-lab-vs-natural' %}
+  </div>
+  <div id="edu-jewellery-care" style="display: none;">
+    {% render 'content-jewellery-care' %}
+  </div>
+  <div id="edu-appraisals" style="display: none;">
+    {% render 'content-appraisals' %}
+  </div>
 
-  @media screen and (min-width: 750px) {
-    .template-404 .title + * {
-      margin-top: 2rem;
-    }
-  }
-</style>
+  <div id="edu-default-404">
+    <style type="text/css">
+      .template-404 .title + * {
+        margin-top: 1rem;
+      }
 
-<div class="template-404 page-width page-margin center">
-  <p>
-    {{ 'templates.404.subtext' | t }}
-  </p>
-  <h1 class="title">
-    {{ 'templates.404.title' | t }}
-  </h1>
-  <a href="{{ routes.all_products_collection_url }}" class="button">
-    {{ 'general.continue_shopping' | t }}
-  </a>
+      @media screen and (min-width: 750px) {
+        .template-404 .title + * {
+          margin-top: 2rem;
+        }
+      }
+    </style>
+
+    <div class="template-404 page-width page-margin center">
+      <p>
+        {{ 'templates.404.subtext' | t }}
+      </p>
+      <h1 class="title">
+        {{ 'templates.404.title' | t }}
+      </h1>
+      <a href="{{ routes.all_products_collection_url }}" class="button">
+        {{ 'general.continue_shopping' | t }}
+      </a>
+    </div>
+  </div>
 </div>
+
+<script>
+  (function () {
+    function routePage() {
+      const path = (window.location.pathname || '').toLowerCase();
+      const default404 = document.getElementById('edu-default-404');
+      let matchedId = null;
+      let matchedTitle = '';
+
+      if (path.includes('ring-size-guide')) {
+        matchedId = 'edu-ring-size-guide';
+        matchedTitle = 'Ring Size Guide – HBPRESTIGE JEWELS';
+      } else if (path.includes('lab-vs-natural') || path.includes('natural-vs-lab')) {
+        matchedId = 'edu-lab-vs-natural';
+        matchedTitle = 'Natural Vs Lab-Grown Diamonds – HBPRESTIGE JEWELS';
+      } else if (path.includes('jewellery-care') || path.includes('care-guide')) {
+        matchedId = 'edu-jewellery-care';
+        matchedTitle = 'Jewellery Care & Maintenance Guide – HBPRESTIGE JEWELS';
+      } else if (path.includes('appraisal') || path.includes('valuation')) {
+        matchedId = 'edu-appraisals';
+        matchedTitle = 'Valuations & Appraisals – HBPRESTIGE JEWELS';
+      }
+
+      if (matchedId) {
+        const el = document.getElementById(matchedId);
+        if (el) {
+          el.style.display = 'block';
+        }
+        if (default404) {
+          default404.style.display = 'none';
+        }
+        if (matchedTitle) {
+          document.title = matchedTitle;
+        }
+      }
+    }
+
+    routePage();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', routePage);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,67 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{% render 'content-ring-size-guide' %}
+
+{% schema %}
+{
+  "name": "Ring Size Guide",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Hero Badge",
+      "default": "Sizing & Measurement"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Heading",
+      "default": "Official Ring Size Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Hero Subtitle",
+      "default": "Ensure a flawless fit for your engagement ring or wedding band with our accurate international sizing chart and step-by-step measurement techniques."
+    },
+    {
+      "type": "text",
+      "id": "method1_title",
+      "label": "Method 1 Title",
+      "default": "Measure an Existing Ring"
+    },
+    {
+      "type": "text",
+      "id": "method2_title",
+      "label": "Method 2 Title",
+      "default": "Measure Your Finger"
+    },
+    {
+      "type": "text",
+      "id": "method3_title",
+      "label": "Method 3 Title",
+      "default": "Order a Ring Sizer"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Box Heading",
+      "default": "Need Personalized Sizing Advice?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_desc",
+      "label": "CTA Box Subtitle",
+      "default": "Our experienced gemologists and jewellery specialists are here to guide you to the perfect size."
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "WhatsApp Number (without +)",
+      "default": "919723328111"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,280 @@
+<style>
+  .care-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+    font-family: var(--font-body-family);
+    color: #1f2937;
+  }
+
+  .care-hero {
+    text-align: center;
+    padding: 3.5rem 1.5rem 3rem;
+    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
+    border-radius: 16px;
+    margin-bottom: 3.5rem;
+    border: 1px solid #ebecee;
+  }
+
+  .care-badge {
+    display: inline-block;
+    background: #111111;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1.4rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+  }
+
+  .care-hero__title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(2.6rem, 4.2vw, 4.2rem);
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .care-hero__subtitle {
+    font-size: 1.5rem;
+    color: #4b5563;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  .care-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.2rem;
+    margin-bottom: 4rem;
+  }
+
+  .care-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2.2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .care-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .care-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .care-card__title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 0.8rem;
+  }
+
+  .care-card__text {
+    font-size: 1.35rem;
+    color: #4b5563;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .care-steps-box {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    margin-bottom: 4rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .care-steps-box__title {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+
+  .care-steps-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .care-step-item {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 1.8rem 1.5rem;
+    border: 1px solid #e5e7eb;
+  }
+
+  .care-step-item__num {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #111111;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .care-step-item__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111111;
+    margin: 0 0 0.6rem;
+  }
+
+  .care-step-item__desc {
+    font-size: 1.3rem;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .care-cta-box {
+    background: #111111;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+  }
+
+  .care-cta-box h3 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    margin: 0 0 1rem;
+  }
+
+  .care-cta-box p {
+    color: #9ca3af;
+    font-size: 1.45rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  .care-btn {
+    display: inline-block;
+    background: #ffffff;
+    color: #111111;
+    font-weight: 600;
+    padding: 0.9rem 2.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.35rem;
+    transition: background 0.2s ease;
+  }
+
+  .care-btn:hover {
+    background: #e5e7eb;
+  }
+
+  @media screen and (max-width: 768px) {
+    .care-page-container {
+      padding: 2rem 1.5rem 4rem;
+    }
+  }
+</style>
+
+<div class="care-page-container">
+  <div class="care-hero">
+    <span class="care-badge">{{ section.settings.badge | default: 'Jewellery Maintenance' }}</span>
+    <h1 class="care-hero__title">{{ section.settings.title | default: 'Jewellery Care & Maintenance Guide' }}</h1>
+    <p class="care-hero__subtitle">
+      {{ section.settings.subtitle | default: 'Learn how to protect, clean, and safely store your gold, platinum, and diamond fine jewellery to preserve its timeless brilliance for generations.' }}
+    </p>
+  </div>
+
+  <div class="care-grid">
+    <div class="care-card">
+      <div class="care-card__icon">🚿</div>
+      <h3 class="care-card__title">{{ section.settings.card1_title | default: 'Daily Habits & Wear' }}</h3>
+      <p class="care-card__text">
+        {{ section.settings.card1_desc | default: 'Remove your rings and fine jewellery before showering, swimming in chlorinated pools, exercising, or doing heavy household chores to prevent accidental impacts and snagging.' }}
+      </p>
+    </div>
+
+    <div class="care-card">
+      <div class="care-card__icon">🧴</div>
+      <h3 class="care-card__title">{{ section.settings.card2_title | default: 'Avoid Harsh Chemicals' }}</h3>
+      <p class="care-card__text">
+        {{ section.settings.card2_desc | default: 'Apply lotions, perfumes, hairsprays, and cosmetics before putting on your jewellery. Chemical residues can create a dull film over diamonds and gemstones.' }}
+      </p>
+    </div>
+
+    <div class="care-card">
+      <div class="care-card__icon">📦</div>
+      <h3 class="care-card__title">{{ section.settings.card3_title | default: 'Safe Individual Storage' }}</h3>
+      <p class="care-card__text">
+        {{ section.settings.card3_desc | default: 'Store each piece separately in a soft velvet pouch or compartmented jewellery box. Because diamonds can scratch other gemstones and metals, avoid letting pieces rub together.' }}
+      </p>
+    </div>
+
+    <div class="care-card">
+      <div class="care-card__icon">🔍</div>
+      <h3 class="care-card__title">{{ section.settings.card4_title | default: 'Regular Inspections' }}</h3>
+      <p class="care-card__text">
+        {{ section.settings.card4_desc | default: 'Have your diamond rings inspected annually by a professional jeweller to check prong security, stone tightness, and setting integrity.' }}
+      </p>
+    </div>
+  </div>
+
+  <div class="care-steps-box">
+    <h2 class="care-steps-box__title">How to Clean Your Diamond Jewellery at Home</h2>
+    <div class="care-steps-list">
+      <div class="care-step-item">
+        <div class="care-step-item__num">1</div>
+        <h4 class="care-step-item__title">Warm Soapy Water</h4>
+        <p class="care-step-item__desc">Mix lukewarm water with a few drops of mild dishwashing soap in a small bowl.</p>
+      </div>
+
+      <div class="care-step-item">
+        <div class="care-step-item__num">2</div>
+        <h4 class="care-step-item__title">Gentle Soak (15 Mins)</h4>
+        <p class="care-step-item__desc">Soak your jewellery for 10 to 15 minutes to loosen daily dirt, oils, and residues.</p>
+      </div>
+
+      <div class="care-step-item">
+        <div class="care-step-item__num">3</div>
+        <h4 class="care-step-item__title">Soft-Bristle Brush</h4>
+        <p class="care-step-item__desc">Gently brush behind the diamond setting and prongs using an extra-soft toothbrush.</p>
+      </div>
+
+      <div class="care-step-item">
+        <div class="care-step-item__num">4</div>
+        <h4 class="care-step-item__title">Rinse & Dry</h4>
+        <p class="care-step-item__desc">Rinse with clean lukewarm water and pat dry using a lint-free microfiber cloth.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="care-cta-box">
+    <h3>{{ section.settings.cta_title | default: 'Need Professional Cleaning or Sizing?' }}</h3>
+    <p>{{ section.settings.cta_desc | default: 'Our master craftsmen provide complimentary professional cleaning, inspection, and rhodium polishing.' }}</p>
+    <a href="{{ section.settings.cta_link | default: '/pages/contact' }}" class="care-btn">
+      {{ section.settings.cta_text | default: 'Contact Customer Support' }}
+    </a>
+  </div>
+</div>

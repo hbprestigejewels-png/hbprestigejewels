@@ -1,6 +1,5 @@
 {% comment %}
   Renders product variant-picker
-
   Accepts:
   - product: {Object} product object.
   - block: {Object} passing the block information.
@@ -9,13 +8,206 @@
   {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
 {% endcomment %}
 {%- unless product.has_only_default_variant -%}
+  {%- liquid
+    assign materials_opt = null
+    assign colors_opt = null
+
+    if product.options_with_values.size >= 2
+      assign materials_opt = product.options_with_values[0]
+      assign colors_opt = product.options_with_values[1]
+      assign combine_metal_swatches = true
+    elsif product.options_with_values.size == 1
+      assign materials_opt = product.options_with_values[0]
+      assign combine_metal_swatches = false
+    endif
+  -%}
+
   <variant-selects
     id="variant-selects-{{ section.id }}"
     data-section="{{ section.id }}"
     {{ block.shopify_attributes }}
   >
+    {%- if combine_metal_swatches -%}
+      <!-- UNIFIED COMBINED METAL TYPE PICKER (1 Silver + 9 Gold = 10 Swatches) -->
+      <fieldset class="js product-form__input product-form__input--pill product-form__input--combined-metal">
+        <legend class="form__label">
+          Metal Type :
+          <span data-combined-metal-title class="form__label-selected-val">
+            {%- assign init_mat_down = materials_opt.selected_value | downcase -%}
+            {%- if init_mat_down contains '925' or init_mat_down contains 'silver' -%}
+              {{- materials_opt.selected_value -}}
+            {%- else -%}
+              {{- materials_opt.selected_value }} {{ colors_opt.selected_value -}}
+            {%- endif -%}
+          </span>
+        </legend>
+        <div class="combined-metal-swatch-row">
+          {%- for mat_val in materials_opt.values -%}
+            {%- assign mat_str = mat_val | downcase -%}
+            {%- if mat_str contains '925' or mat_str contains 'silver' -%}
+              {%- comment -%} 925 Silver -> EXACTLY 1 SILVER SWATCH {%- endcomment -%}
+              {%- liquid
+                assign is_active_combo = false
+                if materials_opt.selected_value == mat_val
+                  assign is_active_combo = true
+                endif
+
+                assign matched_var = null
+                for v in product.variants
+                  if v.options[0] == mat_val
+                    assign matched_var = v
+                    break
+                  endif
+                endfor
+
+                assign first_col_val = ''
+                if matched_var != null and matched_var.options[1] != blank
+                  assign first_col_val = matched_var.options[1]
+                else
+                  assign first_col_val = colors_opt.values[0]
+                endif
+              -%}
+
+              <input
+                type="radio"
+                name="combined-metal-selector-{{ section.id }}"
+                id="Option-{{ section.id }}-combined-{{ mat_val | handle }}"
+                value="{{ mat_val | escape }}"
+                data-option1="{{ mat_val | escape }}"
+                data-option2="{{ first_col_val | escape }}"
+                data-mat-pos="1"
+                data-col-pos="2"
+                {% if matched_var != null %}
+                  data-variant-id="{{ matched_var.id }}"
+                  data-variant-url="{{ matched_var.url }}"
+                {% endif %}
+                {% if is_active_combo %}
+                  checked
+                {% endif %}
+              >
+              <label
+                for="Option-{{ section.id }}-combined-{{ mat_val | handle }}"
+                class="variant-metal-swatch swatch--white-silver"
+                title="{{ mat_val }}"
+              >
+                <div class="variant-metal-swatch__box">
+                  <span class="swatch-label-text">925</span>
+                </div>
+              </label>
+
+            {%- else -%}
+              {%- comment -%} Gold Options (10K, 14K, 18K) -> EXACTLY 3 SWATCHES EACH (White, Yellow, Rose) {%- endcomment -%}
+              {%- liquid
+                assign tag_badge = mat_val
+                if mat_str contains '10k'
+                  assign tag_badge = '10K'
+                elsif mat_str contains '14k'
+                  assign tag_badge = '14K'
+                elsif mat_str contains '18k'
+                  assign tag_badge = '18K'
+                elsif mat_str contains '9k'
+                  assign tag_badge = '9K'
+                endif
+                assign target_colors = 'white,yellow,rose' | split: ','
+              -%}
+
+              {%- for target_color in target_colors -%}
+                {%- liquid
+                  assign matched_col_val = ''
+                  for cv in colors_opt.values
+                    assign cv_d = cv | downcase
+                    if target_color == 'white'
+                      if cv_d contains 'white' or cv_d contains 'silver'
+                        assign matched_col_val = cv
+                        break
+                      endif
+                    elsif target_color == 'yellow'
+                      if cv_d contains 'yellow'
+                        assign matched_col_val = cv
+                        break
+                      elsif cv_d contains 'gold'
+                        unless cv_d contains 'white' or cv_d contains 'rose' or cv_d contains 'silver'
+                          assign matched_col_val = cv
+                          break
+                        endunless
+                      endif
+                    elsif target_color == 'rose'
+                      if cv_d contains 'rose' or cv_d contains 'pink'
+                        assign matched_col_val = cv
+                        break
+                      endif
+                    endif
+                  endfor
+
+                  if matched_col_val == ''
+                    continue
+                  endif
+
+                  assign is_active_combo = false
+                  if materials_opt.selected_value == mat_val and colors_opt.selected_value == matched_col_val
+                    assign is_active_combo = true
+                  endif
+
+                  assign matched_var = null
+                  for v in product.variants
+                    if v.options[0] == mat_val and v.options[1] == matched_col_val
+                      assign matched_var = v
+                      break
+                    endif
+                  endfor
+
+                  assign metal_color_class = 'swatch--white-silver'
+                  if target_color == 'white'
+                    assign metal_color_class = 'swatch--white-silver'
+                  elsif target_color == 'yellow'
+                    assign metal_color_class = 'swatch--yellow-gold'
+                  elsif target_color == 'rose'
+                    assign metal_color_class = 'swatch--rose-gold'
+                  endif
+                -%}
+
+                <input
+                  type="radio"
+                  name="combined-metal-selector-{{ section.id }}"
+                  id="Option-{{ section.id }}-combined-{{ mat_val | handle }}-{{ matched_col_val | handle }}"
+                  value="{{ mat_val | escape }} {{ matched_col_val | escape }}"
+                  data-option1="{{ mat_val | escape }}"
+                  data-option2="{{ matched_col_val | escape }}"
+                  data-mat-pos="1"
+                  data-col-pos="2"
+                  {% if matched_var != null %}
+                    data-variant-id="{{ matched_var.id }}"
+                    data-variant-url="{{ matched_var.url }}"
+                  {% endif %}
+                  {% if is_active_combo %}
+                    checked
+                  {% endif %}
+                >
+                <label
+                  for="Option-{{ section.id }}-combined-{{ mat_val | handle }}-{{ matched_col_val | handle }}"
+                  class="variant-metal-swatch {{ metal_color_class }}"
+                  title="{{ mat_val }} {{ matched_col_val }}"
+                >
+                  <div class="variant-metal-swatch__box">
+                    <span class="swatch-label-text">{{ tag_badge }}</span>
+                  </div>
+                </label>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endif -%}
+
     {%- for option in product.options_with_values -%}
       {%- liquid
+        assign hide_this_option = false
+        if combine_metal_swatches
+          if option.position == 1 or option.position == 2
+            assign hide_this_option = true
+          endif
+        endif
+
         assign swatch_count = option.values | map: 'swatch' | compact | size
         assign picker_type = block.settings.picker_type
 
@@ -27,73 +219,547 @@
           endif
         endif
       -%}
-      {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
-          </legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
-          {% render 'product-variant-options',
-            product: product,
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
-      {%- else -%}
-        <div class="product-form__input product-form__input--dropdown">
-          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
-            {{ option.name }}
-          </label>
-          <div class="select">
-            {%- if picker_type == 'swatch_dropdown' -%}
-              <span
-                data-selected-value
-                class="dropdown-swatch"
+
+      {%- if hide_this_option -%}
+        <div style="display: none !important;">
+          <select
+            id="Option-{{ section.id }}-{{ forloop.index0 }}"
+            class="select__select"
+            name="options[{{ option.name | escape }}]"
+            form="{{ product_form_id }}"
+            data-option-position="{{ option.position }}"
+          >
+            {%- for value in option.values -%}
+              <option
+                value="{{ value | escape }}"
+                {% if value.selected %}
+                  selected="selected"
+                {% endif %}
               >
-                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
-              </span>
-            {%- endif -%}
-            <select
-              id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="select__select"
-              name="options[{{ option.name | escape }}]"
-              form="{{ product_form_id }}"
-            >
-              {% render 'product-variant-options',
-                product: product,
-                option: option,
-                block: block,
-                picker_type: picker_type
-              %}
-            </select>
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
-          </div>
+                {{ value }}
+              </option>
+            {%- endfor -%}
+          </select>
         </div>
+      {%- else -%}
+        {%- if picker_type == 'swatch' -%}
+          <fieldset class="js product-form__input product-form__input--swatch">
+            <legend class="form__label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <span>
+                {{ option.name }}:
+                <span data-selected-value>
+                  {{- option.selected_value -}}
+                </span>
+              </span>
+              {% assign opt_name_d = option.name | downcase %}
+              {% if opt_name_d contains 'size' %}
+                <button
+                  type="button"
+                  class="link link--text text-link"
+                  data-ring-size-modal-trigger
+                  style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  Ring Size Guide
+                </button>
+              {% endif %}
+            </legend>
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- elsif picker_type == 'button' -%}
+          <fieldset class="js product-form__input product-form__input--pill">
+            <legend class="form__label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <span>
+                {{ option.name }} :
+                <span data-selected-value class="form__label-selected-val">
+                  {{- option.selected_value -}}
+                </span>
+              </span>
+              {% assign opt_name_d = option.name | downcase %}
+              {% if opt_name_d contains 'size' %}
+                <button
+                  type="button"
+                  class="link link--text text-link"
+                  data-ring-size-modal-trigger
+                  style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  Ring Size Guide
+                </button>
+              {% endif %}
+            </legend>
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- else -%}
+          <div class="product-form__input product-form__input--dropdown">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+              <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}" style="margin-bottom: 0;">
+                {{ option.name }}
+              </label>
+              {% assign opt_name_d = option.name | downcase %}
+              {% if opt_name_d contains 'size' %}
+                <button
+                  type="button"
+                  class="link link--text text-link"
+                  data-ring-size-modal-trigger
+                  style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+                  Ring Size Guide
+                </button>
+              {% endif %}
+            </div>
+            <div class="select">
+              {%- if picker_type == 'swatch_dropdown' -%}
+                <span
+                  data-selected-value
+                  class="dropdown-swatch"
+                >
+                  {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+                </span>
+              {%- endif -%}
+              <select
+                id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                class="select__select"
+                name="options[{{ option.name | escape }}]"
+                form="{{ product_form_id }}"
+                data-option-position="{{ option.position }}"
+              >
+                {% render 'product-variant-options',
+                  product: product,
+                  option: option,
+                  block: block,
+                  picker_type: picker_type
+                %}
+              </select>
+              <span class="svg-wrapper">
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
+
+    {%- liquid
+      assign has_size_option = false
+      for opt in product.options_with_values
+        assign opt_down = opt.name | downcase
+        if opt_down contains 'size'
+          assign has_size_option = true
+          break
+        endif
+      endfor
+
+      assign is_ring_product = false
+      assign prod_title_down = product.title | downcase
+      assign prod_type_down = product.type | downcase
+      if prod_title_down contains 'ring' or prod_title_down contains 'band' or prod_type_down contains 'ring' or prod_type_down contains 'band'
+        assign is_ring_product = true
+      endif
+    -%}
+
+    {%- if has_size_option == false and is_ring_product -%}
+      <div class="product-form__input product-form__input--dropdown">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem;">
+          <label class="form__label" for="Option-{{ section.id }}-ring-size" style="margin-bottom: 0;">
+            Ring size
+          </label>
+          <button
+            type="button"
+            class="link link--text text-link"
+            data-ring-size-modal-trigger
+            style="font-size: 1.3rem; text-decoration: underline; cursor: pointer; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 4px; color: inherit;"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>
+            Ring Size Guide
+          </button>
+        </div>
+        <div class="select">
+          <select
+            id="Option-{{ section.id }}-ring-size"
+            class="select__select"
+            name="properties[Ring size]"
+            form="{{ product_form_id }}"
+          >
+            <option value="3" selected>3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4</option>
+            <option value="4.5">4.5</option>
+            <option value="5">5</option>
+            <option value="5.5">5.5</option>
+            <option value="6">6</option>
+            <option value="6.5">6.5</option>
+            <option value="7">7</option>
+            <option value="7.5">7.5</option>
+            <option value="8">8</option>
+            <option value="8.5">8.5</option>
+            <option value="9">9</option>
+            <option value="9.5">9.5</option>
+            <option value="10">10</option>
+            <option value="10.5">10.5</option>
+            <option value="11">11</option>
+            <option value="11.5">11.5</option>
+            <option value="12">12</option>
+          </select>
+          <span class="svg-wrapper">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- RING SIZE GUIDE POPUP MODAL -->
+    <div id="RingSizeGuideModalOverlay-{{ section.id }}" class="rsg-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 1.5rem;">
+      <div class="rsg-modal-card" style="background: #ffffff; width: 100%; max-width: 720px; max-height: 88vh; overflow-y: auto; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; padding: 2.5rem 2rem; color: #111111;">
+        <button type="button" class="rsg-modal-close" style="position: absolute; top: 1.5rem; right: 1.5rem; background: #f3f4f6; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 2rem; line-height: 1; color: #111;">&times;</button>
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <span style="font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; background: #111111; color: #ffffff; padding: 0.3rem 1rem; border-radius: 20px;">Sizing Guide</span>
+          <h2 style="font-size: 2.2rem; font-weight: 600; margin: 1rem 0 0.5rem; color: #111111;">Ring Size Guide & Conversion</h2>
+          <p style="font-size: 1.35rem; color: #666666; margin: 0;">Find your exact US and Australian ring size.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.8rem;">
+          <div style="background: #f9fafb; padding: 1.2rem; border-radius: 10px; border: 1px solid #e5e7eb;">
+            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;">1. Measure Diameter</strong>
+            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">Measure inside width across existing ring in mm.</p>
+          </div>
+          <div style="background: #f9fafb; padding: 1.2rem; border-radius: 10px; border: 1px solid #e5e7eb;">
+            <strong style="display: block; font-size: 1.35rem; color: #111; margin-bottom: 0.3rem;">2. Measure Finger</strong>
+            <p style="font-size: 1.25rem; color: #555; margin: 0; line-height: 1.5;">Wrap a paper strip around finger and measure length in mm.</p>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+          <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 1.3rem;">
+            <thead>
+              <tr style="background: #f3f4f6; border-bottom: 2px solid #e5e7eb; color: #111;">
+                <th style="padding: 0.9rem 0.6rem;">US / CA</th>
+                <th style="padding: 0.9rem 0.6rem;">UK / AU</th>
+                <th style="padding: 0.9rem 0.6rem;">EU</th>
+                <th style="padding: 0.9rem 0.6rem;">Diameter (mm)</th>
+                <th style="padding: 0.9rem 0.6rem;">Circumference (mm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 0.7rem;">3</td><td>F</td><td>44</td><td>14.1 mm</td><td>44.2 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">3.5</td><td>G</td><td>45</td><td>14.5 mm</td><td>45.5 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">4</td><td>H</td><td>47</td><td>14.9 mm</td><td>46.8 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">4.5</td><td>I</td><td>48</td><td>15.3 mm</td><td>48.0 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">5</td><td>J</td><td>49</td><td>15.7 mm</td><td>49.3 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">5.5</td><td>K</td><td>50</td><td>16.1 mm</td><td>50.6 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">6</td><td>L</td><td>52</td><td>16.5 mm</td><td>51.9 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">6.5</td><td>M</td><td>53</td><td>16.9 mm</td><td>53.1 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">7</td><td>N</td><td>54</td><td>17.3 mm</td><td>54.4 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">7.5</td><td>O</td><td>56</td><td>17.7 mm</td><td>55.7 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">8</td><td>P</td><td>57</td><td>18.1 mm</td><td>57.0 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">8.5</td><td>Q</td><td>58</td><td>18.5 mm</td><td>58.3 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">9</td><td>R</td><td>60</td><td>19.0 mm</td><td>59.5 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">9.5</td><td>S</td><td>61</td><td>19.4 mm</td><td>60.8 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">10</td><td>T</td><td>62</td><td>19.8 mm</td><td>62.1 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">10.5</td><td>U</td><td>64</td><td>20.2 mm</td><td>63.4 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">11</td><td>V</td><td>65</td><td>20.6 mm</td><td>64.6 mm</td></tr>
+              <tr style="background: #fbfbfb;"><td style="padding: 0.7rem;">11.5</td><td>W</td><td>66</td><td>21.0 mm</td><td>65.9 mm</td></tr>
+              <tr><td style="padding: 0.7rem;">12</td><td>X</td><td>68</td><td>21.4 mm</td><td>67.2 mm</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 1.8rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <a href="/pages/contact" style="font-size: 1.3rem; color: #111; font-weight: 600; text-decoration: underline;">Need assistance? Contact our jewellery experts</a>
+          <button type="button" class="button button--secondary rsg-modal-close-btn" style="min-height: 38px; padding: 0 1.8rem; font-size: 1.3rem;">Close</button>
+        </div>
+      </div>
+    </div>
 
     <script type="application/json" data-selected-variant>
       {{ product.selected_or_first_available_variant | json }}
     </script>
+    <script type="application/json" data-product-variants>
+      {{ product.variants | json }}
+    </script>
   </variant-selects>
 {%- endunless -%}
 
-{% comment %} <script>
-  const productData = {{ product | json }};
-  console.log(productData);
-</script> {% endcomment %}
+<script>
+  // Combined Metal Swatch Change Handler
+  document.addEventListener('change', function (e) {
+    const radio = e.target.closest('input[name^="combined-metal-selector-"]');
+    if (!radio || radio.disabled) return;
+
+    e.stopPropagation();
+
+    const opt1Val = radio.dataset.option1;
+    const opt2Val = radio.dataset.option2;
+    const variantSelects = radio.closest('variant-selects');
+    if (!variantSelects) return;
+
+    const isSilver = opt1Val.toLowerCase().includes('925') || opt1Val.toLowerCase().includes('silver');
+
+    // 1. Update header title text
+    const titleSpan = variantSelects.querySelector('[data-combined-metal-title]');
+    if (titleSpan) {
+      if (isSilver) {
+        titleSpan.textContent = opt1Val;
+      } else {
+        titleSpan.textContent = opt1Val + (opt2Val ? ' ' + opt2Val : '');
+      }
+    }
+
+    // 2. Update hidden Option 1 select
+    const opt1Select = variantSelects.querySelector('select[data-option-position="1"]');
+    if (opt1Select) {
+      opt1Select.value = opt1Val;
+    }
+
+    // 3. Update hidden Option 2 select
+    const opt2Select = variantSelects.querySelector('select[data-option-position="2"]');
+    if (opt2Select) {
+      if (isSilver) {
+        if (opt2Val) opt2Select.value = opt2Val;
+      } else {
+        opt2Select.value = opt2Val;
+      }
+    }
+
+    // 4. Find matching variant from data-product-variants or window.allProductVariants
+    const variants = window.allProductVariants || (variantSelects.getVariantData ? variantSelects.getVariantData() : []);
+    if (variants && variants.length) {
+      const otherSelects = Array.from(variantSelects.querySelectorAll('select')).filter(
+        (s) => parseInt(s.dataset.optionPosition, 10) > 2
+      );
+
+      const currentRingSize = otherSelects[0]?.value;
+
+      // Find exact variant with current ring size
+      let matched = variants.find((v) => {
+        const match1 = v.options[0] === opt1Val;
+        const match2 = isSilver ? true : (opt2Val ? v.options[1] === opt2Val : true);
+        const match3 = currentRingSize ? v.options[2] === currentRingSize : true;
+        return match1 && match2 && match3;
+      });
+
+      // If current size combination doesn't exist, auto-select first candidate variant
+      if (!matched) {
+        const candidate = variants.find((v) => {
+          const match1 = v.options[0] === opt1Val;
+          const match2 = isSilver ? true : (opt2Val ? v.options[1] === opt2Val : true);
+          return match1 && match2;
+        });
+
+        if (candidate) {
+          matched = candidate;
+          if (otherSelects[0] && candidate.options[2]) {
+            otherSelects[0].value = candidate.options[2];
+          }
+          if (isSilver && candidate.options[1] && opt2Select) {
+            opt2Select.value = candidate.options[1];
+          }
+        }
+      }
+
+      // If matched variant found, update product info instantly
+      if (matched) {
+        const productInfo = variantSelects.closest('product-info') || document.querySelector('product-info');
+        if (productInfo) {
+          const productUrl = productInfo.dataset.url || window.location.pathname;
+          productInfo.clientSideVariantUpdate(matched, productUrl);
+          return;
+        }
+      }
+    }
+
+    // Fallback: trigger change on variantSelects
+    variantSelects.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+</script>
+
+<script>
+  (async function () {
+    let allVariants = {{ product.variants | json }};
+    const productData = {{ product | json }};
+    const productOptions = {{ product.options_with_values | json }};
+    const selectedVariant = {{ product.selected_or_first_available_variant | json }};
+
+    function buildOptionMap(variants) {
+      const map = {};
+      variants.forEach((v) => {
+        const key = (v.option1 || 'Default') + (v.option2 ? ' / ' + v.option2 : '');
+        if (!map[key]) {
+          map[key] = {
+            material: v.option1,
+            color: v.option2,
+            count: 0,
+            variants: [],
+            sizes: []
+          };
+        }
+        map[key].count++;
+        map[key].variants.push(v);
+        if (v.option3 && !map[key].sizes.includes(v.option3)) {
+          map[key].sizes.push(v.option3);
+        }
+      });
+      return map;
+    }
+
+    try {
+      const cleanPath = window.location.pathname.replace(/\/$/, '');
+      const res = await fetch(`${cleanPath}?view=variants-json&page=1`);
+      if (res.ok) {
+        const data = await res.json();
+        const totalPages = data.pages || 1;
+        let fetchedVariants = data.variants || [];
+
+        if (totalPages > 1) {
+          const fetchPromises = [];
+          for (let p = 2; p <= totalPages; p++) {
+            fetchPromises.push(
+              fetch(`${cleanPath}?view=variants-json&page=${p}`)
+                .then((r) => (r.ok ? r.json() : null))
+                .then((d) => (d && d.variants ? d.variants : []))
+            );
+          }
+          const otherPages = await Promise.all(fetchPromises);
+          otherPages.forEach((pageVars) => {
+            fetchedVariants = fetchedVariants.concat(pageVars);
+          });
+        }
+
+        if (fetchedVariants.length > allVariants.length) {
+          allVariants = fetchedVariants;
+          window.allProductVariants = allVariants;
+
+          const scriptTag = document.querySelector('script[data-product-variants]');
+          if (scriptTag) {
+            scriptTag.textContent = JSON.stringify(allVariants);
+          }
+
+          const variantSelects = document.querySelector('variant-selects');
+          if (variantSelects) {
+            variantSelects.variantData = allVariants;
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Could not fetch extra paginated variants:", err);
+    }
+
+    window.allProductVariants = allVariants;
+
+    // Validate swatches with the full 492 variants
+    document.querySelectorAll('input[name^="combined-metal-selector-"]').forEach((radio) => {
+      const opt1 = radio.dataset.option1;
+      const opt2 = radio.dataset.option2;
+      const isSilver = opt1.toLowerCase().includes('925') || opt1.toLowerCase().includes('silver');
+
+      const hasVariant = allVariants.some((v) => {
+        const m1 = v.options[0] === opt1;
+        const m2 = isSilver ? true : (opt2 ? v.options[1] === opt2 : true);
+        return m1 && m2;
+      });
+
+      const label = document.querySelector(`label[for="${radio.id}"]`);
+      if (hasVariant) {
+        radio.disabled = false;
+        radio.removeAttribute('disabled');
+        if (label) label.classList.remove('is-disabled');
+      } else {
+        radio.disabled = true;
+        radio.setAttribute('disabled', 'disabled');
+        if (label) label.classList.add('is-disabled');
+      }
+    });
+
+    const variantsByOption = buildOptionMap(allVariants);
+
+    // Extract and format all product and variant image URLs
+    const rawImages = productData.images || [];
+    const formatUrl = (u) => {
+      if (!u) return null;
+      if (typeof u === 'object' && u.src) u = u.src;
+      return typeof u === 'string' ? (u.startsWith('//') ? 'https:' + u : u) : u;
+    };
+
+    const allImageUrls = rawImages.map(formatUrl).filter(Boolean);
+
+    // Extract any unique variant featured images
+    allVariants.forEach((v) => {
+      if (v.featured_image) {
+        const vUrl = formatUrl(v.featured_image);
+        if (vUrl && !allImageUrls.includes(vUrl)) {
+          allImageUrls.push(vUrl);
+        }
+      }
+    });
+
+    // Detailed image summary table
+    const imageDetails = allImageUrls.map((url, idx) => {
+      const associatedVariants = allVariants
+        .filter((v) => formatUrl(v.featured_image) === url)
+        .map((v) => v.title);
+
+      return {
+        Index: idx + 1,
+        Image_URL: url,
+        Associated_Variants_Count: associatedVariants.length,
+        Sample_Variants: associatedVariants.slice(0, 3).join(', ') + (associatedVariants.length > 3 ? ' ...' : '')
+      };
+    });
+
+    console.log("💎 Product Information:", productData);
+    console.log("📋 Product Options:", productOptions);
+    console.log(`🔢 Product Variants (Total: ${allVariants.length}):`, allVariants);
+    console.log("🎨 Variants Grouped by Metal Type (Option 1 & Option 2):", variantsByOption);
+    console.log("⭐ Selected Variant:", selectedVariant);
+    console.log(`📸 Product All Image URLs (Total: ${allImageUrls.length}):`, allImageUrls);
+    console.log("🖼️ Product Images Detailed Table:");
+    console.table(imageDetails);
+  })();
+
+  // Modal open/close handler for Ring Size Guide (Always Centered in Screen)
+  document.addEventListener('click', function (e) {
+    const trigger = e.target.closest('[data-ring-size-modal-trigger]');
+    if (trigger) {
+      e.preventDefault();
+      let overlay = document.querySelector('.rsg-modal-overlay');
+      if (overlay) {
+        if (overlay.parentNode !== document.body) {
+          document.body.appendChild(overlay);
+        }
+        overlay.classList.add('is-open');
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      return;
+    }
+
+    const closeBtn = e.target.closest('.rsg-modal-close, .rsg-modal-close-btn');
+    if (closeBtn) {
+      e.preventDefault();
+      const overlay = document.querySelector('.rsg-modal-overlay');
+      if (overlay) {
+        overlay.classList.remove('is-open');
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      return;
+    }
+
+    if (e.target.classList && e.target.classList.contains('rsg-modal-overlay')) {
+      e.target.classList.remove('is-open');
+      e.target.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  });
+</script>

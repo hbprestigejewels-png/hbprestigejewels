@@ -1,4 +1,4 @@
-{% render 'lazy-stylesheet', file: 'component-slider.css' %}
+<link rel="stylesheet" href="{{ 'component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
 
 <section class="custom-collection-carousel color-{{ section.settings.color_scheme }}">
   <div class="page-width{% if section.settings.full_width %} page-width--full{% endif %}">
@@ -51,13 +51,14 @@
                 >
                   <picture>
                     {% if img_mobile %}
-                      <source media="(max-width: 768px)" srcset="{{ img_mobile | image_url: width: 600 }}">
+                      <source media="(max-width: 768px)" srcset="{{ img_mobile | image_url: width: 360, format: 'webp' }}">
                     {% endif %}
                     <img
-                      src="{{ img | image_url: width: 800 }}"
+                      src="{{ img | image_url: width: 400, format: 'webp' }}"
                       alt="{{ title }}"
                       class="cc-carousel__image"
                       loading="lazy"
+                      decoding="async"
                       width="{{ img.width }}"
                       height="{{ img.height }}"
                     >
@@ -490,6 +491,19 @@
 
 <script>
   (function () {
+    // This script is emitted once per section instance, and the home page uses
+    // three Collection Carousels. The old bootstrap ran
+    // `document.querySelectorAll('carousel-component')` from each copy, so with
+    // three sections on the page every carousel was constructed three times -
+    // triple the scroll/touch/resize listeners and three competing autoplay
+    // setInterval timers per carousel.
+    //
+    // Registering a custom element instead makes the browser do the pairing:
+    // each <carousel-component> is upgraded exactly once, no matter how many
+    // copies of this script land on the page. The guard below keeps the second
+    // and third copies from throwing on a duplicate definition.
+    if (customElements.get('carousel-component')) return;
+
     // Enhanced Carousel with Touch Support
     class TouchCarousel {
       constructor(element) {
@@ -545,13 +559,15 @@
           this.container.addEventListener('mouseup', this.onDragEnd.bind(this));
           this.container.addEventListener('mouseleave', this.onDragEnd.bind(this));
 
-          this.container.addEventListener('touchstart', this.onTouchStart.bind(this));
-          this.container.addEventListener('touchmove', this.onTouchMove.bind(this));
-          this.container.addEventListener('touchend', this.onTouchEnd.bind(this));
+          // None of these handlers call preventDefault, so they can all be
+          // passive and stay off the scroll-commit critical path.
+          this.container.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: true });
+          this.container.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: true });
+          this.container.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: true });
         }
 
         // Window resize
-        window.addEventListener('resize', this.onResize.bind(this));
+        window.addEventListener('resize', this.onResize.bind(this), { passive: true });
 
         // Start autoplay
         if (this.autoplay && this.totalSlides > 1) {
@@ -778,10 +794,30 @@
       }
     }
 
-    // Initialize all carousels
-    document.querySelectorAll('carousel-component').forEach((carousel) => {
-      new TouchCarousel(carousel);
-    });
+    class CarouselComponent extends HTMLElement {
+      connectedCallback() {
+        if (this.carousel) return; // already upgraded
+
+        // connectedCallback fires as soon as the *opening* tag is parsed, so
+        // for any instance further down the document the slides do not exist
+        // yet and measuring them would read zeroes. Wait for the parser to
+        // finish in that case; instances already in the DOM when
+        // customElements.define ran are complete and can start immediately.
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => this.upgrade(), { once: true });
+        } else {
+          this.upgrade();
+        }
+      }
+
+      upgrade() {
+        if (this.carousel) return;
+        if (!this.querySelector('[data-carousel-track]')) return;
+        this.carousel = new TouchCarousel(this);
+      }
+    }
+
+    customElements.define('carousel-component', CarouselComponent);
   })();
 </script>
 

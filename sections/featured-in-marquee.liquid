@@ -254,9 +254,11 @@
                       aria-label="{% if block.settings.alt_text != blank %}{{ block.settings.alt_text | escape }}{% elsif block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
                     >
                       <img
-                        src="{{ block.settings.image | image_url: width: 200 }}"
+                        src="{{ block.settings.image | image_url: width: 400 }}"
                         alt="{{ block.settings.image.alt | default: 'Logo' }}"
                         loading="lazy"
+                        decoding="async"
+                        sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
                         width="{{ section.settings.logo_height | times: 2 }}"
                         height="{{ section.settings.logo_height }}"
                         draggable="false"
@@ -264,9 +266,11 @@
                     </a>
                   {% else %}
                     <img
-                      src="{{ block.settings.image | image_url: width: 200 }}"
+                      src="{{ block.settings.image | image_url: width: 400 }}"
                       alt="{{ block.settings.image.alt | default: 'Logo' }}"
                       loading="lazy"
+                      decoding="async"
+                      sizes="(min-width: 1200px) 550px, (min-width: 990px) 550px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
                       width="{{ section.settings.logo_height | times: 2 }}"
                       height="{{ section.settings.logo_height }}"
                       draggable="false"
@@ -468,7 +472,7 @@
   }
   
   // Handle window resize
-  window.addEventListener('resize', handleResize);
+  window.addEventListener('resize', handleResize, { passive: true });
   
   // Shopify theme editor support
   if (window.Shopify && Shopify.designMode) {

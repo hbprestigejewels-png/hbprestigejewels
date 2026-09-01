@@ -1,0 +1,9 @@
+{% layout none %}
+{%- paginate product.variants by 250 -%}
+{
+  "variants": {{ product.variants | json }},
+  "current_page": {{ paginate.current_page }},
+  "pages": {{ paginate.pages }},
+  "items": {{ paginate.items }}
+}
+{%- endpaginate -%}

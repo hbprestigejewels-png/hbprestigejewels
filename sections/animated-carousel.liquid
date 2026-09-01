@@ -6,11 +6,12 @@
           <div class="carousel-item">
             <div class="carousel-card">
               <img
-                src="{{ block.settings.image | image_url: width: 400 }}"
+                src="{{ block.settings.image | image_url: width: 800 }}"
                 alt="{% if block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
-                width="220"
-                height="220"
                 loading="lazy"
+                decoding="async"
+                width="{{ block.settings.image.width | default: 800 }}"
+                height="{{ block.settings.image.height | default: 800 }}"
               >
             </div>
           </div>

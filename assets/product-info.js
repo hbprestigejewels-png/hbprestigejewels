@@ -60,23 +60,213 @@ if (!customElements.get('product-info')) {
         });
       }
 
-      handleOptionValueChange({ data: { event, target, selectedOptionValues } }) {
+      handleOptionValueChange({ data: { event, target, selectedOptionValues, currentVariant, variantId } }) {
         if (!this.contains(event.target)) return;
 
         this.resetProductFormState();
 
-        const productUrl = target.dataset.productUrl || this.pendingRequestUrl || this.dataset.url;
-        this.pendingRequestUrl = productUrl;
-        const shouldSwapProduct = this.dataset.url !== productUrl;
+        const rawProductUrl = target.dataset.productUrl || this.pendingRequestUrl || this.dataset.url;
+        this.pendingRequestUrl = rawProductUrl;
+        
+        // Compare pathnames only (ignore query parameters like ?variant=ID) to detect actual product swap
+        const currentPathname = new URL(this.dataset.url || window.location.pathname, window.location.origin).pathname;
+        const targetPathname = new URL(rawProductUrl || window.location.href, window.location.origin).pathname;
+        const shouldSwapProduct = currentPathname !== targetPathname;
         const shouldFetchFullPage = this.dataset.updateUrl === 'true' && shouldSwapProduct;
 
+        // Clean product URL without query params for URL bar updates
+        const productUrl = targetPathname;
+
+        // For same-product variant changes: use instant client-side update
+        if (!shouldSwapProduct) {
+          const variant = currentVariant || this.variantSelectors?.currentVariant;
+          this.clientSideVariantUpdate(variant, rawProductUrl);
+          return;
+        }
+
+        // Fallback: AJAX fetch (only used for actual product swaps across handles)
+        const effectiveVariantId = variantId || currentVariant?.id;
         this.renderProductInfo({
-          requestUrl: this.buildRequestUrlWithParams(productUrl, selectedOptionValues, shouldFetchFullPage),
+          requestUrl: this.buildRequestUrlWithParams(productUrl, selectedOptionValues, shouldFetchFullPage, effectiveVariantId),
           targetId: target.id,
           callback: shouldSwapProduct
             ? this.handleSwapProduct(productUrl, shouldFetchFullPage)
             : this.handleUpdateProductInfo(productUrl),
         });
+      }
+
+      /**
+       * Instantly update page with variant data without any AJAX fetch.
+       * Uses the variant JSON pre-loaded in data-product-variants script tag.
+       */
+      clientSideVariantUpdate(variant, productUrl) {
+        const sectionId = this.dataset.section;
+
+        // 1. Update URL
+        this.updateURL(productUrl, variant?.id);
+
+        // 2. Update variant form input
+        this.updateVariantInputs(variant?.id);
+
+        // 3. Update pickup availability
+        this.pickupAvailability?.update(variant);
+
+        // 4. Handle unavailable vs available variant
+        if (!variant) {
+          this.setUnavailable();
+          return;
+        }
+
+        // Unhide price and variant info elements
+        const priceWrapper =
+          document.getElementById(`price-${sectionId}`) ||
+          document.querySelector(`[id^="price-${sectionId}"]`);
+        if (priceWrapper) {
+          priceWrapper.classList.remove('hidden');
+          priceWrapper.style.display = '';
+        }
+
+        const selectors = ['Inventory', 'Sku', 'Price-Per-Item', 'Volume-Note', 'Volume', 'Quantity-Rules']
+          .map((id) => `#${id}-${sectionId}`)
+          .join(', ');
+        document.querySelectorAll(selectors).forEach(({ classList }) => classList.remove('hidden'));
+
+        // 5. Update Add to Cart button
+        if (this.productForm) {
+          const isDisabled = !variant.available;
+          this.productForm.toggleSubmitButton(isDisabled, window.variantStrings?.soldOut || 'Sold out');
+        }
+
+        // 6. Update media gallery image
+        const featuredMedia = variant.featured_media || variant.featured_image;
+        if (featuredMedia && featuredMedia.id) {
+          const mediaId = `${sectionId}-${featuredMedia.id}`;
+          const mediaGallery = this.querySelector('media-gallery') || document.querySelector('media-gallery');
+          if (mediaGallery && typeof mediaGallery.setActiveMedia === 'function') {
+            mediaGallery.setActiveMedia(mediaId, false);
+          }
+        }
+
+        // 7. Update price display
+        this.updatePriceDOM(variant, sectionId);
+
+        // 8. Publish variant change event for other subscribers
+        publish(PUB_SUB_EVENTS.variantChange, {
+          data: {
+            sectionId: this.sectionId,
+            html: null,
+            variant,
+          },
+        });
+      }
+
+      /**
+       * Directly update price elements in the DOM from variant data.
+       * Uses shop.money_format set in theme.liquid for correct currency symbol.
+       */
+      updatePriceDOM(variant, sectionId) {
+        const priceWrapper =
+          document.getElementById(`price-${sectionId}`) ||
+          document.querySelector(`[id^="price-${sectionId}"]`);
+        if (!priceWrapper) return;
+
+        const price = variant.price;
+        const compareAtPrice = variant.compare_at_price;
+        const available = variant.available;
+        const isOnSale = compareAtPrice && compareAtPrice > price;
+
+        /**
+         * Full implementation of Shopify's formatMoney function.
+         * Handles: {{amount}}, {{amount_no_decimals}}, {{amount_with_comma_separator}}, etc.
+         */
+        const formatMoney = (cents) => {
+          // Use Shopify's native formatMoney if available
+          if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+            const fmt = window.Shopify.currency_code_enabled
+              ? window.Shopify.money_with_currency_format
+              : window.Shopify.money_format;
+            return window.Shopify.formatMoney(cents, fmt);
+          }
+
+          // Implement format parser ourselves
+          const moneyFormat = window.Shopify?.currency_code_enabled
+            ? window.Shopify?.money_with_currency_format
+            : window.Shopify?.money_format;
+
+          if (!moneyFormat) {
+            // Last resort fallback: read symbol from existing price on page
+            const existingPrice = priceWrapper.querySelector('.price-item');
+            const existingText = existingPrice?.textContent?.trim() || '';
+            const symbol = existingText.match(/^[^\d\s,\.]+/)?.[0] || '';
+            return symbol + (cents / 100).toFixed(2);
+          }
+
+          const value = cents / 100;
+          const formatParts = moneyFormat.match(/\{\{(\w+)\}\}/);
+          if (!formatParts) return moneyFormat;
+
+          const formatType = formatParts[1];
+          let formattedValue;
+
+          switch (formatType) {
+            case 'amount':
+              formattedValue = value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              break;
+            case 'amount_no_decimals':
+              formattedValue = Math.floor(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              break;
+            case 'amount_with_comma_separator':
+              formattedValue = value.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+              break;
+            case 'amount_no_decimals_with_comma_separator':
+              formattedValue = Math.floor(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+              break;
+            case 'amount_with_apostrophe_separator':
+              formattedValue = value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+              break;
+            default:
+              formattedValue = value.toFixed(2);
+          }
+
+          return moneyFormat.replace(/\{\{\w+\}\}/, formattedValue);
+        };
+
+        const priceEl = priceWrapper.querySelector('.price');
+        if (!priceEl) return;
+
+        // Toggle sale/sold-out classes
+        priceEl.classList.toggle('price--sold-out', !available);
+        priceEl.classList.toggle('price--on-sale', !!isOnSale);
+
+        const formattedPrice = formatMoney(price);
+        const formattedCompare = compareAtPrice ? formatMoney(compareAtPrice) : null;
+
+        // Update price text in sale container (.price__sale) and regular container
+        const saleContainer = priceEl.querySelector('.price__sale');
+        const regularContainer = priceEl.querySelector('.price__regular');
+
+        if (isOnSale) {
+          // Show sale price
+          const salePriceEl = saleContainer?.querySelector('.price-item--sale');
+          if (salePriceEl) salePriceEl.textContent = formattedPrice;
+
+          // Show compare-at (strikethrough)
+          const compareEl = saleContainer?.querySelector('s.price-item--regular');
+          if (compareEl && formattedCompare) {
+            compareEl.textContent = formattedCompare;
+            compareEl.closest('span')?.classList.remove('hidden');
+          }
+
+          if (saleContainer) saleContainer.style.display = '';
+          if (regularContainer) regularContainer.style.display = 'none';
+        } else {
+          // Regular price
+          const regularPriceEl = regularContainer?.querySelector('.price-item--regular:not(s)');
+          if (regularPriceEl) regularPriceEl.textContent = formattedPrice;
+
+          if (regularContainer) regularContainer.style.display = '';
+          if (saleContainer) saleContainer.style.display = 'none';
+        }
       }
 
       resetProductFormState() {
@@ -90,7 +280,7 @@ if (!customElements.get('product-info')) {
           this.productModal?.remove();
 
           const selector = updateFullPage ? "product-info[id^='MainProduct']" : 'product-info';
-          const variant = this.getSelectedVariant(html.querySelector(selector));
+          const variant = this.getSelectedVariant(html.querySelector(selector)) || this.variantSelectors?.currentVariant;
           this.updateURL(productUrl, variant?.id);
 
           if (updateFullPage) {
@@ -142,12 +332,14 @@ if (!customElements.get('product-info')) {
         return !!selectedVariant ? JSON.parse(selectedVariant) : null;
       }
 
-      buildRequestUrlWithParams(url, optionValues, shouldFetchFullPage = false) {
+      buildRequestUrlWithParams(url, optionValues, shouldFetchFullPage = false, variantId = null) {
         const params = [];
 
         !shouldFetchFullPage && params.push(`section_id=${this.sectionId}`);
 
-        if (optionValues.length) {
+        if (variantId) {
+          params.push(`variant=${variantId}`);
+        } else if (optionValues && optionValues.length) {
           params.push(`option_values=${optionValues.join(',')}`);
         }
 
@@ -163,10 +355,10 @@ if (!customElements.get('product-info')) {
 
       handleUpdateProductInfo(productUrl) {
         return (html) => {
-          const variant = this.getSelectedVariant(html);
+          const variant = this.getSelectedVariant(html) || this.variantSelectors?.currentVariant;
           console.log("Selected Variant", variant);
-console.log("Variant Price", variant.price);
-console.log("Compare Price", variant.compare_at_price);
+          console.log("Variant Price", variant?.price);
+          console.log("Compare Price", variant?.compare_at_price);
 
           this.pickupAvailability?.update(variant);
           this.updateOptionValues(html);
@@ -210,8 +402,14 @@ if (variant && variant.options) {
           // Selected Variants Code end
 
           const updateSourceFromDestination = (id, shouldHide = (source) => false) => {
-            const source = html.getElementById(`${id}-${this.sectionId}`);
-            const destination = this.querySelector(`#${id}-${this.dataset.section}`);
+            const source =
+              html.getElementById(`${id}-${this.sectionId}`) ||
+              html.querySelector(`[id^="${id}-${this.sectionId}"]`) ||
+              html.querySelector(`#${id}-${this.dataset.section}`);
+            const destination =
+              this.querySelector(`#${id}-${this.dataset.section}`) ||
+              this.querySelector(`[id^="${id}-${this.dataset.section}"]`) ||
+              document.querySelector(`#${id}-${this.dataset.section}`);
             if (source && destination) {
               destination.innerHTML = source.innerHTML;
               destination.classList.toggle('hidden', shouldHide(source));
@@ -331,7 +529,8 @@ if (variant && variant.options) {
         }
 
         // set featured media as active in the media gallery
-        this.querySelector(`media-gallery`)?.setActiveMedia?.(
+        const mediaGallery = this.querySelector(`media-gallery`) || document.querySelector(`media-gallery`);
+        mediaGallery?.setActiveMedia?.(
           `${this.dataset.section}-${variantFeaturedMediaId}`,
           true
         );

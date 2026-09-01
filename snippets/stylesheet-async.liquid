@@ -1,0 +1,28 @@
+{% comment %}
+  Loads a stylesheet without blocking the first paint.
+
+  `stylesheet_tag` emits a plain <link rel="stylesheet">, which is
+  render-blocking even inside <body> - the browser stops building the render
+  tree until it arrives. For sections below the fold that cost buys nothing.
+
+  This uses `rel="preload" as="style"` rather than the more common
+  `media="print"` trick on purpose. Both are non-blocking, but `media="print"`
+  is fetched at the *lowest* priority, so on a slow connection the sheet can
+  land after the visitor has already scrolled the section into view - which
+  trades a render-blocking request for a visible restyle and a layout shift.
+  `preload as="style"` is non-blocking *and* high priority, so it is in hand
+  well before the section is reached.
+
+  Only use this for below-the-fold sections. Above-the-fold CSS must stay
+  blocking, otherwise the section paints unstyled first and shifts.
+
+  Usage:
+    {% render 'stylesheet-async', file: 'component-card.css' %}
+{% endcomment %}
+<link
+  rel="preload"
+  as="style"
+  href="{{ file | asset_url }}"
+  onload="this.onload=null;this.rel='stylesheet'"
+>
+<noscript>{{ file | asset_url | stylesheet_tag }}</noscript>

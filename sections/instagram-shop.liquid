@@ -16,17 +16,17 @@
           href="{{ block.settings.link }}"
           class="insta-item"
           target="_blank"
-          rel="noopener noreferrer"
           aria-label="{% if block.settings.alt_text != blank %}{{ block.settings.alt_text | escape }}{% elsif block.settings.image.alt != blank %}{{ block.settings.image.alt | escape }}{% else %}HB Prestige Jewels Logo{% endif %}"
         >
           <div class="insta-image">
             {% if block.settings.image != blank %}
               <img
-                src="{{ block.settings.image | image_url: width: 400 }}"
-                alt="instagram image"
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                alt="{{ block.settings.image.alt | default: 'Instagram post' | escape }}"
                 loading="lazy"
-                width="400"
-                height="400"
+                decoding="async"
+                width="{{ block.settings.image.width | default: 800 }}"
+                height="{{ block.settings.image.height | default: 800 }}"
               >
             {% endif %}
 
