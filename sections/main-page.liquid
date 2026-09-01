@@ -170,6 +170,9 @@
   }
 {%- endstyle -%}
 
+{%- if page.handle contains 'lab-vs-natural' or page.handle contains 'lab-grown' or page.template_suffix == 'lab-vs-natural' -%}
+  {% render 'content-lab-vs-natural' %}
+{%- else -%}
 <div class="color-{{ section.settings.color_scheme }} gradient main-page-{{ section.id }}">
   {%- assign bg_video = section.settings.background_video -%}
   {%- assign has_valid_video = false -%}
@@ -268,6 +271,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 {% schema %}
 {
