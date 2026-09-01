@@ -1,1 +1,137 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"show_collection_description":true,"show_collection_image":false,"color_scheme":"scheme-1"}},"collection_carousel_cWhNWr":{"type":"collection-carousel","blocks":{"collection_ChmpWa":{"type":"collection","settings":{"collection":"gold-special-bracelets","collection_image":"shopify:\/\/shop_images\/Elegant_Diamond_Bracelet.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Elegant_Diamond_Bracelet.jpg","collection_name":"Bracelets","button_text":"SHOP NOW","url":""}},"collection_nfyCzE":{"type":"collection","settings":{"collection":"special-necklaces","collection_image":"shopify:\/\/shop_images\/The_necklace_design_is_drawn_and_then_executed.jpg","collection_image_mobile":"shopify:\/\/shop_images\/The_necklace_design_is_drawn_and_then_executed.jpg","collection_name":"Necklaces","button_text":"SHOP NOW","url":""}},"collection_Y8jeyk":{"type":"collection","settings":{"collection":"special-earrings","collection_image":"shopify:\/\/shop_images\/Rhinestone_Drop_Earrings.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Rhinestone_Drop_Earrings.jpg","collection_name":"Earrings","button_text":"SHOP NOW","url":""}},"collection_ekxyBT":{"type":"collection","settings":{"collection":"special-rings","collection_image":"shopify:\/\/shop_images\/ring.jpg","collection_image_mobile":"shopify:\/\/shop_images\/ring.jpg","collection_name":"Rings","button_text":"SHOP NOW","url":""}},"collection_J96nnK":{"type":"collection","settings":{"collection":"special-jewellery","collection_image":"shopify:\/\/shop_images\/Elegant_Rhinestone_Jewelry_Set_for_Women_Includes_Necklace_Earrings_and_Bracelet_Perfect_for_Weddings_Parties_and_Formal_Events_2026_-_14_99.webp","collection_image_mobile":"shopify:\/\/shop_images\/Elegant_Rhinestone_Jewelry_Set_for_Women_Includes_Necklace_Earrings_and_Bracelet_Perfect_for_Weddings_Parties_and_Formal_Events_2026_-_14_99.webp","collection_name":"Specials","button_text":"SHOP NOW","url":""}}},"block_order":["collection_ChmpWa","collection_nfyCzE","collection_Y8jeyk","collection_ekxyBT","collection_J96nnK"],"name":"Collection Carousel","settings":{"title":"Special","subheading":"","heading_size":"h2","image_aspect_ratio":"1\/1","card_radius":0,"gap":4,"text_alignment":"center","title_color":"#000000","button_bg_color":"#ffffff","button_text_color":"#ffffff","button_hover_bg_color":"#333333","button_radius":4,"show_progress":false,"progress_height":3,"progress_bg_color":"#00000026","progress_fill_color":"#000000","progress_radius":2,"columns_desktop":5,"columns_mobile":2,"full_width":false,"autoplay":false,"autoplay_speed":5,"loop":false,"show_arrows":false,"show_arrows_mobile":false,"show_mobile_dots":true,"color_scheme":"","padding_top":36,"padding_bottom":36}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":16,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"padding_top":36,"padding_bottom":36}}},"order":["banner","collection_carousel_cWhNWr","product-grid"]}
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "collection_carousel_cWhNWr": {
+      "type": "collection-carousel",
+      "blocks": {
+        "collection_ChmpWa": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-special-bracelets",
+            "collection_image": "shopify://shop_images/Elegant_Diamond_Bracelet.jpg",
+            "collection_image_mobile": "shopify://shop_images/Elegant_Diamond_Bracelet.jpg",
+            "collection_name": "Bracelets",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_nfyCzE": {
+          "type": "collection",
+          "settings": {
+            "collection": "special-necklaces",
+            "collection_image": "shopify://shop_images/The_necklace_design_is_drawn_and_then_executed.jpg",
+            "collection_image_mobile": "shopify://shop_images/The_necklace_design_is_drawn_and_then_executed.jpg",
+            "collection_name": "Necklaces",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_Y8jeyk": {
+          "type": "collection",
+          "settings": {
+            "collection": "special-earrings",
+            "collection_image": "shopify://shop_images/Rhinestone_Drop_Earrings.jpg",
+            "collection_image_mobile": "shopify://shop_images/Rhinestone_Drop_Earrings.jpg",
+            "collection_name": "Earrings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_ekxyBT": {
+          "type": "collection",
+          "settings": {
+            "collection": "special-rings",
+            "collection_image": "shopify://shop_images/ring.jpg",
+            "collection_image_mobile": "shopify://shop_images/ring.jpg",
+            "collection_name": "Rings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_J96nnK": {
+          "type": "collection",
+          "settings": {
+            "collection": "special-jewellery",
+            "collection_image": "shopify://shop_images/Elegant_Rhinestone_Jewelry_Set_for_Women_Includes_Necklace_Earrings_and_Bracelet_Perfect_for_Weddings_Parties_and_Formal_Events_2026_-_14_99.webp",
+            "collection_image_mobile": "shopify://shop_images/Elegant_Rhinestone_Jewelry_Set_for_Women_Includes_Necklace_Earrings_and_Bracelet_Perfect_for_Weddings_Parties_and_Formal_Events_2026_-_14_99.webp",
+            "collection_name": "Specials",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_ChmpWa",
+        "collection_nfyCzE",
+        "collection_Y8jeyk",
+        "collection_ekxyBT",
+        "collection_J96nnK"
+      ],
+      "name": "Collection Carousel",
+      "settings": {
+        "title": "Special",
+        "subheading": "",
+        "heading_size": "h2",
+        "image_aspect_ratio": "1/1",
+        "card_radius": 0,
+        "gap": 4,
+        "text_alignment": "center",
+        "title_color": "#000000",
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#333333",
+        "button_radius": 4,
+        "show_progress": false,
+        "progress_height": 3,
+        "progress_bg_color": "#00000026",
+        "progress_fill_color": "#000000",
+        "progress_radius": 2,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "full_width": false,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "loop": false,
+        "show_arrows": false,
+        "show_arrows_mobile": false,
+        "show_mobile_dots": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "collection_carousel_cWhNWr",
+    "product-grid"
+  ]
+}

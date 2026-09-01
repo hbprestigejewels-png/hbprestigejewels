@@ -1,1 +1,175 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer2_aBiNGr":{"type":"footer2","blocks":{"floating_image_QXz3bH":{"type":"floating_image","settings":{"image":"shopify:\/\/shop_images\/rose-gold-1.webp","alt_text":"","size":40,"opacity":65,"top_position":70,"left_position":85,"animation_path":"A","spin":true,"duration":24,"delay":0}},"floating_image_M3FdHN":{"type":"floating_image","settings":{"image":"shopify:\/\/shop_images\/yellow-gold-1.webp","alt_text":"","size":40,"opacity":75,"top_position":20,"left_position":20,"animation_path":"A","spin":true,"duration":24,"delay":0}},"floating_image_acJ3DX":{"type":"floating_image","settings":{"image":"shopify:\/\/shop_images\/Opulent_Classic_Pear_Trio_Ring_-_18KT_White_Gold___Pear.jpg","alt_text":"","size":40,"opacity":50,"top_position":20,"left_position":20,"animation_path":"A","spin":false,"duration":24,"delay":0}},"floating_image_dRWCjT":{"type":"floating_image","settings":{"image":"shopify:\/\/shop_images\/download_b978e68d-c086-4230-9300-148240f86382.webp","alt_text":"","size":40,"opacity":50,"top_position":10,"left_position":20,"animation_path":"A","spin":false,"duration":13,"delay":0}},"floating_image_brD4Yd":{"type":"floating_image","settings":{"image":"shopify:\/\/shop_images\/c4689001e6cf4863ae0d3a94f0123600.webp","alt_text":"","size":28,"opacity":50,"top_position":52,"left_position":20,"animation_path":"A","spin":false,"duration":24,"delay":3}}},"block_order":["floating_image_QXz3bH","floating_image_M3FdHN","floating_image_acJ3DX","floating_image_dRWCjT","floating_image_brD4Yd"],"name":"Custom Avone Footer","settings":{"footer_logo":"shopify:\/\/shop_images\/IMG-20260715-WA0017_1_80d681c2-ccd6-4bef-b166-010bd947969f.png","about_text":"<h4 style=\"font-weight:600; margin-bottom:10px;\">HB Presitge<\/h4>\n\n<p style=\"text-align:justify;font-size:13px; line-height:1.6;\">\nHB Presitge started with a passion for jewellery and a dream to make it accessible to all. Today, we create pieces that celebrate individuality, blending Indian heritage with modern elegance, designed to dazzle every moment.\n<\/p>","phone":"+91 9723328111","email":"hbprestigejewels@gmail.com","company_menu":"homepage-menu","service_menu":"policies","payment_icons":"shopify:\/\/shop_images\/payment_group.svg","show_default_floating_decor":false}},"footer":{"type":"footer","blocks":{"custom_html_9JDTrW":{"type":"custom_html","settings":{"heading":"HB Presitge Jewels","custom_html":"<p style=\"text-align:justify;\">\nHB Presitge started with a passion for jewellery and a dream to make it accessible to all. Today, we create pieces that celebrate individuality, blending Indian heritage with modern elegance, designed to dazzle every moment.\n<\/p>"}},"link_list_MDY3pT":{"type":"link_list","settings":{"heading":"OUR COMPANY","menu":"homepage-menu"}},"link_list_BWpCfX":{"type":"link_list","settings":{"heading":"CUSTOMER SERVICE","menu":"policies"}},"brand_information_kwDqp4":{"type":"brand_information","settings":{"show_social":true}}},"block_order":["custom_html_9JDTrW","link_list_MDY3pT","link_list_BWpCfX","brand_information_kwDqp4"],"disabled":true,"settings":{"color_scheme":"scheme-1","newsletter_enable":false,"newsletter_heading":"Subscribe to our emails","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":false,"enable_language_selector":true,"payment_enable":true,"show_policy":false,"margin_top":0,"padding_top":36,"padding_bottom":36}},"footer2_MkfM3R":{"type":"footer2","disabled":true,"name":"Footer 2 ","settings":{"about_text":"","phone":"","email":"","company_menu":"","service_menu":"","show_default_floating_decor":true}}},"order":["footer2_aBiNGr","footer","footer2_MkfM3R"]}
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer2_aBiNGr": {
+      "type": "footer2",
+      "blocks": {
+        "floating_image_QXz3bH": {
+          "type": "floating_image",
+          "settings": {
+            "image": "shopify://shop_images/rose-gold-1.webp",
+            "alt_text": "",
+            "size": 40,
+            "opacity": 65,
+            "top_position": 70,
+            "left_position": 85,
+            "animation_path": "A",
+            "spin": true,
+            "duration": 24,
+            "delay": 0
+          }
+        },
+        "floating_image_M3FdHN": {
+          "type": "floating_image",
+          "settings": {
+            "image": "shopify://shop_images/yellow-gold-1.webp",
+            "alt_text": "",
+            "size": 40,
+            "opacity": 75,
+            "top_position": 20,
+            "left_position": 20,
+            "animation_path": "A",
+            "spin": true,
+            "duration": 24,
+            "delay": 0
+          }
+        },
+        "floating_image_acJ3DX": {
+          "type": "floating_image",
+          "settings": {
+            "image": "shopify://shop_images/Opulent_Classic_Pear_Trio_Ring_-_18KT_White_Gold___Pear.jpg",
+            "alt_text": "",
+            "size": 40,
+            "opacity": 50,
+            "top_position": 20,
+            "left_position": 20,
+            "animation_path": "A",
+            "spin": false,
+            "duration": 24,
+            "delay": 0
+          }
+        },
+        "floating_image_dRWCjT": {
+          "type": "floating_image",
+          "settings": {
+            "image": "shopify://shop_images/download_b978e68d-c086-4230-9300-148240f86382.webp",
+            "alt_text": "",
+            "size": 40,
+            "opacity": 50,
+            "top_position": 10,
+            "left_position": 20,
+            "animation_path": "A",
+            "spin": false,
+            "duration": 13,
+            "delay": 0
+          }
+        },
+        "floating_image_brD4Yd": {
+          "type": "floating_image",
+          "settings": {
+            "image": "shopify://shop_images/c4689001e6cf4863ae0d3a94f0123600.webp",
+            "alt_text": "",
+            "size": 28,
+            "opacity": 50,
+            "top_position": 52,
+            "left_position": 20,
+            "animation_path": "A",
+            "spin": false,
+            "duration": 24,
+            "delay": 3
+          }
+        }
+      },
+      "block_order": [
+        "floating_image_QXz3bH",
+        "floating_image_M3FdHN",
+        "floating_image_acJ3DX",
+        "floating_image_dRWCjT",
+        "floating_image_brD4Yd"
+      ],
+      "name": "Custom Avone Footer",
+      "settings": {
+        "footer_logo": "shopify://shop_images/IMG-20260715-WA0017_1_80d681c2-ccd6-4bef-b166-010bd947969f.png",
+        "about_text": "<h4 style=\"font-weight:600; margin-bottom:10px;\">HB Presitge</h4>\n\n<p style=\"text-align:justify;font-size:13px; line-height:1.6;\">\nHB Presitge started with a passion for jewellery and a dream to make it accessible to all. Today, we create pieces that celebrate individuality, blending Indian heritage with modern elegance, designed to dazzle every moment.\n</p>",
+        "phone": "+91 9723328111",
+        "email": "hbprestigejewels@gmail.com",
+        "company_menu": "homepage-menu",
+        "service_menu": "policies",
+        "payment_icons": "shopify://shop_images/payment_group.svg",
+        "show_default_floating_decor": false
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "custom_html_9JDTrW": {
+          "type": "custom_html",
+          "settings": {
+            "heading": "HB Presitge Jewels",
+            "custom_html": "<p style=\"text-align:justify;\">\nHB Presitge started with a passion for jewellery and a dream to make it accessible to all. Today, we create pieces that celebrate individuality, blending Indian heritage with modern elegance, designed to dazzle every moment.\n</p>"
+          }
+        },
+        "link_list_MDY3pT": {
+          "type": "link_list",
+          "settings": {
+            "heading": "OUR COMPANY",
+            "menu": "homepage-menu"
+          }
+        },
+        "link_list_BWpCfX": {
+          "type": "link_list",
+          "settings": {
+            "heading": "CUSTOMER SERVICE",
+            "menu": "policies"
+          }
+        },
+        "brand_information_kwDqp4": {
+          "type": "brand_information",
+          "settings": {
+            "show_social": true
+          }
+        }
+      },
+      "block_order": [
+        "custom_html_9JDTrW",
+        "link_list_MDY3pT",
+        "link_list_BWpCfX",
+        "brand_information_kwDqp4"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "newsletter_enable": false,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "footer2_MkfM3R": {
+      "type": "footer2",
+      "disabled": true,
+      "name": "Footer 2 ",
+      "settings": {
+        "about_text": "",
+        "phone": "",
+        "email": "",
+        "company_menu": "",
+        "service_menu": "",
+        "show_default_floating_decor": true
+      }
+    }
+  },
+  "order": [
+    "footer2_aBiNGr",
+    "footer",
+    "footer2_MkfM3R"
+  ]
+}

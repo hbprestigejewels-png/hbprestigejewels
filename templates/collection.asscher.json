@@ -1,1 +1,137 @@
-{"sections":{"collection_carousel_rzV8VE":{"type":"collection-carousel","blocks":{"collection_rghwWV":{"type":"collection","settings":{"collection":"gold-asscher-cut-bracelets","collection_image":"shopify:\/\/shop_images\/Bezel_Treated_Diamond_Asscher_Cut_White_Tennis_Bracelet_In_925_Silver.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Bezel_Treated_Diamond_Asscher_Cut_White_Tennis_Bracelet_In_925_Silver.jpg","collection_name":"Bracelets","button_text":"SHOP NOW","url":""}},"collection_HCmFVp":{"type":"collection","settings":{"collection":"asscher-necklaces","collection_image":"shopify:\/\/shop_images\/1_Carat_Asscher_Cut_Lab_Grown_Diamond_Necklace_18k_White_Gold_IGI_Certified.jpg","collection_image_mobile":"shopify:\/\/shop_images\/1_Carat_Asscher_Cut_Lab_Grown_Diamond_Necklace_18k_White_Gold_IGI_Certified.jpg","collection_name":"Necklaces","button_text":"SHOP NOW","url":""}},"collection_kmxGU7":{"type":"collection","settings":{"collection":"gold-asscher-cut-earrings","collection_image":"shopify:\/\/shop_images\/2ct_D_vvs1_Asscher_Cut_Moissanite_Solitaire_Stud_Earrings_14k_White_Gold_Plated.jpg","collection_image_mobile":"shopify:\/\/shop_images\/2ct_D_vvs1_Asscher_Cut_Moissanite_Solitaire_Stud_Earrings_14k_White_Gold_Plated.jpg","collection_name":"Earrings","button_text":"SHOP NOW","url":""}},"collection_yqWX8b":{"type":"collection","settings":{"collection":"gold-asscher-cut-engagement-rings","collection_image":"shopify:\/\/shop_images\/The_History_of_the_Asscher_Cut_Diamond_Ring__From_Art_Deco_Glamour_to.jpg","collection_image_mobile":"shopify:\/\/shop_images\/The_History_of_the_Asscher_Cut_Diamond_Ring__From_Art_Deco_Glamour_to.jpg","collection_name":"Rings","button_text":"SHOP NOW","url":""}},"collection_ycgriw":{"type":"collection","settings":{"collection":"gold-asscher-cut-wedding-band","collection_image":"shopify:\/\/shop_images\/Five_Stones_Asscher_Cut_Lab_Grown_Diamond_Anniversary_Ring.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Five_Stones_Asscher_Cut_Lab_Grown_Diamond_Anniversary_Ring.jpg","collection_name":"Specials","button_text":"SHOP NOW","url":""}}},"block_order":["collection_rghwWV","collection_HCmFVp","collection_kmxGU7","collection_yqWX8b","collection_ycgriw"],"name":"Collection Carousel","settings":{"title":"Asscher","subheading":"","heading_size":"h2","image_aspect_ratio":"1\/1","card_radius":0,"gap":4,"text_alignment":"center","title_color":"#000000","button_bg_color":"#ffffff","button_text_color":"#ffffff","button_hover_bg_color":"#333333","button_radius":4,"show_progress":false,"progress_height":3,"progress_bg_color":"#00000026","progress_fill_color":"#000000","progress_radius":2,"columns_desktop":5,"columns_mobile":2,"full_width":false,"autoplay":false,"autoplay_speed":5,"loop":false,"show_arrows":false,"show_arrows_mobile":false,"show_mobile_dots":true,"color_scheme":"","padding_top":36,"padding_bottom":36}},"banner":{"type":"main-collection-banner","disabled":true,"settings":{"show_collection_description":true,"show_collection_image":false,"color_scheme":"scheme-1"}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":16,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"padding_top":36,"padding_bottom":36}}},"order":["collection_carousel_rzV8VE","banner","product-grid"]}
+{
+  "sections": {
+    "collection_carousel_rzV8VE": {
+      "type": "collection-carousel",
+      "blocks": {
+        "collection_rghwWV": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-asscher-cut-bracelets",
+            "collection_image": "shopify://shop_images/Bezel_Treated_Diamond_Asscher_Cut_White_Tennis_Bracelet_In_925_Silver.jpg",
+            "collection_image_mobile": "shopify://shop_images/Bezel_Treated_Diamond_Asscher_Cut_White_Tennis_Bracelet_In_925_Silver.jpg",
+            "collection_name": "Bracelets",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_HCmFVp": {
+          "type": "collection",
+          "settings": {
+            "collection": "asscher-necklaces",
+            "collection_image": "shopify://shop_images/1_Carat_Asscher_Cut_Lab_Grown_Diamond_Necklace_18k_White_Gold_IGI_Certified.jpg",
+            "collection_image_mobile": "shopify://shop_images/1_Carat_Asscher_Cut_Lab_Grown_Diamond_Necklace_18k_White_Gold_IGI_Certified.jpg",
+            "collection_name": "Necklaces",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_kmxGU7": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-asscher-cut-earrings",
+            "collection_image": "shopify://shop_images/2ct_D_vvs1_Asscher_Cut_Moissanite_Solitaire_Stud_Earrings_14k_White_Gold_Plated.jpg",
+            "collection_image_mobile": "shopify://shop_images/2ct_D_vvs1_Asscher_Cut_Moissanite_Solitaire_Stud_Earrings_14k_White_Gold_Plated.jpg",
+            "collection_name": "Earrings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_yqWX8b": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-asscher-cut-engagement-rings",
+            "collection_image": "shopify://shop_images/The_History_of_the_Asscher_Cut_Diamond_Ring__From_Art_Deco_Glamour_to.jpg",
+            "collection_image_mobile": "shopify://shop_images/The_History_of_the_Asscher_Cut_Diamond_Ring__From_Art_Deco_Glamour_to.jpg",
+            "collection_name": "Rings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_ycgriw": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-asscher-cut-wedding-band",
+            "collection_image": "shopify://shop_images/Five_Stones_Asscher_Cut_Lab_Grown_Diamond_Anniversary_Ring.jpg",
+            "collection_image_mobile": "shopify://shop_images/Five_Stones_Asscher_Cut_Lab_Grown_Diamond_Anniversary_Ring.jpg",
+            "collection_name": "Specials",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_rghwWV",
+        "collection_HCmFVp",
+        "collection_kmxGU7",
+        "collection_yqWX8b",
+        "collection_ycgriw"
+      ],
+      "name": "Collection Carousel",
+      "settings": {
+        "title": "Asscher",
+        "subheading": "",
+        "heading_size": "h2",
+        "image_aspect_ratio": "1/1",
+        "card_radius": 0,
+        "gap": 4,
+        "text_alignment": "center",
+        "title_color": "#000000",
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#333333",
+        "button_radius": 4,
+        "show_progress": false,
+        "progress_height": 3,
+        "progress_bg_color": "#00000026",
+        "progress_fill_color": "#000000",
+        "progress_radius": 2,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "full_width": false,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "loop": false,
+        "show_arrows": false,
+        "show_arrows_mobile": false,
+        "show_mobile_dots": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "collection_carousel_rzV8VE",
+    "banner",
+    "product-grid"
+  ]
+}

@@ -1,1 +1,137 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"show_collection_description":true,"show_collection_image":false,"color_scheme":"scheme-1"}},"collection_carousel_CWzVze":{"type":"collection-carousel","blocks":{"collection_JphbHq":{"type":"collection","settings":{"collection":"halo-bracelet","collection_image":"shopify:\/\/shop_images\/Aura_round_brilliant_diamond_bracelet.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Aura_round_brilliant_diamond_bracelet.jpg","collection_name":"Bracelet","button_text":"SHOP NOW","url":""}},"collection_KnkU83":{"type":"collection","settings":{"collection":"halo-necklace","collection_image":"shopify:\/\/shop_images\/SAVVY_CIE_JEWELS_Brilliant_Cubic_Zirconia_Halo_Pendant_Necklace_in_White_at_Nordstrom_Rack.jpg","collection_image_mobile":"shopify:\/\/shop_images\/SAVVY_CIE_JEWELS_Brilliant_Cubic_Zirconia_Halo_Pendant_Necklace_in_White_at_Nordstrom_Rack.jpg","collection_name":"Necklace","button_text":"SHOP NOW","url":""}},"collection_q4KtXA":{"type":"collection","settings":{"collection":"halo-earrings","collection_image":"shopify:\/\/shop_images\/Sparkling_Halo_Drop_Earrings___Silver_Crystal_Jewelry_1.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Sparkling_Halo_Drop_Earrings___Silver_Crystal_Jewelry.jpg","collection_name":"Earrings","button_text":"SHOP NOW","url":""}},"collection_gzGQCy":{"type":"collection","settings":{"collection":"gold-halo-rings","collection_image":"shopify:\/\/shop_images\/2_10_CT_Oval_Cut_Halo_Pave_Setting_Moissanite_Engagement_Ring_-_14K_Yellow_Gold.jpg","collection_image_mobile":"shopify:\/\/shop_images\/2_10_CT_Oval_Cut_Halo_Pave_Setting_Moissanite_Engagement_Ring_-_14K_Yellow_Gold_8899d94b-e754-4cab-84a9-3fc9a1e02498.jpg","collection_name":"Rings","button_text":"SHOP NOW","url":""}},"collection_GngrFt":{"type":"collection","settings":{"collection":"halo-special","collection_image":"shopify:\/\/shop_images\/The_Lily_Gold_Halo_Necklace_-_Modern_Gents.jpg","collection_image_mobile":"shopify:\/\/shop_images\/The_Lily_Gold_Halo_Necklace_-_Modern_Gents.jpg","collection_name":"Special","button_text":"SHOP NOW","url":""}}},"block_order":["collection_JphbHq","collection_KnkU83","collection_q4KtXA","collection_gzGQCy","collection_GngrFt"],"name":"Collection Carousel","settings":{"title":"Halo","subheading":"","heading_size":"h2","image_aspect_ratio":"1\/1","card_radius":0,"gap":4,"text_alignment":"center","title_color":"#000000","button_bg_color":"#ffffff","button_text_color":"#ffffff","button_hover_bg_color":"#333333","button_radius":4,"show_progress":false,"progress_height":3,"progress_bg_color":"#00000026","progress_fill_color":"#000000","progress_radius":2,"columns_desktop":5,"columns_mobile":2,"full_width":false,"autoplay":false,"autoplay_speed":5,"loop":false,"show_arrows":false,"show_arrows_mobile":false,"show_mobile_dots":true,"color_scheme":"","padding_top":36,"padding_bottom":36}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":16,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"padding_top":36,"padding_bottom":36}}},"order":["banner","collection_carousel_CWzVze","product-grid"]}
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "collection_carousel_CWzVze": {
+      "type": "collection-carousel",
+      "blocks": {
+        "collection_JphbHq": {
+          "type": "collection",
+          "settings": {
+            "collection": "halo-bracelet",
+            "collection_image": "shopify://shop_images/Aura_round_brilliant_diamond_bracelet.jpg",
+            "collection_image_mobile": "shopify://shop_images/Aura_round_brilliant_diamond_bracelet.jpg",
+            "collection_name": "Bracelet",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_KnkU83": {
+          "type": "collection",
+          "settings": {
+            "collection": "halo-necklace",
+            "collection_image": "shopify://shop_images/SAVVY_CIE_JEWELS_Brilliant_Cubic_Zirconia_Halo_Pendant_Necklace_in_White_at_Nordstrom_Rack.jpg",
+            "collection_image_mobile": "shopify://shop_images/SAVVY_CIE_JEWELS_Brilliant_Cubic_Zirconia_Halo_Pendant_Necklace_in_White_at_Nordstrom_Rack.jpg",
+            "collection_name": "Necklace",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_q4KtXA": {
+          "type": "collection",
+          "settings": {
+            "collection": "halo-earrings",
+            "collection_image": "shopify://shop_images/Sparkling_Halo_Drop_Earrings___Silver_Crystal_Jewelry_1.jpg",
+            "collection_image_mobile": "shopify://shop_images/Sparkling_Halo_Drop_Earrings___Silver_Crystal_Jewelry.jpg",
+            "collection_name": "Earrings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_gzGQCy": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-halo-rings",
+            "collection_image": "shopify://shop_images/2_10_CT_Oval_Cut_Halo_Pave_Setting_Moissanite_Engagement_Ring_-_14K_Yellow_Gold.jpg",
+            "collection_image_mobile": "shopify://shop_images/2_10_CT_Oval_Cut_Halo_Pave_Setting_Moissanite_Engagement_Ring_-_14K_Yellow_Gold_8899d94b-e754-4cab-84a9-3fc9a1e02498.jpg",
+            "collection_name": "Rings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_GngrFt": {
+          "type": "collection",
+          "settings": {
+            "collection": "halo-special",
+            "collection_image": "shopify://shop_images/The_Lily_Gold_Halo_Necklace_-_Modern_Gents.jpg",
+            "collection_image_mobile": "shopify://shop_images/The_Lily_Gold_Halo_Necklace_-_Modern_Gents.jpg",
+            "collection_name": "Special",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_JphbHq",
+        "collection_KnkU83",
+        "collection_q4KtXA",
+        "collection_gzGQCy",
+        "collection_GngrFt"
+      ],
+      "name": "Collection Carousel",
+      "settings": {
+        "title": "Halo",
+        "subheading": "",
+        "heading_size": "h2",
+        "image_aspect_ratio": "1/1",
+        "card_radius": 0,
+        "gap": 4,
+        "text_alignment": "center",
+        "title_color": "#000000",
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#333333",
+        "button_radius": 4,
+        "show_progress": false,
+        "progress_height": 3,
+        "progress_bg_color": "#00000026",
+        "progress_fill_color": "#000000",
+        "progress_radius": 2,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "full_width": false,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "loop": false,
+        "show_arrows": false,
+        "show_arrows_mobile": false,
+        "show_mobile_dots": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "collection_carousel_CWzVze",
+    "product-grid"
+  ]
+}

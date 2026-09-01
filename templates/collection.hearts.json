@@ -1,1 +1,137 @@
-{"sections":{"banner":{"type":"main-collection-banner","disabled":true,"settings":{"show_collection_description":true,"show_collection_image":false,"color_scheme":"scheme-1"}},"collection_carousel_rHpmBL":{"type":"collection-carousel","blocks":{"collection_jCmgjg":{"type":"collection","settings":{"collection":"gold-heart-cut-bracelets","collection_image":"shopify:\/\/shop_images\/Moissanite_and_Lab_Grown_Diamond_Tennis_Bracelet_for_Women_and_Men_Certified_Diamond_Tennis_Bracelet_Solid_Gold_Heart_Diamond_Bracelet.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Moissanite_and_Lab_Grown_Diamond_Tennis_Bracelet_for_Women_and_Men_Certified_Diamond_Tennis_Bracelet_Solid_Gold_Heart_Diamond_Bracelet.jpg","collection_name":"Bracelets","button_text":"SHOP NOW","url":""}},"collection_mUHTAJ":{"type":"collection","settings":{"collection":"heart-necklaces","collection_image":"shopify:\/\/shop_images\/1_CT_Lab_Grown_Heart_Solitaire_Diamond_Bezel_Necklace_-_14K_Gold___0_25_CT.jpg","collection_image_mobile":"shopify:\/\/shop_images\/1_CT_Lab_Grown_Heart_Solitaire_Diamond_Bezel_Necklace_-_14K_Gold___0_25_CT.jpg","collection_name":"Necklaces","button_text":"SHOP NOW","url":""}},"collection_t6yEVn":{"type":"collection","settings":{"collection":"gold-hearts-cut-earrings","collection_image":"shopify:\/\/shop_images\/3ct_Heart_Cut_Lab_Created_3_Prong_Solitaire_Stud_Earrings_14k_Yellow_Gold_Plated.jpg","collection_image_mobile":"shopify:\/\/shop_images\/3ct_Heart_Cut_Lab_Created_3_Prong_Solitaire_Stud_Earrings_14k_Yellow_Gold_Plated.jpg","collection_name":"Earrings","button_text":"SHOP NOW","url":""}},"collection_8kcgMi":{"type":"collection","settings":{"collection":"gold-heart-cut-engagement-rings","collection_image":"shopify:\/\/shop_images\/Heart_Cut_Lab_Diamond_Pave_Ring.jpg","collection_image_mobile":"shopify:\/\/shop_images\/Heart_Cut_Lab_Diamond_Pave_Ring.jpg","collection_name":"Rings","button_text":"SHOP NOW","url":""}},"collection_t6HCc6":{"type":"collection","settings":{"collection":"heart-special","collection_image":"shopify:\/\/shop_images\/3ct_Heart_Cut_Lab_Created_Diamond_Women_s_Heart_Pendant_14k_White_Gold_Finish.jpg","collection_image_mobile":"shopify:\/\/shop_images\/3ct_Heart_Cut_Lab_Created_Diamond_Women_s_Heart_Pendant_14k_White_Gold_Finish.jpg","collection_name":"Specials","button_text":"SHOP NOW","url":""}}},"block_order":["collection_jCmgjg","collection_mUHTAJ","collection_t6yEVn","collection_8kcgMi","collection_t6HCc6"],"name":"Collection Carousel","settings":{"title":"Heart","subheading":"","heading_size":"h2","image_aspect_ratio":"1\/1","card_radius":0,"gap":4,"text_alignment":"center","title_color":"#000000","button_bg_color":"#ffffff","button_text_color":"#ffffff","button_hover_bg_color":"#333333","button_radius":4,"show_progress":false,"progress_height":3,"progress_bg_color":"#00000026","progress_fill_color":"#000000","progress_radius":2,"columns_desktop":5,"columns_mobile":2,"full_width":false,"autoplay":false,"autoplay_speed":5,"loop":false,"show_arrows":false,"show_arrows_mobile":false,"show_mobile_dots":true,"color_scheme":"","padding_top":36,"padding_bottom":36}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":16,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"padding_top":36,"padding_bottom":36}}},"order":["banner","collection_carousel_rHpmBL","product-grid"]}
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "collection_carousel_rHpmBL": {
+      "type": "collection-carousel",
+      "blocks": {
+        "collection_jCmgjg": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-heart-cut-bracelets",
+            "collection_image": "shopify://shop_images/Moissanite_and_Lab_Grown_Diamond_Tennis_Bracelet_for_Women_and_Men_Certified_Diamond_Tennis_Bracelet_Solid_Gold_Heart_Diamond_Bracelet.jpg",
+            "collection_image_mobile": "shopify://shop_images/Moissanite_and_Lab_Grown_Diamond_Tennis_Bracelet_for_Women_and_Men_Certified_Diamond_Tennis_Bracelet_Solid_Gold_Heart_Diamond_Bracelet.jpg",
+            "collection_name": "Bracelets",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_mUHTAJ": {
+          "type": "collection",
+          "settings": {
+            "collection": "heart-necklaces",
+            "collection_image": "shopify://shop_images/1_CT_Lab_Grown_Heart_Solitaire_Diamond_Bezel_Necklace_-_14K_Gold___0_25_CT.jpg",
+            "collection_image_mobile": "shopify://shop_images/1_CT_Lab_Grown_Heart_Solitaire_Diamond_Bezel_Necklace_-_14K_Gold___0_25_CT.jpg",
+            "collection_name": "Necklaces",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_t6yEVn": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-hearts-cut-earrings",
+            "collection_image": "shopify://shop_images/3ct_Heart_Cut_Lab_Created_3_Prong_Solitaire_Stud_Earrings_14k_Yellow_Gold_Plated.jpg",
+            "collection_image_mobile": "shopify://shop_images/3ct_Heart_Cut_Lab_Created_3_Prong_Solitaire_Stud_Earrings_14k_Yellow_Gold_Plated.jpg",
+            "collection_name": "Earrings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_8kcgMi": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-heart-cut-engagement-rings",
+            "collection_image": "shopify://shop_images/Heart_Cut_Lab_Diamond_Pave_Ring.jpg",
+            "collection_image_mobile": "shopify://shop_images/Heart_Cut_Lab_Diamond_Pave_Ring.jpg",
+            "collection_name": "Rings",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        },
+        "collection_t6HCc6": {
+          "type": "collection",
+          "settings": {
+            "collection": "heart-special",
+            "collection_image": "shopify://shop_images/3ct_Heart_Cut_Lab_Created_Diamond_Women_s_Heart_Pendant_14k_White_Gold_Finish.jpg",
+            "collection_image_mobile": "shopify://shop_images/3ct_Heart_Cut_Lab_Created_Diamond_Women_s_Heart_Pendant_14k_White_Gold_Finish.jpg",
+            "collection_name": "Specials",
+            "button_text": "SHOP NOW",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_jCmgjg",
+        "collection_mUHTAJ",
+        "collection_t6yEVn",
+        "collection_8kcgMi",
+        "collection_t6HCc6"
+      ],
+      "name": "Collection Carousel",
+      "settings": {
+        "title": "Heart",
+        "subheading": "",
+        "heading_size": "h2",
+        "image_aspect_ratio": "1/1",
+        "card_radius": 0,
+        "gap": 4,
+        "text_alignment": "center",
+        "title_color": "#000000",
+        "button_bg_color": "#ffffff",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#333333",
+        "button_radius": 4,
+        "show_progress": false,
+        "progress_height": 3,
+        "progress_bg_color": "#00000026",
+        "progress_fill_color": "#000000",
+        "progress_radius": 2,
+        "columns_desktop": 5,
+        "columns_mobile": 2,
+        "full_width": false,
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "loop": false,
+        "show_arrows": false,
+        "show_arrows_mobile": false,
+        "show_mobile_dots": true,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "collection_carousel_rHpmBL",
+    "product-grid"
+  ]
+}
