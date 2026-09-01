@@ -11,6 +11,9 @@
   <div id="edu-appraisals" style="display: none;">
     {% render 'content-appraisals' %}
   </div>
+  <div id="edu-about-us" style="display: none;">
+    {% render 'content-about-page' %}
+  </div>
 
   <div id="edu-default-404">
     <style type="text/css">
@@ -59,6 +62,9 @@
       } else if (path.includes('appraisal') || path.includes('valuation')) {
         matchedId = 'edu-appraisals';
         matchedTitle = 'Valuations & Appraisals – HBPRESTIGE JEWELS';
+      } else if (path.includes('about')) {
+        matchedId = 'edu-about-us';
+        matchedTitle = 'About Us – HBPRESTIGE JEWELS';
       }
 
       if (matchedId) {
