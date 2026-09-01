@@ -142,6 +142,65 @@
     }
   }
 
+  .top-deal-banner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
+
+  .top-deal-title {
+    font-weight: 700;
+    color: #ffd700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .top-deal-divider {
+    opacity: 0.4;
+  }
+
+  .top-deal-timer-label {
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  .top-deal-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .top-deal-timer .timer-segment {
+    background: rgba(255, 255, 255, 0.18);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-family: monospace, sans-serif;
+    font-size: 11.5px;
+    letter-spacing: 0.5px;
+  }
+
+  .top-deal-timer .timer-segment b {
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  @media(max-width: 768px){
+    .top-deal-banner {
+      font-size: 11px;
+      gap: 4px;
+    }
+    .top-deal-timer .timer-segment {
+      padding: 1px 4px;
+      font-size: 10.5px;
+    }
+  }
+
   /* Prevent glitch on iOS devices */
   @supports (-webkit-touch-callout: none) {
     .top-header-wrapper {
@@ -168,9 +227,18 @@
       {% endif %}
     </div>
 
-    <!-- Center: Announcement text -->
+    <!-- Center: 30% Flat Discount with 1-Day Countdown Timer -->
     <div class="announcement-text">
-      {{ section.settings.shipping_text }}
+      <div class="top-deal-banner">
+        <span class="top-deal-title">🔥 FLAT 30% DISCOUNT</span>
+        <span class="top-deal-divider">|</span>
+        <span class="top-deal-timer-label">Ends in:</span>
+        <span class="top-deal-timer" id="topHeaderDealTimer">
+          <span class="timer-segment"><b id="topTimerH">23</b>h</span> :
+          <span class="timer-segment"><b id="topTimerM">59</b>m</span> :
+          <span class="timer-segment"><b id="topTimerS">59</b>s</span>
+        </span>
+      </div>
     </div>
 
     <!-- Right side: Social icons -->
@@ -347,6 +415,57 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    function initTopHeaderTimer() {
+      var STORAGE_KEY = 'hb_top_deal_timer_end_v1';
+      var ONE_DAY_MS = 24 * 60 * 60 * 1000;
+      var now = Date.now();
+      var storedTarget = localStorage.getItem(STORAGE_KEY);
+      var targetTime;
+
+      if (!storedTarget || now >= parseInt(storedTarget, 10)) {
+        targetTime = now + ONE_DAY_MS;
+        localStorage.setItem(STORAGE_KEY, targetTime.toString());
+      } else {
+        targetTime = parseInt(storedTarget, 10);
+      }
+
+      function updateTimer() {
+        var current = Date.now();
+        var diff = targetTime - current;
+
+        if (diff <= 0) {
+          targetTime = Date.now() + ONE_DAY_MS;
+          localStorage.setItem(STORAGE_KEY, targetTime.toString());
+          diff = ONE_DAY_MS;
+        }
+
+        var hours = Math.floor(diff / (1000 * 60 * 60));
+        var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        var hEl = document.getElementById('topTimerH');
+        var mEl = document.getElementById('topTimerM');
+        var sEl = document.getElementById('topTimerS');
+
+        if (hEl) hEl.textContent = hours < 10 ? '0' + hours : hours;
+        if (mEl) mEl.textContent = minutes < 10 ? '0' + minutes : minutes;
+        if (sEl) sEl.textContent = seconds < 10 ? '0' + seconds : seconds;
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTopHeaderTimer);
+    } else {
+      initTopHeaderTimer();
+    }
+  })();
+</script>
 
 {% schema %}
 {
