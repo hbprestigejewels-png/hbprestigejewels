@@ -1,1 +1,376 @@
-{"sections":{"main":{"type":"main-product","blocks":{"vendor":{"type":"text","disabled":true,"settings":{"text":"{{ product.vendor }}","text_style":"uppercase"}},"title":{"type":"title","settings":{}},"price":{"type":"price","settings":{}},"custom_liquid_mmebJz":{"type":"custom_liquid","settings":{"custom_liquid":"<div class=\"offer-wrapper\">\n  \n  <!-- Heading -->\n  <div class=\"offer-title\">\n    Exclusive Offer: Flat 5% Off*\n  <\/div>\n\n  <!-- Offer Box -->\n  <div class=\"offer-box\">\n    <span class=\"offer-icon\">%<\/span>\n    <span class=\"offer-text\">\n      Use code <strong>CELEBRATE<\/strong> for extra 5% off*\n    <\/span>\n  <\/div>\n\n<\/div>\n\n<style>\n.offer-wrapper {\n  margin: 15px 0;\n  font-family: \"Poppins\", Arial, sans-serif;\n}\n\n\/* Heading *\/\n.offer-title {\n  color: #2e7d32;\nfont-family: Poppins, \"Poppins Fallback\", Arial, Tahoma, sans-serif;\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 24px;\n}\n\n\/* Box *\/\n.offer-box {\n  background: #efe5d6;\n  padding: 12px 15px;\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  border-radius:20px !important;\n}\n\n\/* Icon *\/\n.offer-icon {\n  background: #000;\n  color: #fff;\n  font-size: 12px;\n  font-weight: bold;\n  width: 22px;\n  height: 22px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 50%;\n}\n\n\/* Text *\/\n.offer-text {\n  font-family: Poppins, \"Poppins Fallback\", Arial, Tahoma, sans-serif;\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 24px;\n  color: #000;\n}\n<\/style>"}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"dropdown","swatch_shape":"circle"}},"quantity_selector":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":true,"show_gift_card_recipient":true}},"description":{"type":"description","disabled":true,"settings":{}},"share":{"type":"share","disabled":true,"settings":{"share_label":"Share"}},"custom_liquid_Gggjee":{"type":"custom_liquid","disabled":true,"settings":{"custom_liquid":"<div class=\"custom-accordion\">\n\n  <!-- PRODUCT DETAILS (DYNAMIC) -->\n  <div class=\"accordion-item\">\n    <div class=\"accordion-header\">\n      Product Details\n      <span class=\"icon\">+<\/span>\n    <\/div>\n    <div class=\"accordion-content\">\n      {{ product.description }}\n    <\/div>\n  <\/div>\n\n  <!-- MANUFACTURER -->\n  <div class=\"accordion-item\">\n    <div class=\"accordion-header\">\n      Manufacturer & Origin\n      <span class=\"icon\">+<\/span>\n    <\/div>\n    <div class=\"accordion-content\">\n      <p><strong>Manufacturer:<\/strong> HB Prestige<\/p>\n      <p>Address: Your Address Here<\/p>\n      <p><strong>Country of Origin:<\/strong> India<\/p>\n    <\/div>\n  <\/div>\n\n<\/div>\n\n<style>\n.custom-accordion {\n  border: 1px solid #e5e5e5;\n  border-radius: 6px;\n  overflow: hidden;\n  font-family: \"Poppins\", Arial, sans-serif;\n}\n\n\/* ITEM *\/\n.accordion-item {\n  border-bottom: 1px solid #e5e5e5;\n}\n\n.accordion-item:last-child {\n  border-bottom: none;\n}\n\n\/* HEADER *\/\n.accordion-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 15px;\n  cursor: pointer;\n  background: #f7f7f7;\n  font-size: 15px;\n  font-weight: 500;\n}\n\n\/* ICON *\/\n.accordion-header .icon {\n  font-size: 18px;\n  transition: transform 0.3s ease;\n}\n\n\/* CONTENT *\/\n.accordion-content {\n  max-height: 0;\n  overflow: hidden;\n  transition: all 0.3s ease;\n  background: #fff;\n  padding: 0 15px;\n}\n\n\/* IMPORTANT: for rich text *\/\n.accordion-content * {\n  font-size: 14px;\n  color: #333;\n}\n\n\/* ACTIVE *\/\n.accordion-item.active .accordion-content {\n  max-height: 5000px;\n  padding: 15px;\n}\n\n.accordion-item.active .icon {\n  transform: rotate(45deg);\n}\n\n\/* MOBILE *\/\n@media (max-width: 768px) {\n  .accordion-header {\n    font-size: 14px;\n    padding: 12px;\n  }\n}\n<\/style>\n\n<script>\ndocument.querySelectorAll('.accordion-header').forEach(header => {\n  header.addEventListener('click', () => {\n    const item = header.parentElement;\n\n    \/\/ close others\n    document.querySelectorAll('.accordion-item').forEach(i => {\n      if (i !== item) i.classList.remove('active');\n    });\n\n    item.classList.toggle('active');\n  });\n});\n<\/script>"}},"custom_liquid_Y4GCrz":{"type":"custom_liquid","disabled":true,"settings":{"custom_liquid":"<div class=\"custom-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"accordion-item active\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Product Details<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner rte\">\n        {{ product.description }}\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Manufacturer -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Manufacturer & Origin<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p><strong>Manufacturer:<\/strong> HB Prestige<\/p>\n        <p><strong>Address:<\/strong> Your Company Address<\/p>\n        <p><strong>Country of Origin:<\/strong> India<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Shipping -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Shipping & Returns<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.<\/li>\n          <li>Dispatch within 1–2 business days.<\/li>\n          <li>Easy Returns within 7 Days.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Wash Care -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Wash Care<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Dry Clean Recommended.<\/li>\n          <li>Do Not Bleach.<\/li>\n          <li>Iron on Low Heat.<\/li>\n          <li>Store in a Cool & Dry Place.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Customer Support -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Customer Support<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p>Email : support@example.com<\/p>\n        <p>Phone : +91 97171 00683<\/p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n<\/div>\n\n<style>\n.custom-accordion{\n    width:100%;\n    border:1px solid #e5e5e5;\n    border-radius:8px;\n    overflow:hidden;\n    background:#fff;\n    margin:30px 0;\n}\n\n.accordion-item+.accordion-item{\n    border-top:1px solid #ececec;\n}\n\n.accordion-header{\n    width:100%;\n    display:flex;\n    justify-content:space-between;\n    align-items:center;\n    padding:18px 22px;\n    background:#fafafa;\n    border:none;\n    cursor:pointer;\n    font-size:16px;\n    font-weight:600;\n    color:#222;\n    transition:.3s;\n}\n\n.accordion-header:hover{\n    background:#f4f4f4;\n}\n\n.icon{\n    font-size:24px;\n    transition:.3s;\n    line-height:1;\n}\n\n.accordion-content{\n    max-height:0;\n    overflow:hidden;\n    transition:max-height .35s ease;\n}\n\n.accordion-inner{\n    padding:0 22px;\n}\n\n.accordion-item.active .accordion-content{\n    max-height:3000px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:20px 22px;\n}\n\n.accordion-item.active .icon{\n    transform:rotate(45deg);\n}\n\n.accordion-inner p{\n    margin:0 0 12px;\n    line-height:1.8;\n}\n\n.accordion-inner ul{\n    margin:0;\n    padding-left:18px;\n}\n\n.accordion-inner li{\n    margin-bottom:8px;\n}\n\n.accordion-inner img{\n    max-width:100%;\n    height:auto;\n}\n\n.accordion-inner table{\n    display:block;\n    overflow:auto;\n    width:100%;\n}\n\n.accordion-inner iframe,\n.accordion-inner video{\n    max-width:100%;\n}\n\n@media(max-width:768px){\n\n.accordion-header{\n    padding:15px;\n    font-size:15px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:15px;\n}\n\n}\n<\/style>\n\n<script>\ndocument.querySelectorAll(\".accordion-header\").forEach(function(header){\n\nheader.addEventListener(\"click\",function(){\n\nconst item=this.parentElement;\n\ndocument.querySelectorAll(\".accordion-item\").forEach(function(acc){\n\nif(acc!==item){\nacc.classList.remove(\"active\");\n}\n\n});\n\nitem.classList.toggle(\"active\");\n\n});\n\n});\n<\/script>"}},"custom_liquid_rgXnie":{"type":"custom_liquid","disabled":true,"settings":{"custom_liquid":"<div class=\"ha-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"ha-item active\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Product Details<\/span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"\/><\/svg>\n      <\/span>\n    <\/button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner rte\">\n        {{ product.description }}\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Manufacturer -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Manufacturer &amp; Origin<\/span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"\/><\/svg>\n      <\/span>\n    <\/button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <p><strong>Manufacturer:<\/strong> HB Prestige<\/p>\n        <p><strong>Address:<\/strong> Your Company Address<\/p>\n        <p><strong>Country of Origin:<\/strong> India<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Shipping -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Shipping &amp; Returns<\/span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"\/><\/svg>\n      <\/span>\n    <\/button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.<\/li>\n          <li>Dispatch within 1–2 business days.<\/li>\n          <li>Easy Returns within 7 Days.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Wash Care -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Wash Care<\/span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"\/><\/svg>\n      <\/span>\n    <\/button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <ul>\n          <li>Dry Clean Recommended.<\/li>\n          <li>Do Not Bleach.<\/li>\n          <li>Iron on Low Heat.<\/li>\n          <li>Store in a Cool &amp; Dry Place.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Customer Support -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Customer Support<\/span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"\/><\/svg>\n      <\/span>\n    <\/button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <p>Email : hbprestigejewels@gmail.com<\/p>\n        <p>Phone : +91 9723328111<\/p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n<\/div>\n\n<style>\n.ha-accordion{\n  --accent: #c9a15a;\n  --text-dark: #1c1c1c;\n  --border: #ebe7e0;\n  width: 100%;\n  max-width: 100%;\n  border-radius: 20px;\n  overflow: hidden;\n  background: #fff;\n  margin: 32px 0;\n  box-shadow: 0 2px 14px rgba(0,0,0,0.05);\n  border: 1px solid black;\n  font-family: inherit;\n}\n\n.ha-item{\n  border-bottom: 1px solid var(--border);\n  position: relative;\n}\n.ha-item:last-child{ border-bottom: none; }\n\n.ha-header{\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 16px;\n  padding: 10px 22px;\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  text-align: left;\n  transition: background .25s ease;\n}\n\n.ha-header:hover{ background: #faf8f4; }\n\n.ha-title{\n  font-size: 16px;\n  font-weight: 600;\n  color: var(--text-dark);\n  letter-spacing: .2px;\n  position: relative;\n  transition: color .25s ease;\n}\n\n.ha-item.active .ha-title{ color: var(--accent); }\n\n.ha-icon{\n  flex-shrink: 0;\n  width: 30px;\n  height: 30px;\n  border-radius: 50%;\n  border: 1.5px solid var(--border);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: all .3s ease;\n}\n\n.ha-icon svg{\n  width: 14px;\n  height: 14px;\n  transition: transform .35s cubic-bezier(.4,0,.2,1);\n}\n.ha-icon svg path{\n  stroke: var(--text-dark);\n  stroke-width: 2;\n  stroke-linecap: round;\n  fill: none;\n}\n\n.ha-item.active .ha-icon{\n  background: var(--accent);\n  border-color: var(--accent);\n}\n.ha-item.active .ha-icon svg path{ stroke: #fff; }\n.ha-item.active .ha-icon svg{ transform: rotate(135deg); }\n\n.ha-content{\n  max-height: 0;\n  overflow: hidden;\n  transition: max-height .4s cubic-bezier(.4,0,.2,1);\n}\n\n.ha-inner{\n  padding: 0 22px;\n}\n\n.ha-item.active .ha-inner{\n  padding: 0 22px 22px;\n}\n\n.ha-inner p{ margin: 0 0 12px; line-height: 1.75; color: #444; }\n.ha-inner ul{ margin: 0; padding-left: 18px; }\n.ha-inner li{ margin-bottom: 8px; line-height: 1.6; color: #444; }\n.ha-inner img{ max-width: 100%; height: auto; border-radius: 6px; }\n.ha-inner iframe, .ha-inner video{ max-width: 100%; border-radius: 6px; }\n\n\/* subtle left accent bar on active item *\/\n.ha-item.active::before{\n  content: \"\";\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  width: 3px;\n  background: var(--accent);\n}\n\n@media (max-width: 768px){\n  .ha-accordion{ margin: 22px 0; border-radius: 10px; }\n  .ha-header{ padding: 16px 16px; }\n  .ha-title{ font-size: 14.5px; }\n  .ha-icon{ width: 26px; height: 26px; }\n  .ha-icon svg{ width: 12px; height: 12px; }\n  .ha-item.active .ha-inner{ padding: 0 16px 18px; }\n  .ha-inner{ padding: 0 16px; }\n}\n\n\/* ===== TABLE (no scroll, content wraps) ===== *\/\n.ha-inner table{\n  display: table;\n  width: 100%;\n  table-layout: fixed;\n  border-collapse: separate;\n  border-spacing: 0;\n  border-radius: 20px;\n  overflow: hidden;\n}\n\n.ha-inner table th,\n.ha-inner table td{\n  padding: 6px;\n  text-align: left;\n  border-bottom: 1px solid var(--border);\n  border-right: 1px solid var(--border);\n  font-size: 13px;\n  line-height: 1.5;\n  vertical-align: middle;\n  white-space: normal;\n  word-break: break-word;\n  overflow-wrap: break-word;\n}\n\n\/* remove double border on last column\/row *\/\n.ha-inner table th:last-child,\n.ha-inner table td:last-child{\n  border-right: none;\n}\n.ha-inner table tr:last-child td{\n  border-bottom: none;\n}\n\n.ha-inner table th{\n  background: #faf8f4;\n  font-weight: 600;\n  color: var(--text-dark);\n}\n\n.ha-inner table tr:nth-child(even) td{\n  background: #fcfcfb;\n}\n\n@media (max-width: 768px){\n  .ha-inner table{ border-radius: 14px; }\n  .ha-inner table th,\n  .ha-inner table td{\n    padding: 6px;\n    font-size: 12.5px;\n  }\n}\n<\/style>\n\n<script>\n(function () {\n  function initAccordion(root) {\n    const accordion = (root || document).querySelector(\".ha-accordion\");\n    if (!accordion || accordion.dataset.haInit === \"true\") return;\n    accordion.dataset.haInit = \"true\";\n\n    const items = accordion.querySelectorAll(\".ha-item\");\n\n    function setHeight(item, open) {\n      const content = item.querySelector(\".ha-content\");\n      const inner = item.querySelector(\".ha-inner\");\n      if (open) {\n        content.style.maxHeight = inner.scrollHeight + \"px\";\n      } else {\n        content.style.maxHeight = \"0px\";\n      }\n    }\n\n    items.forEach(function (item) {\n      const header = item.querySelector(\".ha-header\");\n\n      \/\/ initial state for the item that's active by default\n      if (item.classList.contains(\"active\")) {\n        requestAnimationFrame(function () { setHeight(item, true); });\n      }\n\n      header.addEventListener(\"click\", function () {\n        const isActive = item.classList.contains(\"active\");\n\n        items.forEach(function (i) {\n          i.classList.remove(\"active\");\n          setHeight(i, false);\n        });\n\n        if (!isActive) {\n          item.classList.add(\"active\");\n          setHeight(item, true);\n        }\n      });\n    });\n\n    \/\/ Recalculate open item's height on resize (content reflow, e.g. font load, image load)\n    window.addEventListener(\"resize\", function () {\n      accordion.querySelectorAll(\".ha-item.active\").forEach(function (item) {\n        setHeight(item, true);\n      });\n    });\n  }\n\n  document.addEventListener(\"DOMContentLoaded\", () => initAccordion(document));\n  document.addEventListener(\"shopify:section:load\", (e) => initAccordion(e.target));\n})();\n<\/script>"}},"custom_liquid_PPLLjy":{"type":"custom_liquid","settings":{"custom_liquid":"<div class=\"why-shop-box\">\n\n  <div class=\"why-header\">\n    <h2 class=\"why-title\">Why Shop With Us<\/h2>\n    <span class=\"why-underline\"><\/span>\n  <\/div>\n\n  <div class=\"why-scroll\">\n    <div class=\"why-grid\">\n\n      <!-- BIS -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0743\/0825\/5844\/files\/images.png?v=1773853311\" alt=\"BIS Hallmark\" loading=\"lazy\">\n        <\/div>\n        <p>BIS<br>Hallmark<\/p>\n      <\/div>\n\n      <!-- Exchange -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0743\/0825\/5844\/files\/exchange.png?v=1773853176\" alt=\"Exchange\" loading=\"lazy\">\n        <\/div>\n        <p>Exchange &amp;<br>Buyback<\/p>\n      <\/div>\n\n      <!-- Returns -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0743\/0825\/5844\/files\/past.png?v=1773853175\" alt=\"Returns\" loading=\"lazy\">\n        <\/div>\n        <p>Free 15-Day<br>Returns<\/p>\n      <\/div>\n\n      <!-- Certificate -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0743\/0825\/5844\/files\/good-idea.png?v=1773853177\" alt=\"Certified\" loading=\"lazy\">\n        <\/div>\n        <p>Hbprestige<br>Certified<\/p>\n      <\/div>\n\n      <!-- Rating -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0743\/0825\/5844\/files\/rate.png?v=1773853177\" alt=\"Rating\" loading=\"lazy\">\n        <\/div>\n        <p>Rated<br>4.7\/5<\/p>\n      <\/div>\n\n    <\/div>\n  <\/div>\n<\/div>\n\n<style>\n.why-shop-box{\n  --accent: #c9a15a;\n  --accent-light: #f4e7d0;\n  --text-dark: #1c1c1c;\n  box-sizing: border-box;\n  border: 1px solid #000;\n  border-radius: 16px;\n  padding: 24px 20px;\n  background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);\n  font-family: \"Poppins\", Arial, sans-serif;\n  overflow: hidden;\n  box-shadow: 0 2px 16px rgba(0,0,0,0.05);\n}\n\n.why-shop-box *{\n  box-sizing: border-box;\n}\n\n\/* HEADER *\/\n.why-header{\n  margin-bottom: 20px;\n}\n.why-title{\n  font-size: 16px;\n  color: var(--text-dark);\n  font-weight: 600;\n  letter-spacing: .3px;\n  margin: 0 0 8px;\n}\n.why-underline{\n  display: block;\n  width: 40px;\n  height: 3px;\n  border-radius: 3px;\n  background: linear-gradient(90deg, var(--accent), #e6c988);\n}\n\n\/* SCROLL WRAPPER *\/\n.why-scroll{\n  overflow-x: auto;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n  padding: 4px 2px 6px;\n  margin: -4px -2px -6px;\n}\n.why-scroll::-webkit-scrollbar{ display: none; }\n.why-scroll{\n  scrollbar-width: none;\n  -ms-overflow-style: none;\n}\n\n\/* GRID *\/\n.why-grid{\n  display: flex;\n  gap: 20px;\n  width: max-content;\n  min-width: 100%;\nflex-wrap:wrap;\n}\n\n\/* ITEM *\/\n.why-item{\n  text-align: center;\n  flex: 0 0 auto;\n  width: 92px;\n  cursor: default;\n}\n\n\/* ICON *\/\n.why-icon{\n  width: 64px;\n  height: 64px;\n  margin: 0 auto 12px;\n  background: linear-gradient(145deg, var(--accent-light), #ffffff);\n  border: 1px solid #f0e2c4;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 3px 10px rgba(201,161,90,0.18);\n  transition: transform .3s ease, box-shadow .3s ease;\n}\n\n.why-item:hover .why-icon{\n  transform: translateY(-4px);\n  box-shadow: 0 8px 18px rgba(201,161,90,0.3);\n}\n\n.why-icon img{\n  width: 30px;\n  height: 30px;\n  object-fit: contain;\n  display: block;\n}\n\n\/* TEXT *\/\n.why-item p{\n  font-size: 11.5px;\n  color: #444;\n  font-weight: 500;\n  line-height: 1.45;\n  margin: 0;\n  white-space: normal;\n  word-break: normal;\n  overflow-wrap: break-word;\n  transition: color .3s ease;\n}\n\n.why-item:hover p{\n  color: var(--accent);\n}\n\n\/* DESKTOP *\/\n@media (min-width: 768px){\n  .why-scroll{ overflow: visible; padding: 0; margin: 0; }\n  .why-grid{\n    width: 100%;\n    min-width: 0;\n    justify-content: space-between;\n    gap: 8px;\n  }\n  .why-item{ flex: 1 1 0; width: auto; min-width: 0; }\n  .why-icon{ width: 70px; height: 70px; }\n  .why-icon img{ width: 34px; height: 34px; }\n  .why-item p{ font-size: 12.5px; }\n}\n\n\/* MOBILE FINE-TUNE *\/\n@media (max-width: 767px){\n  .why-shop-box{ padding: 20px 16px; border-radius: 14px; }\n  .why-title{ font-size: 14.5px; }\n}\n<\/style>"}}},"block_order":["vendor","title","price","custom_liquid_mmebJz","variant_picker","quantity_selector","buy_buttons","description","share","custom_liquid_Gggjee","custom_liquid_Y4GCrz","custom_liquid_rgXnie","custom_liquid_PPLLjy"],"custom_css":[".page-width {max-width: 1200px; margin: 0 auto; padding: 0 20px;}"],"settings":{"enable_sticky_info":true,"color_scheme":"scheme-1","media_size":"medium","constrain_to_viewport":true,"media_fit":"contain","gallery_layout":"thumbnail_slider","mobile_thumbnails":"hide","media_position":"left","image_zoom":"hover","hide_variants":false,"enable_video_looping":false,"padding_top":36,"padding_bottom":12}},"custom_liquid_rwxXFW":{"type":"custom-liquid","disabled":true,"name":"t:sections.custom-liquid.presets.name","settings":{"custom_liquid":"<div class=\"custom-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"accordion-item active\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Product Details<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner rte\">\n        {{ product.description }}\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Manufacturer -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Manufacturer & Origin<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p><strong>Manufacturer:<\/strong> HB Prestige<\/p>\n        <p><strong>Address:<\/strong> Your Company Address<\/p>\n        <p><strong>Country of Origin:<\/strong> India<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Shipping -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Shipping & Returns<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.<\/li>\n          <li>Dispatch within 1–2 business days.<\/li>\n          <li>Easy Returns within 7 Days.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Wash Care -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Wash Care<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Dry Clean Recommended.<\/li>\n          <li>Do Not Bleach.<\/li>\n          <li>Iron on Low Heat.<\/li>\n          <li>Store in a Cool & Dry Place.<\/li>\n        <\/ul>\n      <\/div>\n    <\/div>\n  <\/div>\n\n  <!-- Customer Support -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Customer Support<\/span>\n      <span class=\"icon\">+<\/span>\n    <\/button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p>Email : support@example.com<\/p>\n        <p>Phone : +91 97171 00683<\/p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM<\/p>\n      <\/div>\n    <\/div>\n  <\/div>\n\n<\/div>\n\n<style>\n.custom-accordion{\n    width:100%;\n    border:1px solid #e5e5e5;\n    border-radius:8px;\n    overflow:hidden;\n    background:#fff;\n    margin:30px 0;\n}\n\n.accordion-item+.accordion-item{\n    border-top:1px solid #ececec;\n}\n\n.accordion-header{\n    width:100%;\n    display:flex;\n    justify-content:space-between;\n    align-items:center;\n    padding:18px 22px;\n    background:#fafafa;\n    border:none;\n    cursor:pointer;\n    font-size:16px;\n    font-weight:600;\n    color:#222;\n    transition:.3s;\n}\n\n.accordion-header:hover{\n    background:#f4f4f4;\n}\n\n.icon{\n    font-size:24px;\n    transition:.3s;\n    line-height:1;\n}\n\n.accordion-content{\n    max-height:0;\n    overflow:hidden;\n    transition:max-height .35s ease;\n}\n\n.accordion-inner{\n    padding:0 22px;\n}\n\n.accordion-item.active .accordion-content{\n    max-height:3000px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:20px 22px;\n}\n\n.accordion-item.active .icon{\n    transform:rotate(45deg);\n}\n\n.accordion-inner p{\n    margin:0 0 12px;\n    line-height:1.8;\n}\n\n.accordion-inner ul{\n    margin:0;\n    padding-left:18px;\n}\n\n.accordion-inner li{\n    margin-bottom:8px;\n}\n\n.accordion-inner img{\n    max-width:100%;\n    height:auto;\n}\n\n.accordion-inner table{\n    display:block;\n    overflow:auto;\n    width:100%;\n}\n\n.accordion-inner iframe,\n.accordion-inner video{\n    max-width:100%;\n}\n\n@media(max-width:768px){\n\n.accordion-header{\n    padding:15px;\n    font-size:15px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:15px;\n}\n\n}\n<\/style>\n\n<script>\ndocument.querySelectorAll(\".accordion-header\").forEach(function(header){\n\nheader.addEventListener(\"click\",function(){\n\nconst item=this.parentElement;\n\ndocument.querySelectorAll(\".accordion-item\").forEach(function(acc){\n\nif(acc!==item){\nacc.classList.remove(\"active\");\n}\n\n});\n\nitem.classList.toggle(\"active\");\n\n});\n\n});\n<\/script>","color_scheme":"","padding_top":40,"padding_bottom":52}},"main_banner_swiper_MmWgwE":{"type":"main-banner-swiper","blocks":{"slide_G6K7kL":{"type":"slide","settings":{"media_type_desktop":"image","image_desktop":"shopify:\/\/shop_images\/Under_1.png","media_type_mobile":"image","image_mobile":"shopify:\/\/shop_images\/Under_1.png","video_autoplay":true,"video_loop":true,"video_muted":true,"video_controls":false,"link":"https:\/\/wa.me\/919537253838","alt_text":"    .banner-box{        height:40vh !important;    } "}}},"block_order":["slide_G6K7kL"],"custom_css":[".banner-box {height: 50vh;}"],"name":"Main Banner (Swiper)","settings":{"layout":"page-width","border_radius":0,"show_pagination":true,"autoplay_enable":false,"autoplay_speed":"5"}},"custom_liquid_9Rt8jX":{"type":"custom-liquid","name":"t:sections.custom-liquid.presets.name","settings":{"custom_liquid":"","color_scheme":"","padding_top":40,"padding_bottom":40}},"related-products":{"type":"related-products","settings":{"heading":"You may also like","heading_size":"h2","products_to_show":6,"columns_desktop":6,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"quick_add":"standard","padding_top":36,"padding_bottom":28}},"our_8_cs_promise_GykD3W":{"type":"our-8-cs-promise","name":"Our 8 Cs Promise","settings":{"title":"Our 8 Cs Promise","subtitle":"We blend a 400-year gemstone legacy with modern technology to craft bespoke fine jewellery faster, offering 30% more value.","intro_image":"shopify:\/\/shop_images\/Bridal_Gold_Necklace_Earrings_Jewellery_Set_Elegant_Wedding_Look.jpg","intro_video":"","c1":"Colours Hand","c1_desc":"Only the most vibrant and hand-picked gemstone hues make it to the cut.","c1_media":"shopify:\/\/shop_images\/1e7094e81781b079082c609ea9862e36.jpg","c2":"Cut Unmatched Beauty","c2_desc":"Expertly cut to maximise radiance, fire and beauty.","c2_media":"shopify:\/\/shop_images\/1_308_R-_viwe2.png","c3":"Curation Superior Selection","c3_desc":"Carefully curated collection for every moment of life.","c3_media":"shopify:\/\/shop_images\/81617178-il_fullxfull.7436256132_52pz.jpg","c4":"Customisation Always Personal","c4_desc":"Bringing your dream pieces to life, just the way you imagined them.","c4_media":"shopify:\/\/shop_images\/1_308_W-_viwe2.png","c5":"Craftsmanship Time Honoured Tradition","c5_desc":"Handcrafted by skilled artisans using techniques handed down from generations.","c5_media":"shopify:\/\/shop_images\/c33e302d-il_fullxfull.7437838746_etem.jpg","c6":"Care Mindful Design","c6_desc":"Each piece is created with love that finds a place straight into your heart.","c6_media":"shopify:\/\/shop_images\/5cfafcc2-il_fullxfull.7486283833_p3ma.jpg","c7":"Cost Exceptional Value","c7_desc":"No middlemen, just exceptional value quality directly from us to you.","c7_media":"shopify:\/\/shop_images\/ed17c7e7-il_fullxfull.7438318338_55wy.jpg","c8":"Commitment Lifelong Relationship","c8_desc":"Complete transparency with certified gemstones & secure returns.","c8_media":"shopify:\/\/shop_images\/334da39f-il_fullxfull.7437797420_to1d.jpg"}},"featured_in_marquee_gzUpbk":{"type":"featured-in-marquee","blocks":{"logo_ndCJCT":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_58_news-18-colour.svg","link":""}},"logo_VxEywh":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_403_refinery29.svg","link":""}},"logo_DeHx3J":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_60_forbes.svg","link":""}},"logo_eGeE4g":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_53_vogue.svg","link":""}},"logo_EBRAQ4":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_63_byrdie.svg","link":""}},"logo_8ccd6B":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_54_economic-times-colour.svg","link":""}},"logo_kXNQ3k":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_57_et-retail-colour.svg","link":""}},"logo_m4LKq4":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_66_medium_87f483d4-ee77-4f0d-9c70-b878cc784ef8.svg","link":""}},"logo_jymGYQ":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_56_cnbc-tv18-colour.svg","link":""}},"logo_BfjXHF":{"type":"logo","settings":{"image":"shopify:\/\/shop_images\/imgi_64_the-knot.svg","link":""}}},"block_order":["logo_ndCJCT","logo_VxEywh","logo_DeHx3J","logo_eGeE4g","logo_EBRAQ4","logo_8ccd6B","logo_kXNQ3k","logo_m4LKq4","logo_jymGYQ","logo_BfjXHF"],"name":"Featured In Marquee","settings":{"heading":"Featured In","speed":30,"logo_height":20,"pause_on_hover":true,"section_width":"full","custom_width":950,"logo_gap":60}},"featured_collection_LJfjz6":{"type":"featured-collection","name":"t:sections.featured-collection.presets.name","settings":{"collection":"yellow-gold","products_to_show":6,"title":"Recently Viewed","heading_size":"h1","title_font_size":28,"subtitle_font_size":16,"description":"","show_description":true,"description_style":"body","columns_desktop":6,"enable_desktop_slider":false,"full_width":false,"show_view_all":false,"view_all_style":"solid","color_scheme":"","image_ratio":"adapt","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"standard","columns_mobile":"2","swipe_on_mobile":false,"padding_top":36,"padding_bottom":36}}},"order":["main","custom_liquid_rwxXFW","main_banner_swiper_MmWgwE","custom_liquid_9Rt8jX","related-products","our_8_cs_promise_GykD3W","featured_in_marquee_gzUpbk","featured_collection_LJfjz6"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "custom_liquid_mmebJz": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"offer-wrapper\">\n  \n  <!-- Heading -->\n  <div class=\"offer-title\">\n    Exclusive Offer: Flat 5% Off*\n  </div>\n\n  <!-- Offer Box -->\n  <div class=\"offer-box\">\n    <span class=\"offer-icon\">%</span>\n    <span class=\"offer-text\">\n      Use code <strong>CELEBRATE</strong> for extra 5% off*\n    </span>\n  </div>\n\n</div>\n\n<style>\n.offer-wrapper {\n  margin: 15px 0;\n  font-family: \"Poppins\", Arial, sans-serif;\n}\n\n/* Heading */\n.offer-title {\n  color: #2e7d32;\nfont-family: Poppins, \"Poppins Fallback\", Arial, Tahoma, sans-serif;\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 24px;\n}\n\n/* Box */\n.offer-box {\n  background: #efe5d6;\n  padding: 12px 15px;\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  border-radius:20px !important;\n}\n\n/* Icon */\n.offer-icon {\n  background: #000;\n  color: #fff;\n  font-size: 12px;\n  font-weight: bold;\n  width: 22px;\n  height: 22px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border-radius: 50%;\n}\n\n/* Text */\n.offer-text {\n  font-family: Poppins, \"Poppins Fallback\", Arial, Tahoma, sans-serif;\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 24px;\n  color: #000;\n}\n</style>"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "dropdown",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "disabled": true,
+          "settings": {}
+        },
+        "share": {
+          "type": "share",
+          "disabled": true,
+          "settings": {
+            "share_label": "Share"
+          }
+        },
+        "custom_liquid_Gggjee": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div class=\"custom-accordion\">\n\n  <!-- PRODUCT DETAILS (DYNAMIC) -->\n  <div class=\"accordion-item\">\n    <div class=\"accordion-header\">\n      Product Details\n      <span class=\"icon\">+</span>\n    </div>\n    <div class=\"accordion-content\">\n      {{ product.description }}\n    </div>\n  </div>\n\n  <!-- MANUFACTURER -->\n  <div class=\"accordion-item\">\n    <div class=\"accordion-header\">\n      Manufacturer & Origin\n      <span class=\"icon\">+</span>\n    </div>\n    <div class=\"accordion-content\">\n      <p><strong>Manufacturer:</strong> HB Prestige</p>\n      <p>Address: Your Address Here</p>\n      <p><strong>Country of Origin:</strong> India</p>\n    </div>\n  </div>\n\n</div>\n\n<style>\n.custom-accordion {\n  border: 1px solid #e5e5e5;\n  border-radius: 6px;\n  overflow: hidden;\n  font-family: \"Poppins\", Arial, sans-serif;\n}\n\n/* ITEM */\n.accordion-item {\n  border-bottom: 1px solid #e5e5e5;\n}\n\n.accordion-item:last-child {\n  border-bottom: none;\n}\n\n/* HEADER */\n.accordion-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 15px;\n  cursor: pointer;\n  background: #f7f7f7;\n  font-size: 15px;\n  font-weight: 500;\n}\n\n/* ICON */\n.accordion-header .icon {\n  font-size: 18px;\n  transition: transform 0.3s ease;\n}\n\n/* CONTENT */\n.accordion-content {\n  max-height: 0;\n  overflow: hidden;\n  transition: all 0.3s ease;\n  background: #fff;\n  padding: 0 15px;\n}\n\n/* IMPORTANT: for rich text */\n.accordion-content * {\n  font-size: 14px;\n  color: #333;\n}\n\n/* ACTIVE */\n.accordion-item.active .accordion-content {\n  max-height: 5000px;\n  padding: 15px;\n}\n\n.accordion-item.active .icon {\n  transform: rotate(45deg);\n}\n\n/* MOBILE */\n@media (max-width: 768px) {\n  .accordion-header {\n    font-size: 14px;\n    padding: 12px;\n  }\n}\n</style>\n\n<script>\ndocument.querySelectorAll('.accordion-header').forEach(header => {\n  header.addEventListener('click', () => {\n    const item = header.parentElement;\n\n    // close others\n    document.querySelectorAll('.accordion-item').forEach(i => {\n      if (i !== item) i.classList.remove('active');\n    });\n\n    item.classList.toggle('active');\n  });\n});\n</script>"
+          }
+        },
+        "custom_liquid_Y4GCrz": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div class=\"custom-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"accordion-item active\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Product Details</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner rte\">\n        {{ product.description }}\n      </div>\n    </div>\n  </div>\n\n  <!-- Manufacturer -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Manufacturer & Origin</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p><strong>Manufacturer:</strong> HB Prestige</p>\n        <p><strong>Address:</strong> Your Company Address</p>\n        <p><strong>Country of Origin:</strong> India</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- Shipping -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Shipping & Returns</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.</li>\n          <li>Dispatch within 1–2 business days.</li>\n          <li>Easy Returns within 7 Days.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Wash Care -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Wash Care</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Dry Clean Recommended.</li>\n          <li>Do Not Bleach.</li>\n          <li>Iron on Low Heat.</li>\n          <li>Store in a Cool & Dry Place.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Customer Support -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Customer Support</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p>Email : support@example.com</p>\n        <p>Phone : +91 97171 00683</p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM</p>\n      </div>\n    </div>\n  </div>\n\n</div>\n\n<style>\n.custom-accordion{\n    width:100%;\n    border:1px solid #e5e5e5;\n    border-radius:8px;\n    overflow:hidden;\n    background:#fff;\n    margin:30px 0;\n}\n\n.accordion-item+.accordion-item{\n    border-top:1px solid #ececec;\n}\n\n.accordion-header{\n    width:100%;\n    display:flex;\n    justify-content:space-between;\n    align-items:center;\n    padding:18px 22px;\n    background:#fafafa;\n    border:none;\n    cursor:pointer;\n    font-size:16px;\n    font-weight:600;\n    color:#222;\n    transition:.3s;\n}\n\n.accordion-header:hover{\n    background:#f4f4f4;\n}\n\n.icon{\n    font-size:24px;\n    transition:.3s;\n    line-height:1;\n}\n\n.accordion-content{\n    max-height:0;\n    overflow:hidden;\n    transition:max-height .35s ease;\n}\n\n.accordion-inner{\n    padding:0 22px;\n}\n\n.accordion-item.active .accordion-content{\n    max-height:3000px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:20px 22px;\n}\n\n.accordion-item.active .icon{\n    transform:rotate(45deg);\n}\n\n.accordion-inner p{\n    margin:0 0 12px;\n    line-height:1.8;\n}\n\n.accordion-inner ul{\n    margin:0;\n    padding-left:18px;\n}\n\n.accordion-inner li{\n    margin-bottom:8px;\n}\n\n.accordion-inner img{\n    max-width:100%;\n    height:auto;\n}\n\n.accordion-inner table{\n    display:block;\n    overflow:auto;\n    width:100%;\n}\n\n.accordion-inner iframe,\n.accordion-inner video{\n    max-width:100%;\n}\n\n@media(max-width:768px){\n\n.accordion-header{\n    padding:15px;\n    font-size:15px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:15px;\n}\n\n}\n</style>\n\n<script>\ndocument.querySelectorAll(\".accordion-header\").forEach(function(header){\n\nheader.addEventListener(\"click\",function(){\n\nconst item=this.parentElement;\n\ndocument.querySelectorAll(\".accordion-item\").forEach(function(acc){\n\nif(acc!==item){\nacc.classList.remove(\"active\");\n}\n\n});\n\nitem.classList.toggle(\"active\");\n\n});\n\n});\n</script>"
+          }
+        },
+        "custom_liquid_rgXnie": {
+          "type": "custom_liquid",
+          "disabled": true,
+          "settings": {
+            "custom_liquid": "<div class=\"ha-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"ha-item active\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Product Details</span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"/></svg>\n      </span>\n    </button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner rte\">\n        {{ product.description }}\n      </div>\n    </div>\n  </div>\n\n  <!-- Manufacturer -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Manufacturer &amp; Origin</span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"/></svg>\n      </span>\n    </button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <p><strong>Manufacturer:</strong> HB Prestige</p>\n        <p><strong>Address:</strong> Your Company Address</p>\n        <p><strong>Country of Origin:</strong> India</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- Shipping -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Shipping &amp; Returns</span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"/></svg>\n      </span>\n    </button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.</li>\n          <li>Dispatch within 1–2 business days.</li>\n          <li>Easy Returns within 7 Days.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Wash Care -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Wash Care</span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"/></svg>\n      </span>\n    </button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <ul>\n          <li>Dry Clean Recommended.</li>\n          <li>Do Not Bleach.</li>\n          <li>Iron on Low Heat.</li>\n          <li>Store in a Cool &amp; Dry Place.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Customer Support -->\n  <div class=\"ha-item\">\n    <button class=\"ha-header\" type=\"button\">\n      <span class=\"ha-title\">Customer Support</span>\n      <span class=\"ha-icon\">\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 5v14M5 12h14\"/></svg>\n      </span>\n    </button>\n    <div class=\"ha-content\">\n      <div class=\"ha-inner\">\n        <p>Email : hbprestigejewels@gmail.com</p>\n        <p>Phone : +91 9723328111</p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM</p>\n      </div>\n    </div>\n  </div>\n\n</div>\n\n<style>\n.ha-accordion{\n  --accent: #c9a15a;\n  --text-dark: #1c1c1c;\n  --border: #ebe7e0;\n  width: 100%;\n  max-width: 100%;\n  border-radius: 20px;\n  overflow: hidden;\n  background: #fff;\n  margin: 32px 0;\n  box-shadow: 0 2px 14px rgba(0,0,0,0.05);\n  border: 1px solid black;\n  font-family: inherit;\n}\n\n.ha-item{\n  border-bottom: 1px solid var(--border);\n  position: relative;\n}\n.ha-item:last-child{ border-bottom: none; }\n\n.ha-header{\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 16px;\n  padding: 10px 22px;\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  text-align: left;\n  transition: background .25s ease;\n}\n\n.ha-header:hover{ background: #faf8f4; }\n\n.ha-title{\n  font-size: 16px;\n  font-weight: 600;\n  color: var(--text-dark);\n  letter-spacing: .2px;\n  position: relative;\n  transition: color .25s ease;\n}\n\n.ha-item.active .ha-title{ color: var(--accent); }\n\n.ha-icon{\n  flex-shrink: 0;\n  width: 30px;\n  height: 30px;\n  border-radius: 50%;\n  border: 1.5px solid var(--border);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  transition: all .3s ease;\n}\n\n.ha-icon svg{\n  width: 14px;\n  height: 14px;\n  transition: transform .35s cubic-bezier(.4,0,.2,1);\n}\n.ha-icon svg path{\n  stroke: var(--text-dark);\n  stroke-width: 2;\n  stroke-linecap: round;\n  fill: none;\n}\n\n.ha-item.active .ha-icon{\n  background: var(--accent);\n  border-color: var(--accent);\n}\n.ha-item.active .ha-icon svg path{ stroke: #fff; }\n.ha-item.active .ha-icon svg{ transform: rotate(135deg); }\n\n.ha-content{\n  max-height: 0;\n  overflow: hidden;\n  transition: max-height .4s cubic-bezier(.4,0,.2,1);\n}\n\n.ha-inner{\n  padding: 0 22px;\n}\n\n.ha-item.active .ha-inner{\n  padding: 0 22px 22px;\n}\n\n.ha-inner p{ margin: 0 0 12px; line-height: 1.75; color: #444; }\n.ha-inner ul{ margin: 0; padding-left: 18px; }\n.ha-inner li{ margin-bottom: 8px; line-height: 1.6; color: #444; }\n.ha-inner img{ max-width: 100%; height: auto; border-radius: 6px; }\n.ha-inner iframe, .ha-inner video{ max-width: 100%; border-radius: 6px; }\n\n/* subtle left accent bar on active item */\n.ha-item.active::before{\n  content: \"\";\n  position: absolute;\n  left: 0; top: 0; bottom: 0;\n  width: 3px;\n  background: var(--accent);\n}\n\n@media (max-width: 768px){\n  .ha-accordion{ margin: 22px 0; border-radius: 10px; }\n  .ha-header{ padding: 16px 16px; }\n  .ha-title{ font-size: 14.5px; }\n  .ha-icon{ width: 26px; height: 26px; }\n  .ha-icon svg{ width: 12px; height: 12px; }\n  .ha-item.active .ha-inner{ padding: 0 16px 18px; }\n  .ha-inner{ padding: 0 16px; }\n}\n\n/* ===== TABLE (no scroll, content wraps) ===== */\n.ha-inner table{\n  display: table;\n  width: 100%;\n  table-layout: fixed;\n  border-collapse: separate;\n  border-spacing: 0;\n  border-radius: 20px;\n  overflow: hidden;\n}\n\n.ha-inner table th,\n.ha-inner table td{\n  padding: 6px;\n  text-align: left;\n  border-bottom: 1px solid var(--border);\n  border-right: 1px solid var(--border);\n  font-size: 13px;\n  line-height: 1.5;\n  vertical-align: middle;\n  white-space: normal;\n  word-break: break-word;\n  overflow-wrap: break-word;\n}\n\n/* remove double border on last column/row */\n.ha-inner table th:last-child,\n.ha-inner table td:last-child{\n  border-right: none;\n}\n.ha-inner table tr:last-child td{\n  border-bottom: none;\n}\n\n.ha-inner table th{\n  background: #faf8f4;\n  font-weight: 600;\n  color: var(--text-dark);\n}\n\n.ha-inner table tr:nth-child(even) td{\n  background: #fcfcfb;\n}\n\n@media (max-width: 768px){\n  .ha-inner table{ border-radius: 14px; }\n  .ha-inner table th,\n  .ha-inner table td{\n    padding: 6px;\n    font-size: 12.5px;\n  }\n}\n</style>\n\n<script>\n(function () {\n  function initAccordion(root) {\n    const accordion = (root || document).querySelector(\".ha-accordion\");\n    if (!accordion || accordion.dataset.haInit === \"true\") return;\n    accordion.dataset.haInit = \"true\";\n\n    const items = accordion.querySelectorAll(\".ha-item\");\n\n    function setHeight(item, open) {\n      const content = item.querySelector(\".ha-content\");\n      const inner = item.querySelector(\".ha-inner\");\n      if (open) {\n        content.style.maxHeight = inner.scrollHeight + \"px\";\n      } else {\n        content.style.maxHeight = \"0px\";\n      }\n    }\n\n    items.forEach(function (item) {\n      const header = item.querySelector(\".ha-header\");\n\n      // initial state for the item that's active by default\n      if (item.classList.contains(\"active\")) {\n        requestAnimationFrame(function () { setHeight(item, true); });\n      }\n\n      header.addEventListener(\"click\", function () {\n        const isActive = item.classList.contains(\"active\");\n\n        items.forEach(function (i) {\n          i.classList.remove(\"active\");\n          setHeight(i, false);\n        });\n\n        if (!isActive) {\n          item.classList.add(\"active\");\n          setHeight(item, true);\n        }\n      });\n    });\n\n    // Recalculate open item's height on resize (content reflow, e.g. font load, image load)\n    window.addEventListener(\"resize\", function () {\n      accordion.querySelectorAll(\".ha-item.active\").forEach(function (item) {\n        setHeight(item, true);\n      });\n    });\n  }\n\n  document.addEventListener(\"DOMContentLoaded\", () => initAccordion(document));\n  document.addEventListener(\"shopify:section:load\", (e) => initAccordion(e.target));\n})();\n</script>"
+          }
+        },
+        "custom_liquid_PPLLjy": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"why-shop-box\">\n\n  <div class=\"why-header\">\n    <h2 class=\"why-title\">Why Shop With Us</h2>\n    <span class=\"why-underline\"></span>\n  </div>\n\n  <div class=\"why-scroll\">\n    <div class=\"why-grid\">\n\n      <!-- BIS -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https://cdn.shopify.com/s/files/1/0743/0825/5844/files/images.png?v=1773853311\" alt=\"BIS Hallmark\" loading=\"lazy\">\n        </div>\n        <p>BIS<br>Hallmark</p>\n      </div>\n\n      <!-- Exchange -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https://cdn.shopify.com/s/files/1/0743/0825/5844/files/exchange.png?v=1773853176\" alt=\"Exchange\" loading=\"lazy\">\n        </div>\n        <p>Exchange &amp;<br>Buyback</p>\n      </div>\n\n      <!-- Returns -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https://cdn.shopify.com/s/files/1/0743/0825/5844/files/past.png?v=1773853175\" alt=\"Returns\" loading=\"lazy\">\n        </div>\n        <p>Free 15-Day<br>Returns</p>\n      </div>\n\n      <!-- Certificate -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https://cdn.shopify.com/s/files/1/0743/0825/5844/files/good-idea.png?v=1773853177\" alt=\"Certified\" loading=\"lazy\">\n        </div>\n        <p>Hbprestige<br>Certified</p>\n      </div>\n\n      <!-- Rating -->\n      <div class=\"why-item\">\n        <div class=\"why-icon\">\n          <img src=\"https://cdn.shopify.com/s/files/1/0743/0825/5844/files/rate.png?v=1773853177\" alt=\"Rating\" loading=\"lazy\">\n        </div>\n        <p>Rated<br>4.7/5</p>\n      </div>\n\n    </div>\n  </div>\n</div>\n\n<style>\n.why-shop-box{\n  --accent: #c9a15a;\n  --accent-light: #f4e7d0;\n  --text-dark: #1c1c1c;\n  box-sizing: border-box;\n  border: 1px solid #000;\n  border-radius: 16px;\n  padding: 24px 20px;\n  background: linear-gradient(180deg, #ffffff 0%, #fdfbf7 100%);\n  font-family: \"Poppins\", Arial, sans-serif;\n  overflow: hidden;\n  box-shadow: 0 2px 16px rgba(0,0,0,0.05);\n}\n\n.why-shop-box *{\n  box-sizing: border-box;\n}\n\n/* HEADER */\n.why-header{\n  margin-bottom: 20px;\n}\n.why-title{\n  font-size: 16px;\n  color: var(--text-dark);\n  font-weight: 600;\n  letter-spacing: .3px;\n  margin: 0 0 8px;\n}\n.why-underline{\n  display: block;\n  width: 40px;\n  height: 3px;\n  border-radius: 3px;\n  background: linear-gradient(90deg, var(--accent), #e6c988);\n}\n\n/* SCROLL WRAPPER */\n.why-scroll{\n  overflow-x: auto;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n  padding: 4px 2px 6px;\n  margin: -4px -2px -6px;\n}\n.why-scroll::-webkit-scrollbar{ display: none; }\n.why-scroll{\n  scrollbar-width: none;\n  -ms-overflow-style: none;\n}\n\n/* GRID */\n.why-grid{\n  display: flex;\n  gap: 20px;\n  width: max-content;\n  min-width: 100%;\nflex-wrap:wrap;\n}\n\n/* ITEM */\n.why-item{\n  text-align: center;\n  flex: 0 0 auto;\n  width: 92px;\n  cursor: default;\n}\n\n/* ICON */\n.why-icon{\n  width: 64px;\n  height: 64px;\n  margin: 0 auto 12px;\n  background: linear-gradient(145deg, var(--accent-light), #ffffff);\n  border: 1px solid #f0e2c4;\n  border-radius: 50%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 3px 10px rgba(201,161,90,0.18);\n  transition: transform .3s ease, box-shadow .3s ease;\n}\n\n.why-item:hover .why-icon{\n  transform: translateY(-4px);\n  box-shadow: 0 8px 18px rgba(201,161,90,0.3);\n}\n\n.why-icon img{\n  width: 30px;\n  height: 30px;\n  object-fit: contain;\n  display: block;\n}\n\n/* TEXT */\n.why-item p{\n  font-size: 11.5px;\n  color: #444;\n  font-weight: 500;\n  line-height: 1.45;\n  margin: 0;\n  white-space: normal;\n  word-break: normal;\n  overflow-wrap: break-word;\n  transition: color .3s ease;\n}\n\n.why-item:hover p{\n  color: var(--accent);\n}\n\n/* DESKTOP */\n@media (min-width: 768px){\n  .why-scroll{ overflow: visible; padding: 0; margin: 0; }\n  .why-grid{\n    width: 100%;\n    min-width: 0;\n    justify-content: space-between;\n    gap: 8px;\n  }\n  .why-item{ flex: 1 1 0; width: auto; min-width: 0; }\n  .why-icon{ width: 70px; height: 70px; }\n  .why-icon img{ width: 34px; height: 34px; }\n  .why-item p{ font-size: 12.5px; }\n}\n\n/* MOBILE FINE-TUNE */\n@media (max-width: 767px){\n  .why-shop-box{ padding: 20px 16px; border-radius: 14px; }\n  .why-title{ font-size: 14.5px; }\n}\n</style>"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "custom_liquid_mmebJz",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "share",
+        "custom_liquid_Gggjee",
+        "custom_liquid_Y4GCrz",
+        "custom_liquid_rgXnie",
+        "custom_liquid_PPLLjy"
+      ],
+      "custom_css": [
+        ".page-width {max-width: 1200px; margin: 0 auto; padding: 0 20px;}"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "hover",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "custom_liquid_rwxXFW": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<div class=\"custom-accordion\">\n\n  <!-- Product Details -->\n  <div class=\"accordion-item active\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Product Details</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner rte\">\n        {{ product.description }}\n      </div>\n    </div>\n  </div>\n\n  <!-- Manufacturer -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Manufacturer & Origin</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p><strong>Manufacturer:</strong> HB Prestige</p>\n        <p><strong>Address:</strong> Your Company Address</p>\n        <p><strong>Country of Origin:</strong> India</p>\n      </div>\n    </div>\n  </div>\n\n  <!-- Shipping -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Shipping & Returns</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Free Shipping above ₹2999.</li>\n          <li>Dispatch within 1–2 business days.</li>\n          <li>Easy Returns within 7 Days.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Wash Care -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Wash Care</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <ul>\n          <li>Dry Clean Recommended.</li>\n          <li>Do Not Bleach.</li>\n          <li>Iron on Low Heat.</li>\n          <li>Store in a Cool & Dry Place.</li>\n        </ul>\n      </div>\n    </div>\n  </div>\n\n  <!-- Customer Support -->\n  <div class=\"accordion-item\">\n    <button class=\"accordion-header\" type=\"button\">\n      <span>Customer Support</span>\n      <span class=\"icon\">+</span>\n    </button>\n\n    <div class=\"accordion-content\">\n      <div class=\"accordion-inner\">\n        <p>Email : support@example.com</p>\n        <p>Phone : +91 97171 00683</p>\n        <p>Mon - Sat : 10:00 AM - 7:00 PM</p>\n      </div>\n    </div>\n  </div>\n\n</div>\n\n<style>\n.custom-accordion{\n    width:100%;\n    border:1px solid #e5e5e5;\n    border-radius:8px;\n    overflow:hidden;\n    background:#fff;\n    margin:30px 0;\n}\n\n.accordion-item+.accordion-item{\n    border-top:1px solid #ececec;\n}\n\n.accordion-header{\n    width:100%;\n    display:flex;\n    justify-content:space-between;\n    align-items:center;\n    padding:18px 22px;\n    background:#fafafa;\n    border:none;\n    cursor:pointer;\n    font-size:16px;\n    font-weight:600;\n    color:#222;\n    transition:.3s;\n}\n\n.accordion-header:hover{\n    background:#f4f4f4;\n}\n\n.icon{\n    font-size:24px;\n    transition:.3s;\n    line-height:1;\n}\n\n.accordion-content{\n    max-height:0;\n    overflow:hidden;\n    transition:max-height .35s ease;\n}\n\n.accordion-inner{\n    padding:0 22px;\n}\n\n.accordion-item.active .accordion-content{\n    max-height:3000px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:20px 22px;\n}\n\n.accordion-item.active .icon{\n    transform:rotate(45deg);\n}\n\n.accordion-inner p{\n    margin:0 0 12px;\n    line-height:1.8;\n}\n\n.accordion-inner ul{\n    margin:0;\n    padding-left:18px;\n}\n\n.accordion-inner li{\n    margin-bottom:8px;\n}\n\n.accordion-inner img{\n    max-width:100%;\n    height:auto;\n}\n\n.accordion-inner table{\n    display:block;\n    overflow:auto;\n    width:100%;\n}\n\n.accordion-inner iframe,\n.accordion-inner video{\n    max-width:100%;\n}\n\n@media(max-width:768px){\n\n.accordion-header{\n    padding:15px;\n    font-size:15px;\n}\n\n.accordion-item.active .accordion-inner{\n    padding:15px;\n}\n\n}\n</style>\n\n<script>\ndocument.querySelectorAll(\".accordion-header\").forEach(function(header){\n\nheader.addEventListener(\"click\",function(){\n\nconst item=this.parentElement;\n\ndocument.querySelectorAll(\".accordion-item\").forEach(function(acc){\n\nif(acc!==item){\nacc.classList.remove(\"active\");\n}\n\n});\n\nitem.classList.toggle(\"active\");\n\n});\n\n});\n</script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "main_banner_swiper_MmWgwE": {
+      "type": "main-banner-swiper",
+      "blocks": {
+        "slide_G6K7kL": {
+          "type": "slide",
+          "settings": {
+            "media_type_desktop": "image",
+            "image_desktop": "shopify://shop_images/Under_1.png",
+            "media_type_mobile": "image",
+            "image_mobile": "shopify://shop_images/Under_1.png",
+            "video_autoplay": true,
+            "video_loop": true,
+            "video_muted": true,
+            "video_controls": false,
+            "link": "https://wa.me/919537253838",
+            "alt_text": "    .banner-box{        height:40vh !important;    } "
+          }
+        }
+      },
+      "block_order": [
+        "slide_G6K7kL"
+      ],
+      "custom_css": [
+        ".banner-box {height: 50vh;}"
+      ],
+      "name": "Main Banner (Swiper)",
+      "settings": {
+        "layout": "page-width",
+        "border_radius": 0,
+        "show_pagination": true,
+        "autoplay_enable": false,
+        "autoplay_speed": "5"
+      }
+    },
+    "custom_liquid_9Rt8jX": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 6,
+        "columns_desktop": 6,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "our_8_cs_promise_GykD3W": {
+      "type": "our-8-cs-promise",
+      "name": "Our 8 Cs Promise",
+      "settings": {
+        "title": "Our 8 Cs Promise",
+        "subtitle": "We blend a 400-year gemstone legacy with modern technology to craft bespoke fine jewellery faster, offering 30% more value.",
+        "intro_image": "shopify://shop_images/Bridal_Gold_Necklace_Earrings_Jewellery_Set_Elegant_Wedding_Look.jpg",
+        "intro_video": "",
+        "c1": "Colours Hand",
+        "c1_desc": "Only the most vibrant and hand-picked gemstone hues make it to the cut.",
+        "c1_media": "shopify://shop_images/1e7094e81781b079082c609ea9862e36.jpg",
+        "c2": "Cut Unmatched Beauty",
+        "c2_desc": "Expertly cut to maximise radiance, fire and beauty.",
+        "c2_media": "shopify://shop_images/1_308_R-_viwe2.png",
+        "c3": "Curation Superior Selection",
+        "c3_desc": "Carefully curated collection for every moment of life.",
+        "c3_media": "shopify://shop_images/81617178-il_fullxfull.7436256132_52pz.jpg",
+        "c4": "Customisation Always Personal",
+        "c4_desc": "Bringing your dream pieces to life, just the way you imagined them.",
+        "c4_media": "shopify://shop_images/1_308_W-_viwe2.png",
+        "c5": "Craftsmanship Time Honoured Tradition",
+        "c5_desc": "Handcrafted by skilled artisans using techniques handed down from generations.",
+        "c5_media": "shopify://shop_images/c33e302d-il_fullxfull.7437838746_etem.jpg",
+        "c6": "Care Mindful Design",
+        "c6_desc": "Each piece is created with love that finds a place straight into your heart.",
+        "c6_media": "shopify://shop_images/5cfafcc2-il_fullxfull.7486283833_p3ma.jpg",
+        "c7": "Cost Exceptional Value",
+        "c7_desc": "No middlemen, just exceptional value quality directly from us to you.",
+        "c7_media": "shopify://shop_images/ed17c7e7-il_fullxfull.7438318338_55wy.jpg",
+        "c8": "Commitment Lifelong Relationship",
+        "c8_desc": "Complete transparency with certified gemstones & secure returns.",
+        "c8_media": "shopify://shop_images/334da39f-il_fullxfull.7437797420_to1d.jpg"
+      }
+    },
+    "featured_in_marquee_gzUpbk": {
+      "type": "featured-in-marquee",
+      "blocks": {
+        "logo_ndCJCT": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_58_news-18-colour.svg",
+            "link": ""
+          }
+        },
+        "logo_VxEywh": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_403_refinery29.svg",
+            "link": ""
+          }
+        },
+        "logo_DeHx3J": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_60_forbes.svg",
+            "link": ""
+          }
+        },
+        "logo_eGeE4g": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_53_vogue.svg",
+            "link": ""
+          }
+        },
+        "logo_EBRAQ4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_63_byrdie.svg",
+            "link": ""
+          }
+        },
+        "logo_8ccd6B": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_54_economic-times-colour.svg",
+            "link": ""
+          }
+        },
+        "logo_kXNQ3k": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_57_et-retail-colour.svg",
+            "link": ""
+          }
+        },
+        "logo_m4LKq4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_66_medium_87f483d4-ee77-4f0d-9c70-b878cc784ef8.svg",
+            "link": ""
+          }
+        },
+        "logo_jymGYQ": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_56_cnbc-tv18-colour.svg",
+            "link": ""
+          }
+        },
+        "logo_BfjXHF": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/imgi_64_the-knot.svg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_ndCJCT",
+        "logo_VxEywh",
+        "logo_DeHx3J",
+        "logo_eGeE4g",
+        "logo_EBRAQ4",
+        "logo_8ccd6B",
+        "logo_kXNQ3k",
+        "logo_m4LKq4",
+        "logo_jymGYQ",
+        "logo_BfjXHF"
+      ],
+      "name": "Featured In Marquee",
+      "settings": {
+        "heading": "Featured In",
+        "speed": 30,
+        "logo_height": 20,
+        "pause_on_hover": true,
+        "section_width": "full",
+        "custom_width": 950,
+        "logo_gap": 60
+      }
+    },
+    "featured_collection_LJfjz6": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "yellow-gold",
+        "products_to_show": 6,
+        "title": "Recently Viewed",
+        "heading_size": "h1",
+        "title_font_size": 28,
+        "subtitle_font_size": 16,
+        "description": "",
+        "show_description": true,
+        "description_style": "body",
+        "columns_desktop": 6,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "custom_liquid_rwxXFW",
+    "main_banner_swiper_MmWgwE",
+    "custom_liquid_9Rt8jX",
+    "related-products",
+    "our_8_cs_promise_GykD3W",
+    "featured_in_marquee_gzUpbk",
+    "featured_collection_LJfjz6"
+  ]
+}
