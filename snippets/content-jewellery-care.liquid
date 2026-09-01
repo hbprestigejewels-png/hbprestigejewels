@@ -1,280 +1,520 @@
-<style>
-  .care-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 2rem 6rem;
-    font-family: var(--font-body-family);
-    color: #1f2937;
-  }
+<!-- Jewellery Care Guide Page (Exact Replica of diamondsforeveryone.com.au) -->
+<div class="jc-page-wrapper">
 
-  .care-hero {
-    text-align: center;
-    padding: 3.5rem 1.5rem 3rem;
-    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
-    border-radius: 16px;
-    margin-bottom: 3.5rem;
-    border: 1px solid #ebecee;
-  }
+  <!-- =========================================================================
+       MAIN JEWELLERY CARE TIPS (6 ALTERNATING LUXURY ROWS)
+       ========================================================================= -->
+  <section class="jc-section">
+    <div class="jc-container">
+      <div class="jc-cards-wrapper">
 
-  .care-badge {
-    display: inline-block;
-    background: #111111;
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    padding: 0.4rem 1.4rem;
-    border-radius: 20px;
-    margin-bottom: 1.2rem;
-  }
+        <!-- ROW 1: HEADER & INTRO (TEXT LEFT, IMAGE RIGHT) -->
+        <div class="jc-card-row" data-aos="fade-up">
+          <div class="jc-card-text">
+            <span class="jc-subtag">EXPERT MAINTENANCE</span>
+            <h1 class="jc-card-title">Jewellery Care Guide</h1>
+            <div class="jc-card-desc">
+              <p>To keep your jewellery sparkling and long-lasting, follow these expert care tips designed for gold, silver, diamonds, gemstones, and everyday wear pieces.</p>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/Frame_1321314542_800x800.png?v=1775210378"
+                alt="Jewellery Care Guide - Woman wearing fine diamond jewellery"
+                loading="eager"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-hero__title {
-    font-family: var(--font-heading-family);
-    font-size: clamp(2.6rem, 4.2vw, 4.2rem);
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 1rem;
-    letter-spacing: -0.02em;
-  }
+        <!-- ROW 2: SHOWERING / SWIMMING (IMAGE LEFT, TEXT RIGHT - REVERSED) -->
+        <div class="jc-card-row jc-card-row--reverse" data-aos="fade-up">
+          <div class="jc-card-text">
+            <h2 class="jc-card-title">Remove Before Showering Or Swimming</h2>
+            <div class="jc-card-desc">
+              <ul class="jc-bullet-list">
+                <li>Remove your jewellery before showering, swimming, applying perfume, or lotions.</li>
+                <li>Avoid contact with chemicals, chlorine, hand sanitiser, and cleaning products.</li>
+                <li>Store each piece separately to prevent scratches and tangling.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/Frame_1321314540_800x800.png?v=1775209566"
+                alt="Remove jewellery before showering or swimming"
+                loading="lazy"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-hero__subtitle {
-    font-size: 1.5rem;
-    color: #4b5563;
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.65;
-  }
+        <!-- ROW 3: CHEMICAL CONTACT (TEXT LEFT, IMAGE RIGHT) -->
+        <div class="jc-card-row" data-aos="fade-up">
+          <div class="jc-card-text">
+            <h2 class="jc-card-title">Avoid Contact With Chemicals</h2>
+            <div class="jc-card-desc">
+              <p>Protect your jewellery by avoiding contact with harsh chemicals such as perfumes, cleaning agents, and lotions. Chemicals can damage the finish, discolour precious metals, and weaken gemstones over time.</p>
+              <p>Always remove your jewellery before using cleaning products or applying cosmetics to maintain its brilliance and longevity. Simple daily care ensures your treasured pieces stay beautiful for years to come.</p>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/Frame_1321314541_800x800.png?v=1775209566"
+                alt="Avoid contact with chemicals and cosmetics"
+                loading="lazy"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2.2rem;
-    margin-bottom: 4rem;
-  }
+        <!-- ROW 4: CLEANING INSTRUCTIONS (IMAGE LEFT, TEXT RIGHT - REVERSED) -->
+        <div class="jc-card-row jc-card-row--reverse" data-aos="fade-up">
+          <div class="jc-card-text">
+            <h2 class="jc-card-title">Gold &amp; Diamond Jewellery Cleaning Instructions</h2>
+            <div class="jc-card-desc">
+              <ul class="jc-bullet-list">
+                <li>Soak in warm soapy water for 5–10 minutes.</li>
+                <li>Gently scrub with a soft baby toothbrush and pat dry with a lint-free microfibre cloth.</li>
+              </ul>
+              <h3 class="jc-subheading">Gemstone Jewellery</h3>
+              <ul class="jc-bullet-list">
+                <li>Clean with a damp soft cloth — avoid harsh chemicals and ultrasonic cleaners.</li>
+                <li>Do not expose porous stones like emerald, opal, or pearl to water for long periods.</li>
+              </ul>
+              <h3 class="jc-subheading">Sterling Silver Jewellery</h3>
+              <ul class="jc-bullet-list">
+                <li>Use a specialist silver polishing cloth to gently remove natural tarnish.</li>
+                <li>Keep silver pieces in airtight zip pouches to minimise oxidation.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/Frame_1321314538_800x800.png?v=1775209566"
+                alt="Gold and diamond jewellery cleaning instructions"
+                loading="lazy"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 2.2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+        <!-- ROW 5: STORAGE (TEXT LEFT, IMAGE RIGHT) -->
+        <div class="jc-card-row" data-aos="fade-up">
+          <div class="jc-card-text">
+            <h2 class="jc-card-title">Store In Sealed Container</h2>
+            <div class="jc-card-desc">
+              <ul class="jc-bullet-list">
+                <li>Store your jewellery in a cool, dry place away from direct sunlight.</li>
+                <li>Use soft velvet-lined fabric pouches or a jewellery box with separate individual compartments.</li>
+                <li>Avoid storing delicate fine jewellery pieces in the bathroom due to ambient moisture and humidity.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/Frame_1321314539_800x800.png?v=1775209566"
+                alt="Store fine jewellery in a sealed velvet box"
+                loading="lazy"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
+        <!-- ROW 6: PROFESSIONAL CLEANING (IMAGE LEFT, TEXT RIGHT - REVERSED) -->
+        <div class="jc-card-row jc-card-row--reverse" data-aos="fade-up">
+          <div class="jc-card-text">
+            <h2 class="jc-card-title">Professional Cleaning</h2>
+            <div class="jc-card-desc">
+              <p>For long-term maintenance and prong inspection, get your fine jewellery professionally cleaned and checked once or twice a year.</p>
+            </div>
+            <div class="jc-btn-wrapper">
+              <a href="/collections/all" class="jc-btn">SHOP DIAMONDS</a>
+            </div>
+          </div>
+          <div class="jc-card-media">
+            <div class="jc-media-frame">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/ChatGPT_Image_Apr_3_2026_04_12_37_PM_800x800.png?v=1775212978"
+                alt="Professional jewellery cleaning service"
+                loading="lazy"
+                class="jc-img"
+              >
+            </div>
+          </div>
+        </div>
 
-  .care-card__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .care-card__title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 0.8rem;
-  }
-
-  .care-card__text {
-    font-size: 1.35rem;
-    color: #4b5563;
-    line-height: 1.7;
-    margin: 0;
-  }
-
-  .care-steps-box {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    margin-bottom: 4rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  }
-
-  .care-steps-box__title {
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 2rem;
-    text-align: center;
-  }
-
-  .care-steps-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.8rem;
-  }
-
-  .care-step-item {
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 1.8rem 1.5rem;
-    border: 1px solid #e5e7eb;
-  }
-
-  .care-step-item__num {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #111111;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .care-step-item__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 0.6rem;
-  }
-
-  .care-step-item__desc {
-    font-size: 1.3rem;
-    color: #4b5563;
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .care-cta-box {
-    background: #111111;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    text-align: center;
-  }
-
-  .care-cta-box h3 {
-    color: #ffffff;
-    font-size: 2.2rem;
-    margin: 0 0 1rem;
-  }
-
-  .care-cta-box p {
-    color: #9ca3af;
-    font-size: 1.45rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
-  }
-
-  .care-btn {
-    display: inline-block;
-    background: #ffffff;
-    color: #111111;
-    font-weight: 600;
-    padding: 0.9rem 2.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 1.35rem;
-    transition: background 0.2s ease;
-  }
-
-  .care-btn:hover {
-    background: #e5e7eb;
-  }
-
-  @media screen and (max-width: 768px) {
-    .care-page-container {
-      padding: 2rem 1.5rem 4rem;
-    }
-  }
-</style>
-
-<div class="care-page-container">
-  <div class="care-hero">
-    <span class="care-badge">{{ section.settings.badge | default: 'Jewellery Maintenance' }}</span>
-    <h1 class="care-hero__title">{{ section.settings.title | default: 'Jewellery Care & Maintenance Guide' }}</h1>
-    <p class="care-hero__subtitle">
-      {{ section.settings.subtitle | default: 'Learn how to protect, clean, and safely store your gold, platinum, and diamond fine jewellery to preserve its timeless brilliance for generations.' }}
-    </p>
-  </div>
-
-  <div class="care-grid">
-    <div class="care-card">
-      <div class="care-card__icon">🚿</div>
-      <h3 class="care-card__title">{{ section.settings.card1_title | default: 'Daily Habits & Wear' }}</h3>
-      <p class="care-card__text">
-        {{ section.settings.card1_desc | default: 'Remove your rings and fine jewellery before showering, swimming in chlorinated pools, exercising, or doing heavy household chores to prevent accidental impacts and snagging.' }}
-      </p>
-    </div>
-
-    <div class="care-card">
-      <div class="care-card__icon">🧴</div>
-      <h3 class="care-card__title">{{ section.settings.card2_title | default: 'Avoid Harsh Chemicals' }}</h3>
-      <p class="care-card__text">
-        {{ section.settings.card2_desc | default: 'Apply lotions, perfumes, hairsprays, and cosmetics before putting on your jewellery. Chemical residues can create a dull film over diamonds and gemstones.' }}
-      </p>
-    </div>
-
-    <div class="care-card">
-      <div class="care-card__icon">📦</div>
-      <h3 class="care-card__title">{{ section.settings.card3_title | default: 'Safe Individual Storage' }}</h3>
-      <p class="care-card__text">
-        {{ section.settings.card3_desc | default: 'Store each piece separately in a soft velvet pouch or compartmented jewellery box. Because diamonds can scratch other gemstones and metals, avoid letting pieces rub together.' }}
-      </p>
-    </div>
-
-    <div class="care-card">
-      <div class="care-card__icon">🔍</div>
-      <h3 class="care-card__title">{{ section.settings.card4_title | default: 'Regular Inspections' }}</h3>
-      <p class="care-card__text">
-        {{ section.settings.card4_desc | default: 'Have your diamond rings inspected annually by a professional jeweller to check prong security, stone tightness, and setting integrity.' }}
-      </p>
-    </div>
-  </div>
-
-  <div class="care-steps-box">
-    <h2 class="care-steps-box__title">How to Clean Your Diamond Jewellery at Home</h2>
-    <div class="care-steps-list">
-      <div class="care-step-item">
-        <div class="care-step-item__num">1</div>
-        <h4 class="care-step-item__title">Warm Soapy Water</h4>
-        <p class="care-step-item__desc">Mix lukewarm water with a few drops of mild dishwashing soap in a small bowl.</p>
-      </div>
-
-      <div class="care-step-item">
-        <div class="care-step-item__num">2</div>
-        <h4 class="care-step-item__title">Gentle Soak (15 Mins)</h4>
-        <p class="care-step-item__desc">Soak your jewellery for 10 to 15 minutes to loosen daily dirt, oils, and residues.</p>
-      </div>
-
-      <div class="care-step-item">
-        <div class="care-step-item__num">3</div>
-        <h4 class="care-step-item__title">Soft-Bristle Brush</h4>
-        <p class="care-step-item__desc">Gently brush behind the diamond setting and prongs using an extra-soft toothbrush.</p>
-      </div>
-
-      <div class="care-step-item">
-        <div class="care-step-item__num">4</div>
-        <h4 class="care-step-item__title">Rinse & Dry</h4>
-        <p class="care-step-item__desc">Rinse with clean lukewarm water and pat dry using a lint-free microfiber cloth.</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="care-cta-box">
-    <h3>{{ section.settings.cta_title | default: 'Need Professional Cleaning or Sizing?' }}</h3>
-    <p>{{ section.settings.cta_desc | default: 'Our master craftsmen provide complimentary professional cleaning, inspection, and rhodium polishing.' }}</p>
-    <a href="{{ section.settings.cta_link | default: '/pages/contact' }}" class="care-btn">
-      {{ section.settings.cta_text | default: 'Contact Customer Support' }}
-    </a>
-  </div>
+  <!-- =========================================================================
+       BOTTOM TRUST / SERVICE HIGHLIGHTS (6 ICON BADGES)
+       ========================================================================= -->
+  <section class="jc-trust-section" data-aos="fade-up">
+    <div class="jc-container">
+      <div class="jc-trust-grid">
+        
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON_1.png?v=1777875745&width=300" alt="Custom Jewellery" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">Custom Jewellery</h4>
+        </div>
+
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON-5.png?v=1777875745&width=300" alt="Free Insured Shipping" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">Free Insured Shipping</h4>
+        </div>
+
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON-4.png?v=1777875745&width=300" alt="Certified Diamonds" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">Certified Diamonds</h4>
+        </div>
+
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON-3.png?v=1777875745&width=300" alt="Transparent Pricing" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">Transparent Pricing</h4>
+        </div>
+
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON-6.png?v=1777875745&width=300" alt="30 Day Return" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">30 Day Return</h4>
+        </div>
+
+        <div class="jc-trust-item">
+          <div class="jc-trust-icon">
+            <img src="https://diamondsforeveryone.com.au/cdn/shop/files/ICON-2.png?v=1777875745&width=300" alt="Free Engraving" loading="lazy">
+          </div>
+          <h4 class="jc-trust-title">Free Engraving</h4>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
 </div>
+
+<style>
+/* ==========================================================================
+   JEWELLERY CARE GUIDE STYLING (EXACT HIGH-LUXURY MATCH)
+   ========================================================================== */
+.jc-page-wrapper {
+  width: 100%;
+  background-color: #ffffff;
+  color: #2b2b2b;
+  overflow-x: hidden;
+  font-family: var(--font-body-family, 'Work Sans', sans-serif);
+}
+
+.jc-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.jc-section {
+  padding: 40px 0 60px;
+}
+
+.jc-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ==================== CARD ROW ==================== */
+.jc-card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f1f1f1;
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 440px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jc-card-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.jc-card-row--reverse .jc-card-text {
+  order: 2;
+}
+
+.jc-card-row--reverse .jc-card-media {
+  order: 1;
+}
+
+/* ==================== TEXT BLOCK ==================== */
+.jc-card-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 50px;
+  text-align: center;
+}
+
+.jc-subtag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #c5897a; /* luxury rose gold accent */
+  margin-bottom: 12px;
+}
+
+.jc-card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 34px;
+  font-weight: 500;
+  color: #2b2318;
+  line-height: 1.25;
+  margin: 0 0 20px;
+}
+
+.jc-subheading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #3b2f1e;
+  margin: 18px 0 8px;
+  text-align: left;
+  width: 100%;
+}
+
+.jc-card-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #555555;
+  max-width: 520px;
+}
+
+.jc-card-desc p {
+  margin: 0 0 14px;
+}
+
+.jc-card-desc p:last-child {
+  margin-bottom: 0;
+}
+
+.jc-bullet-list {
+  text-align: left;
+  padding-left: 20px;
+  margin: 0 0 14px;
+}
+
+.jc-bullet-list li {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: #555555;
+}
+
+/* ==================== MEDIA BLOCK ==================== */
+.jc-card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e7e7e7;
+  padding: 40px;
+}
+
+.jc-media-frame {
+  max-width: 360px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jc-img {
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.jc-card-row:hover .jc-img {
+  transform: scale(1.03);
+}
+
+/* ==================== BUTTON ==================== */
+.jc-btn-wrapper {
+  margin-top: 24px;
+}
+
+.jc-btn {
+  display: inline-block;
+  background: #2e3b23;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 13px 32px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(46, 59, 35, 0.2);
+}
+
+.jc-btn:hover {
+  background: #1a2214;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================== TRUST / SERVICE SECTION ==================== */
+.jc-trust-section {
+  background: #f1f1f1;
+  padding: 40px 0;
+  border-top: 1px solid #e5e5e5;
+  margin-top: 20px;
+}
+
+.jc-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+}
+
+.jc-trust-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.jc-trust-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jc-trust-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.jc-trust-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #34421e;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1100px) {
+  .jc-trust-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+}
+
+@media (max-width: 900px) {
+  .jc-card-row {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  
+  .jc-card-row--reverse .jc-card-media {
+    order: -1;
+  }
+  
+  .jc-card-media {
+    order: -1;
+    padding: 30px;
+  }
+  
+  .jc-card-text {
+    padding: 40px 24px;
+  }
+  
+  .jc-card-title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 640px) {
+  .jc-section {
+    padding: 20px 0 40px;
+  }
+  
+  .jc-cards-wrapper {
+    gap: 20px;
+  }
+  
+  .jc-card-row {
+    border-radius: 14px;
+  }
+  
+  .jc-card-text {
+    padding: 30px 18px;
+  }
+  
+  .jc-card-title {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  
+  .jc-card-desc {
+    font-size: 13.5px;
+  }
+  
+  .jc-bullet-list {
+    padding-left: 16px;
+  }
+  
+  .jc-bullet-list li {
+    font-size: 13px;
+  }
+  
+  .jc-subheading {
+    font-size: 17px;
+  }
+  
+  .jc-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .jc-trust-title {
+    font-size: 13px;
+  }
+}
+</style>
