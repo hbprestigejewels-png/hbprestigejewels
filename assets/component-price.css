@@ -91,10 +91,13 @@
   justify-content: center;
 }
 
-.price--on-sale .price-item--regular {
+.price--on-sale .price-item--regular,
+.price__sale s.price-item--regular,
+.price__sale s {
   text-decoration: line-through;
-  color: rgba(var(--color-foreground), 0.75);
-  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.65);
+  font-size: 1.2rem;
+  font-weight: 400;
 }
 
 .unit-price {
