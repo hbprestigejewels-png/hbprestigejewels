@@ -1,266 +1,700 @@
-<style>
-  .appraisals-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 2rem 6rem;
-    font-family: var(--font-body-family);
-    color: #1f2937;
-  }
+<!-- Valuations & Appraisals Page (Exact Match to diamondsforeveryone.com.au) -->
+<div class="appr-page-wrapper">
 
-  .appr-hero {
-    text-align: center;
-    padding: 3.5rem 1.5rem 3rem;
-    background: linear-gradient(180deg, #fbfbfb 0%, #f4f5f7 100%);
-    border-radius: 16px;
-    margin-bottom: 3.5rem;
-    border: 1px solid #ebecee;
-  }
-
-  .appr-badge {
-    display: inline-block;
-    background: #111111;
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    padding: 0.4rem 1.4rem;
-    border-radius: 20px;
-    margin-bottom: 1.2rem;
-  }
-
-  .appr-hero__title {
-    font-family: var(--font-heading-family);
-    font-size: clamp(2.6rem, 4.2vw, 4.2rem);
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 1rem;
-    letter-spacing: -0.02em;
-  }
-
-  .appr-hero__subtitle {
-    font-size: 1.5rem;
-    color: #4b5563;
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.65;
-  }
-
-  .appr-grid-3col {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.2rem;
-    margin-bottom: 4rem;
-  }
-
-  .appr-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .appr-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-
-  .appr-card__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .appr-card__title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 0.8rem;
-  }
-
-  .appr-card__text {
-    font-size: 1.35rem;
-    color: #4b5563;
-    line-height: 1.7;
-    margin: 0;
-  }
-
-  .appr-process-box {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    margin-bottom: 4rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  }
-
-  .appr-process-box__title {
-    font-size: 2.2rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 2rem;
-    text-align: center;
-  }
-
-  .appr-steps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.8rem;
-  }
-
-  .appr-step {
-    background: #f9fafb;
-    border-radius: 12px;
-    padding: 1.8rem 1.5rem;
-    border: 1px solid #e5e7eb;
-  }
-
-  .appr-step__num {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #111111;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-  }
-
-  .appr-step__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111111;
-    margin: 0 0 0.6rem;
-  }
-
-  .appr-step__desc {
-    font-size: 1.3rem;
-    color: #4b5563;
-    margin: 0;
-    line-height: 1.6;
-  }
-
-  .appr-cta-box {
-    background: #111111;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 3rem 2.5rem;
-    text-align: center;
-  }
-
-  .appr-cta-box h3 {
-    color: #ffffff;
-    font-size: 2.2rem;
-    margin: 0 0 1rem;
-  }
-
-  .appr-cta-box p {
-    color: #9ca3af;
-    font-size: 1.45rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
-  }
-
-  .appr-btn {
-    display: inline-block;
-    background: #ffffff;
-    color: #111111;
-    font-weight: 600;
-    padding: 0.9rem 2.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 1.35rem;
-    transition: background 0.2s ease;
-  }
-
-  .appr-btn:hover {
-    background: #e5e7eb;
-  }
-
-  @media screen and (max-width: 768px) {
-    .appraisals-page-container {
-      padding: 2rem 1.5rem 4rem;
-    }
-  }
-</style>
-
-<div class="appraisals-page-container">
-  <div class="appr-hero">
-    <span class="appr-badge">{{ section.settings.badge | default: 'Certification & Valuation' }}</span>
-    <h1 class="appr-hero__title">{{ section.settings.title | default: 'Valuations & Appraisals' }}</h1>
-    <p class="appr-hero__subtitle">
-      {{ section.settings.subtitle | default: 'Secure, certified, and independent valuation reports for insurance coverage, estate management, and official authenticity verification.' }}
-    </p>
-  </div>
-
-  <div class="appr-grid-3col">
-    <div class="appr-card">
-      <div class="appr-card__icon">🛡️</div>
-      <h3 class="appr-card__title">{{ section.settings.card1_title | default: 'Insurance Replacement Value' }}</h3>
-      <p class="appr-card__text">
-        {{ section.settings.card1_desc | default: 'Insurance companies require an official valuation report to cover your valuable jewellery against loss, theft, or damage at its current retail replacement cost.' }}
-      </p>
-    </div>
-
-    <div class="appr-card">
-      <div class="appr-card__icon">⚖️</div>
-      <h3 class="appr-card__title">{{ section.settings.card2_title | default: 'Certified Independent Valuers' }}</h3>
-      <p class="appr-card__text">
-        {{ section.settings.card2_desc | default: 'Our valuations are conducted by registered, independent third-party NCJV/GIA accredited gemological valuers, guaranteeing unbiased objectivity.' }}
-      </p>
-    </div>
-
-    <div class="appr-card">
-      <div class="appr-card__icon">📜</div>
-      <h3 class="appr-card__title">{{ section.settings.card3_title | default: 'Detailed Gemological Specs' }}</h3>
-      <p class="appr-card__text">
-        {{ section.settings.card3_desc | default: 'Every report provides itemized technical descriptions: metal purity, total diamond weight, colour grade, clarity grade, cut quality, and retail estimate.' }}
-      </p>
-    </div>
-  </div>
-
-  <div class="appr-process-box">
-    <h2 class="appr-process-box__title">How the Valuation Process Works</h2>
-    <div class="appr-steps-grid">
-      <div class="appr-step">
-        <div class="appr-step__num">1</div>
-        <h4 class="appr-step__title">Gemological Assessment</h4>
-        <p class="appr-step__desc">The diamond and precious metal settings are carefully measured and evaluated under high-magnification microscopes.</p>
-      </div>
-
-      <div class="appr-step">
-        <div class="appr-step__num">2</div>
-        <h4 class="appr-step__title">Market Rate Analysis</h4>
-        <p class="appr-step__desc">Current Australian and international bullion, diamond, and craftsmanship market rates are calculated.</p>
-      </div>
-
-      <div class="appr-step">
-        <div class="appr-step__num">3</div>
-        <h4 class="appr-step__title">Official Certificate</h4>
-        <p class="appr-step__desc">You receive an embossed, tamper-proof official valuation document ready to submit to your insurance provider.</p>
+  <!-- =========================================================================
+       SECTION 1: HERO HEADER (VALUATION REPORTS)
+       ========================================================================= -->
+  <section class="appr-header-section">
+    <div class="appr-container">
+      <div class="appr-header-box" data-aos="fade-up">
+        <span class="appr-subtag">INDEPENDENT CERTIFICATION</span>
+        <h1 class="appr-main-title">Valuation Reports</h1>
+        <p class="appr-intro-text">
+          At HB Prestige Jewels, you can choose to add an official valuation report to your jewellery. This report is prepared by a certified independent valuer and includes all the key details about your piece, along with its value. It helps you with insurance and makes sure your jewellery is properly documented for the future. It’s a simple way to feel more confident about your purchase, not just today but in the years ahead.
+        </p>
+        <div class="appr-optional-badge">
+          <span>The valuation report is optional. If you would like one, it can be added for an extra $120.</span>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="appr-cta-box">
-    <h3>{{ section.settings.cta_title | default: 'Request an Appraisal or Valuation' }}</h3>
-    <p>{{ section.settings.cta_desc | default: 'Need a valuation certificate for your recent purchase or custom bespoke piece? Contact our specialists today.' }}</p>
-    <a href="{{ section.settings.cta_link | default: '/pages/contact' }}" class="appr-btn">
-      {{ section.settings.cta_text | default: 'Request Appraisal Assistance' }}
-    </a>
-  </div>
+  <!-- =========================================================================
+       SECTION 2: WHY REQUEST A VALUATION? (SPLIT WITH HD IMAGE)
+       ========================================================================= -->
+  <section class="appr-split-section">
+    <div class="appr-container">
+      <div class="appr-split-grid">
+        <div class="appr-split-content" data-aos="fade-right">
+          <span class="appr-subtag">PEACE OF MIND</span>
+          <h2 class="appr-section-title">Why Request a Valuation?</h2>
+          <p class="appr-desc">
+            A good piece of jewellery is more than just something you buy. It tells a story, your story, holds real value, and can be passed down over time. At HB Prestige Jewels, our certified valuation reports are made to reflect that.
+          </p>
+          <p class="appr-desc">
+            If you need it for insurance, planning, or just want to know what your piece is worth, a proper valuation gives you clear details and peace of mind.
+          </p>
+          <p class="appr-desc">
+            We specialise in both natural and lab-grown diamonds, offering transparent pricing and personalised service to help you create the perfect piece.
+          </p>
+          <div class="appr-btn-wrapper">
+            <a href="/pages/contact" class="appr-btn">SCHEDULE YOUR APPOINTMENT</a>
+          </div>
+        </div>
+        <div class="appr-split-media" data-aos="fade-left">
+          <div class="appr-img-frame">
+            <img
+              src="https://diamondsforeveryone.com.au/cdn/shop/files/Book_an_appoinment_dual_block_jpg.jpg?v=1773223996&width=1000"
+              alt="Jeweller examining diamond with loupe"
+              loading="lazy"
+              class="appr-img"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 3: WHAT'S INCLUDED (SPLIT WITH DUAL HD IMAGES)
+       ========================================================================= -->
+  <section class="appr-split-section appr-split-section--alt">
+    <div class="appr-container">
+      <div class="appr-split-grid appr-split-grid--reversed">
+        <div class="appr-split-media" data-aos="fade-right">
+          <div class="appr-dual-img-wrap">
+            <div class="appr-img-frame appr-img-frame--main">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/jewelry-natural-3-middle.jpg?v=1773223866&width=1066"
+                alt="Fine diamond jewellery valuation"
+                loading="lazy"
+                class="appr-img"
+              >
+            </div>
+            <div class="appr-img-frame appr-img-frame--sub">
+              <img
+                src="https://diamondsforeveryone.com.au/cdn/shop/files/ivana-jewels-emerald-cut-diamond-cluster-bangle-best-lab-grown-diamond-jewellery-brand-1195367747.webp?v=1773223944&width=1066"
+                alt="Emerald cut diamond cluster bangle"
+                loading="lazy"
+                class="appr-img"
+              >
+            </div>
+          </div>
+        </div>
+        <div class="appr-split-content" data-aos="fade-left">
+          <span class="appr-subtag">DOCUMENTATION DETAILS</span>
+          <h2 class="appr-section-title">What’s Included</h2>
+          <ul class="appr-bullet-list">
+            <li>A simple and detailed write-up of your jewellery, covering all important features.</li>
+            <li>Full details of the diamond or gemstone, including its carat, cut, color, clarity grade, and key traits.</li>
+            <li>Clear info about the metal used (14k / 18k solid gold or 950 platinum).</li>
+            <li>A retail replacement value to help you sort your insurance.</li>
+            <li>A printed physical certificate copy sent out with your jewellery.</li>
+          </ul>
+          <div class="appr-btn-wrapper">
+            <a href="/collections/all" class="appr-btn">DISCOVER NOW</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 4: WHY WE USE AN INDEPENDENT VALUER (CENTERED NARRATIVE)
+       ========================================================================= -->
+  <section class="appr-narrative-section">
+    <div class="appr-container">
+      <div class="appr-narrative-box" data-aos="fade-up">
+        <span class="appr-subtag">TRUST &amp; INTEGRITY</span>
+        <h2 class="appr-narrative-title">Why We Use an Independent Valuer</h2>
+        <div class="appr-narrative-body">
+          <p>
+            At HB Prestige Jewels, we believe trust comes from being open and doing things the right way. That’s why we don’t do in-house valuations. Some jewellers provide their own reports, but that can raise doubts about how fair or accurate they are.
+          </p>
+          <p>
+            Instead, every valuation is done by an independent accredited expert. They’re a trusted third party who specialise in diamond grading, gemstone identification, and precision valuation.
+          </p>
+          <p>
+            They follow strict industry standards and keep their knowledge up to date with regular training. This means your report is accurate, current, and reliable. Because it’s done independently, it’s accepted by insurers worldwide and not influenced by sales or internal pressure.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 5: SAMPLE VALUATION REPORT (SPLIT WITH CERTIFICATE IMAGE)
+       ========================================================================= -->
+  <section class="appr-split-section">
+    <div class="appr-container">
+      <div class="appr-split-grid">
+        <div class="appr-split-media" data-aos="fade-right">
+          <div class="appr-img-frame appr-img-frame--cert">
+            <img
+              src="https://diamondsforeveryone.com.au/cdn/shop/files/9F8A814F-372E-4488-8317-691A92F5D3B7.webp?v=1777284661&width=800"
+              alt="Official Sample Valuation Certificate"
+              loading="lazy"
+              class="appr-img"
+            >
+          </div>
+        </div>
+        <div class="appr-split-content" data-aos="fade-left">
+          <span class="appr-subtag">SAMPLE CERTIFICATE</span>
+          <h2 class="appr-section-title">Sample Valuation Report</h2>
+          <p class="appr-desc">
+            Here’s an example of the valuation certificate you’ll receive with your HB Prestige Jewels piece.
+          </p>
+          <p class="appr-desc">
+            A jewellery valuation report is a formal document prepared by a certified expert. It shows the full retail replacement value of your piece. It also includes a detailed description, full gemstone and metal details, a photo of the jewellery, and a value based on current market rates.
+          </p>
+          <p class="appr-desc">
+            Most people use this report for insurance, but it’s also useful for estate planning, legal matters, or if you plan to sell your piece later. A proper valuation gives you clear records and peace of mind, with an accurate value at the time it’s done.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 6: PRICING & TURNAROUND (3 LUXURY CARDS)
+       ========================================================================= -->
+  <section class="appr-pricing-section">
+    <div class="appr-container">
+      <div class="appr-pricing-header text-center" data-aos="fade-up">
+        <span class="appr-subtag">TRANSPARENT VALUE</span>
+        <h2 class="appr-section-title">Pricing &amp; Turnaround</h2>
+        <p class="appr-pricing-subtitle">
+          At HB Prestige Jewels, we keep pricing simple and clear, with no hidden costs.
+        </p>
+      </div>
+
+      <div class="appr-pricing-grid" data-aos="fade-up">
+        
+        <!-- CARD 1 -->
+        <div class="appr-price-card">
+          <div class="appr-price-icon">💎</div>
+          <span class="appr-card-sub">STANDARD PRICE</span>
+          <h3 class="appr-card-highlight">$120 AUD</h3>
+          <p class="appr-card-desc">per jewellery item</p>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="appr-price-card">
+          <div class="appr-price-icon">⏱️</div>
+          <span class="appr-card-sub">TURNAROUND</span>
+          <h3 class="appr-card-highlight">5 to 10 Days</h3>
+          <p class="appr-card-desc">business days from request</p>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="appr-price-card">
+          <div class="appr-price-icon">📜</div>
+          <span class="appr-card-sub">DELIVERY</span>
+          <h3 class="appr-card-highlight">Printed Copy</h3>
+          <p class="appr-card-desc">delivered securely with your jewellery</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 7: ADD A VALUATION TO YOUR ORDER (BANNER SPLIT)
+       ========================================================================= -->
+  <section class="appr-split-section appr-split-section--consult">
+    <div class="appr-container">
+      <div class="appr-split-grid">
+        <div class="appr-split-media" data-aos="fade-right">
+          <div class="appr-img-frame">
+            <img
+              src="https://diamondsforeveryone.com.au/cdn/shop/files/Make-It-Miadonna-Desktop_1000x_ea227e1b-6b4b-42a1-8a17-0fc99ed63dc5.webp?v=1773223936&width=800"
+              alt="Consultation for fine jewellery valuation"
+              loading="lazy"
+              class="appr-img"
+            >
+          </div>
+        </div>
+        <div class="appr-split-content" data-aos="fade-left">
+          <span class="appr-subtag">BOOK CONSULTATION</span>
+          <h2 class="appr-section-title">Add a Valuation to Your Order</h2>
+          <p class="appr-desc">
+            You can add a certified valuation report at checkout, or chat with your HB Prestige Jewels consultant to include it with your custom piece. It’s an easy way to have your jewellery properly documented from the start, so you know exactly what it’s worth and can feel confident in its authenticity.
+          </p>
+          <div class="appr-session-badge">
+            ✓ Free Consultation • 30 Minute Session
+          </div>
+          <div class="appr-btn-wrapper" style="margin-top: 20px;">
+            <a href="/pages/contact" class="appr-btn">BOOK VIRTUAL APPOINTMENT</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 8: FREQUENTLY ASKED QUESTIONS (ACCORDION)
+       ========================================================================= -->
+  <section class="appr-faq-section">
+    <div class="appr-container">
+      <div class="appr-faq-header text-center" data-aos="fade-up">
+        <span class="appr-subtag">FAQ</span>
+        <h2 class="appr-section-title">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="appr-faq-accordion" data-aos="fade-up">
+        
+        <details class="appr-faq-item" open>
+          <summary class="appr-faq-summary">
+            <span>What is a jewellery valuation report?</span>
+            <span class="appr-faq-chevron">+</span>
+          </summary>
+          <div class="appr-faq-answer">
+            <p>
+              A jewellery valuation report is an official document prepared by a certified independent expert. It shows the full retail replacement value of your piece. It includes a detailed description, gemstone/diamond and metal details, clear images, and a value based on current market prices. Most people use it for insurance, but it can also help with estate planning, legal matters, or resale. It gives you proper records and peace of mind about the value of your jewellery.
+            </p>
+          </div>
+        </details>
+
+        <details class="appr-faq-item">
+          <summary class="appr-faq-summary">
+            <span>Why is an independent valuation so important?</span>
+            <span class="appr-faq-chevron">+</span>
+          </summary>
+          <div class="appr-faq-answer">
+            <p>
+              An independent valuation means your jewellery is checked by someone who has no link to the sale. This helps make sure the value is fair and accurate. It also means insurers are more likely to accept it. If a valuation is not independent, the value may not be reliable and could cause issues with insurance claims. At HB Prestige Jewels, we believe your valuation should be clear and trustworthy.
+            </p>
+          </div>
+        </details>
+
+        <details class="appr-faq-item">
+          <summary class="appr-faq-summary">
+            <span>Can’t my jeweller just write a valuation themselves?</span>
+            <span class="appr-faq-chevron">+</span>
+          </summary>
+          <div class="appr-faq-answer">
+            <p>
+              Some jewellers do offer their own valuations, but these are not always seen as independent and may not be accepted by all insurers. A proper valuation should be done by a certified third party. This gives you a more accurate and reliable result, and better confidence in the long-term value of your jewellery.
+            </p>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
 </div>
+
+<style>
+/* ==========================================================================
+   APPRAISALS & VALUATIONS STYLING (EXACT HIGH-LUXURY MATCH)
+   ========================================================================== */
+.appr-page-wrapper {
+  width: 100%;
+  background-color: #ffffff;
+  color: #2b2b2b;
+  overflow-x: hidden;
+  font-family: var(--font-body-family, 'Work Sans', sans-serif);
+}
+
+.appr-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.text-center { text-align: center; }
+
+.appr-subtag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #c5897a; /* luxury rose gold / champagne accent */
+  margin-bottom: 12px;
+}
+
+.appr-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.3;
+  margin: 0 0 18px 0;
+}
+
+/* ==================== HEADER INTRO ==================== */
+.appr-header-section {
+  padding: 50px 0 35px;
+  text-align: center;
+}
+
+.appr-header-box {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.appr-main-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 38px;
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.25;
+  margin: 0 0 18px;
+}
+
+.appr-intro-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555555;
+  margin: 0 0 20px;
+}
+
+.appr-optional-badge {
+  display: inline-block;
+  background: #fdf8f5;
+  border: 1px solid #f2e3da;
+  padding: 10px 22px;
+  border-radius: 30px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #a86b5c;
+}
+
+/* ==================== SPLIT SECTIONS ==================== */
+.appr-split-section {
+  padding: 50px 0;
+  border-top: 1px solid #f2f2f2;
+}
+
+.appr-split-section--alt {
+  background-color: #faf9f7;
+}
+
+.appr-split-section--consult {
+  background-color: #faf8f5;
+  border-top: 1px solid #eee8e0;
+}
+
+.appr-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+}
+
+.appr-split-grid--reversed {
+  direction: ltr;
+}
+
+.appr-split-media {
+  width: 100%;
+}
+
+.appr-img-frame {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.appr-img-frame--cert {
+  border: 1px solid #e5e5e5;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.appr-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.appr-img-frame:hover .appr-img {
+  transform: scale(1.02);
+}
+
+.appr-split-content {
+  padding: 10px;
+}
+
+.appr-desc {
+  font-size: 14.5px;
+  line-height: 1.75;
+  color: #555555;
+  margin: 0 0 16px 0;
+}
+
+.appr-bullet-list {
+  margin: 0 0 24px 0;
+  padding-left: 20px;
+}
+
+.appr-bullet-list li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #555555;
+  margin-bottom: 10px;
+}
+
+/* ==================== DUAL IMAGES IN SPLIT ==================== */
+.appr-dual-img-wrap {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.appr-img-frame--main {
+  width: 85%;
+}
+
+.appr-img-frame--sub {
+  position: absolute;
+  width: 50%;
+  right: 0;
+  bottom: 0;
+  border: 4px solid #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== CENTERED NARRATIVE ==================== */
+.appr-narrative-section {
+  padding: 55px 0;
+  background: #ffffff;
+  border-top: 1px solid #f2f2f2;
+}
+
+.appr-narrative-box {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.appr-narrative-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 22px;
+  line-height: 1.3;
+}
+
+.appr-narrative-body p {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: #555555;
+  margin: 0 0 16px;
+}
+
+.appr-narrative-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== PRICING & TURNAROUND ==================== */
+.appr-pricing-section {
+  padding: 60px 0;
+  background: #faf9f7;
+  border-top: 1px solid #f2f2f2;
+}
+
+.appr-pricing-header {
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.appr-pricing-subtitle {
+  font-size: 14.5px;
+  color: #666666;
+  margin: 0;
+}
+
+.appr-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.appr-price-card {
+  background: #ffffff;
+  border: 1px solid #eee8e0;
+  border-radius: 8px;
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.appr-price-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.appr-price-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.appr-card-sub {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 10px;
+}
+
+.appr-card-highlight {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #2e3b23; /* luxury green tone */
+  margin: 0 0 8px;
+}
+
+.appr-card-desc {
+  font-size: 13px;
+  color: #666666;
+  margin: 0;
+}
+
+/* ==================== CONSULTATION SESSION BADGE ==================== */
+.appr-session-badge {
+  display: inline-block;
+  background: #eef4ea;
+  color: #2e5924;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* ==================== FAQ ACCORDION ==================== */
+.appr-faq-section {
+  padding: 65px 0 80px;
+  background: #ffffff;
+  border-top: 1px solid #f2f2f2;
+}
+
+.appr-faq-header {
+  margin-bottom: 35px;
+}
+
+.appr-faq-accordion {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appr-faq-item {
+  background: #fdfcfb;
+  border: 1px solid #ebe7e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.appr-faq-item[open] {
+  border-color: #d4c8bb;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.appr-faq-summary {
+  padding: 20px 24px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  user-select: none;
+}
+
+.appr-faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.appr-faq-chevron {
+  font-family: var(--font-body-family, sans-serif);
+  font-size: 22px;
+  font-weight: 300;
+  color: #888888;
+  transition: transform 0.25s ease;
+}
+
+.appr-faq-item[open] .appr-faq-chevron {
+  transform: rotate(45deg);
+}
+
+.appr-faq-answer {
+  padding: 0 24px 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #555555;
+  border-top: 1px solid #f4f0eb;
+  padding-top: 14px;
+}
+
+.appr-faq-answer p {
+  margin: 0;
+}
+
+/* ==================== BUTTONS ==================== */
+.appr-btn-wrapper {
+  margin-top: 24px;
+}
+
+.appr-btn {
+  display: inline-block;
+  background: #2e3b23;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 13px 32px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  box-shadow: 0 4px 12px rgba(46, 59, 35, 0.2);
+}
+
+.appr-btn:hover {
+  background: #1a2214;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 991px) {
+  .appr-main-title { font-size: 30px; }
+  .appr-section-title { font-size: 26px; }
+  .appr-split-grid { gap: 30px; }
+  .appr-pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+}
+
+@media (max-width: 767px) {
+  .appr-header-section { padding: 35px 0 25px; }
+  .appr-main-title { font-size: 25px; }
+  .appr-section-title { font-size: 23px; }
+  .appr-split-grid { grid-template-columns: 1fr; gap: 25px; }
+  .appr-split-content { padding: 0; }
+  .appr-btn { width: 100%; text-align: center; }
+  .appr-faq-summary { font-size: 16px; padding: 16px 18px; }
+  .appr-faq-answer { padding: 12px 18px 18px; }
+}
+</style>
