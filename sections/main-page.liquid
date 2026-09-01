@@ -178,6 +178,8 @@
   {% render 'content-jewellery-care' %}
 {%- elsif page.handle contains 'appraisal' or page.handle contains 'valuation' or page.template_suffix == 'appraisals' -%}
   {% render 'content-appraisals' %}
+{%- elsif page.handle contains 'about' or page.template_suffix contains 'about' -%}
+  {% render 'content-about-page' %}
 {%- else -%}
 <div class="color-{{ section.settings.color_scheme }} gradient main-page-{{ section.id }}">
   {%- assign bg_video = section.settings.background_video -%}

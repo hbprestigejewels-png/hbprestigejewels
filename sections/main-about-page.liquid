@@ -1,0 +1,12 @@
+{{ 'section-main-page.css' | asset_url | stylesheet_tag }}
+
+{% render 'content-about-page' %}
+
+{% schema %}
+{
+  "name": "About Us",
+  "tag": "section",
+  "class": "section",
+  "settings": []
+}
+{% endschema %}
