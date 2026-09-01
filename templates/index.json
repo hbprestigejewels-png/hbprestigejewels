@@ -1553,76 +1553,6 @@
         "button_link": "/",
         "color_scheme": ""
       }
-    },
-    "178663782321b08457": {
-      "type": "_blocks",
-      "blocks": {
-        "ai_gen_block_1a1f4e7_AVJ4RL": {
-          "type": "ai_gen_block_1a1f4e7",
-          "disabled": true,
-          "settings": {
-            "blog": "",
-            "posts_to_show": 6,
-            "heading": "Latest Stories",
-            "subheading": "Discover our curated collection of insights and inspiration",
-            "heading_alignment": "center",
-            "columns_desktop": 3,
-            "columns_tablet": "2",
-            "grid_gap": 30,
-            "container_width": 1300,
-            "section_padding_top": 60,
-            "section_padding_bottom": 60,
-            "heading_spacing": 40,
-            "grid_spacing": 40,
-            "card_background": "#ffffff",
-            "card_border_radius": 8,
-            "card_padding": 30,
-            "card_shadow_vertical": 4,
-            "card_shadow_blur": 15,
-            "card_shadow_opacity": 0.1,
-            "card_hover_lift": 8,
-            "image_aspect_ratio": 65,
-            "show_badge": true,
-            "badge_background": "#121212",
-            "badge_text_color": "#ffffff",
-            "badge_font_size": 11,
-            "badge_border_radius": 4,
-            "heading_font": "cormorant_i5",
-            "heading_size": 48,
-            "heading_color": "#121212",
-            "subheading_size": 16,
-            "subheading_color": "#666666",
-            "title_font": "cormorant_i5",
-            "title_size": 24,
-            "title_color": "#121212",
-            "title_hover_color": "#666666",
-            "show_excerpt": true,
-            "excerpt_length": 120,
-            "excerpt_size": 14,
-            "excerpt_color": "#666666",
-            "show_author": true,
-            "show_date": true,
-            "avatar_size": 40,
-            "meta_font_size": 13,
-            "meta_color": "#666666",
-            "date_format": "%B %d, %Y",
-            "avatar_placeholder_bg": "#f4f4f4",
-            "avatar_placeholder_text": "#121212",
-            "divider_color": "#e5e5e5",
-            "button_text": "Read More",
-            "button_font_size": 14,
-            "button_text_color": "#121212",
-            "button_hover_color": "#666666",
-            "button_underline_color": "#121212",
-            "background_color": "#f9f9f9"
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "ai_gen_block_1a1f4e7_AVJ4RL"
-      ],
-      "settings": {}
     }
   },
   "order": [
@@ -1647,7 +1577,6 @@
     "instagram_shop_yddHK4",
     "blogpost_9yDB6z",
     "faq_DrbPD7",
-    "instacrousel_TiUjNe",
-    "178663782321b08457"
+    "instacrousel_TiUjNe"
   ]
 }
