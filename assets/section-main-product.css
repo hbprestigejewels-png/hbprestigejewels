@@ -258,18 +258,20 @@ a.product__text {
 
 .product__title {
   word-break: break-word;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
-.product__title h1 {
-  font-family: "Poppins", "Poppins Fallback", Arial, Tahoma, sans-serif;
+.product__title h1,
+.product__title .h1,
+.product__title > * {
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 32px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.25;
   color: rgb(0, 0, 0);
 
   word-break: break-word;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .product__title > * {
