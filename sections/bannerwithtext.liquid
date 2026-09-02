@@ -64,21 +64,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 2.5rem;
+    padding: 1.2rem 2.8rem;
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-decoration: none;
-    transition: all 0.2s ease;
-    border: 1px solid #000;
-    background: transparent;
-    color: #000;
-    border-radius:20px !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1.5px solid rgba(194, 133, 116, 0.75);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 246, 243, 0.85) 45%, rgba(246, 230, 224, 0.7) 100%);
+    color: #ad6d5d;
+    border-radius: 9999px !important;
+    backdrop-filter: blur(14px) saturate(190%);
+    -webkit-backdrop-filter: blur(14px) saturate(190%);
+    box-shadow: 0 8px 24px -4px rgba(194, 133, 116, 0.18), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
   }
 
   .sustainable-btn:hover {
-    background: #000;
-    color: #fff;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(251, 239, 234, 0.95) 50%, rgba(242, 219, 211, 0.85) 100%);
+    border-color: #b87b6c;
+    color: #944b3b;
+    box-shadow: 0 12px 30px -4px rgba(194, 133, 116, 0.32), inset 0 2px 3px rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
   }
 
   /* Image Stack Overlap Effect - Cadiant Style */

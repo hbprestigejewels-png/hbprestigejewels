@@ -303,23 +303,18 @@
                 assign qty_rules = true
               endif
             -%}
-            {% if false %}
+            {%- if card_product.variants.size > 1 or qty_rules -%}
               <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
                 <button
                   id="{{ product_form_id }}-submit"
                   type="submit"
                   name="add"
-                  class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add animate-arrow{% endif %}"
+                  class="quick-add__submit button button--full-width button--secondary"
                   aria-haspopup="dialog"
                   aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
                   data-product-url="{{ card_product.url }}"
                 >
-                  {{ 'products.product.choose_options' | t }}
-                  {%- if horizontal_quick_add -%}
-                    <span class="icon-wrap">
-                      {{- 'icon-arrow.svg' | inline_asset_content -}}
-                    </span>
-                  {%- endif -%}
+                  {{ 'products.product.add_to_cart' | t }}
                   {%- render 'loading-spinner' -%}
                 </button>
               </modal-opener>
@@ -364,7 +359,7 @@
                     id="{{ product_form_id }}-submit"
                     type="submit"
                     name="add"
-                    class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add{% endif %}"
+                    class="quick-add__submit button button--full-width button--secondary"
                     aria-haspopup="dialog"
                     aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
                     aria-live="polite"
@@ -383,11 +378,6 @@
                     <span class="sold-out-message hidden">
                       {{ 'products.product.sold_out' | t }}
                     </span>
-                    {%- if horizontal_quick_add -%}
-                      <span class="icon-wrap">
-                        {{- 'icon-plus.svg' | inline_asset_content -}}
-                      </span>
-                    {%- endif -%}
                     {%- render 'loading-spinner' -%}
                   </button>
                 {%- endform -%}
@@ -432,7 +422,7 @@
               -%}
               <modal-opener
                 id="QuickBulk-{{ card_product.id }}-{{ section_id }}"
-                data-modal="#QuickAddBulk-{{ card_product.id }}-{{ section.id }}"
+                data-modal="#QuickAddBulk-{{ card_product.id }}-{{ section_id }}"
               >
                 <button
                   id="{{ product_form_id }}-submit"
@@ -443,7 +433,7 @@
                   aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
                   data-product-url="{{ card_product.url }}"
                 >
-                  {{ 'products.product.choose_options' | t }}
+                  {{ 'products.product.add_to_cart' | t }}
                   {%- render 'loading-spinner' -%}
                 </button>
               </modal-opener>
@@ -473,41 +463,21 @@
                     <div class="quick-add__content-info__media">
                       <div class="quick-add__info">
                         {%- if card_product.featured_media -%}
-                          <div
-                            class="quick-add__product-media"
-                          >
+                          <div class="quick-add__product-media">
                             <div class="quick-add__product-container global-media-settings">
-                              {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
                               <img
-                                srcset="
-                                  {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165, format: 'webp' }} 165w,{%- endif -%}
-                                  {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360, format: 'webp' }} 360w,{%- endif -%}
-                                  {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533, format: 'webp' }} 533w,{%- endif -%}
-                                  {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720, format: 'webp' }} 720w,{%- endif -%}
-                                  {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940, format: 'webp' }} 940w,{%- endif -%}
-                                  {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066, format: 'webp' }} 1066w,{%- endif -%}
-                                  {{ card_product.featured_media | image_url: width: 1200, format: 'webp' }} 1200w
-                                "
                                 src="{{ card_product.featured_media | image_url: width: 533, format: 'webp' }}"
-                                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
                                 alt="{{ card_product.featured_media.alt | default: card_product.title | escape }}"
                                 class="motion-reduce"
-                                {% unless lazy_load == false %}
-                                  loading="lazy"
-                                {% endunless %}
+                                loading="lazy"
                                 width="{{ card_product.featured_media.width }}"
                                 height="{{ card_product.featured_media.height }}"
                               >
-                              {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
                             </div>
                           </div>
                         {%- endif -%}
                         <a
-                          {% if card_product == blank %}
-                            role="link" aria-disabled="true"
-                          {% else %}
-                            href="{{ card_product.url }}"
-                          {% endif %}
+                          href="{{ card_product.url }}"
                           class="link product__view-details animate-arrow small-hide medium-hide"
                         >
                           {{ 'products.product.view_full_details' | t -}}
@@ -519,26 +489,14 @@
                           <h3>{{ card_product.title | escape }}</h3>
                         </a>
                         {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
-                        {%- if card_product.quantity_price_breaks_configured? -%}
-                          <div class="card__information-volume-pricing-note">
-                            <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
-                          </div>
-                        {%- endif -%}
                       </div>
                     </div>
                     <div>
                       <div class="quick-add-modal__content-info--bulk-details small-hide medium-hide">
                         <a href="{{ card_product.url }}" class="full-unstyled-link">
-                          <h3 class="h2">
-                            {{ card_product.title | escape }}
-                          </h3>
+                          <h3 class="h2">{{ card_product.title | escape }}</h3>
                         </a>
                         {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
-                        {%- if card_product.quantity_price_breaks_configured? -%}
-                          <div class="card__information-volume-pricing-note">
-                            <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
-                          </div>
-                        {%- endif -%}
                       </div>
                       <bulk-modal
                         id="QuickBulkModal-{{ card_product.id }}-{{ section_id }}"

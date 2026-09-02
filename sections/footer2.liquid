@@ -339,18 +339,19 @@
   .newsletter-box{
     display: flex;
     align-items: center;
-    border: 1.5px solid var(--text-dark);
+    border: 1.5px solid #e6d9c3;
     max-width: 420px;
-    border-radius: 30px !important;
+    border-radius: 40px !important;
     overflow: hidden;
     background: #fff;
     padding-left: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     transition: border-color .3s ease, box-shadow .3s ease;
   }
 
   .newsletter-box:focus-within{
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(201,161,90,0.18), 0 6px 16px rgba(201,161,90,0.15);
+    border-color: #c28574;
+    box-shadow: 0 0 0 4px rgba(194,133,116,0.18), 0 6px 16px rgba(194,133,116,0.15);
   }
 
   .newsletter-icon{
@@ -362,11 +363,11 @@
   .newsletter-icon svg{
     width: 16px;
     height: 16px;
-    fill: #999;
+    fill: #b87b6c;
     transition: fill .25s ease;
   }
   .newsletter-box:focus-within .newsletter-icon svg{
-    fill: var(--accent);
+    fill: #944b3b;
   }
 
   .newsletter-input{
@@ -396,15 +397,17 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--text-dark);
-    color: #fff;
+    background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
+    color: #fff !important;
     border: none;
-    padding: 13px 22px;
+    padding: 13px 24px;
     font-size: 13.5px;
-    font-weight: 500;
-    letter-spacing: .3px;
+    font-weight: 600;
+    letter-spacing: .4px;
     cursor: pointer;
-    transition: background .35s ease, padding-right .3s ease;
+    border-radius: 40px;
+    box-shadow: 0 4px 14px rgba(184, 123, 108, 0.35);
+    transition: all .35s ease;
     white-space: nowrap;
     overflow: hidden;
   }
@@ -416,7 +419,7 @@
     left: -60%;
     width: 40%;
     height: 100%;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
     transform: skewX(-20deg);
     transition: left .6s ease;
   }
@@ -439,8 +442,9 @@
   }
 
   .newsletter-btn:hover{
-    background: var(--accent);
-    padding-right: 18px;
+    background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
+    box-shadow: 0 6px 20px rgba(184, 123, 108, 0.5);
+    padding-right: 20px;
   }
   .newsletter-btn:hover .newsletter-btn-icon svg{
     transform: translateX(0);

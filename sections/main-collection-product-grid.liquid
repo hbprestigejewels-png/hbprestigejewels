@@ -186,14 +186,365 @@
               {%- endfor -%}
             </ul>
 
+            </ul>
+
+            <!-- Infinite Scroll & Load More Component -->
+            <div 
+              id="infinite-scroll-container"
+              class="infinite-scroll-container"
+              data-next-url="{{ paginate.next.url }}"
+              data-total-pages="{{ paginate.pages }}"
+              data-current-page="{{ paginate.current_page }}"
+              data-total-products="{{ collection.products_count }}"
+              data-loaded-products="{{ collection.products.size }}"
+            >
+              <!-- Live Product Count & Progress Tracker -->
+              <div class="collection-progress-tracker" id="collection-progress-tracker">
+                <p class="collection-progress-text">
+                  Showing <span id="loaded-products-count" class="progress-count-highlight">{{ collection.products.size }}</span> of <span id="total-products-count" class="progress-count-highlight">{{ collection.products_count }}</span> products
+                </p>
+                <div class="collection-progress-track">
+                  {% assign progress_pct = collection.products.size | times: 100.0 | divided_by: collection.products_count | round %}
+                  <div class="collection-progress-bar" id="collection-progress-bar" style="width: {{ progress_pct | default: 100 }}%;"></div>
+                </div>
+              </div>
+
+              <!-- Action: Get More Products Button -->
+              {%- if paginate.next -%}
+                <div class="load-more-btn-wrapper" id="load-more-btn-wrapper">
+                  <button 
+                    type="button" 
+                    id="load-more-products-btn" 
+                    class="button load-more-btn"
+                    aria-label="Load more products"
+                  >
+                    <span class="load-more-btn-text">
+                      Get More Products
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px; vertical-align: middle;">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <polyline points="19 12 12 19 5 12"></polyline>
+                      </svg>
+                    </span>
+                    <span class="load-more-btn-spinner" style="display: none;">
+                      <span class="btn-spinner-icon"></span>
+                      Loading More Pieces...
+                    </span>
+                  </button>
+                </div>
+              {%- endif -%}
+
+              <!-- Sentinel for automatic scroll trigger -->
+              <div id="infinite-scroll-sentinel" class="infinite-scroll-sentinel"></div>
+
+              <!-- Completion message when all products are loaded -->
+              <div id="infinite-scroll-end" class="infinite-scroll-end" {% if paginate.next %}style="display: none;"{% endif %}>
+                <span class="infinite-scroll-end-line"></span>
+                <span class="infinite-scroll-end-text">✦ You've viewed all {{ collection.products_count }} products ✦</span>
+                <span class="infinite-scroll-end-line"></span>
+              </div>
+            </div>
+
+            {% comment %} Standard pagination kept hidden for SEO crawlers {% endcomment %}
             {%- if paginate.pages > 1 -%}
-              {% render 'pagination', paginate: paginate, anchor: '' %}
+              <div class="pagination-wrapper pagination-hidden-seo" style="display: none !important;">
+                {% render 'pagination', paginate: paginate, anchor: '' %}
+              </div>
             {%- endif -%}
           </div>
         {%- endif -%}
       </div>
     </div>
   {%- endpaginate -%}
+
+  <style>
+    .infinite-scroll-container {
+      width: 100%;
+      text-align: center;
+      padding: 3.5rem 0 2rem;
+      position: relative;
+    }
+
+    /* Product Progress Tracker */
+    .collection-progress-tracker {
+      max-width: 380px;
+      margin: 0 auto 2.2rem;
+      text-align: center;
+    }
+    .collection-progress-text {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #666;
+      margin: 0 0 1rem;
+      letter-spacing: 0.03em;
+    }
+    .progress-count-highlight {
+      font-weight: 700;
+      color: #944b3b;
+    }
+    .collection-progress-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(194, 133, 116, 0.18);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .collection-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #d89685 0%, #c28574 50%, #b37060 100%);
+      border-radius: 9999px;
+      transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 10px rgba(184, 123, 108, 0.45);
+    }
+
+    /* Load More Luxury Pill Button */
+    .load-more-btn-wrapper {
+      margin: 1.5rem auto 1rem;
+    }
+    .load-more-btn {
+      min-width: 240px !important;
+      min-height: 4.8rem !important;
+      padding: 1.3rem 3.4rem !important;
+      font-size: 1.45rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.06em !important;
+      border-radius: 9999px !important;
+      background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
+      color: #ffffff !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      box-shadow: 0 10px 28px -4px rgba(184, 123, 108, 0.42), 
+                  inset 0 1.5px 2px rgba(255, 255, 255, 0.6) !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .load-more-btn:hover {
+      background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 14px 34px -4px rgba(184, 123, 108, 0.6), 
+                  inset 0 2px 3px rgba(255, 255, 255, 0.75) !important;
+    }
+    .load-more-btn:active {
+      transform: translateY(1px) !important;
+    }
+    .load-more-btn-spinner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-spinner-icon {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: btnSpin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    /* Sentinel */
+    .infinite-scroll-sentinel {
+      width: 100%;
+      height: 20px;
+      margin-top: -200px;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    /* Completion text */
+    .infinite-scroll-end {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem;
+      margin: 2.5rem auto 1rem;
+      max-width: 500px;
+    }
+    .infinite-scroll-end-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(194, 133, 116, 0.4), transparent);
+    }
+    .infinite-scroll-end-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #944b3b;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    @keyframes btnSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script>
+    (function() {
+      let isFetchingNextPage = false;
+      let infiniteObserver = null;
+
+      function setupInfiniteScroll() {
+        const container = document.getElementById('infinite-scroll-container');
+        const sentinel = document.getElementById('infinite-scroll-sentinel');
+        const loadMoreBtn = document.getElementById('load-more-products-btn');
+        const loadMoreWrapper = document.getElementById('load-more-btn-wrapper');
+        const endEl = document.getElementById('infinite-scroll-end');
+        const productGrid = document.getElementById('product-grid');
+        const loadedCountEl = document.getElementById('loaded-products-count');
+        const totalCountEl = document.getElementById('total-products-count');
+        const progressBar = document.getElementById('collection-progress-bar');
+
+        if (!container || !productGrid) return;
+
+        if (infiniteObserver) {
+          infiniteObserver.disconnect();
+          infiniteObserver = null;
+        }
+
+        let nextUrl = container.getAttribute('data-next-url');
+        const totalProducts = parseInt(container.getAttribute('data-total-products'), 10) || 0;
+
+        function updateProgressUI() {
+          const currentCount = productGrid.querySelectorAll('.grid__item').length;
+          if (loadedCountEl) loadedCountEl.textContent = currentCount;
+          if (totalCountEl && totalProducts > 0) totalCountEl.textContent = totalProducts;
+          if (progressBar && totalProducts > 0) {
+            const pct = Math.min(100, Math.round((currentCount / totalProducts) * 100));
+            progressBar.style.width = pct + '%';
+          }
+        }
+
+        updateProgressUI();
+
+        if (!nextUrl || nextUrl.trim() === '') {
+          if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
+          if (endEl) endEl.style.display = 'flex';
+          return;
+        }
+
+        async function loadMoreProducts() {
+          if (isFetchingNextPage) return;
+          nextUrl = container.getAttribute('data-next-url');
+          if (!nextUrl || nextUrl.trim() === '') return;
+
+          isFetchingNextPage = true;
+
+          // Toggle Button Spinner
+          if (loadMoreBtn) {
+            const btnText = loadMoreBtn.querySelector('.load-more-btn-text');
+            const btnSpinner = loadMoreBtn.querySelector('.load-more-btn-spinner');
+            if (btnText) btnText.style.display = 'none';
+            if (btnSpinner) btnSpinner.style.display = 'inline-flex';
+            loadMoreBtn.setAttribute('disabled', 'disabled');
+          }
+
+          try {
+            const response = await fetch(nextUrl);
+            if (!response.ok) throw new Error('Network error loading products');
+            const htmlText = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+
+            const newGridItems = doc.querySelectorAll('#product-grid .grid__item');
+            if (newGridItems.length > 0) {
+              const fragment = document.createDocumentFragment();
+              newGridItems.forEach(item => {
+                item.classList.add('scroll-trigger--cancel');
+                fragment.appendChild(item);
+              });
+              productGrid.appendChild(fragment);
+
+              updateProgressUI();
+
+              // Re-trigger reveal animation if needed
+              if (typeof initializeScrollAnimationTrigger === 'function') {
+                initializeScrollAnimationTrigger(document.getElementById('ProductGridContainer'));
+              }
+
+              // Re-init wishlist buttons if wishlist app is active
+              if (window.WishlistBySquare && typeof window.WishlistBySquare.init === 'function') {
+                window.WishlistBySquare.init();
+              }
+            }
+
+            const newContainer = doc.getElementById('infinite-scroll-container');
+            const newNextUrl = newContainer ? newContainer.getAttribute('data-next-url') : null;
+
+            if (newNextUrl && newNextUrl.trim() !== '') {
+              container.setAttribute('data-next-url', newNextUrl);
+              nextUrl = newNextUrl;
+              if (loadMoreBtn) {
+                const btnText = loadMoreBtn.querySelector('.load-more-btn-text');
+                const btnSpinner = loadMoreBtn.querySelector('.load-more-btn-spinner');
+                if (btnText) btnText.style.display = 'inline-flex';
+                if (btnSpinner) btnSpinner.style.display = 'none';
+                loadMoreBtn.removeAttribute('disabled');
+              }
+              isFetchingNextPage = false;
+            } else {
+              container.removeAttribute('data-next-url');
+              if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
+              if (endEl) endEl.style.display = 'flex';
+              if (infiniteObserver && sentinel) {
+                infiniteObserver.unobserve(sentinel);
+              }
+              isFetchingNextPage = false;
+            }
+          } catch (err) {
+            console.error('Error loading more products:', err);
+            if (loadMoreBtn) {
+              const btnText = loadMoreBtn.querySelector('.load-more-btn-text');
+              const btnSpinner = loadMoreBtn.querySelector('.load-more-btn-spinner');
+              if (btnText) btnText.style.display = 'inline-flex';
+              if (btnSpinner) btnSpinner.style.display = 'none';
+              loadMoreBtn.removeAttribute('disabled');
+            }
+            isFetchingNextPage = false;
+          }
+        }
+
+        // Attach click event to Get More button
+        if (loadMoreBtn) {
+          loadMoreBtn.onclick = function(e) {
+            e.preventDefault();
+            loadMoreProducts();
+          };
+        }
+
+        // Auto-load on scroll observer
+        if (sentinel) {
+          infiniteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && !isFetchingNextPage) {
+                loadMoreProducts();
+              }
+            });
+          }, {
+            root: null,
+            rootMargin: '300px 0px',
+            threshold: 0.01
+          });
+
+          infiniteObserver.observe(sentinel);
+        }
+      }
+
+      window.initInfiniteScroll = setupInfiniteScroll;
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupInfiniteScroll);
+      } else {
+        setupInfiniteScroll();
+      }
+    })();
+  </script>
   {% if section.settings.image_shape == 'arch' %}
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}

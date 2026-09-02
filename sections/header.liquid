@@ -128,6 +128,11 @@
 </style>
 
 {%- style -%}
+  .header-wrapper {
+    background: linear-gradient(180deg, #fff6ef 0%, #fff1ea 100%) !important;
+    border-bottom: 1px solid #f0dcc8 !important;
+  }
+
   .header {
     padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
   }
@@ -179,9 +184,10 @@
     }
 
     .header {
-      background: #ffffff !important;
+      background: linear-gradient(180deg, #fff6ef 0%, #fff1ea 100%) !important;
       border-radius: 24px !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+      border: 1px solid #f0dcc8 !important;
       padding: 6px 14px !important;
       display: flex !important;
       justify-content: space-between !important;

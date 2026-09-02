@@ -1,6 +1,5 @@
 <section class="ck-scrolling-text" 
 style="
-background: {{ section.settings.bg_color }};
 padding-top: {{ section.settings.padding_top }}px;
 padding-bottom: {{ section.settings.padding_bottom }}px;
 ">
@@ -25,6 +24,21 @@ padding-bottom: {{ section.settings.padding_bottom }}px;
 .ck-scrolling-text{
   width:100%;
   overflow:hidden;
+  background: linear-gradient(90deg, #d89685 0%, #f4ded7 25%, #c28574 50%, #f8ebe6 75%, #d89685 100%) !important;
+  background-size: 250% 100%;
+  animation: scrollBarGradient 6s ease-in-out infinite alternate;
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 2px 8px rgba(184, 123, 108, 0.12);
+}
+
+@keyframes scrollBarGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .ck-scroll-wrapper{
@@ -46,8 +60,8 @@ padding-bottom: {{ section.settings.padding_bottom }}px;
   white-space:nowrap;
   margin-right:60px;
   font-size:{{ section.settings.text_size }}px;
-  color:{{ section.settings.text_color }};
-  font-weight:500;
+  color: #000000 !important;
+  font-weight:600;
   letter-spacing:1px;
   font-family:var(--font-body-family);
 }

@@ -13,3 +13,7 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Archives
+*.zip
+*.rar

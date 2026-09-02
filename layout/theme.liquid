@@ -94,6 +94,9 @@
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
@@ -459,7 +462,7 @@
       .banner__text { margin-bottom: 1.5rem; }
       .banner__buttons { display: flex; flex-wrap: wrap; gap: 1rem; }
       /* Top bar critical */
-      .top-header-wrapper { background: #000; color: #fff; font-size: 12px; text-align: center; position: relative; z-index: 10; }
+      .top-header-wrapper { background: linear-gradient(90deg, #d89685 0%, #f4ded7 25%, #c28574 50%, #f8ebe6 75%, #d89685 100%); color: #000; font-size: 12px; text-align: center; position: relative; z-index: 10; }
       .top-header { max-width: 100%; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; }
       .announcement-text { display: flex; justify-content: center; align-items: center; flex: 1; white-space: nowrap; }
       /* Footer */
@@ -523,9 +526,11 @@
 
 
 
-    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
-      {{ 'accessibility.skip_to_text' | t }}
-    </a>
+    {% comment %}
+      <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+        {{ 'accessibility.skip_to_text' | t }}
+      </a>
+    {% endcomment %}
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}

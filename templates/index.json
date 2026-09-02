@@ -166,8 +166,8 @@
       ],
       "name": "Scrolling Text",
       "settings": {
-        "bg_color": "#191919",
-        "text_color": "#ffffff",
+        "bg_color": "#d89685",
+        "text_color": "#000000",
         "text_size": 12,
         "text_size_mobile": 12,
         "speed": 30,

@@ -1367,22 +1367,37 @@ shopify-accelerated-checkout-cart {
   }
 }
 
-.button.loading>.loading__spinner {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  height: 100%;
-  display: flex;
-  align-items: center;
+.button.loading {
+  position: relative !important;
 }
 
-.button.loading>.loading__spinner .spinner {
-  width: fit-content;
+.button.loading > span {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
-.button.loading>.loading__spinner .path {
-  stroke: rgb(var(--color-button-text));
+.button.loading > .loading__spinner {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  position: absolute !important;
+  width: 22px !important;
+  height: 22px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.button.loading > .loading__spinner .spinner {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.button.loading > .loading__spinner .path {
+  stroke: currentColor !important;
+  stroke-width: 3.5 !important;
 }
 
 /* Button - social share */
@@ -2369,12 +2384,13 @@ input[type='checkbox'] {
   /* background-color: rgb(var(--color-background)); */
   /* position: fixed;
   width: stretch; */
-  background: #ffffffb5 !important;
+  background: linear-gradient(180deg, #fff6ef 0%, #fff1ea 100%) !important;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   z-index: 9999 !important;
+  border-bottom: 1px solid #f0dcc8 !important;
   /* Bottom Shadow */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(194, 133, 116, 0.08);
 
   transition: transform .35s ease, opacity .35s ease;
 }
@@ -3835,4 +3851,141 @@ details-disclosure>details {
 .custom-accordion table td {
   font-size: 1.25rem !important; /* ~12.5px */
   padding: 6px 8px !important;
+}
+
+/* ==========================================================================
+   GLOBAL LUXURY GRADIENT GLASSMORPHISM BUTTONS (ALL SITE BUTTONS)
+   ========================================================================== */
+
+/* Completely hide Skip to Content button */
+.skip-to-content-link,
+a.skip-to-content-link,
+.skip-to-content-link.button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  clip: rect(0 0 0 0) !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Universal Pill shape and base styling for all primary & standard CTA buttons */
+.button:not(.skip-to-content-link),
+.button--primary:not(.skip-to-content-link),
+button.button:not(.skip-to-content-link),
+a.button:not(.skip-to-content-link),
+.shopify-challenge__button,
+.customer button:not(.button--secondary):not(.skip-to-content-link),
+.cart__checkout-button,
+.quick-add__submit,
+.banner__buttons .button:not(.skip-to-content-link),
+.slideshow__text .button:not(.skip-to-content-link),
+.image-with-text__content .button:not(.skip-to-content-link),
+.rich-text__buttons .button:not(.skip-to-content-link),
+.newsletter-form__button,
+.contact__button .button:not(.skip-to-content-link),
+input[type="submit"].button,
+input[type="submit"] {
+  border-radius: 9999px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 4.6rem !important;
+  padding: 1.2rem 2.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  font-size: 1.45rem !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.42) !important;
+  background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: 0 10px 26px -4px rgba(184, 123, 108, 0.42), 
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.6), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.16) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Remove default Dawn pseudo elements */
+.button:not(.skip-to-content-link)::after,
+.button:not(.skip-to-content-link)::before,
+.button--primary::after,
+.button--primary::before,
+.cart__checkout-button::after,
+.cart__checkout-button::before,
+.shopify-challenge__button::after,
+.shopify-challenge__button::before {
+  display: none !important;
+}
+
+/* Hover state for all primary gradient glass buttons */
+.button:hover:not([disabled]):not(.skip-to-content-link),
+.button--primary:hover:not([disabled]):not(.skip-to-content-link),
+button.button:hover:not([disabled]):not(.skip-to-content-link),
+a.button:hover:not([disabled]):not(.skip-to-content-link),
+.shopify-challenge__button:hover:not([disabled]),
+.customer button:hover:not([disabled]):not(.button--secondary):not(.skip-to-content-link),
+.cart__checkout-button:hover:not([disabled]),
+.quick-add__submit:hover:not([disabled]),
+.banner__buttons .button:hover:not([disabled]):not(.skip-to-content-link),
+.slideshow__text .button:hover:not([disabled]):not(.skip-to-content-link),
+.image-with-text__content .button:hover:not([disabled]):not(.skip-to-content-link),
+.rich-text__buttons .button:hover:not([disabled]):not(.skip-to-content-link),
+.newsletter-form__button:hover:not([disabled]),
+.contact__button .button:hover:not([disabled]):not(.skip-to-content-link),
+input[type="submit"]:hover:not([disabled]) {
+  background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
+  border-color: rgba(255, 255, 255, 0.68) !important;
+  color: #ffffff !important;
+  box-shadow: 0 14px 34px -4px rgba(184, 123, 108, 0.6), 
+              inset 0 2px 3px rgba(255, 255, 255, 0.75), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.18) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Active Press state */
+.button:active:not([disabled]):not(.skip-to-content-link),
+.button--primary:active:not([disabled]):not(.skip-to-content-link),
+button.button:active:not([disabled]):not(.skip-to-content-link),
+a.button:active:not([disabled]):not(.skip-to-content-link),
+.cart__checkout-button:active:not([disabled]) {
+  transform: translateY(1px) scale(0.99) !important;
+  box-shadow: 0 6px 16px -2px rgba(184, 123, 108, 0.35) !important;
+}
+
+/* Secondary / Outlined Glass Buttons (Frosted glass like Add to cart) */
+.button--secondary:not(.skip-to-content-link),
+a.button.button--secondary:not(.skip-to-content-link),
+button.button.button--secondary:not(.skip-to-content-link),
+.customer button.button--secondary:not(.skip-to-content-link) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 246, 243, 0.85) 45%, rgba(246, 230, 224, 0.7) 100%) !important;
+  backdrop-filter: blur(14px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(190%) !important;
+  border: 1.5px solid rgba(194, 133, 116, 0.75) !important;
+  color: #ad6d5d !important;
+  box-shadow: 0 8px 24px -4px rgba(194, 133, 116, 0.18), 
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.95), 
+              inset 0 -1.5px 3px rgba(194, 133, 116, 0.12) !important;
+  text-shadow: none !important;
+}
+
+.button--secondary:hover:not([disabled]):not(.skip-to-content-link),
+a.button.button--secondary:hover:not([disabled]):not(.skip-to-content-link),
+button.button.button--secondary:hover:not([disabled]):not(.skip-to-content-link) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(251, 239, 234, 0.95) 50%, rgba(242, 219, 211, 0.85) 100%) !important;
+  border-color: #b87b6c !important;
+  color: #944b3b !important;
+  box-shadow: 0 12px 30px -4px rgba(194, 133, 116, 0.32), 
+              inset 0 2px 3px rgba(255, 255, 255, 1), 
+              inset 0 -1px 2px rgba(194, 133, 116, 0.2) !important;
+  transform: translateY(-2px) !important;
 }

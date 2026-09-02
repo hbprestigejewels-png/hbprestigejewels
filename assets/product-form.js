@@ -4,108 +4,160 @@ if (!customElements.get('product-form')) {
     class ProductForm extends HTMLElement {
       constructor() {
         super();
+        this.init();
+      }
 
+      connectedCallback() {
+        this.init();
+      }
+
+      init() {
         this.form = this.querySelector('form');
-        this.variantIdInput.disabled = false;
-        this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+        if (this.variantIdInput) this.variantIdInput.disabled = false;
+        
+        if (this.form && !this._hasSubmitListener) {
+          this.form.addEventListener('submit', this.onSubmitHandler.bind(this));
+          this._hasSubmitListener = true;
+        }
+
         this.cart = document.querySelector('cart-notification') || document.querySelector('cart-drawer');
         this.submitButton = this.querySelector('[type="submit"]');
-        this.submitButtonText = this.submitButton.querySelector('span');
+        this.submitButtonText = this.submitButton ? this.submitButton.querySelector('span') : null;
 
-        if (document.querySelector('cart-drawer')) this.submitButton.setAttribute('aria-haspopup', 'dialog');
+        if (document.querySelector('cart-drawer') && this.submitButton) {
+          this.submitButton.setAttribute('aria-haspopup', 'dialog');
+        }
 
         this.hideErrors = this.dataset.hideErrors === 'true';
       }
 
       onSubmitHandler(evt) {
         evt.preventDefault();
+        if (!this.form) this.form = this.querySelector('form');
+        if (!this.submitButton) this.submitButton = this.querySelector('[type="submit"]');
+        if (!this.submitButton) return;
         if (this.submitButton.getAttribute('aria-disabled') === 'true') return;
 
         this.handleErrorMessage();
 
         this.submitButton.setAttribute('aria-disabled', true);
         this.submitButton.classList.add('loading');
-        this.querySelector('.loading__spinner').classList.remove('hidden');
+        const spinner = this.querySelector('.loading__spinner');
+        if (spinner) spinner.classList.remove('hidden');
 
-        const config = fetchConfig('javascript');
+        this.cart = this.cart || document.querySelector('cart-notification') || document.querySelector('cart-drawer');
+
+        const config = typeof fetchConfig === 'function' ? fetchConfig('javascript') : {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        };
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
         delete config.headers['Content-Type'];
 
         const formData = new FormData(this.form);
-        if (this.cart) {
+        if (this.cart && typeof this.cart.getSectionsToRender === 'function') {
           formData.append(
             'sections',
             this.cart.getSectionsToRender().map((section) => section.id)
           );
           formData.append('sections_url', window.location.pathname);
-          this.cart.setActiveElement(document.activeElement);
+          if (typeof this.cart.setActiveElement === 'function') {
+            this.cart.setActiveElement(document.activeElement);
+          }
         }
         config.body = formData;
 
-        fetch(`${routes.cart_add_url}`, config)
+        const cartAddUrl = (window.routes && window.routes.cart_add_url) ? window.routes.cart_add_url : '/cart/add.js';
+
+        fetch(`${cartAddUrl}`, config)
           .then((response) => response.json())
           .then((response) => {
-            if (response.status) {
-              publish(PUB_SUB_EVENTS.cartError, {
-                source: 'product-form',
-                productVariantId: formData.get('id'),
-                errors: response.errors || response.description,
-                message: response.message,
-              });
+            if (response.status && response.status !== 200) {
+              if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+                publish(PUB_SUB_EVENTS.cartError, {
+                  source: 'product-form',
+                  productVariantId: formData.get('id'),
+                  errors: response.errors || response.description,
+                  message: response.message,
+                });
+              }
               this.handleErrorMessage(response.description);
 
               const soldOutMessage = this.submitButton.querySelector('.sold-out-message');
               if (!soldOutMessage) return;
               this.submitButton.setAttribute('aria-disabled', true);
-              this.submitButtonText.classList.add('hidden');
+              if (this.submitButtonText) this.submitButtonText.classList.add('hidden');
               soldOutMessage.classList.remove('hidden');
               this.error = true;
               return;
-            } else if (!this.cart) {
-              window.location = window.routes.cart_url;
-              return;
             }
 
-            const startMarker = CartPerformance.createStartingMarker('add:wait-for-subscribers');
-            if (!this.error)
+            if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
               publish(PUB_SUB_EVENTS.cartUpdate, {
                 source: 'product-form',
                 productVariantId: formData.get('id'),
                 cartData: response,
-              }).then(() => {
-                CartPerformance.measureFromMarker('add:wait-for-subscribers', startMarker);
               });
+            }
             this.error = false;
+
             const quickAddModal = this.closest('quick-add-modal');
             if (quickAddModal) {
               document.body.addEventListener(
                 'modalClosed',
                 () => {
                   setTimeout(() => {
-                    CartPerformance.measure("add:paint-updated-sections", () => {
+                    if (this.cart && typeof this.cart.renderContents === 'function') {
                       this.cart.renderContents(response);
-                    });
+                    }
                   });
                 },
                 { once: true }
               );
               quickAddModal.hide(true);
+            } else if (this.cart && typeof this.cart.renderContents === 'function' && response.sections) {
+              this.cart.renderContents(response);
             } else {
-              CartPerformance.measure("add:paint-updated-sections", () => {
-                this.cart.renderContents(response);
-              });
+              // Direct Drawer Refresh Fallback
+              const drawer = document.querySelector('cart-drawer');
+              if (drawer) {
+                fetch(`${window.location.pathname}?section_id=cart-drawer`)
+                  .then(r => r.text())
+                  .then(html => {
+                    const parsed = new DOMParser().parseFromString(html, 'text/html');
+                    const drawerContent = parsed.querySelector('#CartDrawer');
+                    const currentDrawer = document.querySelector('#CartDrawer');
+                    if (drawerContent && currentDrawer) {
+                      currentDrawer.innerHTML = drawerContent.innerHTML;
+                    }
+                    if (typeof drawer.open === 'function') drawer.open();
+                  });
+                // Update cart icon bubble
+                fetch(`${window.location.pathname}?section_id=cart-icon-bubble`)
+                  .then(r => r.text())
+                  .then(html => {
+                    const parsed = new DOMParser().parseFromString(html, 'text/html');
+                    const bubble = parsed.querySelector('#cart-icon-bubble');
+                    const curBubble = document.querySelector('#cart-icon-bubble');
+                    if (bubble && curBubble) curBubble.innerHTML = bubble.innerHTML;
+                  });
+              }
             }
           })
           .catch((e) => {
             console.error(e);
           })
           .finally(() => {
-            this.submitButton.classList.remove('loading');
+            if (this.submitButton) {
+              this.submitButton.classList.remove('loading');
+              if (!this.error) this.submitButton.removeAttribute('aria-disabled');
+            }
             if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
-            if (!this.error) this.submitButton.removeAttribute('aria-disabled');
-            this.querySelector('.loading__spinner').classList.add('hidden');
-
-            CartPerformance.measureFromEvent("add:user-action", evt);
+            const spinner = this.querySelector('.loading__spinner');
+            if (spinner) spinner.classList.add('hidden');
           });
       }
 
@@ -126,16 +178,16 @@ if (!customElements.get('product-form')) {
 
       toggleSubmitButton(disable = true, text) {
         if (disable) {
-          this.submitButton.setAttribute('disabled', 'disabled');
-          if (text) this.submitButtonText.textContent = text;
+          if (this.submitButton) this.submitButton.setAttribute('disabled', 'disabled');
+          if (text && this.submitButtonText) this.submitButtonText.textContent = text;
         } else {
-          this.submitButton.removeAttribute('disabled');
-          this.submitButtonText.textContent = window.variantStrings.addToCart;
+          if (this.submitButton) this.submitButton.removeAttribute('disabled');
+          if (this.submitButtonText) this.submitButtonText.textContent = (window.variantStrings && window.variantStrings.addToCart) || 'Add to cart';
         }
       }
 
       get variantIdInput() {
-        return this.form.querySelector('[name=id]');
+        return this.form ? this.form.querySelector('[name=id]') : null;
       }
     }
   );
