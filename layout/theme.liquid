@@ -474,7 +474,9 @@
     </style>
     <link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ 'base.css' | asset_url }}"></noscript>
+    <noscript><link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}"></noscript>
 
     {%- if settings.cart_type == 'drawer' -%}
       <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -626,6 +628,5 @@
     <script src="{{ 'variant-updater.js' | asset_url }}" defer="defer"></script>
     {% render 'scroll-to-top' %}
     {% render 'whatsapp-floating-btn' %}
-    {% render 'country-floating-picker' %}
   </body>
 </html>
