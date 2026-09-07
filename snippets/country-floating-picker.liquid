@@ -1,57 +1,59 @@
-<!-- FLOATING COUNTRY / CURRENCY PICKER (BOTTOM LEFT) -->
-{%- if localization.available_countries.size > 1 -%}
-  <div id="FloatingCountryPickerWrapper" class="floating-country-picker-wrapper">
-    <div class="floating-country-disclosure">
-      <!-- TRIGGER BUTTON (Matches Screenshot Pill: Flag + Currency + Arrow) -->
-      <button
-        type="button"
-        class="floating-country-btn"
-        id="FloatingCountryButton"
-        aria-expanded="false"
-        aria-label="Select Country and Currency"
-      >
-        <span class="floating-country-flag-icon">
-          <img
-            src="https://flagcdn.com/w40/{{ localization.country.iso_code | downcase }}.png"
-            alt="{{ localization.country.name }}"
-            width="20"
-            height="14"
-            loading="lazy"
-            onerror="this.style.display='none'"
-          >
-        </span>
-        <span class="floating-country-code">{{ localization.country.currency.iso_code }}</span>
-        <svg class="floating-country-caret" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
-          <path fill="currentColor" d="M0 0.5L5 5.5L10 0.5H0Z"/>
+<!-- FLOATING COUNTRY / CURRENCY PICKER (BOTTOM LEFT - EXACT SCREENSHOT MATCH) -->
+<div id="FloatingCountryPickerWrapper" class="floating-country-picker-wrapper">
+  <div class="floating-country-disclosure">
+    <!-- TRIGGER BUTTON (Pill: Flag + Currency + Caret) -->
+    <button
+      type="button"
+      class="floating-country-btn"
+      id="FloatingCountryButton"
+      aria-expanded="false"
+      aria-label="Select Country and Currency"
+    >
+      <span class="floating-country-flag-icon">
+        {%- assign current_iso = localization.country.iso_code | default: 'AU' | downcase -%}
+        <img
+          src="https://flagcdn.com/w40/{{ current_iso }}.png"
+          alt="{{ localization.country.name | default: 'Australia' }}"
+          id="FloatingCountryCurrentFlag"
+          width="20"
+          height="14"
+          loading="eager"
+          onerror="this.style.display='none'"
+        >
+      </span>
+      <span class="floating-country-code" id="FloatingCountryCurrentCode">{{ localization.country.currency.iso_code | default: 'AUD' }}</span>
+      <svg class="floating-country-caret" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M0 0.5L5 5.5L10 0.5H0Z"/>
+      </svg>
+    </button>
+
+    <!-- DROPDOWN MODAL / POPUP -->
+    <div class="floating-country-dropdown" id="FloatingCountryList" style="display: none;">
+      <div class="floating-country-header">
+        <span class="floating-country-title">Select Country &amp; Currency</span>
+        <button type="button" class="floating-country-close" id="FloatingCountryCloseBtn" aria-label="Close modal">&times;</button>
+      </div>
+
+      <!-- SEARCH FILTER -->
+      <div class="floating-country-search-box">
+        <svg class="floating-country-search-icon" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-      </button>
+        <input
+          type="text"
+          class="floating-country-search-input"
+          placeholder="Search country or currency..."
+          id="FloatingCountrySearchInput"
+          autocomplete="off"
+        >
+      </div>
 
-      <!-- DROPDOWN LIST (OPENS UPWARDS) -->
-      <div class="floating-country-dropdown" id="FloatingCountryList" style="display: none;">
-        <div class="floating-country-header">
-          <span class="floating-country-title">Select Country & Currency</span>
-          <button type="button" class="floating-country-close" id="FloatingCountryCloseBtn" aria-label="Close modal">&times;</button>
-        </div>
-
-        <!-- SEARCH FILTER -->
-        <div class="floating-country-search-box">
-          <svg class="floating-country-search-icon" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <input
-            type="text"
-            class="floating-country-search-input"
-            placeholder="Search country or currency..."
-            id="FloatingCountrySearchInput"
-            autocomplete="off"
-          >
-        </div>
-
-        <!-- POPULAR COUNTRIES -->
+      {%- if localization.available_countries.size > 1 -%}
+        <!-- POPULAR COUNTRIES (DYNAMIC) -->
         <div class="floating-country-section-label">Popular Countries</div>
         <ul class="floating-country-items floating-country-items--popular" role="list">
-          {%- assign popular_codes = 'IN,US,AU,GB,CA,AE' | split: ',' -%}
+          {%- assign popular_codes = 'AU,US,GB,CA,IN,AE,NZ,SG,EU' | split: ',' -%}
           {%- for p_code in popular_codes -%}
             {%- for country in localization.available_countries -%}
               {%- if country.iso_code == p_code -%}
@@ -60,6 +62,7 @@
                     href="#"
                     class="floating-country-link{% if country.iso_code == localization.country.iso_code %} is-active{% endif %}"
                     data-value="{{ country.iso_code }}"
+                    data-currency="{{ country.currency.iso_code }}"
                   >
                     <span class="floating-country-item-flag">
                       <img
@@ -85,7 +88,7 @@
           {%- endfor -%}
         </ul>
 
-        <!-- ALL COUNTRIES -->
+        <!-- ALL COUNTRIES (DYNAMIC) -->
         <div class="floating-country-section-label">All Countries</div>
         <ul class="floating-country-items floating-country-items--all" role="list">
           {%- for country in localization.available_countries -%}
@@ -94,6 +97,7 @@
                 href="#"
                 class="floating-country-link{% if country.iso_code == localization.country.iso_code %} is-active{% endif %}"
                 data-value="{{ country.iso_code }}"
+                data-currency="{{ country.currency.iso_code }}"
               >
                 <span class="floating-country-item-flag">
                   <img
@@ -116,415 +120,662 @@
             </li>
           {%- endfor -%}
         </ul>
-      </div>
-    </div>
 
-    <!-- NATIVE FORM (HIDDEN) -->
-    {%- form 'localization', id: 'FloatingCountryForm', class: 'floating-country-native-form' -%}
-      <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}" id="FloatingCountryHiddenInput">
-    {%- endform -%}
+      {%- else -%}
+
+        <!-- FALLBACK COMPREHENSIVE CURRENCY / COUNTRY LIST (FOR LOCAL PREVIEW & GLOBAL STORES) -->
+        <div class="floating-country-section-label">Popular Countries</div>
+        <ul class="floating-country-items floating-country-items--popular" role="list">
+          <li class="floating-country-item" data-country-name="australia" data-currency="aud">
+            <a href="#" class="floating-country-link is-active" data-value="AU" data-currency="AUD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/au.png" alt="Australia" width="20" height="14"></span>
+              <span class="floating-country-item-name">Australia</span>
+              <span class="floating-country-item-currency">AUD ($)</span>
+              <span class="floating-country-checkmark">✓</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united states" data-currency="usd">
+            <a href="#" class="floating-country-link" data-value="US" data-currency="USD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/us.png" alt="United States" width="20" height="14"></span>
+              <span class="floating-country-item-name">United States</span>
+              <span class="floating-country-item-currency">USD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united kingdom" data-currency="gbp">
+            <a href="#" class="floating-country-link" data-value="GB" data-currency="GBP">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/gb.png" alt="United Kingdom" width="20" height="14"></span>
+              <span class="floating-country-item-name">United Kingdom</span>
+              <span class="floating-country-item-currency">GBP (£)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="canada" data-currency="cad">
+            <a href="#" class="floating-country-link" data-value="CA" data-currency="CAD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ca.png" alt="Canada" width="20" height="14"></span>
+              <span class="floating-country-item-name">Canada</span>
+              <span class="floating-country-item-currency">CAD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="india" data-currency="inr">
+            <a href="#" class="floating-country-link" data-value="IN" data-currency="INR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/in.png" alt="India" width="20" height="14"></span>
+              <span class="floating-country-item-name">India</span>
+              <span class="floating-country-item-currency">INR (₹)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united arab emirates" data-currency="aed">
+            <a href="#" class="floating-country-link" data-value="AE" data-currency="AED">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ae.png" alt="UAE" width="20" height="14"></span>
+              <span class="floating-country-item-name">United Arab Emirates</span>
+              <span class="floating-country-item-currency">AED (د.إ)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="new zealand" data-currency="nzd">
+            <a href="#" class="floating-country-link" data-value="NZ" data-currency="NZD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/nz.png" alt="New Zealand" width="20" height="14"></span>
+              <span class="floating-country-item-name">New Zealand</span>
+              <span class="floating-country-item-currency">NZD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="singapore" data-currency="sgd">
+            <a href="#" class="floating-country-link" data-value="SG" data-currency="SGD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/sg.png" alt="Singapore" width="20" height="14"></span>
+              <span class="floating-country-item-name">Singapore</span>
+              <span class="floating-country-item-currency">SGD ($)</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="floating-country-section-label">All Countries</div>
+        <ul class="floating-country-items floating-country-items--all" role="list">
+          <li class="floating-country-item" data-country-name="australia" data-currency="aud">
+            <a href="#" class="floating-country-link is-active" data-value="AU" data-currency="AUD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/au.png" alt="Australia" width="20" height="14"></span>
+              <span class="floating-country-item-name">Australia</span>
+              <span class="floating-country-item-currency">AUD ($)</span>
+              <span class="floating-country-checkmark">✓</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="austria" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="AT" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/at.png" alt="Austria" width="20" height="14"></span>
+              <span class="floating-country-item-name">Austria</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="belgium" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="BE" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/be.png" alt="Belgium" width="20" height="14"></span>
+              <span class="floating-country-item-name">Belgium</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="canada" data-currency="cad">
+            <a href="#" class="floating-country-link" data-value="CA" data-currency="CAD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ca.png" alt="Canada" width="20" height="14"></span>
+              <span class="floating-country-item-name">Canada</span>
+              <span class="floating-country-item-currency">CAD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="denmark" data-currency="dkk">
+            <a href="#" class="floating-country-link" data-value="DK" data-currency="DKK">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/dk.png" alt="Denmark" width="20" height="14"></span>
+              <span class="floating-country-item-name">Denmark</span>
+              <span class="floating-country-item-currency">DKK (kr)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="france" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="FR" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/fr.png" alt="France" width="20" height="14"></span>
+              <span class="floating-country-item-name">France</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="germany" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="DE" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/de.png" alt="Germany" width="20" height="14"></span>
+              <span class="floating-country-item-name">Germany</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="hong kong" data-currency="hkd">
+            <a href="#" class="floating-country-link" data-value="HK" data-currency="HKD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/hk.png" alt="Hong Kong" width="20" height="14"></span>
+              <span class="floating-country-item-name">Hong Kong</span>
+              <span class="floating-country-item-currency">HKD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="india" data-currency="inr">
+            <a href="#" class="floating-country-link" data-value="IN" data-currency="INR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/in.png" alt="India" width="20" height="14"></span>
+              <span class="floating-country-item-name">India</span>
+              <span class="floating-country-item-currency">INR (₹)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="ireland" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="IE" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ie.png" alt="Ireland" width="20" height="14"></span>
+              <span class="floating-country-item-name">Ireland</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="italy" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="IT" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/it.png" alt="Italy" width="20" height="14"></span>
+              <span class="floating-country-item-name">Italy</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="japan" data-currency="jpy">
+            <a href="#" class="floating-country-link" data-value="JP" data-currency="JPY">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/jp.png" alt="Japan" width="20" height="14"></span>
+              <span class="floating-country-item-name">Japan</span>
+              <span class="floating-country-item-currency">JPY (¥)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="netherlands" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="NL" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/nl.png" alt="Netherlands" width="20" height="14"></span>
+              <span class="floating-country-item-name">Netherlands</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="new zealand" data-currency="nzd">
+            <a href="#" class="floating-country-link" data-value="NZ" data-currency="NZD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/nz.png" alt="New Zealand" width="20" height="14"></span>
+              <span class="floating-country-item-name">New Zealand</span>
+              <span class="floating-country-item-currency">NZD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="norway" data-currency="nok">
+            <a href="#" class="floating-country-link" data-value="NO" data-currency="NOK">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/no.png" alt="Norway" width="20" height="14"></span>
+              <span class="floating-country-item-name">Norway</span>
+              <span class="floating-country-item-currency">NOK (kr)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="singapore" data-currency="sgd">
+            <a href="#" class="floating-country-link" data-value="SG" data-currency="SGD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/sg.png" alt="Singapore" width="20" height="14"></span>
+              <span class="floating-country-item-name">Singapore</span>
+              <span class="floating-country-item-currency">SGD ($)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="spain" data-currency="eur">
+            <a href="#" class="floating-country-link" data-value="ES" data-currency="EUR">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/es.png" alt="Spain" width="20" height="14"></span>
+              <span class="floating-country-item-name">Spain</span>
+              <span class="floating-country-item-currency">EUR (€)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="switzerland" data-currency="chf">
+            <a href="#" class="floating-country-link" data-value="CH" data-currency="CHF">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ch.png" alt="Switzerland" width="20" height="14"></span>
+              <span class="floating-country-item-name">Switzerland</span>
+              <span class="floating-country-item-currency">CHF (CHF)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united arab emirates" data-currency="aed">
+            <a href="#" class="floating-country-link" data-value="AE" data-currency="AED">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/ae.png" alt="UAE" width="20" height="14"></span>
+              <span class="floating-country-item-name">United Arab Emirates</span>
+              <span class="floating-country-item-currency">AED (د.إ)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united kingdom" data-currency="gbp">
+            <a href="#" class="floating-country-link" data-value="GB" data-currency="GBP">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/gb.png" alt="United Kingdom" width="20" height="14"></span>
+              <span class="floating-country-item-name">United Kingdom</span>
+              <span class="floating-country-item-currency">GBP (£)</span>
+            </a>
+          </li>
+          <li class="floating-country-item" data-country-name="united states" data-currency="usd">
+            <a href="#" class="floating-country-link" data-value="US" data-currency="USD">
+              <span class="floating-country-item-flag"><img src="https://flagcdn.com/w40/us.png" alt="United States" width="20" height="14"></span>
+              <span class="floating-country-item-name">United States</span>
+              <span class="floating-country-item-currency">USD ($)</span>
+            </a>
+          </li>
+        </ul>
+      {%- endif -%}
+
+    </div>
   </div>
 
-  <style>
+  <!-- NATIVE FORM (HIDDEN) -->
+  {%- form 'localization', id: 'FloatingCountryForm', class: 'floating-country-native-form' -%}
+    <input type="hidden" name="country_code" value="{{ localization.country.iso_code | default: 'AU' }}" id="FloatingCountryHiddenInput">
+  {%- endform -%}
+</div>
+
+<style>
+  .floating-country-picker-wrapper {
+    position: fixed;
+    bottom: 22px;
+    left: 22px;
+    z-index: 99998;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .floating-country-disclosure {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* MATCHING SCREENSHOT PILL (BORDER, ROUNDED, PADDING, SHADOW) */
+  .floating-country-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #ffffff;
+    color: #111111;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    padding: 6px 11px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .floating-country-btn:hover {
+    border-color: #111111;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .floating-country-flag-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 0 1px rgba(0,0,0,0.3);
+  }
+
+  .floating-country-flag-icon img {
+    display: block;
+    object-fit: cover;
+    width: 18px;
+    height: 13px;
+  }
+
+  .floating-country-code {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.02em;
+  }
+
+  .floating-country-caret {
+    width: 8px;
+    height: 5px;
+    color: #555555;
+    transition: transform 0.25s ease;
+    margin-left: 2px;
+  }
+
+  .floating-country-btn.is-active .floating-country-caret {
+    transform: rotate(180deg);
+  }
+
+  /* DROPDOWN POPUP (OPENS UPWARDS) */
+  .floating-country-dropdown {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    width: 310px;
+    max-width: 90vw;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: floatCountryFadeUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 999999;
+  }
+
+  @keyframes floatCountryFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .floating-country-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f3f4f6;
+    background: #fafafa;
+  }
+
+  .floating-country-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #111111;
+  }
+
+  .floating-country-close {
+    background: #f3f4f6;
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    color: #555;
+    padding: 0;
+    transition: all 0.2s ease;
+  }
+
+  .floating-country-close:hover {
+    background: #e5e7eb;
+    color: #000;
+    transform: scale(1.08);
+  }
+
+  /* SEARCH INPUT */
+  .floating-country-search-box {
+    position: relative;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+  }
+
+  .floating-country-search-icon {
+    position: absolute;
+    left: 22px;
+    width: 14px;
+    height: 14px;
+    color: #888888;
+    pointer-events: none;
+  }
+
+  .floating-country-search-input {
+    width: 100%;
+    padding: 8px 10px 8px 30px;
+    font-size: 13px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+    font-family: inherit;
+    background: #fdfdfd;
+  }
+
+  .floating-country-search-input:focus {
+    border-color: #111111;
+    background: #ffffff;
+  }
+
+  .floating-country-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888888;
+    padding: 8px 14px 4px;
+    background: #ffffff;
+  }
+
+  /* COUNTRY ITEMS LIST */
+  .floating-country-items {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
+  .floating-country-items--all {
+    max-height: 180px;
+    border-top: 1px solid #f5f5f5;
+  }
+
+  .floating-country-item {
+    margin: 0;
+    padding: 0;
+  }
+
+  .floating-country-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 13px;
+    transition: background 0.15s ease;
+  }
+
+  .floating-country-link:hover,
+  .floating-country-link.is-active {
+    background: #f4f6f8;
+    color: #000000;
+  }
+
+  .floating-country-item-flag {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .floating-country-item-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+  }
+
+  .floating-country-item-currency {
+    color: #777777;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .floating-country-checkmark {
+    color: #111111;
+    font-weight: bold;
+    margin-left: 4px;
+  }
+
+  .floating-country-native-form {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
     .floating-country-picker-wrapper {
-      position: fixed;
-      bottom: 22px;
-      left: 22px;
-      z-index: 99998;
-      font-family: inherit;
+      bottom: 16px;
+      left: 16px;
     }
-
-    .floating-country-disclosure {
-      position: relative;
-      display: inline-block;
-    }
-
-    /* MATCHING SCREENSHOT PILL */
     .floating-country-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: #ffffff;
-      color: #111111;
-      border: 1px solid rgba(0, 0, 0, 0.14);
-      border-radius: 8px;
-      padding: 6px 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      font-size: 1.35rem;
-      font-weight: 500;
-      line-height: 1;
-      outline: none;
-      user-select: none;
-      -webkit-user-select: none;
+      padding: 5px 9px;
+      font-size: 12.5px;
     }
-
-    .floating-country-btn:hover {
-      border-color: #111111;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      transform: translateY(-2px);
-    }
-
-    .floating-country-flag-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 2px;
-      overflow: hidden;
-      box-shadow: 0 0 1px rgba(0,0,0,0.3);
-    }
-
-    .floating-country-flag-icon img {
-      display: block;
-      object-fit: cover;
-    }
-
-    .floating-country-code {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: #1a1a1a;
-      letter-spacing: 0.02em;
-    }
-
-    .floating-country-caret {
-      width: 8px;
-      height: 5px;
-      color: #444444;
-      transition: transform 0.25s ease;
-    }
-
-    .floating-country-btn.is-active .floating-country-caret {
-      transform: rotate(180deg);
-    }
-
-    /* DROPDOWN POPUP (OPENS UPWARDS) */
     .floating-country-dropdown {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 0;
-      width: 320px;
-      max-width: 90vw;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      animation: floatCountryFadeUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 999999;
+      width: 280px;
     }
+  }
+</style>
 
-    @keyframes floatCountryFadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+<script>
+  (function () {
+    const btn = document.getElementById('FloatingCountryButton');
+    const dropdown = document.getElementById('FloatingCountryList');
+    const closeBtn = document.getElementById('FloatingCountryCloseBtn');
+    const searchInput = document.getElementById('FloatingCountrySearchInput');
+    const form = document.getElementById('FloatingCountryForm');
+    const hiddenInput = document.getElementById('FloatingCountryHiddenInput');
+    const wrapper = document.getElementById('FloatingCountryPickerWrapper');
+    const currentFlag = document.getElementById('FloatingCountryCurrentFlag');
+    const currentCode = document.getElementById('FloatingCountryCurrentCode');
 
-    .floating-country-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border-bottom: 1px solid #f3f4f6;
-      background: #fafafa;
-    }
+    if (!btn || !dropdown) return;
 
-    .floating-country-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #111111;
-    }
-
-    .floating-country-close {
-      background: #f3f4f6;
-      border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      line-height: 1;
-      cursor: pointer;
-      color: #555;
-      padding: 0;
-      transition: all 0.2s ease;
-    }
-
-    .floating-country-close:hover {
-      background: #e5e7eb;
-      color: #000;
-      transform: scale(1.08);
-    }
-
-    /* SEARCH INPUT */
-    .floating-country-search-box {
-      position: relative;
-      padding: 10px 12px;
-      border-bottom: 1px solid #f0f0f0;
-      display: flex;
-      align-items: center;
-    }
-
-    .floating-country-search-icon {
-      position: absolute;
-      left: 22px;
-      width: 14px;
-      height: 14px;
-      color: #888888;
-      pointer-events: none;
-    }
-
-    .floating-country-search-input {
-      width: 100%;
-      padding: 8px 10px 8px 32px;
-      font-size: 1.25rem;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      outline: none;
-      box-sizing: border-box;
-      font-family: inherit;
-      background: #fdfdfd;
-    }
-
-    .floating-country-search-input:focus {
-      border-color: #111111;
-      background: #ffffff;
-    }
-
-    .floating-country-section-label {
-      font-size: 1.1rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #888888;
-      padding: 8px 14px 4px;
-      background: #ffffff;
-    }
-
-    /* COUNTRY ITEMS LIST */
-    .floating-country-items {
-      list-style: none;
-      margin: 0;
-      padding: 4px 0;
-      max-height: 180px;
-      overflow-y: auto;
-    }
-
-    .floating-country-items--all {
-      max-height: 200px;
-      border-top: 1px solid #f5f5f5;
-    }
-
-    .floating-country-item {
-      margin: 0;
-      padding: 0;
-    }
-
-    .floating-country-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      text-decoration: none;
-      color: #333333;
-      font-size: 1.3rem;
-      transition: background 0.15s ease;
-    }
-
-    .floating-country-link:hover,
-    .floating-country-link.is-active {
-      background: #f4f6f8;
-      color: #000000;
-    }
-
-    .floating-country-item-flag {
-      display: inline-flex;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .floating-country-item-name {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 500;
-    }
-
-    .floating-country-item-currency {
-      color: #777777;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-
-    .floating-country-checkmark {
-      color: #111111;
-      font-weight: bold;
-      margin-left: 4px;
-    }
-
-    .floating-country-native-form {
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .floating-country-picker-wrapper {
-        bottom: 16px;
-        left: 16px;
-      }
-      .floating-country-btn {
-        padding: 5px 8px;
-        font-size: 1.25rem;
-      }
-      .floating-country-dropdown {
-        width: 290px;
-      }
-    }
-  </style>
-
-  <script>
-    (function () {
-      const btn = document.getElementById('FloatingCountryButton');
-      const dropdown = document.getElementById('FloatingCountryList');
-      const closeBtn = document.getElementById('FloatingCountryCloseBtn');
-      const searchInput = document.getElementById('FloatingCountrySearchInput');
-      const form = document.getElementById('FloatingCountryForm');
-      const hiddenInput = document.getElementById('FloatingCountryHiddenInput');
-      const wrapper = document.getElementById('FloatingCountryPickerWrapper');
-
-      if (!btn || !dropdown) return;
-
-      function openMenu() {
-        dropdown.style.display = 'flex';
-        btn.classList.add('is-active');
-        btn.setAttribute('aria-expanded', 'true');
-        if (searchInput) {
-          setTimeout(() => searchInput.focus(), 60);
-        }
-      }
-
-      function closeMenu() {
-        dropdown.style.display = 'none';
-        btn.classList.remove('is-active');
-        btn.setAttribute('aria-expanded', 'false');
-      }
-
-      function toggleMenu(e) {
-        if (e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-        if (dropdown.style.display === 'none' || dropdown.style.display === '') {
-          openMenu();
-        } else {
-          closeMenu();
-        }
-      }
-
-      btn.addEventListener('click', toggleMenu);
-
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          closeMenu();
-        });
-      }
-
-      // Close when clicking anywhere outside
-      document.addEventListener('click', function (e) {
-        if (wrapper && !wrapper.contains(e.target)) {
-          closeMenu();
-        }
-      });
-
-      // Close on Escape key
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' || e.key === 'Esc') {
-          closeMenu();
-        }
-      });
-
-      // Filter search
-      if (searchInput) {
-        searchInput.addEventListener('input', function () {
-          const query = this.value.toLowerCase().trim();
-          const items = dropdown.querySelectorAll('.floating-country-item');
-          items.forEach(item => {
-            const name = item.getAttribute('data-country-name') || '';
-            const curr = item.getAttribute('data-currency') || '';
-            if (name.includes(query) || curr.includes(query)) {
-              item.style.display = '';
-            } else {
-              item.style.display = 'none';
-            }
-          });
-        });
-      }
-
-      // Submit on country select & save user preference
+    // Load saved user selection if any
+    const savedCountry = localStorage.getItem('hb_user_selected_country');
+    const savedCurrency = localStorage.getItem('hb_user_selected_currency');
+    if (savedCountry && savedCurrency && currentFlag && currentCode) {
+      currentFlag.src = `https://flagcdn.com/w40/${savedCountry.toLowerCase()}.png`;
+      currentCode.textContent = savedCurrency;
+      
       dropdown.querySelectorAll('.floating-country-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          const countryCode = this.getAttribute('data-value');
-          if (countryCode && hiddenInput && form) {
-            localStorage.setItem('hb_user_selected_country', countryCode);
-            hiddenInput.value = countryCode;
-            closeMenu();
-            form.submit();
+        if (link.getAttribute('data-value') === savedCountry) {
+          link.classList.add('is-active');
+        } else {
+          link.classList.remove('is-active');
+        }
+      });
+    }
+
+    function openMenu() {
+      dropdown.style.display = 'flex';
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-expanded', 'true');
+      if (searchInput) {
+        setTimeout(() => searchInput.focus(), 60);
+      }
+    }
+
+    function closeMenu() {
+      dropdown.style.display = 'none';
+      btn.classList.remove('is-active');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        openMenu();
+      } else {
+        closeMenu();
+      }
+    }
+
+    btn.addEventListener('click', toggleMenu);
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMenu();
+      });
+    }
+
+    // Close when clicking anywhere outside
+    document.addEventListener('click', function (e) {
+      if (wrapper && !wrapper.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        closeMenu();
+      }
+    });
+
+    // Filter search
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const items = dropdown.querySelectorAll('.floating-country-item');
+        items.forEach(item => {
+          const name = item.getAttribute('data-country-name') || '';
+          const curr = item.getAttribute('data-currency') || '';
+          if (name.includes(query) || curr.includes(query)) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
           }
         });
       });
+    }
 
-      // =========================================================================
-      // IP-BASED AUTOMATIC COUNTRY DETECTION (Geo-IP)
-      // =========================================================================
-      async function autoDetectCountryByIP() {
-        // If user already manually selected or auto-detected in this browser, skip
-        if (localStorage.getItem('hb_user_selected_country')) return;
+    // Submit / select country
+    dropdown.querySelectorAll('.floating-country-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const countryCode = this.getAttribute('data-value');
+        const currencyCode = this.getAttribute('data-currency') || countryCode;
+        
+        if (countryCode) {
+          localStorage.setItem('hb_user_selected_country', countryCode);
+          localStorage.setItem('hb_user_selected_currency', currencyCode);
+          
+          if (currentFlag) currentFlag.src = `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
+          if (currentCode) currentCode.textContent = currencyCode;
+          
+          dropdown.querySelectorAll('.floating-country-link').forEach(l => l.classList.remove('is-active'));
+          this.classList.add('is-active');
 
-        try {
-          // Free Geo-IP lookup
-          const response = await fetch('https://ipapi.co/json/');
-          if (!response.ok) return;
-          const geoData = await response.json();
-          const detectedCountry = (geoData.country_code || geoData.country || '').toUpperCase();
+          closeMenu();
 
-          if (detectedCountry) {
-            const currentCountry = '{{ localization.country.iso_code }}';
-            // Save detection so it doesn't loop
+          {%- if localization.available_countries.size > 1 -%}
+            if (hiddenInput && form) {
+              hiddenInput.value = countryCode;
+              form.submit();
+            }
+          {%- endif -%}
+        }
+      });
+    });
+
+    // IP-Based Auto Detection
+    async function autoDetectCountryByIP() {
+      if (localStorage.getItem('hb_user_selected_country')) return;
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) return;
+        const geoData = await response.json();
+        const detectedCountry = (geoData.country_code || geoData.country || '').toUpperCase();
+        if (detectedCountry) {
+          const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
+          if (matchingLink) {
+            const curr = matchingLink.getAttribute('data-currency') || detectedCountry;
             localStorage.setItem('hb_user_selected_country', detectedCountry);
-
-            if (detectedCountry !== currentCountry) {
-              const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
-              if (matchingLink && hiddenInput && form) {
-                console.log(`🌐 GeoIP detected country: ${detectedCountry}. Automatically switching currency...`);
+            localStorage.setItem('hb_user_selected_currency', curr);
+            if (currentFlag) currentFlag.src = `https://flagcdn.com/w40/${detectedCountry.toLowerCase()}.png`;
+            if (currentCode) currentCode.textContent = curr;
+            {%- if localization.available_countries.size > 1 -%}
+              if (hiddenInput && form && detectedCountry !== '{{ localization.country.iso_code }}') {
                 hiddenInput.value = detectedCountry;
                 form.submit();
               }
-            }
+            {%- endif -%}
           }
-        } catch (error) {
-          // Fail silently on ad-blocker or offline
-          console.log('GeoIP auto-detection skipped:', error);
         }
+      } catch (err) {
+        // Ignore silent error
       }
+    }
 
-      // Run Geo-IP on page load
-      if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(autoDetectCountryByIP, 800);
-      } else {
-        window.addEventListener('DOMContentLoaded', () => setTimeout(autoDetectCountryByIP, 800));
-      }
-    })();
-  </script>
-{%- endif -%}
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(autoDetectCountryByIP, 600);
+    } else {
+      window.addEventListener('DOMContentLoaded', () => setTimeout(autoDetectCountryByIP, 600));
+    }
+  })();
+</script>
