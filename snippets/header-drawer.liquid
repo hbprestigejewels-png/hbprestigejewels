@@ -770,31 +770,8 @@
         </a>
       {%- endif -%}
 
-      {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+      {%- if localization.available_languages.size > 1 -%}
         <div class="premium-localization">
-          {%- if localization.available_countries.size > 1 -%}
-            <localization-form>
-              {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
-                <div class="disclosure">
-                  <button type="button" class="disclosure__button" aria-expanded="false" aria-controls="CountryList">
-                    <i class="fas fa-globe"></i>
-                    {{ localization.country.name }} ({{ localization.country.currency.iso_code }})
-                    <i class="fas fa-chevron-down"></i>
-                  </button>
-                  <ul id="CountryList" role="list" class="disclosure__list" hidden>
-                    {%- for country in localization.available_countries -%}
-                      <li>
-                        <a href="#" data-value="{{ country.iso_code }}">
-                          {{ country.name }} ({{ country.currency.iso_code }})
-                        </a>
-                      </li>
-                    {%- endfor -%}
-                  </ul>
-                  <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
-                </div>
-              {%- endform -%}
-            </localization-form>
-          {%- endif -%}
 
           {%- if localization.available_languages.size > 1 -%}
             <localization-form>

@@ -724,6 +724,7 @@
         if (countryCode) {
           localStorage.setItem('hb_user_selected_country', countryCode);
           localStorage.setItem('hb_user_selected_currency', currencyCode);
+          localStorage.setItem('hb_user_explicit_country', 'true');
           
           if (currentFlag) currentFlag.src = `https://flagcdn.com/w40/${countryCode.toLowerCase()}.png`;
           if (currentCode) currentCode.textContent = currencyCode;
@@ -743,39 +744,88 @@
       });
     });
 
-    // IP-Based Auto Detection
+    // Enhanced IP-Based Auto Detection with multiple fast endpoints
     async function autoDetectCountryByIP() {
-      if (localStorage.getItem('hb_user_selected_country')) return;
+      // Check if user manually clicked a country before
+      const explicitChoice = localStorage.getItem('hb_user_explicit_country');
+      if (explicitChoice) return;
+
+      let detectedCountry = '';
+
+      // Try Endpoint 1: api.country.is (ultra fast & lightweight)
       try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (!response.ok) return;
-        const geoData = await response.json();
-        const detectedCountry = (geoData.country_code || geoData.country || '').toUpperCase();
-        if (detectedCountry) {
-          const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
-          if (matchingLink) {
-            const curr = matchingLink.getAttribute('data-currency') || detectedCountry;
-            localStorage.setItem('hb_user_selected_country', detectedCountry);
-            localStorage.setItem('hb_user_selected_currency', curr);
-            if (currentFlag) currentFlag.src = `https://flagcdn.com/w40/${detectedCountry.toLowerCase()}.png`;
-            if (currentCode) currentCode.textContent = curr;
-            {%- if localization.available_countries.size > 1 -%}
-              if (hiddenInput && form && detectedCountry !== '{{ localization.country.iso_code }}') {
-                hiddenInput.value = detectedCountry;
-                form.submit();
-              }
-            {%- endif -%}
-          }
+        const res = await fetch('https://api.country.is/', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          detectedCountry = (data.country || '').toUpperCase();
         }
-      } catch (err) {
-        // Ignore silent error
+      } catch (e) {}
+
+      // Try Endpoint 2: ipapi.co fallback
+      if (!detectedCountry) {
+        try {
+          const res = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            detectedCountry = (data.country_code || data.country || '').toUpperCase();
+          }
+        } catch (e) {}
+      }
+
+      // Try Endpoint 3: ipwhois.app fallback
+      if (!detectedCountry) {
+        try {
+          const res = await fetch('https://ipwhois.app/json/', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            detectedCountry = (data.country_code || '').toUpperCase();
+          }
+        } catch (e) {}
+      }
+
+      if (detectedCountry) {
+        console.log(`🌐 GeoIP Detected User Country: ${detectedCountry}`);
+        
+        const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
+        let curr = detectedCountry;
+        
+        if (matchingLink) {
+          curr = matchingLink.getAttribute('data-currency') || detectedCountry;
+          dropdown.querySelectorAll('.floating-country-link').forEach(l => l.classList.remove('is-active'));
+          matchingLink.classList.add('is-active');
+        } else {
+          // Default mapping for common regions
+          const mapCurr = {
+            'US': 'USD', 'AU': 'AUD', 'GB': 'GBP', 'CA': 'CAD', 'IN': 'INR', 
+            'AE': 'AED', 'NZ': 'NZD', 'SG': 'SGD', 'DE': 'EUR', 'FR': 'EUR', 
+            'IT': 'EUR', 'ES': 'EUR', 'NL': 'EUR', 'BE': 'EUR', 'IE': 'EUR', 
+            'JP': 'JPY', 'HK': 'HKD', 'CH': 'CHF', 'DK': 'DKK', 'NO': 'NOK'
+          };
+          curr = mapCurr[detectedCountry] || 'AUD';
+        }
+
+        localStorage.setItem('hb_user_selected_country', detectedCountry);
+        localStorage.setItem('hb_user_selected_currency', curr);
+
+        if (currentFlag) {
+          currentFlag.src = `https://flagcdn.com/w40/${detectedCountry.toLowerCase()}.png`;
+          currentFlag.style.display = 'block';
+        }
+        if (currentCode) currentCode.textContent = curr;
+
+        {%- if localization.available_countries.size > 1 -%}
+          if (hiddenInput && form && detectedCountry !== '{{ localization.country.iso_code }}') {
+            hiddenInput.value = detectedCountry;
+            form.submit();
+          }
+        {%- endif -%}
       }
     }
 
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      setTimeout(autoDetectCountryByIP, 600);
+      autoDetectCountryByIP();
     } else {
-      window.addEventListener('DOMContentLoaded', () => setTimeout(autoDetectCountryByIP, 600));
+      window.addEventListener('DOMContentLoaded', autoDetectCountryByIP);
     }
   })();
 </script>
