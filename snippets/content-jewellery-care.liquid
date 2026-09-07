@@ -371,32 +371,44 @@
 
 .jc-btn {
   display: inline-block;
-  background: #2e3b23;
+  background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
   color: #ffffff !important;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 13px 32px;
+  padding: 14px 34px;
   border-radius: 6px;
   text-decoration: none !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(46, 59, 35, 0.2);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1.5px solid rgba(255, 255, 255, 0.42) !important;
+  box-shadow: 0 10px 28px -4px rgba(184, 123, 108, 0.45), 
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.6), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.16) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18) !important;
+  cursor: pointer;
 }
 
 .jc-btn:hover {
-  background: #1a2214;
+  background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
   color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 14px 34px -4px rgba(184, 123, 108, 0.6), 
+              inset 0 2px 3px rgba(255, 255, 255, 0.75), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.18) !important;
+}
+
+.jc-btn:active {
+  transform: translateY(1px) scale(0.99);
 }
 
 /* ==================== TRUST / SERVICE SECTION ==================== */
 .jc-trust-section {
-  background: #f1f1f1;
+  background: #fdfaf8;
   padding: 40px 0;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #f2e3df;
   margin-top: 20px;
 }
 
@@ -433,7 +445,7 @@
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 15px;
   font-weight: 600;
-  color: #34421e;
+  color: #944b3b;
   margin: 0;
   line-height: 1.3;
 }

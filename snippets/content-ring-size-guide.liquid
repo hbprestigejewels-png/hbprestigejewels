@@ -567,8 +567,8 @@
   margin: 0 auto;
   overflow-x: auto;
   border-radius: 8px;
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 25px rgba(194, 133, 116, 0.09);
+  border: 1px solid #ebd8d2;
 }
 
 .rsg-table {
@@ -579,32 +579,38 @@
 }
 
 .rsg-table thead {
-  background: #2e3b23; /* rich deep luxury green tone */
+  background: linear-gradient(135deg, #d89685 0%, #c28574 50%, #a66555 100%);
   color: #ffffff;
 }
 
 .rsg-table th {
-  padding: 14px 18px;
+  padding: 15px 18px;
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  border-bottom: 2px solid #24301a;
+  border-bottom: 2px solid #a66555;
   white-space: nowrap;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .rsg-table td {
-  padding: 12px 18px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 13px 18px;
+  border-bottom: 1px solid #f2e3df;
   color: #444444;
 }
 
 .rsg-table tbody tr:nth-child(even) {
-  background: #fafaf8;
+  background: #fdf9f8;
 }
 
 .rsg-table tbody tr:hover {
-  background: #f4f7ef;
+  background: #f8ece8;
+}
+
+.rsg-table td strong {
+  color: #944b3b;
 }
 
 /* ==================== FORM SECTION ==================== */
@@ -684,8 +690,8 @@
 
 .rsg-form-group input:focus,
 .rsg-form-group select:focus {
-  border-color: #2e3b23;
-  box-shadow: 0 0 0 2px rgba(46, 59, 35, 0.12);
+  border-color: #c28574;
+  box-shadow: 0 0 0 3px rgba(194, 133, 116, 0.18);
 }
 
 .rsg-form-submit {
@@ -776,11 +782,12 @@
 }
 
 .rsg-tip-badge {
-  background: #f9f5f0;
+  background: #fbf0ec;
+  border: 1px solid #f0d5cc;
   border-radius: 4px;
   padding: 10px 14px;
   font-size: 12.5px;
-  color: #555555;
+  color: #944b3b;
   line-height: 1.6;
   margin-top: auto;
 }
@@ -797,7 +804,7 @@
 }
 
 .rsg-contact-box a {
-  color: #2e3b23;
+  color: #944b3b;
   font-weight: 600;
   text-decoration: none;
 }
@@ -813,27 +820,37 @@
 
 .rsg-btn {
   display: inline-block;
-  background: #2e3b23;
+  background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
   color: #ffffff !important;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 13px 32px;
-  border-radius: 4px;
+  padding: 14px 34px;
+  border-radius: 6px;
   text-decoration: none !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
-  box-shadow: 0 4px 12px rgba(46, 59, 35, 0.2);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1.5px solid rgba(255, 255, 255, 0.42) !important;
+  box-shadow: 0 10px 28px -4px rgba(184, 123, 108, 0.45), 
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.6), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.16) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18) !important;
   cursor: pointer;
 }
 
 .rsg-btn:hover {
-  background: #1a2214;
+  background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
   color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 14px 34px -4px rgba(184, 123, 108, 0.6), 
+              inset 0 2px 3px rgba(255, 255, 255, 0.75), 
+              inset 0 -2px 4px rgba(0, 0, 0, 0.18) !important;
+}
+
+.rsg-btn:active {
+  transform: translateY(1px) scale(0.99);
 }
 
 .rsg-btn--submit {
@@ -842,18 +859,21 @@
 }
 
 .rsg-btn--outline {
-  background: transparent;
-  color: #2e3b23 !important;
-  border: 1px solid #2e3b23;
-  box-shadow: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 246, 243, 0.85) 45%, rgba(246, 230, 224, 0.7) 100%) !important;
+  color: #944b3b !important;
+  border: 1.5px solid #c28574 !important;
+  box-shadow: 0 4px 14px rgba(194, 133, 116, 0.15) !important;
   width: 100%;
   text-align: center;
-  padding: 11px 20px;
+  padding: 12px 20px;
+  text-shadow: none !important;
 }
 
 .rsg-btn--outline:hover {
-  background: #2e3b23;
+  background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
   color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
+  box-shadow: 0 8px 24px -3px rgba(184, 123, 108, 0.5) !important;
 }
 
 /* ==================== RESPONSIVE DESIGN ==================== */

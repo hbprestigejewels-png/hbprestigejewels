@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main_banner_swiper_RCVgRi": {
@@ -408,92 +417,89 @@
         "padding_bottom": 36
       }
     },
-    "featured_collections_styles_XWX4kU": {
-      "type": "featured-collections-styles",
+    "collection_tabs_M8KQcH": {
+      "type": "collection-tabs",
       "blocks": {
-        "collection_PyEpeb": {
+        "collection_XT64m4": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/Five_rings_displayed_on_a_dark_green_marble_surface_with_a_beige_fabric_accent._The_rings_include_various_diamond_cuts_round_princess_emerald_baguette_and_settings_in_silver_yellow_gold_and_white_gold_with_two_featuring_small_blue_accent.jpg",
-            "collection_title": "Solitaire",
-            "collection_link": "shopify://collections/gold-solitaire-engagement-rings"
+            "collection": "gold-engagement-rings",
+            "label": "Engagement Ring"
           }
         },
-        "collection_k8T8iz": {
+        "collection_8Kqb6m": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/Three_engagement-style_rings_displayed_on_a_dark_green_marble_surface_with_a_beige_fabric_and_paper_prop._The_rings_feature_large_round_brilliant-cut_clear_stones_and_smaller_accent_stones_along_the_bands_shown_in_silver_and_yellow_gold_tones..jpg",
-            "collection_title": "Halo",
-            "collection_link": "shopify://collections/gold-halo-rings"
+            "collection": "gold-wedding-bands",
+            "label": "Wedding Band"
           }
         },
-        "collection_xcfea6": {
+        "collection_bNRwWD": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/Four_rings_displayed_on_a_dark_green_marble_surface_with_a_brown_velvet_cloth_and_a_small_card_in_the_background._The_rings_include_a_silver_floral_cluster_ring_a_gold_crescent-shaped_ring_with_clear_stones_a_silver_baguette_ring_and_a_silver.jpg",
-            "collection_title": "Loose Stone",
-            "collection_link": "shopify://collections/gold-loose-stone-rings"
+            "collection": "gold-earrings",
+            "label": "Earrings"
           }
         },
-        "collection_MzKfaz": {
+        "collection_7wXQtU": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/A_yellow_gold_ring_featuring_a_large_marquise-cut_diamond_center_stone_surrounded_by_smaller_baguette_and_round_diamonds_displayed_on_a_dark_green_marble_surface_with_gold_flecks..jpg",
-            "collection_title": "Special",
-            "collection_link": "shopify://collections/gold-special-rings"
+            "collection": "gold-bracelets",
+            "label": "Bracelets"
           }
         },
-        "collection_xBTKxE": {
+        "collection_8LkHrp": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/A_yellow_gold_ring_featuring_a_large_marquise-cut_center_stone_surrounded_by_smaller_round_and_marquise-cut_diamonds_set_on_a_dark_green_marbled_surface_with_a_gold_velvet_corner..jpg",
-            "collection_title": "Shop Vintage",
-            "collection_link": "shopify://collections/gold-shop-vintage-rings"
+            "collection": "gemstones",
+            "label": ""
           }
         },
-        "collection_HpGJHJ": {
+        "collection_GDz9PV": {
           "type": "collection",
           "settings": {
-            "collection_image": "shopify://shop_images/jewelry_image_cropped_no_watermark_area_1.jpg",
-            "collection_title": "Shop Classic",
-            "collection_link": "shopify://collections/gold-shop-classic-rings"
+            "collection": "lab-diamonds",
+            "label": "Lab Diamonds"
+          }
+        },
+        "collection_iDLD9E": {
+          "type": "collection",
+          "settings": {
+            "collection": "all-silver",
+            "label": ""
           }
         }
       },
       "block_order": [
-        "collection_PyEpeb",
-        "collection_k8T8iz",
-        "collection_xcfea6",
-        "collection_MzKfaz",
-        "collection_xBTKxE",
-        "collection_HpGJHJ"
+        "collection_XT64m4",
+        "collection_8Kqb6m",
+        "collection_bNRwWD",
+        "collection_7wXQtU",
+        "collection_8LkHrp",
+        "collection_GDz9PV",
+        "collection_iDLD9E"
       ],
-      "custom_css": [],
-      "name": "Shop By Styles (Carousel)",
+      "custom_css": [
+        ".title h2 {text-align: center; margin-bottom: 10px; font-size: 40px; color: #666;}",
+        ".title {margin: 2rem 0 1rem;}",
+        ".card__heading a {font-family: \"Poppins\", sans-serif; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}",
+        ".Vtl-WishlistButton__WishlistIconButton {height: 52px;}"
+      ],
+      "name": "Collection Tabs",
       "settings": {
-        "columns_desktop": 7,
-        "columns_tablet": 3,
-        "columns_mobile": 2,
-        "background_color": "#f9f9f9",
-        "color_scheme": "",
-        "card_color_scheme": "",
-        "full_width": false,
-        "padding_top": 0,
-        "padding_bottom": 32,
-        "padding_top_mobile": 12,
-        "padding_bottom_mobile": 8,
-        "subtitle": "",
-        "subtitle_color": "#000000",
-        "title": "Shop By Styles",
-        "heading_size": "h2",
-        "text_alignment": "left",
-        "title_style": "italic",
-        "title_color": "#000000",
-        "image_ratio": "100",
-        "image_border_radius": 0,
-        "title_font_weight": "500",
-        "collection_title_color": "#000000",
-        "enable_slider_navigation": true
+        "full_width": true,
+        "title": "Shop Fine Jewellery",
+        "subheading": "Explore our best collections",
+        "heading_size": "h1",
+        "products_to_show": 6,
+        "columns_desktop": 6,
+        "columns_mobile": "2",
+        "show_vendor": false,
+        "show_secondary_image": true,
+        "show_rating": false,
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "quick_add": "standard"
       }
     },
     "custom_liquid_CA9Ewj": {
@@ -666,7 +672,6 @@
         "shape_6DmGpa",
         "shape_HAaQRt"
       ],
-      "disabled": true,
       "name": "Shop Stone by Shape",
       "settings": {
         "full_width": true,
@@ -936,89 +941,92 @@
         "padding_bottom": 36
       }
     },
-    "collection_tabs_M8KQcH": {
-      "type": "collection-tabs",
+    "featured_collections_styles_XWX4kU": {
+      "type": "featured-collections-styles",
       "blocks": {
-        "collection_XT64m4": {
+        "collection_PyEpeb": {
           "type": "collection",
           "settings": {
-            "collection": "gold-engagement-rings",
-            "label": "Engagement Ring"
+            "collection_image": "shopify://shop_images/Five_rings_displayed_on_a_dark_green_marble_surface_with_a_beige_fabric_accent._The_rings_include_various_diamond_cuts_round_princess_emerald_baguette_and_settings_in_silver_yellow_gold_and_white_gold_with_two_featuring_small_blue_accent.jpg",
+            "collection_title": "Solitaire",
+            "collection_link": "shopify://collections/gold-solitaire-engagement-rings"
           }
         },
-        "collection_8Kqb6m": {
+        "collection_k8T8iz": {
           "type": "collection",
           "settings": {
-            "collection": "gold-wedding-bands",
-            "label": "Wedding Band"
+            "collection_image": "shopify://shop_images/Three_engagement-style_rings_displayed_on_a_dark_green_marble_surface_with_a_beige_fabric_and_paper_prop._The_rings_feature_large_round_brilliant-cut_clear_stones_and_smaller_accent_stones_along_the_bands_shown_in_silver_and_yellow_gold_tones..jpg",
+            "collection_title": "Halo",
+            "collection_link": "shopify://collections/gold-halo-rings"
           }
         },
-        "collection_bNRwWD": {
+        "collection_xcfea6": {
           "type": "collection",
           "settings": {
-            "collection": "gold-earrings",
-            "label": "Earrings"
+            "collection_image": "shopify://shop_images/Four_rings_displayed_on_a_dark_green_marble_surface_with_a_brown_velvet_cloth_and_a_small_card_in_the_background._The_rings_include_a_silver_floral_cluster_ring_a_gold_crescent-shaped_ring_with_clear_stones_a_silver_baguette_ring_and_a_silver.jpg",
+            "collection_title": "Loose Stone",
+            "collection_link": "shopify://collections/gold-loose-stone-rings"
           }
         },
-        "collection_7wXQtU": {
+        "collection_MzKfaz": {
           "type": "collection",
           "settings": {
-            "collection": "gold-bracelets",
-            "label": "Bracelets"
+            "collection_image": "shopify://shop_images/A_yellow_gold_ring_featuring_a_large_marquise-cut_diamond_center_stone_surrounded_by_smaller_baguette_and_round_diamonds_displayed_on_a_dark_green_marble_surface_with_gold_flecks..jpg",
+            "collection_title": "Special",
+            "collection_link": "shopify://collections/gold-special-rings"
           }
         },
-        "collection_8LkHrp": {
+        "collection_xBTKxE": {
           "type": "collection",
           "settings": {
-            "collection": "gemstones",
-            "label": ""
+            "collection_image": "shopify://shop_images/A_yellow_gold_ring_featuring_a_large_marquise-cut_center_stone_surrounded_by_smaller_round_and_marquise-cut_diamonds_set_on_a_dark_green_marbled_surface_with_a_gold_velvet_corner..jpg",
+            "collection_title": "Shop Vintage",
+            "collection_link": "shopify://collections/gold-shop-vintage-rings"
           }
         },
-        "collection_GDz9PV": {
+        "collection_HpGJHJ": {
           "type": "collection",
           "settings": {
-            "collection": "lab-diamonds",
-            "label": "Lab Diamonds"
-          }
-        },
-        "collection_iDLD9E": {
-          "type": "collection",
-          "settings": {
-            "collection": "all-silver",
-            "label": ""
+            "collection_image": "shopify://shop_images/jewelry_image_cropped_no_watermark_area_1.jpg",
+            "collection_title": "Shop Classic",
+            "collection_link": "shopify://collections/gold-shop-classic-rings"
           }
         }
       },
       "block_order": [
-        "collection_XT64m4",
-        "collection_8Kqb6m",
-        "collection_bNRwWD",
-        "collection_7wXQtU",
-        "collection_8LkHrp",
-        "collection_GDz9PV",
-        "collection_iDLD9E"
+        "collection_PyEpeb",
+        "collection_k8T8iz",
+        "collection_xcfea6",
+        "collection_MzKfaz",
+        "collection_xBTKxE",
+        "collection_HpGJHJ"
       ],
-      "custom_css": [
-        ".title h2 {text-align: center; margin-bottom: 10px; font-size: 40px; color: #666;}",
-        ".title {margin: 2rem 0 1rem;}",
-        ".card__heading a {font-family: \"Poppins\", sans-serif; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}",
-        ".Vtl-WishlistButton__WishlistIconButton {height: 52px;}"
-      ],
-      "name": "Collection Tabs",
+      "custom_css": [],
+      "name": "Shop By Styles (Carousel)",
       "settings": {
-        "full_width": true,
-        "title": "Shop Fine Jewellery",
-        "subheading": "Explore our best collections",
-        "heading_size": "h1",
-        "products_to_show": 6,
-        "columns_desktop": 6,
-        "columns_mobile": "2",
-        "show_vendor": false,
-        "show_secondary_image": true,
-        "show_rating": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "quick_add": "standard"
+        "columns_desktop": 7,
+        "columns_tablet": 3,
+        "columns_mobile": 2,
+        "background_color": "#f9f9f9",
+        "color_scheme": "",
+        "card_color_scheme": "",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 32,
+        "padding_top_mobile": 12,
+        "padding_bottom_mobile": 8,
+        "subtitle": "",
+        "subtitle_color": "#000000",
+        "title": "Shop By Styles",
+        "heading_size": "h2",
+        "text_alignment": "left",
+        "title_style": "italic",
+        "title_color": "#000000",
+        "image_ratio": "100",
+        "image_border_radius": 0,
+        "title_font_weight": "500",
+        "collection_title_color": "#000000",
+        "enable_slider_navigation": true
       }
     },
     "featured_collection_WEnpTT": {
@@ -1561,13 +1569,13 @@
     "scrolling_text_X9A6MQ",
     "premium_category_carousel_AL3xdR",
     "collection_carousel_grXU4K",
-    "featured_collections_styles_XWX4kU",
+    "collection_tabs_M8KQcH",
     "custom_liquid_CA9Ewj",
     "parallelx_MAq7hn",
     "shopstone_LVjRWV",
     "shopbystone_hJWmmL",
     "collection_carousel_D4j8Wx",
-    "collection_tabs_M8KQcH",
+    "featured_collections_styles_XWX4kU",
     "featured_collection_WEnpTT",
     "banner_with_text_custom_rnEqNG",
     "featured_collection",
