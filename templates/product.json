@@ -354,10 +354,88 @@
     },
     "judgeme_reviews": {
       "type": "judgeme-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "date": "2 days ago",
+            "title": "\"Breathtaking Sparkle & Quality!\"",
+            "text": "I ordered this 14K Gold piece with high expectations and it completely blew me away. The clarity is flawless and the diamond brilliance turns heads every single day. Full BIS hallmark and certificate included!",
+            "author": "Ananya Sharma",
+            "verified": true,
+            "product_purchased": "14K Gold Diamond Ring"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "date": "5 days ago",
+            "title": "\"Best Engagement Ring Choice\"",
+            "text": "Proposed to my fiance with this ring and she was in tears! The craftsmanship, pave detailing on the band, and the velvet presentation box were pure royal luxury. Thank you HB Prestige!",
+            "author": "Vikram Patel",
+            "verified": true,
+            "product_purchased": "Twist Shank Band Ring"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "date": "1 week ago",
+            "title": "\"Flawless Lab Diamond Brilliance\"",
+            "text": "Compared this with prominent high-street jewelers and HB Prestige quality is ten times superior at almost half the price tag. Very prompt customer service and continuous WhatsApp delivery updates.",
+            "author": "Rohan Mehta",
+            "verified": true,
+            "product_purchased": "Lab Diamond Engagement Ring"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "date": "2 weeks ago",
+            "title": "\"Pure Elegance in Every Detail\"",
+            "text": "The ring size fits like a glove! The twist band accentuates the center stone with magnificent fire and sparkle. Will definitely recommend HB Prestige to all friends and family.",
+            "author": "Pooja Kothari",
+            "verified": true,
+            "product_purchased": "Oval Halo Proposal Ring"
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "date": "3 weeks ago",
+            "title": "\"Exceeded All Expectations!\"",
+            "text": "Buying fine jewelry online can feel intimidating, but HB Prestige made the process effortless. Insured fast courier, certificate card, and a ring that looks worth twice the price.",
+            "author": "Neha Singhania",
+            "verified": true,
+            "product_purchased": "14K Solid Gold Ring"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5"
+      ],
       "settings": {
+        "subheading": "Verified Feedback",
+        "heading": "Customer Reviews",
+        "score": "5.0",
+        "review_count_text": "Based on 28 Verified Reviews",
+        "bar_5_pct": 96,
+        "bar_4_pct": 4,
+        "bar_3_pct": 0,
+        "bar_2_pct": 0,
+        "bar_1_pct": 0,
         "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     }
   },

@@ -184,65 +184,91 @@
 
     <!-- Luxury Featured Testimonials -->
     <div class="customer-reviews-grid" id="fallbackReviewsGrid">
-      <div class="review-card">
-        <div>
-          <div class="review-card-stars">★★★★★</div>
-          <h3 class="review-card-title">"Breathtaking Sparkle and Quality!"</h3>
-          <p class="review-card-text">"I ordered a 14K Gold Lab Grown Diamond ring. The craftsmanship exceeds luxury designer standards. Delivered in a velvet box with full certificate!"</p>
-        </div>
-        <div class="review-card-footer">
-          <div>
-            <div class="review-author">Aarav M.</div>
-            <div class="review-product-tag">14K Gold Solitaire Ring</div>
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          <div class="review-card" {{ block.shopify_attributes }}>
+            <div>
+              <div class="review-card-stars">
+                {%- assign r = block.settings.rating | default: 5 -%}
+                {%- for i in (1..r) -%}★{%- endfor -%}
+              </div>
+              <h3 class="review-card-title">{{ block.settings.title | escape }}</h3>
+              <p class="review-card-text">{{ block.settings.text | escape }}</p>
+            </div>
+            <div class="review-card-footer">
+              <div>
+                <div class="review-author">{{ block.settings.author | escape }}</div>
+                <div class="review-product-tag">{{ block.settings.product_tag | escape }}</div>
+              </div>
+              {%- if block.settings.verified -%}
+                <span class="review-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </span>
+              {%- endif -%}
+            </div>
           </div>
-          <span class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Verified Buyer
-          </span>
+        {%- endfor -%}
+      {%- else -%}
+        <div class="review-card">
+          <div>
+            <div class="review-card-stars">★★★★★</div>
+            <h3 class="review-card-title">"Breathtaking Sparkle and Quality!"</h3>
+            <p class="review-card-text">"I ordered a 14K Gold Lab Grown Diamond ring. The craftsmanship exceeds luxury designer standards. Delivered in a velvet box with full certificate!"</p>
+          </div>
+          <div class="review-card-footer">
+            <div>
+              <div class="review-author">Aarav M.</div>
+              <div class="review-product-tag">14K Gold Solitaire Ring</div>
+            </div>
+            <span class="review-verified">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              Verified Buyer
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div class="review-card">
-        <div>
-          <div class="review-card-stars">★★★★★</div>
-          <h3 class="review-card-title">"Exceptional Customer Care"</h3>
-          <p class="review-card-text">"Team was so helpful with sizing and gave continuous updates. The diamond clarity is flawless and the ring fits like a dream."</p>
-        </div>
-        <div class="review-card-footer">
+        <div class="review-card">
           <div>
-            <div class="review-author">Pooja K.</div>
-            <div class="review-product-tag">Pave Diamond Promise Ring</div>
+            <div class="review-card-stars">★★★★★</div>
+            <h3 class="review-card-title">"Exceptional Customer Care"</h3>
+            <p class="review-card-text">"Team was so helpful with sizing and gave continuous updates. The diamond clarity is flawless and the ring fits like a dream."</p>
           </div>
-          <span class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Verified Buyer
-          </span>
+          <div class="review-card-footer">
+            <div>
+              <div class="review-author">Pooja K.</div>
+              <div class="review-product-tag">Pave Diamond Promise Ring</div>
+            </div>
+            <span class="review-verified">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              Verified Buyer
+            </span>
+          </div>
         </div>
-      </div>
 
-      <div class="review-card">
-        <div>
-          <div class="review-card-stars">★★★★★</div>
-          <h3 class="review-card-title">"Truly 5-Star Experience"</h3>
-          <p class="review-card-text">"HB Prestige Jewels is now my go-to jeweler. Outstanding lab grown moissanite brilliance, BIS hallmark stamp, and super fast insured delivery."</p>
-        </div>
-        <div class="review-card-footer">
+        <div class="review-card">
           <div>
-            <div class="review-author">Rohan S.</div>
-            <div class="review-product-tag">Moissanite Diamond Bracelet</div>
+            <div class="review-card-stars">★★★★★</div>
+            <h3 class="review-card-title">"Truly 5-Star Experience"</h3>
+            <p class="review-card-text">"HB Prestige Jewels is now my go-to jeweler. Outstanding lab grown moissanite brilliance, BIS hallmark stamp, and super fast insured delivery."</p>
           </div>
-          <span class="review-verified">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Verified Buyer
-          </span>
+          <div class="review-card-footer">
+            <div>
+              <div class="review-author">Rohan S.</div>
+              <div class="review-product-tag">Moissanite Diamond Bracelet</div>
+            </div>
+            <span class="review-verified">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              Verified Buyer
+            </span>
+          </div>
         </div>
-      </div>
+      {%- endif -%}
     </div>
   </div>
 </div>
 
 <script>
-  // Only hide fallback cards if Judge.me has actually rendered real review items
   (function() {
     function checkReviews() {
       const realItems = document.querySelectorAll('.jdgm-carousel-wrapper .jdgm-carousel-item, .jdgm-carousel-wrapper .jdgm-carousel-slide');
@@ -313,9 +339,61 @@
       "default": 48
     }
   ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review Card",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Rating (Stars)",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review Title",
+          "default": "Breathtaking Sparkle and Quality!"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Body",
+          "default": "I ordered a 14K Gold Lab Grown Diamond ring. The craftsmanship exceeds luxury designer standards. Delivered in a velvet box with full certificate!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Aarav M."
+        },
+        {
+          "type": "text",
+          "id": "product_tag",
+          "label": "Product Purchased",
+          "default": "14K Gold Solitaire Ring"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show 'Verified Buyer' Badge",
+          "default": true
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Customer Reviews"
+      "name": "Customer Reviews",
+      "blocks": [
+        {
+          "type": "review"
+        }
+      ]
     }
   ]
 }

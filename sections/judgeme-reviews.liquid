@@ -468,8 +468,12 @@
     <div style="clear:both"></div>
     
     <div class="judgeme-section-header">
-      <span class="subheading">Verified Feedback</span>
-      <h2 class="heading">Customer Reviews</h2>
+      {%- if section.settings.subheading != blank -%}
+        <span class="subheading">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
     </div>
 
     <!-- Judge.me Official Product Review Widget Container -->
@@ -480,36 +484,36 @@
     <!-- Summary Box -->
     <div class="p-reviews-summary-card">
       <div class="p-reviews-score-box">
-        <div class="p-reviews-big-score">5.0</div>
+        <div class="p-reviews-big-score">{{ section.settings.score | default: '5.0' }}</div>
         <div class="p-reviews-big-stars">★★★★★</div>
-        <div class="p-reviews-total-count">Based on 28 Verified Reviews</div>
+        <div class="p-reviews-total-count">{{ section.settings.review_count_text | default: 'Based on 28 Verified Reviews' }}</div>
       </div>
 
       <div class="p-reviews-bars">
         <div class="p-reviews-bar-row">
           <span class="bar-label">5 Star</span>
-          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 96%;"></div></div>
-          <span class="p-reviews-bar-count">96%</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: {{ section.settings.bar_5_pct | default: 96 }}%;"></div></div>
+          <span class="p-reviews-bar-count">{{ section.settings.bar_5_pct | default: 96 }}%</span>
         </div>
         <div class="p-reviews-bar-row">
           <span class="bar-label">4 Star</span>
-          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 4%;"></div></div>
-          <span class="p-reviews-bar-count">4%</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: {{ section.settings.bar_4_pct | default: 4 }}%;"></div></div>
+          <span class="p-reviews-bar-count">{{ section.settings.bar_4_pct | default: 4 }}%</span>
         </div>
         <div class="p-reviews-bar-row">
           <span class="bar-label">3 Star</span>
-          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
-          <span class="p-reviews-bar-count">0%</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: {{ section.settings.bar_3_pct | default: 0 }}%;"></div></div>
+          <span class="p-reviews-bar-count">{{ section.settings.bar_3_pct | default: 0 }}%</span>
         </div>
         <div class="p-reviews-bar-row">
           <span class="bar-label">2 Star</span>
-          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
-          <span class="p-reviews-bar-count">0%</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: {{ section.settings.bar_2_pct | default: 0 }}%;"></div></div>
+          <span class="p-reviews-bar-count">{{ section.settings.bar_2_pct | default: 0 }}%</span>
         </div>
         <div class="p-reviews-bar-row">
           <span class="bar-label">1 Star</span>
-          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
-          <span class="p-reviews-bar-count">0%</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: {{ section.settings.bar_1_pct | default: 0 }}%;"></div></div>
+          <span class="p-reviews-bar-count">{{ section.settings.bar_1_pct | default: 0 }}%</span>
         </div>
       </div>
 
@@ -527,125 +531,61 @@
       </button>
 
       <div class="p-reviews-track" id="pReviewsTrack">
-        <!-- Review 1 -->
-        <div class="p-review-card">
-          <div>
-            <div class="p-card-top">
-              <span class="p-card-stars">★★★★★</span>
-              <span class="p-card-date">2 days ago</span>
-            </div>
-            <h3 class="p-card-title">"Breathtaking Sparkle & Quality!"</h3>
-            <p class="p-card-text">"I ordered this 14K Gold piece with high expectations and it completely blew me away. The clarity is flawless and the diamond brilliance turns heads every single day. Full BIS hallmark and certificate included!"</p>
-          </div>
-          <div class="p-card-footer">
-            <div class="p-card-author">
-              <div class="p-card-avatar">A</div>
+        {%- if section.blocks.size > 0 -%}
+          {%- for block in section.blocks -%}
+            <div class="p-review-card" {{ block.shopify_attributes }}>
               <div>
-                <div class="p-card-author-name">Ananya Sharma</div>
-                <div class="p-card-verified">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                  Verified Buyer
+                <div class="p-card-top">
+                  <span class="p-card-stars">
+                    {%- assign r = block.settings.rating | default: 5 -%}
+                    {%- for i in (1..r) -%}★{%- endfor -%}
+                  </span>
+                  <span class="p-card-date">{{ block.settings.date | escape }}</span>
+                </div>
+                <h3 class="p-card-title">{{ block.settings.title | escape }}</h3>
+                <p class="p-card-text">{{ block.settings.text | escape }}</p>
+              </div>
+              <div class="p-card-footer">
+                <div class="p-card-author">
+                  <div class="p-card-avatar">{{ block.settings.author | slice: 0, 1 | upcase }}</div>
+                  <div>
+                    <div class="p-card-author-name">{{ block.settings.author | escape }}</div>
+                    {%- if block.settings.verified -%}
+                      <div class="p-card-verified">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        Verified Buyer
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <!-- Default fallback cards if no blocks yet -->
+          <div class="p-review-card">
+            <div>
+              <div class="p-card-top">
+                <span class="p-card-stars">★★★★★</span>
+                <span class="p-card-date">2 days ago</span>
+              </div>
+              <h3 class="p-card-title">"Breathtaking Sparkle & Quality!"</h3>
+              <p class="p-card-text">"I ordered this 14K Gold piece with high expectations and it completely blew me away. The clarity is flawless and the diamond brilliance turns heads every single day. Full BIS hallmark and certificate included!"</p>
+            </div>
+            <div class="p-card-footer">
+              <div class="p-card-author">
+                <div class="p-card-avatar">A</div>
+                <div>
+                  <div class="p-card-author-name">Ananya Sharma</div>
+                  <div class="p-card-verified">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    Verified Buyer
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Review 2 -->
-        <div class="p-review-card">
-          <div>
-            <div class="p-card-top">
-              <span class="p-card-stars">★★★★★</span>
-              <span class="p-card-date">5 days ago</span>
-            </div>
-            <h3 class="p-card-title">"Best Engagement Ring Choice"</h3>
-            <p class="p-card-text">"Proposed to my fiance with this ring and she was in tears! The craftsmanship, pave detailing on the band, and the velvet presentation box were pure royal luxury. Thank you HB Prestige!"</p>
-          </div>
-          <div class="p-card-footer">
-            <div class="p-card-author">
-              <div class="p-card-avatar">V</div>
-              <div>
-                <div class="p-card-author-name">Vikram Patel</div>
-                <div class="p-card-verified">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                  Verified Buyer
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 3 -->
-        <div class="p-review-card">
-          <div>
-            <div class="p-card-top">
-              <span class="p-card-stars">★★★★★</span>
-              <span class="p-card-date">1 week ago</span>
-            </div>
-            <h3 class="p-card-title">"Flawless Lab Diamond Brilliance"</h3>
-            <p class="p-card-text">"Compared this with prominent high-street jewelers and HB Prestige quality is ten times superior at almost half the price tag. Very prompt customer service and continuous WhatsApp delivery updates."</p>
-          </div>
-          <div class="p-card-footer">
-            <div class="p-card-author">
-              <div class="p-card-avatar">R</div>
-              <div>
-                <div class="p-card-author-name">Rohan Mehta</div>
-                <div class="p-card-verified">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                  Verified Buyer
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 4 -->
-        <div class="p-review-card">
-          <div>
-            <div class="p-card-top">
-              <span class="p-card-stars">★★★★★</span>
-              <span class="p-card-date">2 weeks ago</span>
-            </div>
-            <h3 class="p-card-title">"Pure Elegance in Every Detail"</h3>
-            <p class="p-card-text">"The ring size fits like a glove! The twist band accentuates the center stone with magnificent fire and sparkle. Will definitely recommend HB Prestige to all friends and family."</p>
-          </div>
-          <div class="p-card-footer">
-            <div class="p-card-author">
-              <div class="p-card-avatar">P</div>
-              <div>
-                <div class="p-card-author-name">Pooja Kothari</div>
-                <div class="p-card-verified">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                  Verified Buyer
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Review 5 -->
-        <div class="p-review-card">
-          <div>
-            <div class="p-card-top">
-              <span class="p-card-stars">★★★★★</span>
-              <span class="p-card-date">3 weeks ago</span>
-            </div>
-            <h3 class="p-card-title">"Exceeded All Expectations!"</h3>
-            <p class="p-card-text">"Buying fine jewelry online can feel intimidating, but HB Prestige made the process effortless. Insured fast courier, certificate card, and a ring that looks worth twice the price."</p>
-          </div>
-          <div class="p-card-footer">
-            <div class="p-card-author">
-              <div class="p-card-avatar">N</div>
-              <div>
-                <div class="p-card-author-name">Neha Singhania</div>
-                <div class="p-card-verified">
-                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                  Verified Buyer
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {%- endif -%}
       </div>
 
       <button type="button" class="p-slider-nav-btn next" onclick="slideReviews(1);" aria-label="Next Reviews">
@@ -756,7 +696,6 @@
 
   // Modal handlers
   function openReviewModal() {
-    // If Judge.me native write review exists, trigger it as well
     const jdgmWrite = document.querySelector('.jdgm-widget.jdgm-review-widget .jdgm-write-rev-link, .jdgm-write-rev');
     if (jdgmWrite) {
       jdgmWrite.click();
@@ -799,9 +738,83 @@
   "class": "section",
   "settings": [
     {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Verified Feedback"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Reviews"
+    },
+    {
+      "type": "text",
+      "id": "score",
+      "label": "Overall Score",
+      "default": "5.0"
+    },
+    {
+      "type": "text",
+      "id": "review_count_text",
+      "label": "Review Count Label",
+      "default": "Based on 28 Verified Reviews"
+    },
+    {
+      "type": "range",
+      "id": "bar_5_pct",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "5 Star Percentage",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "bar_4_pct",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "4 Star Percentage",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "bar_3_pct",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "3 Star Percentage",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "bar_2_pct",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "2 Star Percentage",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "bar_1_pct",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "1 Star Percentage",
+      "default": 0
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
+      "label": "Color scheme",
       "default": "scheme-1"
     },
     {
@@ -811,7 +824,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
+      "label": "Top padding",
       "default": 48
     },
     {
@@ -821,13 +834,71 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
+      "label": "Bottom padding",
       "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Rating (Stars)",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Review Date",
+          "default": "2 days ago"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review Title",
+          "default": "Breathtaking Sparkle & Quality!"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Text",
+          "default": "I ordered this piece with high expectations and it completely blew me away. The clarity is flawless and the diamond brilliance turns heads every single day. Full BIS hallmark and certificate included!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Customer Name",
+          "default": "Ananya Sharma"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Show 'Verified Buyer' Badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "product_purchased",
+          "label": "Product Purchased Label",
+          "default": "14K Gold Diamond Ring"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Judge.me Reviews"
+      "name": "Judge.me Reviews",
+      "blocks": [
+        {
+          "type": "review"
+        }
+      ]
     }
   ]
 }

@@ -1579,6 +1579,46 @@
     },
     "customer_reviews": {
       "type": "customer-reviews",
+      "blocks": {
+        "home_review_1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "\"Breathtaking Sparkle and Quality!\"",
+            "text": "I ordered a 14K Gold Lab Grown Diamond ring. The craftsmanship exceeds luxury designer standards. Delivered in a velvet box with full certificate!",
+            "author": "Aarav M.",
+            "product_tag": "14K Gold Solitaire Ring",
+            "verified": true
+          }
+        },
+        "home_review_2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "\"Exceptional Customer Care\"",
+            "text": "Team was so helpful with sizing and gave continuous updates. The diamond clarity is flawless and the ring fits like a dream.",
+            "author": "Pooja K.",
+            "product_tag": "Pave Diamond Promise Ring",
+            "verified": true
+          }
+        },
+        "home_review_3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "\"Truly 5-Star Experience\"",
+            "text": "HB Prestige Jewels is now my go-to jeweler. Outstanding lab grown moissanite brilliance, BIS hallmark stamp, and super fast insured delivery.",
+            "author": "Rohan S.",
+            "product_tag": "Moissanite Diamond Bracelet",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "home_review_1",
+        "home_review_2",
+        "home_review_3"
+      ],
       "settings": {
         "subheading": "Client Testimonials",
         "heading": "What Our Customers Say",
