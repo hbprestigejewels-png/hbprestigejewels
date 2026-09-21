@@ -17,3 +17,8 @@ Thumbs.db
 # Archives
 *.zip
 *.rar
+
+# Dev launcher & packages
+*.bat
+package.json
+package-lock.json

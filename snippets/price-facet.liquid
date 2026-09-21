@@ -1,45 +1,74 @@
-<span class="field-currency">{{ cart.currency.symbol }}</span>
+  {%- liquid
+    assign range_max_raw = filter.range_max | divided_by: 100.0 | ceil
+    if filter.min_value.value
+      assign min_val = filter.min_value.value | divided_by: 100.0 | ceil
+    else
+      assign min_val = 0
+    endif
+    if filter.max_value.value
+      assign max_val = filter.max_value.value | divided_by: 100.0 | ceil
+    else
+      assign max_val = range_max_raw
+    endif
+  -%}
 
-<div class="field">
-  <input
-    class="field__input"
-    name="{{ filter.min_value.param_name }}"
-    id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
-    {%- if filter.min_value.value -%}
-      value="{{ filter.min_value.value | money_without_currency }}"
-    {%- endif -%}
-    type="text"
-    inputmode="decimal"
-    placeholder="0"
-    data-pattern="\d| |,|\."
-    data-min="0"
-    data-max="{{ filter.range_max | money_without_currency }}"
-  >
-  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
-    {{- 'products.facets.from' | t -}}
-  </label>
-</div>
+  <div class="hb-price-filter">
 
-{%- if filter_type != 'vertical' -%}
-  <span class="field-currency">{{ cart.currency.symbol }}</span>
-{%- endif -%}
+    <div class="hb-price-slider"
+         data-min="0"
+         data-max="{{ range_max_raw }}">
+      <div class="hb-slider-track-bg"></div>
+      <div class="hb-slider-fill"></div>
+      <input type="range"
+        class="hb-slider-range hb-slider-min"
+        min="0"
+        max="{{ range_max_raw }}"
+        value="{{ min_val }}"
+        step="1"
+        aria-label="Minimum price">
+      <input type="range"
+        class="hb-slider-range hb-slider-max"
+        min="0"
+        max="{{ range_max_raw }}"
+        value="{{ max_val }}"
+        step="1"
+        aria-label="Maximum price">
+    </div>
 
-<div class="field">
-  <input
-    class="field__input"
-    name="{{ filter.max_value.param_name }}"
-    id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
-    {%- if filter.max_value.value -%}
-      value="{{ filter.max_value.value | money_without_currency }}"
-    {%- endif -%}
-    type="text"
-    inputmode="decimal"
-    placeholder="{{ filter.range_max | money_without_currency }}"
-    data-pattern="\d| |,|\."
-    data-min="0"
-    data-max="{{ filter.range_max | money_without_currency }}"
-  >
-  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
-    {{- 'products.facets.to' | t -}}
-  </label>
-</div>
+    <div class="hb-price-inputs">
+      <div class="hb-price-field">
+        <span class="hb-curr">{{ cart.currency.symbol }}</span>
+        <input
+          type="text"
+          class="hb-price-text"
+          name="{{ filter.min_value.param_name }}"
+          id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+          {%- if filter.min_value.value -%}
+            value="{{ min_val }}"
+          {%- endif -%}
+          placeholder="Min"
+          inputmode="decimal"
+          data-min="0"
+          data-max="{{ range_max_raw }}"
+        >
+      </div>
+      <span class="hb-dash">—</span>
+      <div class="hb-price-field">
+        <span class="hb-curr">{{ cart.currency.symbol }}</span>
+        <input
+          type="text"
+          class="hb-price-text"
+          name="{{ filter.max_value.param_name }}"
+          id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+          {%- if filter.max_value.value -%}
+            value="{{ max_val }}"
+          {%- endif -%}
+          placeholder="{{ range_max_raw }}"
+          inputmode="decimal"
+          data-min="0"
+          data-max="{{ range_max_raw }}"
+        >
+      </div>
+    </div>
+
+  </div>

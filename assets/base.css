@@ -4011,3 +4011,34 @@ button.button.button--secondary:hover:not([disabled]):not(.skip-to-content-link)
               inset 0 -1px 2px rgba(194, 133, 116, 0.2) !important;
   transform: translateY(-2px) !important;
 }
+
+#ai_webform_custom_form_1127 .full-width.newsletter-popup-box-scroll-cls {
+    background: #F7ECE2 !important;
+}
+@media screen and (max-width: 749px) {
+div#newsletter-detail-section-1127 {
+    text-align: center;
+}
+}
+
+
+button.aio_recommended_product {
+    border: 1px solid #000 ! IMPORTANT;
+    border-radius: 50px !important;
+    width: 100% !important;
+    padding: 15px 10px !important;
+}
+.ai-newsletter-custom-cls .full-width:not(.newsletter-detail-section){
+  background:  #F7ECE2 !important;
+}
+iframe#allinoneiframchat{
+  display:none !important;
+}
+
+.full-width {
+    float: unset !important;
+}
+button.aio_recommended_product {
+    background: linear-gradient(135deg, #fffffff2, #fdf6f3d9 45%, #f6e6e0b3) !important;
+    border: 1.5px solid rgba(194, 133, 116, .75) !important;
+}

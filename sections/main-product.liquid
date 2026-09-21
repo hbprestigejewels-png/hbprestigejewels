@@ -2429,14 +2429,15 @@
       const info = (root || document).querySelector('.product__info-wrapper');
       if (!wrapper || !card || !info) return;
 
-      // પહેલાથી init થયેલું હોય તો ફરી listener ના ઉમેરો
       if (card.dataset.stickyInit === 'true') return;
       card.dataset.stickyInit = 'true';
 
-      const topGap = 130;
-      const bottomBuffer = 20;
       let rafId = null;
-      let active = false;
+
+      function getHeaderHeight() {
+        const header = document.querySelector('.header-wrapper') || document.querySelector('header');
+        return header ? Math.max(header.offsetHeight + 15, 110) : 110;
+      }
 
       function resetStyles() {
         card.style.position = '';
@@ -2444,50 +2445,59 @@
         card.style.left = '';
         card.style.bottom = '';
         card.style.width = '';
+        wrapper.style.position = '';
       }
 
       function update() {
-        // 992px થી નાની સ્ક્રીન પર સ્ટીકી બિલકુલ કામ ના કરે
         if (window.innerWidth < BREAKPOINT) {
-          if (active) {
-            resetStyles();
-            active = false;
-          }
+          resetStyles();
           return;
         }
-        active = true;
 
-        // section re-render થાય અને element DOM માંથી નીકળી જાય તો બંધ કરી દો
         if (!wrapper.isConnected || !card.isConnected || !info.isConnected) {
           window.removeEventListener('scroll', onScroll);
           window.removeEventListener('resize', onResize);
           return;
         }
 
+        const topGap = getHeaderHeight();
         const wrapperRect = wrapper.getBoundingClientRect();
-        const wrapperTop = wrapper.offsetTop;
-        const wrapperBottom = wrapperTop + info.offsetHeight;
-        const scrollTop = window.pageYOffset;
+        const wrapperTop = wrapper.getBoundingClientRect().top + window.pageYOffset;
+        const infoHeight = info.offsetHeight;
+        const cardHeight = card.offsetHeight || 500;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const maxScroll = wrapperTop + infoHeight - cardHeight - topGap;
 
-        card.style.width = wrapper.offsetWidth + 'px';
+        wrapper.style.position = 'relative';
+
+        if (infoHeight <= cardHeight) {
+          card.style.position = 'relative';
+          card.style.top = '0';
+          card.style.left = '';
+          card.style.width = '100%';
+          return;
+        }
 
         if (scrollTop < wrapperTop - topGap) {
+          // 1. At Top: Relative (guarantees image is 100% visible on load / refresh)
           card.style.position = 'relative';
-          card.style.top = '';
+          card.style.top = '0';
           card.style.left = '';
           card.style.bottom = '';
-          card.style.width = '';
-        } else if (scrollTop + topGap + card.offsetHeight < wrapperBottom - bottomBuffer) {
+          card.style.width = '100%';
+        } else if (scrollTop >= wrapperTop - topGap && scrollTop < maxScroll) {
+          // 2. Scrolling: Fixed to viewport on left side
           card.style.position = 'fixed';
           card.style.top = topGap + 'px';
           card.style.left = wrapperRect.left + 'px';
           card.style.bottom = '';
           card.style.width = wrapper.offsetWidth + 'px';
         } else {
-          card.style.position = 'sticky';
-          card.style.top = '100%';
-          card.style.bottom = '20px';
+          // 3. At bottom of product info: Absolute at bottom of wrapper
+          card.style.position = 'absolute';
+          card.style.top = Math.max(0, infoHeight - cardHeight) + 'px';
           card.style.left = '0';
+          card.style.bottom = '';
           card.style.width = '100%';
         }
       }
@@ -2507,12 +2517,22 @@
       update();
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onResize, { passive: true });
+
+      // Update when images finish loading
+      const imgs = card.querySelectorAll('img');
+      imgs.forEach(img => {
+        if (!img.complete) {
+          img.addEventListener('load', update, { once: true });
+        }
+      });
     }
 
-    // પહેલી load વખતે
-    document.addEventListener('DOMContentLoaded', () => initStickyCard(document));
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initStickyCard(document);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => initStickyCard(document));
+    }
 
-    // Theme editor માં section reload/select થાય ત્યારે ફરીથી init કરો
     document.addEventListener('shopify:section:load', (e) => initStickyCard(e.target));
     document.addEventListener('shopify:section:select', (e) => initStickyCard(e.target));
   })();
@@ -2869,3 +2889,46 @@
       transform: translateY(1px) scale(0.99) !important;
     }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ request.origin | append: product.url | json }},
+  {% if product.featured_media %}
+    "image": [
+      {{ product.featured_media | image_url: width: 1920 | prepend: "https:" | json }}
+    ],
+  {% endif %}
+  "description": {{ product.description | strip_html | json }},
+  {% if product.selected_or_first_available_variant.sku != blank %}
+    "sku": {{ product.selected_or_first_available_variant.sku | json }},
+  {% endif %}
+  "brand": {
+    "@type": "Brand",
+    "name": {{ product.vendor | json }}
+  },
+  "offers": [
+    {%- for variant in product.variants -%}
+      {
+        "@type" : "Offer",
+        {%- if variant.sku != blank -%}
+          "sku": {{ variant.sku | json }},
+        {%- endif -%}
+        "availability" : "http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+        "price" : {{ variant.price | divided_by: 100.00 | json }},
+        "priceCurrency" : {{ cart.currency.iso_code | json }},
+        "url" : {{ request.origin | append: variant.url | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+  {%- if product.metafields.reviews.rating.value != blank -%}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ product.metafields.reviews.rating.value.rating | json }},
+    "reviewCount": {{ product.metafields.reviews.rating_count.value | json }}
+  }
+  {%- endif -%}
+}
+</script>

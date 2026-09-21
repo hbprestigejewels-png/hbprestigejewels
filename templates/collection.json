@@ -63,16 +63,32 @@
         "show_rating": false,
         "quick_add": "standard",
         "enable_filtering": true,
-        "filter_type": "horizontal",
+        "filter_type": "vertical",
         "enable_sorting": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "1788870753156167e5": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_new_arrival_block_cPMRrp": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-newArrivalBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_new_arrival_block_cPMRrp"
+      ],
+      "settings": {
+        "include_margins": true
       }
     }
   },
   "order": [
     "banner",
     "featured_collection_KPWTFt",
-    "product-grid"
+    "product-grid",
+    "1788870753156167e5"
   ]
 }

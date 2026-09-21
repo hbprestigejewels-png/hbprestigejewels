@@ -1,0 +1,498 @@
+{%- comment -%}
+  HB Prestige Jewels - Customer Offer & OTP+ Login Flow
+  1. Login Confirmation Modal (Shown when customer is logged in)
+  2. Welcome Offer Modal for Guests:
+     - Heading: "Join Diamonds for Everyone & Get $50 Off"
+     - Subtitle: "Sign in to your account today to receive an exclusive $50 discount code when you spend $5000 or more."
+     - Only "Next" button
+     - Clicking "Next" closes this popup and immediately triggers the real OTP+ login module!
+{%- endcomment -%}
+
+<!-- ═══════════════════════════════════════════════════
+     1. LOGIN CONFIRMATION MODAL (SHOWN ON LOGIN)
+═══════════════════════════════════════════════════ -->
+<div
+  id="hbp-login-confirmation-popup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="hbp-confirmation-title"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999999;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem;
+    box-sizing: border-box;
+    animation: hbpFadeIn 0.3s ease forwards;
+  "
+>
+  <div
+    id="hbp-confirmation-card"
+    style="
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      padding: 3.2rem 2.6rem 2.6rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      box-sizing: border-box;
+      animation: hbpSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    "
+  >
+    <!-- Close Button -->
+    <button
+      id="hbp-confirmation-close"
+      aria-label="Close"
+      type="button"
+      onclick="hbpCloseConfirmation()"
+      style="
+        position: absolute;
+        top: 1.2rem;
+        right: 1.4rem;
+        background: #f3f4f6;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 1.6rem;
+        color: #555;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        transition: background 0.2s, color 0.2s;
+      "
+      onmouseover="this.style.background='#e5e7eb';this.style.color='#111';"
+      onmouseout="this.style.background='#f3f4f6';this.style.color='#555';"
+    >&times;</button>
+
+    <!-- Verified Success Icon -->
+    <div style="
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #ecfdf5;
+      border: 2px solid #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.6rem;
+    ">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+
+    <p style="
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #059669;
+      margin: 0 0 0.6rem;
+      font-family: sans-serif;
+    ">Login Successful</p>
+
+    <h2
+      id="hbp-confirmation-title"
+      style="
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 0.8rem;
+        line-height: 1.25;
+      "
+    >
+      Welcome, <span id="hbp-customer-name">{% if customer %}{{ customer.first_name | default: customer.name | default: 'Valued Customer' }}{% else %}Valued Customer{% endif %}</span>!
+    </h2>
+
+    <p style="
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-size: 1.25rem;
+      color: #4b5563;
+      margin: 0 0 2rem;
+      line-height: 1.5;
+    ">
+      {% if customer %}
+        You are now signed in as <strong style="color: #111827;">{{ customer.email }}</strong>.
+      {% else %}
+        You are now signed in to your account. Enjoy member pricing!
+      {% endif %}
+    </p>
+
+    <!-- Discount Coupon Voucher Box -->
+    <div style="
+      background: linear-gradient(135deg, #fff7ed 0%, #fffbeb 100%);
+      border: 1.5px dashed #d97706;
+      border-radius: 12px;
+      padding: 1.4rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    ">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 0.4rem;">
+        <span style="font-size: 1.6rem;">💎</span>
+        <span style="font-size: 1.25rem; font-weight: 700; color: #92400e; text-transform: uppercase; letter-spacing: 0.05em;">
+          Your $50 Exclusive Voucher
+        </span>
+      </div>
+      <p style="font-size: 1.1rem; color: #78350f; margin: 0 0 1rem;">
+        Use this discount code on your order of $5,000 or more:
+      </p>
+
+      <!-- Code Box + Copy -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem;">
+        <div style="
+          background: #ffffff;
+          border: 1.5px solid #d97706;
+          border-radius: 8px;
+          padding: 0.7rem 1.6rem;
+          font-family: monospace;
+          font-size: 1.6rem;
+          font-weight: 700;
+          color: #b45309;
+          letter-spacing: 0.1em;
+        " id="hbp-discount-code-text">DIAMOND50</div>
+
+        <button
+          id="hbp-copy-code-btn"
+          type="button"
+          onclick="hbpCopyDiscountCode()"
+          style="
+            background: #d97706;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.4rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+          "
+          onmouseover="this.style.background='#b45309'"
+          onmouseout="this.style.background='#d97706'"
+        >Copy</button>
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <button
+      id="hbp-confirmation-continue-btn"
+      type="button"
+      onclick="hbpCloseConfirmation()"
+      style="
+        width: 100%;
+        background: #111827;
+        color: #ffffff;
+        padding: 1.15rem 1.6rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+        letter-spacing: 0.02em;
+      "
+      onmouseover="this.style.background='#1f2937'"
+      onmouseout="this.style.background='#111827'"
+    >
+      Start Shopping
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const CONFIRM_POPUP = document.getElementById('hbp-login-confirmation-popup');
+  const CONFIRM_KEY = 'hbp_login_confirmed_shown';
+
+  window.hbpCloseConfirmation = function() {
+    if (!CONFIRM_POPUP) return;
+    CONFIRM_POPUP.style.display = 'none';
+    try { sessionStorage.setItem(CONFIRM_KEY, '1'); } catch(e) {}
+  };
+
+  if (CONFIRM_POPUP) {
+    CONFIRM_POPUP.addEventListener('click', function(e){
+      if (e.target === CONFIRM_POPUP) window.hbpCloseConfirmation();
+    });
+  }
+
+  function fallbackCopy(text, btn) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      if (btn) {
+        btn.textContent = 'Copied! ✓';
+        btn.style.background = '#059669';
+        setTimeout(function(){
+          btn.textContent = 'Copy';
+          btn.style.background = '#d97706';
+        }, 2500);
+      }
+    } catch (err) {}
+    document.body.removeChild(textarea);
+  }
+
+  window.hbpCopyDiscountCode = function() {
+    const code = 'DIAMOND50';
+    const btn = document.getElementById('hbp-copy-code-btn');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(function() {
+        if (btn) {
+          btn.textContent = 'Copied! ✓';
+          btn.style.background = '#059669';
+          setTimeout(function(){
+            btn.textContent = 'Copy';
+            btn.style.background = '#d97706';
+          }, 2500);
+        }
+      }).catch(function() {
+        fallbackCopy(code, btn);
+      });
+    } else {
+      fallbackCopy(code, btn);
+    }
+  };
+
+  window.hbpOpenLoginConfirmation = function() {
+    if (CONFIRM_POPUP) CONFIRM_POPUP.style.display = 'flex';
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const isCustomerLoggedIn = {% if customer %}true{% else %}false{% endif %};
+    const isTestMode = window.location.search.includes('test_login');
+
+    if ((isCustomerLoggedIn || isTestMode)) {
+      try {
+        if (!sessionStorage.getItem(CONFIRM_KEY) || isTestMode) {
+          setTimeout(function() {
+            if (CONFIRM_POPUP) CONFIRM_POPUP.style.display = 'flex';
+          }, 500);
+        }
+      } catch(e) {
+        if (CONFIRM_POPUP) CONFIRM_POPUP.style.display = 'flex';
+      }
+    }
+  });
+})();
+</script>
+
+
+{%- unless customer -%}
+<!-- ═══════════════════════════════════════════════════
+     2. WELCOME OFFER MODAL (GUEST STATE)
+     - Clean Cream Background
+     - No Email input
+     - Only "Next" button
+     - Clicking "Next" closes this popup and immediately opens the real OTP+ login module!
+═══════════════════════════════════════════════════ -->
+<div
+  id="hbp-newsletter-popup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="hbp-offer-title"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999999;
+    background: rgba(0, 0, 0, 0.58);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem;
+    box-sizing: border-box;
+    animation: hbpFadeIn 0.3s ease;
+  "
+>
+  <div
+    id="hbp-offer-card"
+    style="
+      background: linear-gradient(180deg, #fff6ef 0%, #fff1ea 100%);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      padding: 3.2rem 2.8rem 2.6rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      box-sizing: border-box;
+      animation: hbpSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    "
+  >
+    <!-- Close Button -->
+    <button
+      id="hbp-newsletter-close"
+      aria-label="Close"
+      type="button"
+      onclick="hbpCloseOfferModal()"
+      style="
+        position: absolute;
+        top: 1.1rem;
+        right: 1.3rem;
+        background: transparent;
+        border: none;
+        font-size: 1.9rem;
+        color: #444;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        transition: color 0.2s;
+      "
+      onmouseover="this.style.color='#111'"
+      onmouseout="this.style.color='#444'"
+    >&times;</button>
+
+    <!-- Modal Heading -->
+    <h2
+      id="hbp-offer-title"
+      style="
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 2.1rem;
+        color: #111;
+        margin: 0 0 1.2rem;
+        line-height: 1.3;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+      "
+    >
+      Join Diamonds for Everyone &amp;<br>Get $50 Off
+    </h2>
+
+    <!-- Modal Description -->
+    <p
+      style="
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-size: 1.15rem;
+        color: #333;
+        margin: 0 0 2.2rem;
+        line-height: 1.55;
+      "
+    >
+      Sign in to your account today to receive an exclusive $50 discount code when you spend $5000 or more.
+    </p>
+
+    <!-- Next Button (Only Button) -->
+    <button
+      type="button"
+      id="btn-next-step"
+      onclick="hbpHandleNextTriggerOtp()"
+      style="
+        width: 100%;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        padding: 1.15rem 1.6rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.15s;
+        letter-spacing: 0.02em;
+        box-sizing: border-box;
+        display: block;
+      "
+      onmouseover="this.style.backgroundColor='#333'"
+      onmouseout="this.style.backgroundColor='#1a1a1a'"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const DISMISS_KEY = 'hbp_offer_popup_dismissed';
+  const offerPopup = document.getElementById('hbp-newsletter-popup');
+
+  window.hbpCloseOfferModal = function() {
+    if (!offerPopup) return;
+    offerPopup.style.display = 'none';
+    try { sessionStorage.setItem(DISMISS_KEY, '1'); } catch(e) {}
+  };
+
+  if (offerPopup) {
+    offerPopup.addEventListener('click', function(e){
+      if (e.target === offerPopup) window.hbpCloseOfferModal();
+    });
+  }
+
+  // Next button click: Closes Welcome Offer popup & Immediately triggers the real OTP+ login module!
+  window.hbpHandleNextTriggerOtp = function() {
+    // 1. Close the offer popup
+    if (offerPopup) {
+      offerPopup.style.display = 'none';
+    }
+    try { sessionStorage.setItem(DISMISS_KEY, '1'); } catch(e) {}
+
+    // 2. Trigger the OTP+ login module (same as clicking header account icon)
+    const accountIcon = document.querySelector('.header__icon--account');
+    if (accountIcon) {
+      accountIcon.click();
+    } else {
+      // Direct selector fallback for OTP+ modal
+      const otpModal = document.getElementById('hb-login-popup-modal');
+      if (otpModal) {
+        otpModal.style.display = 'block';
+      }
+    }
+  };
+
+  // Auto-show welcome offer popup after 4 seconds (sessionStorage tracked)
+  document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.search.includes('test_login')) return;
+
+    try {
+      if (sessionStorage.getItem(DISMISS_KEY)) return;
+    } catch(e) {}
+
+    if (window.location.pathname.includes('/account') || window.location.pathname.includes('/checkout')) return;
+
+    setTimeout(function() {
+      if (offerPopup) {
+        offerPopup.style.display = 'flex';
+      }
+    }, 4000);
+  });
+
+  window.hbpOpenOfferPopup = function() {
+    if (offerPopup) offerPopup.style.display = 'flex';
+  };
+})();
+</script>
+{%- endunless -%}
+
+<style>
+  @keyframes hbpFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes hbpSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>

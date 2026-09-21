@@ -748,7 +748,7 @@ a.active-facets__button.focused .active-facets__button-inner {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 2147483647 !important;
   background-color: rgba(var(--color-foreground), 0.5);
   pointer-events: none;
 }
@@ -764,35 +764,37 @@ a.active-facets__button.focused .active-facets__button-inner {
 
 .mobile-facets__wrapper .disclosure-has-popup[open] > summary::before {
   height: 100vh;
-  z-index: 3;
+  z-index: 2147483646 !important;
 }
 
 .mobile-facets__inner {
   background-color: rgb(var(--color-background));
-  width: calc(100% - 5rem);
-  margin-left: auto;
-  height: 100%;
+  width: calc(100% - 3rem);
+  height: max-content;
+  max-height: 85vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 12px;
   overflow-y: auto;
   pointer-events: all;
-  transition: transform var(--duration-default) ease;
-  max-width: 37.5rem;
+  transition: transform var(--duration-default) ease, opacity var(--duration-default) ease;
+  max-width: 40rem;
   display: flex;
   flex-direction: column;
-  border-color: rgba(var(--color-foreground), var(--drawer-border-opacity));
-  border-style: solid;
-  border-width: 0 0 0 var(--drawer-border-width);
-  filter: drop-shadow(
-    var(--drawer-shadow-horizontal-offset) var(--drawer-shadow-vertical-offset) var(--drawer-shadow-blur-radius)
-      rgba(var(--color-shadow), var(--drawer-shadow-opacity))
-  );
+  border: 1px solid rgba(var(--color-foreground), var(--drawer-border-opacity));
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15));
 }
 
 .menu-opening .mobile-facets__inner {
-  transform: translateX(0);
+  transform: translate(-50%, -50%);
+  opacity: 1;
 }
 
 .js .disclosure-has-popup:not(.menu-opening) .mobile-facets__inner {
-  transform: translateX(105vw);
+  transform: translate(-50%, -40%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .mobile-facets__header {
@@ -876,13 +878,16 @@ a.active-facets__button.focused .active-facets__button-inner {
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 0.7rem;
+  top: 1rem;
   right: 1rem;
   width: 4.4rem;
   height: 4.4rem;
-  z-index: 101;
+  z-index: 2147483647 !important;
   opacity: 0;
   transition: opacity var(--duration-short) ease;
+  background-color: rgb(var(--color-background));
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .mobile-facets__close .svg-wrapper {
@@ -977,6 +982,8 @@ details.menu-opening .mobile-facets__close .svg-wrapper {
   visibility: hidden;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .js details[open] > .mobile-facets__submenu {
@@ -1082,18 +1089,18 @@ input.mobile-facets__checkbox {
 }
 
 .mobile-facets__sort .select .icon-caret {
-  right: 0;
+  right: 1rem;
 }
 
 .mobile-facets__sort .select__select {
   background-color: transparent;
-  border-radius: 0;
+  border-radius: 30px;
   box-shadow: none;
   filter: none;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 3.5rem;
 }
 
 .product-count {
@@ -1123,9 +1130,105 @@ input.mobile-facets__checkbox {
   width: 1.8rem;
 }
 
+.shopify-section:has(.facets-vertical),
+.template-collection #MainContent,
+.template-collection #MainContent > .shopify-section {
+  content-visibility: visible !important;
+  contain: none !important;
+}
+
+/* Collection Title Centered at Top */
+.collection-page-header {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
+
+.collection-page-title {
+  margin: 0 auto;
+  font-family: var(--font-heading-family);
+  font-size: calc(var(--font-heading-scale) * 3.2rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgb(var(--color-foreground));
+  text-transform: capitalize;
+  text-align: center;
+}
+
+/* Left Sidebar: Sort By Box */
+.facet-filters-vertical {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.facet-filters-vertical .facet-filters__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.facet-filters-vertical .facet-filters__label {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 0;
+  color: rgb(var(--color-foreground));
+}
+
+.facet-filters-vertical .select {
+  flex-grow: 1;
+  max-width: 17rem;
+}
+
+.facet-filters-vertical .select__select {
+  font-size: 1.35rem;
+  padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+  height: 3.8rem;
+  border-radius: 6px;
+  border: 1px solid rgba(var(--color-foreground), 0.2);
+  background-color: transparent;
+}
+
+/* Left Sidebar Header: Title + Count */
+.facets__sidebar-header-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.facets__sidebar-header-row .facets__heading--vertical {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgb(var(--color-foreground));
+}
+
+.product-count-sidebar {
+  display: inline-flex;
+  align-items: center;
+}
+
+.product-count-sidebar__text {
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: rgba(var(--color-foreground), 0.65);
+}
+
 @media screen and (min-width: 750px) {
   .facets-vertical {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 3.5rem !important;
+    width: 100% !important;
+  }
+
+  .facets-vertical .facets-container {
+    display: block !important;
+    width: 100% !important;
+    padding-top: 0 !important;
   }
 
   .facets-wrap-vertical {
@@ -1136,7 +1239,8 @@ input.mobile-facets__checkbox {
   .facets__form-vertical {
     display: flex;
     flex-direction: column;
-    width: 26rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .facets__disclosure-vertical {
@@ -1153,6 +1257,8 @@ input.mobile-facets__checkbox {
   .facets__heading--vertical {
     margin: 0 0 1.5rem 0;
     font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
   }
 
   .facets__header-vertical {
@@ -1164,8 +1270,44 @@ input.mobile-facets__checkbox {
     padding-bottom: 1.5rem;
   }
 
-  .facets-vertical .facets-wrapper {
-    padding-right: 3rem;
+  .facets-vertical .facets-wrapper,
+  #main-collection-filters.facets-wrapper {
+    width: 27rem !important;
+    min-width: 27rem !important;
+    max-width: 27rem !important;
+    padding-right: 1.2rem !important;
+    padding-left: 0.8rem !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  /* All direct children of the sidebar must respect width */
+  .facets-vertical .facets-wrapper > *,
+  #main-collection-filters.facets-wrapper > * {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+  }
+
+  .facets__form-vertical,
+  .facets__form-vertical > *,
+  .facets-container,
+  .active-facets.active-facets-desktop {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .facets-vertical .facets-wrapper::-webkit-scrollbar {
+    width: 5px;
+  }
+  .facets-vertical .facets-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(184, 123, 108, 0.4);
+    border-radius: 4px;
+  }
+  .facets-vertical .facets-wrapper::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .facets-vertical .facets-wrapper--no-filters {
@@ -1173,17 +1315,9 @@ input.mobile-facets__checkbox {
   }
 
   .facets-vertical .product-grid-container {
-    width: 100%;
-  }
-
-  .facets-vertical-form {
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .product-count-vertical {
-    margin-left: 3.5rem;
-    position: relative;
+    width: calc(100% - 30rem) !important;
+    flex-grow: 1 !important;
+    min-width: 0 !important;
   }
 
   .facets-vertical .active-facets__button-wrapper {
@@ -1253,5 +1387,668 @@ input.mobile-facets__checkbox {
 
   .facets-vertical .active-facets__button-remove {
     padding: 0 1rem 1rem;
+  }
+}
+
+/* ============================================================
+   PREMIUM FILTER UI - HB Prestige Jewels
+   Beautiful sidebar filter with active states & animations
+   ============================================================ */
+
+/* ---- Sidebar Wrapper ---- */
+@media screen and (min-width: 750px) {
+  .facets-vertical .facets-wrapper,
+  #main-collection-filters.facets-wrapper {
+    background: linear-gradient(160deg, rgba(var(--color-background), 1) 0%, rgba(var(--color-background), 0.97) 100%);
+    border-right: 1px solid rgba(var(--color-foreground), 0.07);
+    border-radius: 0 12px 12px 0;
+    padding-bottom: 2rem !important;
+  }
+
+  /* Sidebar Header "Filter" label */
+  .facets__sidebar-header-row .facets__heading--vertical {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground));
+    position: relative;
+    padding-bottom: 0.6rem;
+  }
+
+  .facets__sidebar-header-row .facets__heading--vertical::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 2.8rem;
+    height: 2px;
+    background: rgb(184, 123, 108);
+    border-radius: 2px;
+  }
+
+  /* Product count badge in sidebar */
+  .product-count-sidebar__text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+    background: rgb(184, 123, 108);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---- Sort By Section ---- */
+  .facet-filters-vertical {
+    background: rgba(184, 123, 108, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid rgba(184, 123, 108, 0.15);
+    border-bottom: 1px solid rgba(184, 123, 108, 0.15) !important;
+    margin-bottom: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .facet-filters-vertical .facet-filters__label {
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgb(184, 123, 108);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .facet-filters-vertical .select {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .facet-filters-vertical .select__select {
+    font-size: 1.35rem;
+    padding: 0.7rem 2.4rem 0.7rem 0.8rem;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .facet-filters-vertical .select__select:hover,
+  .facet-filters-vertical .select__select:focus {
+    border-color: rgb(184, 123, 108);
+    box-shadow: 0 0 0 3px rgba(184, 123, 108, 0.12);
+    outline: none;
+  }
+
+  /* ---- Filter Accordion Sections ---- */
+  .facets__disclosure-vertical {
+    border-top: 1px solid rgba(var(--color-foreground), 0.08) !important;
+    margin-right: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .facets__disclosure-vertical:last-child {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  /* Summary row – filter title */
+  .facets-vertical .facets__summary {
+    padding: 1.4rem 0 !important;
+    margin-bottom: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s ease;
+  }
+
+  .facets-vertical .facets__summary:hover {
+    color: rgb(184, 123, 108);
+  }
+
+  .facets-vertical .facets__summary > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Filter section label */
+  .facets-vertical .facets__summary .facets__summary-label {
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: rgb(var(--color-foreground));
+    transition: color 0.2s ease;
+  }
+
+  .facets-vertical .facets__summary:hover .facets__summary-label {
+    color: rgb(184, 123, 108);
+  }
+
+  /* Caret icon */
+  .facets-vertical .facets__summary .icon-caret {
+    width: 1.2rem;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+  }
+
+  .facets__disclosure-vertical[open] .facets__summary .icon-caret {
+    transform: rotate(180deg);
+  }
+
+  /* Active count badge on filter TITLE only (not price header text) */
+  .facets__summary .facets__selected:not(.hidden) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(184, 123, 108);
+    color: #fff !important;
+    border-radius: 50%;
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-left: 0.6rem;
+    flex-shrink: 0;
+    line-height: 1;
+    animation: badgePop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Hide price header (max price text) - slider shows range instead */
+  .facets__header-vertical {
+    display: none !important;
+  }
+
+  @keyframes badgePop {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ---- Dropdown area ---- */
+  .facets__display-vertical {
+    padding: 0 0 1.5rem 0;
+    animation: filterSlideDown 0.25s ease;
+  }
+
+  @keyframes filterSlideDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- Checkbox Items ---- */
+  .facets-vertical .facets__list--vertical {
+    padding: 0.2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .facets-vertical .facets__item.list-menu__item {
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: background 0.15s ease;
+  }
+
+  /* The label row */
+  .facets-vertical .facet-checkbox {
+    padding: 0.65rem 0.8rem 0.65rem 0.4rem;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: relative;
+  }
+
+  .facets-vertical .facet-checkbox:hover {
+    background: rgba(184, 123, 108, 0.06);
+  }
+
+  /* ---- UNCHECKED state: The SVG square box ---- */
+  /* The square.svg uses stroke="currentColor" — control via color */
+  .facets-vertical .facet-checkbox > svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    min-width: 1.6rem;
+    flex-shrink: 0;
+    border-radius: 3px;
+    color: rgba(var(--color-foreground), 0.3);  /* stroke color of the square */
+    background: rgb(var(--color-background));
+    transition: color 0.2s ease, background 0.2s ease;
+    margin-right: 0;
+  }
+
+  /* ---- CHECKED state: fill the square with brand color ---- */
+  .facets-vertical .facet-checkbox > input[type='checkbox']:checked ~ svg {
+    color: rgb(184, 123, 108);           /* stroke becomes brand color */
+    background: rgb(184, 123, 108);      /* background fills with brand color */
+  }
+
+  /* ---- Checkmark icon (inside .svg-wrapper) ---- */
+  .facets-vertical .facet-checkbox .svg-wrapper {
+    visibility: hidden;
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 1rem;
+    height: 0.75rem;
+    pointer-events: none;
+  }
+
+  /* Show checkmark when checked */
+  .facets-vertical .facet-checkbox > input[type='checkbox']:checked ~ .svg-wrapper {
+    visibility: visible;
+  }
+
+  /* White checkmark color */
+  .facets-vertical .facet-checkbox > input[type='checkbox']:checked ~ .svg-wrapper .icon-checkmark {
+    color: #fff;
+  }
+
+  /* Hide the real checkbox input (the SVG is the visual) */
+  .facets-vertical .facet-checkbox > input[type='checkbox'] {
+    position: absolute;
+    opacity: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0;
+    top: 50%;
+    left: 0.4rem;
+    transform: translateY(-50%);
+    z-index: 3;
+    cursor: pointer;
+  }
+
+  /* Label text */
+  .facets-vertical .facet-checkbox .facet-checkbox__text-label {
+    font-size: 1.3rem;
+    color: rgb(var(--color-foreground));
+    transition: color 0.15s ease;
+    font-weight: 400;
+  }
+
+  .facets-vertical .facet-checkbox:hover .facet-checkbox__text-label {
+    color: rgb(184, 123, 108);
+  }
+
+  /* Count in brackets */
+  .facets-vertical .facet-checkbox .facet-checkbox__text {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.65);
+  }
+
+  /* Active (checked) item row highlight */
+  .facets-vertical .facets__label.active .facet-checkbox__text-label,
+  .facets-vertical .facets__label.active .facet-checkbox__text {
+    color: rgb(184, 123, 108);
+
+    font-weight: 500;
+  }
+
+  .facets-vertical .facets__label.active {
+    background: rgba(184, 123, 108, 0.07);
+    border-radius: 8px;
+  }
+
+  /* ---- HB Dual Range Price Slider ---- */
+  .facets-vertical .facets__price {
+    padding: 0.2rem 0 0.8rem 0 !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Reset old .field styles inside price section */
+  .facets-vertical .facets__price .field,
+  .facets-vertical .facets__price .field-currency,
+  .facets-vertical .facets__price .field__label {
+    display: none !important;
+  }
+
+  /* Slider container */
+  .hb-price-filter {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0;
+  }
+
+  .hb-price-slider {
+    position: relative;
+    height: 3.2rem;
+    margin: 1.2rem 0.4rem 1.6rem;
+  }
+
+  /* Background track */
+  .hb-slider-track-bg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #e2e2e2 !important;
+    border-radius: 3px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Filled portion between handles */
+  .hb-slider-fill {
+    position: absolute;
+    top: 50%;
+    height: 3px;
+    background: #000000 !important;
+    border-radius: 3px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    transition: left 0.05s, width 0.05s;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Both range inputs stacked on top of each other */
+  .hb-slider-range {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -0.4rem;
+    right: -0.4rem;
+    width: calc(100% + 0.8rem);
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: transparent !important;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    height: 3.2rem;
+    outline: none;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  /* Hide browser default track on webkit */
+  .hb-slider-range::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: transparent !important;
+    height: 3px;
+  }
+
+  /* Hide browser default track on Firefox */
+  .hb-slider-range::-moz-range-track {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: transparent !important;
+    height: 4px;
+  }
+
+  /* Webkit thumb */
+  .hb-slider-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: all;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    cursor: grab;
+    transition: transform 0.1s ease;
+    margin-top: calc((3px - 2rem) / 2);
+  }
+
+  .hb-slider-range::-webkit-slider-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.15);
+  }
+
+  /* Firefox thumb */
+  .hb-slider-range::-moz-range-thumb {
+    pointer-events: all;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgb(var(--color-background));
+    border: 2.5px solid rgb(184, 123, 108);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+    cursor: grab;
+  }
+
+  /* Firefox track - hide it (we use our own track) */
+  .hb-slider-range::-moz-range-track {
+    background: transparent;
+  }
+
+  /* Text inputs row */
+  .hb-price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hb-price-field {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    border: 1.5px solid rgba(var(--color-foreground), 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgb(var(--color-background));
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  .hb-price-field:focus-within {
+    border-color: rgb(184, 123, 108);
+    box-shadow: 0 0 0 3px rgba(184, 123, 108, 0.12);
+  }
+
+  .hb-curr {
+    padding: 0 0.3rem 0 0.8rem;
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.5);
+    flex-shrink: 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .hb-price-text {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background: transparent !important;
+    color: rgb(var(--color-foreground)) !important;
+    padding: 0.8rem 0.6rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 1.3rem !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+  }
+
+  .hb-price-text::placeholder {
+    color: rgba(var(--color-foreground), 0.4) !important;
+    font-size: 1.2rem !important;
+  }
+
+  .hb-dash {
+    color: rgba(var(--color-foreground), 0.35);
+    flex-shrink: 0;
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+
+
+  /* ---- Active Filter Pills (top of sidebar) ---- */
+  .facets-vertical .active-facets {
+    display: none !important;
+  }
+
+  .facets-vertical .active-facets-vertical-filter {
+    display: none !important;
+  }
+
+  /* "Clear All" link */
+  .active-facets__button-wrapper .active-facets__button-remove {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgb(184, 123, 108) !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s ease;
+  }
+
+  .active-facets__button-wrapper .active-facets__button-remove:hover {
+    opacity: 0.75;
+  }
+
+  /* Active filter pill tags */
+  .facets-vertical .active-facets__button .active-facets__button-inner {
+    background: rgba(184, 123, 108, 0.1);
+    border: 1px solid rgba(184, 123, 108, 0.4);
+    color: rgb(184, 123, 108) !important;
+    border-radius: 20px;
+    padding: 0.35rem 1rem 0.35rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .facets-vertical .active-facets__button:hover .active-facets__button-inner {
+    background: rgba(184, 123, 108, 0.18);
+    border-color: rgb(184, 123, 108);
+  }
+
+  /* Close icon in pill */
+  .facets-vertical .active-facets__button .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.2rem;
+    margin-right: 0;
+  }
+
+  /* Show More button */
+  .button-show-more {
+    font-size: 1.25rem;
+    color: rgb(184, 123, 108);
+    font-weight: 500;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0;
+    transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .button-show-more:hover {
+    opacity: 0.75;
+    text-decoration: none;
+  }
+
+  /* Max price text */
+  .facets__header-vertical .facets__selected {
+    font-size: 1.2rem;
+    color: rgba(var(--color-foreground), 0.6);
+    font-weight: 400;
+  }
+
+  /* Disabled items */
+  .facets-vertical .facets__label.disabled {
+    opacity: 0.4;
+  }
+
+  .facets-vertical .facets__label.disabled .facet-checkbox__text-label {
+    color: rgba(var(--color-foreground), 0.5);
+  }
+}
+
+/* ============================================================
+   SIDEBAR OVERFLOW FIX - Final overrides
+   Ensure all sidebar elements fit within 27rem container
+   ============================================================ */
+@media screen and (min-width: 750px) {
+
+  /* Fix Sort By - the select was being constrained to 17rem by old CSS */
+  .facets-vertical .facet-filters-vertical .select,
+  .facets-vertical .facet-filters-vertical .facet-filters__field,
+  .facet-filters-vertical {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .facets-vertical .facet-filters-vertical .select__select {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    min-width: 0 !important;
+  }
+
+  /* The select's caret icon wrapper must not cause overflow */
+  .facets-vertical .facet-filters-vertical .select .icon-caret {
+    right: 0.6rem !important;
+  }
+
+  /* Force all form elements inside sidebar to not overflow */
+  .facets-vertical .facets__form-vertical *,
+  .facets-vertical .facets-container * {
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  /* Fix .facet-filters__field flex layout within sort box */
+  .facets-vertical .facet-filters-vertical .facet-filters__field {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.6rem !important;
+    width: 100% !important;
+  }
+
+  .facets-vertical .facet-filters-vertical .facet-filters__label {
+    margin: 0 !important;
   }
 }

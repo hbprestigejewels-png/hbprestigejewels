@@ -30,6 +30,7 @@
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    overflow: visible !important;
   }
 
   @media screen and (min-width: 750px) {
@@ -37,69 +38,57 @@
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+
+    .facets-vertical {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: flex-start !important;
+      gap: 3.5rem !important;
+      width: 100% !important;
+      position: relative !important;
+      overflow: visible !important;
+    }
+
+    .facets-vertical .facets-wrapper,
+    #main-collection-filters {
+      width: 27rem !important;
+      min-width: 27rem !important;
+      max-width: 27rem !important;
+      padding-right: 1.2rem !important;
+      padding-left: 0.8rem !important;
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 90px !important;
+      max-height: calc(100vh - 110px) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(184, 123, 108, 0.4) transparent;
+      z-index: 40 !important;
+      flex-shrink: 0 !important;
+      align-self: flex-start !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      transform: none !important;
+      box-sizing: border-box !important;
+    }
+
+    .facets-vertical .product-grid-container,
+    #ProductGridContainer {
+      width: calc(100% - 30rem) !important;
+      flex-grow: 1 !important;
+      min-width: 0 !important;
+    }
   }
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
   {%- paginate collection.products by section.settings.products_per_page -%}
-    {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
-    {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
-      <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
-        <form class="facets-vertical-form" id="FacetSortForm">
-          <div class="facet-filters sorting caption">
-            <div class="facet-filters__field">
-              <h2 class="facet-filters__label caption-large text-body">
-                <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
-              </h2>
-              <div class="select">
-                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-                <select
-                  name="sort_by"
-                  class="facet-filters__sort select__select caption-large"
-                  id="SortBy"
-                  aria-describedby="a11y-refresh-page-message"
-                >
-                  {%- for option in collection.sort_options -%}
-                    <option
-                      value="{{ option.value | escape }}"
-                      {% if option.value == sort_by %}
-                        selected="selected"
-                      {% endif %}
-                    >
-                      {{ option.name | escape }}
-                    </option>
-                  {%- endfor -%}
-                </select>
-                <span class="svg-wrapper">
-                  {{- 'icon-caret.svg' | inline_asset_content -}}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="product-count-vertical light" role="status">
-            <h2 class="product-count__text text-body">
-              <span id="ProductCountDesktop">
-                {%- if collection.results_count -%}
-                  {{
-                    'templates.search.results_with_count'
-                    | t: terms: collection.terms, count: collection.results_count
-                  }}
-                {%- elsif collection.products_count == collection.all_products_count -%}
-                  {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
-                {%- else -%}
-                  {{
-                    'products.facets.product_count'
-                    | t: product_count: collection.products_count, count: collection.all_products_count
-                  }}
-                {%- endif -%}
-              </span>
-            </h2>
-            {%- render 'loading-spinner' -%}
-          </div>
-        </form>
-      </facet-filters-form>
-    {%- endif -%}
+    {% comment %} Collection Title Centered at Top {% endcomment %}
+    <div class="collection-page-header page-width">
+      <h1 class="collection-page-title center">{{ collection.title | escape }}</h1>
+    </div>
 
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
@@ -173,7 +162,7 @@
                     card_product: product,
                     media_aspect_ratio: section.settings.image_ratio,
                     image_shape: section.settings.image_shape,
-                    show_secondary_image: section.settings.show_secondary_image,
+                    show_secondary_image: true,
                     show_vendor: section.settings.show_vendor,
                     show_rating: section.settings.show_rating,
                     lazy_load: lazy_load,
@@ -184,8 +173,6 @@
                 </li>
                 {%- assign skip_card_product_styles = true -%}
               {%- endfor -%}
-            </ul>
-
             </ul>
 
             <!-- Infinite Scroll & Load More Component -->
@@ -446,9 +433,14 @@
           }
 
           try {
-            const response = await fetch(nextUrl);
+            // Make request super fast by only requesting the section HTML
+            const sectionId = productGrid.dataset.id;
+            const fetchUrl = nextUrl.includes('?') ? `${nextUrl}&section_id=${sectionId}` : `${nextUrl}?section_id=${sectionId}`;
+            
+            const response = await fetch(fetchUrl);
             if (!response.ok) throw new Error('Network error loading products');
             const htmlText = await response.text();
+            
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlText, 'text/html');
 
@@ -512,6 +504,8 @@
 
         // Attach click event to Get More button
         if (loadMoreBtn) {
+          // Remove old event listener if re-initializing
+          loadMoreBtn.onclick = null;
           loadMoreBtn.onclick = function(e) {
             e.preventDefault();
             loadMoreProducts();
@@ -528,7 +522,7 @@
             });
           }, {
             root: null,
-            rootMargin: '300px 0px',
+            rootMargin: '600px 0px', // Load earlier before user hits bottom
             threshold: 0.01
           });
 
@@ -543,6 +537,23 @@
       } else {
         setupInfiniteScroll();
       }
+
+      // Re-init infinite scroll after filters are applied (which replaces the container innerHTML)
+      const gridContainer = document.getElementById('ProductGridContainer');
+      if (gridContainer) {
+        new MutationObserver((mutations) => {
+          for (const mutation of mutations) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              // Only re-init if the infinite scroll container was just injected
+              if (gridContainer.querySelector('#infinite-scroll-container')) {
+                setupInfiniteScroll();
+                break;
+              }
+            }
+          }
+        }).observe(gridContainer, { childList: true, subtree: false });
+      }
+
     })();
   </script>
   {% if section.settings.image_shape == 'arch' %}

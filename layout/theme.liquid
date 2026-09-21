@@ -8,11 +8,13 @@
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
-
     <!-- Google Fonts: Work Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+      rel="stylesheet"
+    >
 
     <!-- Resource Hints for Speed Optimization -->
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
@@ -52,25 +54,25 @@
 
     <!-- Speculation Rules API & Instant Link Prefetching for Ultra-Fast Navigation -->
     <script type="speculationrules">
-    {
-      "prefetch": [
-        {
-          "source": "document",
-          "where": {
-            "and": [
-              { "href_matches": "/*" },
-              { "not": { "href_matches": "/cart/*" } },
-              { "not": { "href_matches": "/checkout/*" } }
-            ]
-          },
-          "eagerness": "moderate"
-        }
-      ]
-    }
+      {
+        "prefetch": [
+          {
+            "source": "document",
+            "where": {
+              "and": [
+                { "href_matches": "/*" },
+                { "not": { "href_matches": "/cart/*" } },
+                { "not": { "href_matches": "/checkout/*" } }
+              ]
+            },
+            "eagerness": "moderate"
+          }
+        ]
+      }
     </script>
     <script>
       // Instant hover/touch link prefetcher for ultra-fast navigation (<50ms perception)
-      (function() {
+      (function () {
         const prefetched = new Set();
         function prefetch(url) {
           if (!url || prefetched.has(url) || url.includes('#') || url.includes('javascript:')) return;
@@ -81,14 +83,22 @@
           link.as = 'document';
           document.head.appendChild(link);
         }
-        document.addEventListener('mouseover', function(e) {
-          const a = e.target.closest('a');
-          if (a && a.href && a.origin === location.origin) prefetch(a.href);
-        }, { passive: true });
-        document.addEventListener('touchstart', function(e) {
-          const a = e.target.closest('a');
-          if (a && a.href && a.origin === location.origin) prefetch(a.href);
-        }, { passive: true });
+        document.addEventListener(
+          'mouseover',
+          function (e) {
+            const a = e.target.closest('a');
+            if (a && a.href && a.origin === location.origin) prefetch(a.href);
+          },
+          { passive: true }
+        );
+        document.addEventListener(
+          'touchstart',
+          function (e) {
+            const a = e.target.closest('a');
+            if (a && a.href && a.origin === location.origin) prefetch(a.href);
+          },
+          { passive: true }
+        );
       })();
     </script>
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
@@ -337,11 +347,25 @@
         placeholder height would cause.
       */
       @supports (content-visibility: auto) {
-        #MainContent > .shopify-section:nth-child(n + 3),
         .shopify-section-group-footer-group {
           content-visibility: auto;
           contain-intrinsic-size: auto 600px;
         }
+      }
+
+      body.template-collection {
+        display: block !important;
+        overflow: visible !important;
+      }
+      body.template-collection #MainContent {
+        display: block !important;
+        overflow: visible !important;
+        position: static !important;
+      }
+      body.template-collection .custom-collection-carousel,
+      .template-collection .custom-collection-carousel,
+      body.template-collection .collection-carousel {
+        display: none !important;
       }
 
       /* Reserve the hero's box before its stylesheet/JS arrives so the first
@@ -479,7 +503,12 @@
     <noscript><link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}"></noscript>
 
     {%- if settings.cart_type == 'drawer' -%}
-      <link rel="stylesheet" href="{{ 'component-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link
+        rel="stylesheet"
+        href="{{ 'component-cart-drawer.css' | asset_url }}"
+        media="print"
+        onload="this.media='all'"
+      >
       <link rel="stylesheet" href="{{ 'component-cart.css' | asset_url }}" media="print" onload="this.media='all'">
       <link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
       <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -504,7 +533,12 @@
     {%- endunless -%}
 
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
-      <link rel="preload" href="{{ 'component-localization-form.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <link
+        rel="preload"
+        href="{{ 'component-localization-form.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
       <noscript>
         {% if localization.available_countries.size > 1 %}
           {{ 'component-localization-form.css' | asset_url | stylesheet_tag }}
@@ -514,7 +548,12 @@
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <link rel="stylesheet" href="{{ 'component-predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
+      <link
+        rel="stylesheet"
+        href="{{ 'component-predictive-search.css' | asset_url }}"
+        media="print"
+        onload="this.media='all'"
+      >
     {%- endif -%}
 
     <script>
@@ -522,12 +561,25 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    {%- if template.name == 'index' -%}
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "JewelryStore",
+        "name": {{ shop.name | json }},
+        "url": {{ shop.url | json }},
+        "logo": "https:{{ settings.logo | image_url: width: 500 }}",
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "reviewCount": "120"
+        }
+      }
+      </script>
+    {%- endif -%}
   </head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-
-
-
+  <body class="gradient template-{{ template.name | handle }}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     {% comment %}
       <a class="skip-to-content-link button visually-hidden" href="#MainContent">
         {{ 'accessibility.skip_to_text' | t }}
@@ -606,9 +658,6 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-
-
-
     {% comment %}
       Google Analytics is intentionally NOT loaded here.
 
@@ -629,5 +678,552 @@
     {% render 'country-floating-picker' %}
     {% render 'scroll-to-top' %}
     {% render 'whatsapp-floating-btn' %}
+    {% render 'ip-geolocation' %}
+
+{% comment %}
+  HB Prestige Jewels — India Country Block
+  Blocks visitors from India except whitelisted IPs / IP ranges.
+  Place this file at: snippets/country-block.liquid
+  Render it inside layout/theme.liquid, as high up in <head> as possible:
+    {% render 'country-block' %}
+{% endcomment %}
+<script>
+(function () {
+  'use strict';
+
+  /* =========================================
+     HB PRESTIGE JEWELS
+     IPv4 ONLY COUNTRY + IP WHITELIST
+     ========================================= */
+
+  /* Exact IPv4 whitelist */
+  var WHITELIST_IPS = [
+    /* '49.36.90.199' */
+  ];
+
+  /* IPv4 wildcard ranges
+     * = any IPv4 octet
+     
+     Examples:
+     49.36.*.*
+     106.202.*.*
+     152.59.*.*
+     49.*.*.*
+  */
+  var WHITELIST_IP_RANGES = [
+    '49.36.*.*',
+    {% comment %} '106.202.*.*', {% endcomment %}
+    '152.59.*.*'
+  ];
+
+  /* Country to block */
+  var BLOCKED_COUNTRY = 'IN';
+
+
+  /* =========================================
+     IPv4 VALIDATION
+     ========================================= */
+
+  function isIPv4(ip) {
+    ip = String(ip || '').trim();
+
+    var parts = ip.split('.');
+
+    if (parts.length !== 4) {
+      return false;
+    }
+
+    for (var i = 0; i < 4; i++) {
+      if (!/^\d+$/.test(parts[i])) {
+        return false;
+      }
+
+      var number = Number(parts[i]);
+
+      if (number < 0 || number > 255) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+
+  /* =========================================
+     EXACT IPv4 WHITELIST
+     ========================================= */
+
+  function isExactWhitelisted(ip) {
+
+    ip = String(ip || '').trim();
+
+    if (!isIPv4(ip)) {
+      return false;
+    }
+
+    for (var i = 0; i < WHITELIST_IPS.length; i++) {
+
+      var whitelistIP =
+        String(WHITELIST_IPS[i] || '').trim();
+
+      if (
+        isIPv4(whitelistIP) &&
+        ip === whitelistIP
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  /* =========================================
+     IPv4 WILDCARD RANGE WHITELIST
+
+     Example:
+
+     49.36.*.*
+     
+     Allows:
+     49.36.0.0
+     49.36.0.1
+     49.36.100.50
+     49.36.255.255
+
+     Does NOT allow:
+     49.37.x.x
+     50.36.x.x
+  ========================================= */
+
+  function isRangeWhitelisted(ip) {
+
+    ip = String(ip || '').trim();
+
+    /* IPv6 is automatically rejected */
+    if (!isIPv4(ip)) {
+      return false;
+    }
+
+    var ipParts = ip.split('.');
+
+    for (
+      var i = 0;
+      i < WHITELIST_IP_RANGES.length;
+      i++
+    ) {
+
+      var range =
+        String(
+          WHITELIST_IP_RANGES[i] || ''
+        ).trim();
+
+      if (!range) {
+        continue;
+      }
+
+      var rangeParts = range.split('.');
+
+      if (rangeParts.length !== 4) {
+        continue;
+      }
+
+      var matched = true;
+
+      for (var j = 0; j < 4; j++) {
+
+        var rangePart =
+          String(rangeParts[j])
+            .trim()
+            .toLowerCase();
+
+        var visitorPart =
+          String(ipParts[j]).trim();
+
+        /* Wildcard */
+        if (
+          rangePart === '*' ||
+          rangePart === 'x'
+        ) {
+          continue;
+        }
+
+        /* Exact octet */
+        if (rangePart !== visitorPart) {
+          matched = false;
+          break;
+        }
+      }
+
+      if (matched) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  /* =========================================
+     FINAL WHITELIST CHECK
+     ========================================= */
+
+  function isWhitelisted(ip) {
+
+    if (!isIPv4(ip)) {
+      return false;
+    }
+
+    return (
+      isExactWhitelisted(ip) ||
+      isRangeWhitelisted(ip)
+    );
+  }
+
+
+  /* =========================================
+     BLOCK WEBSITE
+     ========================================= */
+
+  function blockWebsite() {
+
+    if (
+      document.getElementById(
+        'hb-country-block-overlay'
+      )
+    ) {
+      return;
+    }
+
+    var style =
+      document.createElement('style');
+
+    style.id =
+      'hb-country-block-style';
+
+    style.textContent = [
+      'html, body { overflow: hidden !important; }',
+
+      'body > *:not(#hb-country-block-overlay) {' +
+        'display: none !important;' +
+      '}',
+
+      '#hb-country-block-overlay {' +
+        'position: fixed;' +
+        'inset: 0;' +
+        'z-index: 2147483647;' +
+        'margin: 0;' +
+        'background: #ffffff;' +
+        'display: flex;' +
+        'align-items: center;' +
+        'justify-content: center;' +
+        'font-family: Arial, Helvetica, sans-serif;' +
+        'color: #111111;' +
+        'text-align: center;' +
+      '}',
+
+      '#hb-country-block-overlay .hb-country-block {' +
+        'width: 100%;' +
+        'max-width: 600px;' +
+        'padding: 40px 25px;' +
+        'box-sizing: border-box;' +
+      '}',
+
+      '#hb-country-block-overlay h1 {' +
+        'margin: 0 0 15px;' +
+        'font-size: 32px;' +
+        'line-height: 1.3;' +
+        'font-weight: 600;' +
+      '}',
+
+      '#hb-country-block-overlay p {' +
+        'margin: 0;' +
+        'font-size: 16px;' +
+        'line-height: 1.7;' +
+        'color: #666666;' +
+      '}',
+
+      '@media (max-width: 600px) {' +
+        '#hb-country-block-overlay h1 {' +
+          'font-size: 26px;' +
+        '}' +
+        '#hb-country-block-overlay p {' +
+          'font-size: 15px;' +
+        '}' +
+      '}'
+
+    ].join('\n');
+
+    (
+      document.head ||
+      document.documentElement
+    ).appendChild(style);
+
+
+    var overlay =
+      document.createElement('div');
+
+    overlay.id =
+      'hb-country-block-overlay';
+
+    overlay.innerHTML =
+      '<div class="hb-country-block">' +
+        '<h1>Website Unavailable</h1>' +
+        '<p>This website is currently unavailable in your country.</p>' +
+      '</div>';
+
+
+    function appendOverlay() {
+
+      if (!document.body) {
+        return;
+      }
+
+      document.body.appendChild(
+        overlay
+      );
+
+      document.title =
+        'Website Unavailable';
+    }
+
+
+    if (document.body) {
+      appendOverlay();
+    } else {
+      document.addEventListener(
+        'DOMContentLoaded',
+        appendOverlay
+      );
+    }
+  }
+
+
+  /* =========================================
+     FETCH JSON
+     ========================================= */
+
+  function fetchJSON(url) {
+
+    return fetch(
+      url,
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    )
+      .then(function (res) {
+
+        if (!res.ok) {
+          throw new Error(
+            'API error: ' +
+            res.status
+          );
+        }
+
+        return res.json();
+      });
+  }
+
+
+  /* =========================================
+     GET IPv4 VISITOR INFORMATION
+
+     Primary API:
+     ipwho.is
+
+     Fallback:
+     ipapi.co
+
+     IMPORTANT:
+     If either API returns IPv6,
+     we reject it and try fallback.
+  ========================================= */
+
+  function getVisitorInfo() {
+
+    return fetchJSON(
+      'https://ipwho.is/'
+    )
+      .then(function (data) {
+
+        if (
+          !data ||
+          data.success === false
+        ) {
+          throw new Error(
+            'Primary API failed'
+          );
+        }
+
+        var ip =
+          String(
+            data.ip || ''
+          ).trim();
+
+        var country =
+          String(
+            data.country_code || ''
+          )
+            .trim()
+            .toUpperCase();
+
+        /* Only accept IPv4 */
+        if (!isIPv4(ip)) {
+
+          throw new Error(
+            'Primary API returned IPv6 or invalid IP'
+          );
+        }
+
+        return {
+          ip: ip,
+          country: country
+        };
+      })
+
+      .catch(function () {
+
+        return fetchJSON(
+          'https://ipapi.co/json/'
+        )
+          .then(function (data) {
+
+            if (!data) {
+              throw new Error(
+                'Fallback API failed'
+              );
+            }
+
+            var ip =
+              String(
+                data.ip || ''
+              ).trim();
+
+            var country =
+              String(
+                data.country_code || ''
+              )
+                .trim()
+                .toUpperCase();
+
+            /* Only accept IPv4 */
+            if (!isIPv4(ip)) {
+
+              throw new Error(
+                'Fallback API returned IPv6 or invalid IP'
+              );
+            }
+
+            return {
+              ip: ip,
+              country: country
+            };
+          });
+      });
+  }
+
+
+  /* =========================================
+     MAIN CHECK
+     ========================================= */
+
+  function checkVisitor() {
+
+    getVisitorInfo()
+
+      .then(function (info) {
+
+        console.log(
+          '[HB Prestige] IPv4:',
+          info.ip
+        );
+
+        console.log(
+          '[HB Prestige] Country:',
+          info.country
+        );
+
+
+        /* =====================================
+           FIRST: IP WHITELIST
+           ===================================== */
+
+        if (
+          isWhitelisted(info.ip)
+        ) {
+
+          console.log(
+            '[HB Prestige] IPv4 WHITELISTED - ACCESS ALLOWED:',
+            info.ip
+          );
+
+          return;
+        }
+
+
+        /* =====================================
+           SECOND: INDIA BLOCK
+           ===================================== */
+
+        if (
+          info.country === BLOCKED_COUNTRY
+        ) {
+
+          console.log(
+            '[HB Prestige] INDIA - ACCESS BLOCKED:',
+            info.ip
+          );
+
+          blockWebsite();
+
+          return;
+        }
+
+
+        /* =====================================
+           OUTSIDE INDIA
+           ===================================== */
+
+        console.log(
+          '[HB Prestige] OUTSIDE INDIA - ACCESS ALLOWED:',
+          info.ip
+        );
+
+      })
+
+      .catch(function (error) {
+
+        console.error(
+          '[HB Prestige] IPv4 CHECK ERROR:',
+          error
+        );
+
+        /*
+          API failed or only IPv6 was returned.
+
+          Current behavior:
+          FAIL OPEN
+          = website remains accessible.
+        */
+      });
+  }
+
+
+  /* =========================================
+     START
+     ========================================= */
+
+  checkVisitor();
+
+})();
+</script>
+
+
+
+  {%- render 'newsletter-popup' -%}
+
   </body>
 </html>
+
+<!-- Cache bust 09/21/2026 23:45:27 -->

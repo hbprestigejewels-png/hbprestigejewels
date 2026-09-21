@@ -53,38 +53,76 @@
     const sectionId = variantSelectsEl.dataset.section;
 
     /**
-     * Get currently selected option values ordered by option position (1-based)
+     * Get currently selected option values ordered by option position (1-based).
+     *
+     * Special handling for combined-metal radio buttons:
+     *   Each swatch input carries data-option1 (metal) and data-option2 (color)
+     *   with data-mat-pos and data-col-pos for their respective option positions.
+     *   These override hidden selects for the same positions.
      */
     function getCurrentOptions() {
       const byPosition = {};
 
-      variantSelectsEl.querySelectorAll('fieldset input[type="radio"]:checked').forEach((input) => {
-        const pos = parseInt(input.dataset.optionPosition, 10);
-        if (pos) byPosition[pos] = input.value;
-      });
+      // ── 1. Read combined-metal radio (highest priority for option1 & option2) ──
+      const checkedMetal = variantSelectsEl.querySelector(
+        'input[type="radio"][data-option1]:checked, input[type="radio"][data-mat-pos]:checked'
+      );
+      if (checkedMetal) {
+        const matPos = parseInt(checkedMetal.dataset.matPos || checkedMetal.dataset.optionPosition, 10) || 1;
+        const colPos = parseInt(checkedMetal.dataset.colPos, 10) || 2;
+        const opt1 = checkedMetal.dataset.option1;
+        const opt2 = checkedMetal.dataset.option2;
+        if (opt1) byPosition[matPos] = opt1;
+        if (opt2) byPosition[colPos] = opt2;
 
-      variantSelectsEl.querySelectorAll('select').forEach((select) => {
-        let pos = parseInt(select.dataset.optionPosition, 10);
-        if (!pos) {
-          const match = select.id?.match(/-(\d+)$/);
-          if (match) pos = parseInt(match[1], 10) + 1;
-        }
-        if (pos && select.value) {
-          byPosition[pos] = select.value;
-        }
-      });
-
-      if (!Object.keys(byPosition).length) {
-        const fieldsetVals = Array.from(variantSelectsEl.querySelectorAll('fieldset')).map((f) =>
-          Array.from(f.querySelectorAll('input')).find((r) => r.checked)?.value
-        );
-        const selectVals = Array.from(variantSelectsEl.querySelectorAll('select')).map((s) => s.value);
-        return [...fieldsetVals, ...selectVals].filter((v) => v !== undefined);
+        // Keep hidden selects in sync so Shopify form value is correct
+        syncHiddenSelect(matPos, opt1);
+        syncHiddenSelect(colPos, opt2);
       }
 
+      // ── 2. Read remaining selects (ring size etc.) by data-option-position ──
+      variantSelectsEl.querySelectorAll('select').forEach((sel) => {
+        let pos = parseInt(sel.dataset.optionPosition, 10);
+        if (!pos) {
+          // Fallback: parse from id like "Option-SECTION-2" → position 3
+          const m = sel.id?.match(/-(\d+)$/);
+          if (m) pos = parseInt(m[1], 10) + 1;
+        }
+        if (!pos || !sel.value) return;
+        // Only write if not already set by the metal radio
+        if (!byPosition[pos]) {
+          byPosition[pos] = sel.value;
+        }
+      });
+
+      // ── 3. Fallback: regular radio fieldsets (non-combined) ──
+      if (!checkedMetal) {
+        variantSelectsEl.querySelectorAll('fieldset input[type="radio"]:checked').forEach((input) => {
+          const pos = parseInt(input.dataset.optionPosition, 10);
+          if (pos && !byPosition[pos]) byPosition[pos] = input.value;
+        });
+      }
+
+      if (!Object.keys(byPosition).length) return [];
+
       return Object.keys(byPosition)
-        .sort((a, b) => a - b)
+        .sort((a, b) => Number(a) - Number(b))
         .map((k) => byPosition[k]);
+    }
+
+    /**
+     * Sync a hidden <select> for the given option position to the given value,
+     * so Shopify's native form submission and other JS listeners stay correct.
+     */
+    function syncHiddenSelect(position, value) {
+      if (!position || !value) return;
+      const sel = variantSelectsEl.querySelector(
+        `select[data-option-position="${position}"]`
+      );
+      if (sel && sel.value !== value) {
+        sel.value = value;
+        // Do NOT dispatchEvent to avoid race conditions with global.js
+      }
     }
 
     /**
@@ -111,33 +149,40 @@
       if (!priceEl) return;
 
       const price = variant.price;
-      const compareAtPrice = (variant.compare_at_price && variant.compare_at_price > price)
+      // MRP = compare_at_price if set, else admin price
+      const mrpPrice = (variant.compare_at_price && variant.compare_at_price > price)
         ? variant.compare_at_price
-        : Math.round(price * 100 / 70);
-      const discountPercent = Math.round((compareAtPrice - price) * 100 / compareAtPrice);
+        : price;
+      const sellingPrice = Math.round(mrpPrice * 0.70);
+      const discountPercent = 30;
       const available = variant.available;
 
       // Update price classes
       priceEl.classList.toggle('price--sold-out', !available);
       priceEl.classList.add('price--on-sale');
 
-      // Sale / Selling price
+      // Make sure the sale container is visible
+      const saleContainer = priceEl.querySelector('.price__sale');
+      if (saleContainer) saleContainer.style.display = '';
+
+      // Sale / Selling price = 30% off MRP
       const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale, .price-item--sale');
       if (salePriceEl) {
-        salePriceEl.textContent = formatMoney(price);
+        salePriceEl.innerHTML = formatMoney(sellingPrice);
       }
 
-      // Compare at price (strikethrough)
+      // Compare at price (strikethrough) = MRP
       const compareEls = priceEl.querySelectorAll('.price-item--regular s, s.price-item--regular, .price__sale s');
       compareEls.forEach((el) => {
-        el.textContent = formatMoney(compareAtPrice);
-        el.closest('span')?.classList.remove('hidden');
+        el.innerHTML = formatMoney(mrpPrice);
+        const parentSpan = el.closest('span');
+        if (parentSpan) parentSpan.classList.remove('hidden');
       });
 
-      // Discount badge
+      // Discount badge — always 30% OFF
       const discountBadgeEl = priceEl.querySelector('[data-discount-badge], .price__badge-discount');
       if (discountBadgeEl) {
-        discountBadgeEl.textContent = `${discountPercent}% OFF`;
+        discountBadgeEl.innerHTML = `${discountPercent}% OFF`;
       }
     }
 

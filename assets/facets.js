@@ -304,7 +304,9 @@ FacetFiltersForm.setListeners();
 class PriceRange extends HTMLElement {
   constructor() {
     super();
+    // Only attach to text inputs, skip range sliders (used by HB dual slider)
     this.querySelectorAll('input').forEach((element) => {
+      if (element.type === 'range') return;
       element.addEventListener('change', this.onRangeChange.bind(this));
       element.addEventListener('keydown', this.onKeyDown.bind(this));
     });
@@ -324,9 +326,11 @@ class PriceRange extends HTMLElement {
   }
 
   setMinAndMaxValues() {
-    const inputs = this.querySelectorAll('input');
+    // Only get text inputs, not range sliders
+    const inputs = [...this.querySelectorAll('input')].filter((el) => el.type !== 'range');
     const minInput = inputs[0];
     const maxInput = inputs[1];
+    if (!minInput || !maxInput) return;
     if (maxInput.value) minInput.setAttribute('data-max', maxInput.value);
     if (minInput.value) maxInput.setAttribute('data-min', minInput.value);
     if (minInput.value === '') maxInput.setAttribute('data-min', 0);
@@ -334,7 +338,7 @@ class PriceRange extends HTMLElement {
   }
 
   adjustToValidValues(input) {
-    const value = Number(input.value);
+    const value = Number(input.value.replace(/,/g, ''));
     const min = Number(input.getAttribute('data-min'));
     const max = Number(input.getAttribute('data-max'));
 
@@ -365,3 +369,93 @@ class FacetRemove extends HTMLElement {
 }
 
 customElements.define('facet-remove', FacetRemove);
+
+// ============================================================
+// HB Price Slider - Dual Range Slider for Vertical Filter
+// ============================================================
+(function () {
+  function initHBSlider(slider) {
+    if (slider.dataset.hbInit) return;
+    slider.dataset.hbInit = '1';
+
+    const minRange = slider.querySelector('.hb-slider-min');
+    const maxRange = slider.querySelector('.hb-slider-max');
+    const fill = slider.querySelector('.hb-slider-fill');
+    const container = slider.closest('.hb-price-filter');
+    if (!minRange || !maxRange || !fill || !container) return;
+
+    const minText = container.querySelector('[id$="-GTE"]');
+    const maxText = container.querySelector('[id$="-LTE"]');
+    const rangeMax = parseFloat(slider.dataset.max) || 100;
+
+    function updateFill() {
+      const minVal = parseFloat(minRange.value) || 0;
+      const maxVal = parseFloat(maxRange.value) || rangeMax;
+      const minPct = (minVal / rangeMax) * 100;
+      const maxPct = (maxVal / rangeMax) * 100;
+      fill.style.left = minPct + '%';
+      fill.style.width = (maxPct - minPct) + '%';
+    }
+
+    minRange.addEventListener('input', function () {
+      if (parseFloat(this.value) > parseFloat(maxRange.value)) {
+        this.value = maxRange.value;
+      }
+      if (minText) {
+        minText.value = parseFloat(this.value).toFixed(2);
+        minText.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      updateFill();
+    });
+
+    maxRange.addEventListener('input', function () {
+      if (parseFloat(this.value) < parseFloat(minRange.value)) {
+        this.value = minRange.value;
+      }
+      if (maxText) {
+        maxText.value = parseFloat(this.value).toFixed(2);
+        maxText.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      updateFill();
+    });
+
+    if (minText) {
+      minText.addEventListener('change', function () {
+        const val = parseFloat(this.value.replace(/,/g, '')) || 0;
+        minRange.value = Math.min(val, parseFloat(maxRange.value));
+        updateFill();
+      });
+    }
+
+    if (maxText) {
+      maxText.addEventListener('change', function () {
+        const val = parseFloat(this.value.replace(/,/g, ''));
+        if (!isNaN(val)) {
+          maxRange.value = Math.min(Math.max(val, parseFloat(minRange.value)), rangeMax);
+          updateFill();
+        }
+      });
+    }
+
+    updateFill();
+  }
+
+  function initAllHBSliders() {
+    document.querySelectorAll('.hb-price-slider').forEach(initHBSlider);
+  }
+
+  // Init on DOMContentLoaded or immediately if already loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAllHBSliders);
+  } else {
+    initAllHBSliders();
+  }
+
+  // Re-init after AJAX facet updates (MutationObserver)
+  const filtersContainer = document.getElementById('main-collection-filters');
+  if (filtersContainer) {
+    new MutationObserver(function () {
+      document.querySelectorAll('.hb-price-slider:not([data-hb-init])').forEach(initHBSlider);
+    }).observe(filtersContainer, { childList: true, subtree: true });
+  }
+})();

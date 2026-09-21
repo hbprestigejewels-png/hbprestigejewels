@@ -1,4 +1,4 @@
-<!-- FLOATING COUNTRY / CURRENCY PICKER (BOTTOM LEFT - EXACT SCREENSHOT MATCH) -->
+<!-- FLOATING COUNTRY / CURRENCY PICKER (BOTTOM RIGHT) -->
 <div id="FloatingCountryPickerWrapper" class="floating-country-picker-wrapper">
   <div class="floating-country-disclosure">
     <!-- TRIGGER BUTTON (Pill: Flag + Currency + Caret) -->
@@ -351,7 +351,8 @@
   .floating-country-picker-wrapper {
     position: fixed;
     bottom: 22px;
-    left: 22px;
+    right: 85px;
+    left: auto;
     z-index: 99998;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   }
@@ -423,11 +424,12 @@
     transform: rotate(180deg);
   }
 
-  /* DROPDOWN POPUP (OPENS UPWARDS) */
+  /* DROPDOWN POPUP (OPENS UPWARDS TO THE LEFT OF BUTTON) */
   .floating-country-dropdown {
     position: absolute;
     bottom: calc(100% + 10px);
-    left: 0;
+    right: 0;
+    left: auto;
     width: 310px;
     max-width: 90vw;
     background: #ffffff;
@@ -604,7 +606,8 @@
   @media (max-width: 768px) {
     .floating-country-picker-wrapper {
       bottom: 16px;
-      left: 16px;
+      right: 75px;
+      left: auto;
     }
     .floating-country-btn {
       padding: 5px 9px;
@@ -744,7 +747,7 @@
       });
     });
 
-    // Enhanced IP-Based Auto Detection with multiple fast endpoints
+    // Enhanced IP-Based Auto Detection with multiple fast endpoints (non-blocking, no automated form submit)
     async function autoDetectCountryByIP() {
       // Check if user manually clicked a country before
       const explicitChoice = localStorage.getItem('hb_user_explicit_country');
@@ -752,22 +755,34 @@
 
       let detectedCountry = '';
 
+      // Helper for fast fetch with timeout
+      async function fetchWithTimeout(url, ms = 1500) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), ms);
+        try {
+          const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+          clearTimeout(timeoutId);
+          return res.ok ? await res.json() : null;
+        } catch (e) {
+          clearTimeout(timeoutId);
+          return null;
+        }
+      }
+
       // Try Endpoint 1: api.country.is (ultra fast & lightweight)
       try {
-        const res = await fetch('https://api.country.is/', { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          detectedCountry = (data.country || '').toUpperCase();
+        const data = await fetchWithTimeout('https://api.country.is/');
+        if (data && data.country) {
+          detectedCountry = data.country.toUpperCase();
         }
       } catch (e) {}
 
       // Try Endpoint 2: ipapi.co fallback
       if (!detectedCountry) {
         try {
-          const res = await fetch('https://ipapi.co/json/', { cache: 'no-store' });
-          if (res.ok) {
-            const data = await res.json();
-            detectedCountry = (data.country_code || data.country || '').toUpperCase();
+          const data = await fetchWithTimeout('https://ipapi.co/json/');
+          if (data && (data.country_code || data.country)) {
+            detectedCountry = (data.country_code || data.country).toUpperCase();
           }
         } catch (e) {}
       }
@@ -775,17 +790,14 @@
       // Try Endpoint 3: ipwhois.app fallback
       if (!detectedCountry) {
         try {
-          const res = await fetch('https://ipwhois.app/json/', { cache: 'no-store' });
-          if (res.ok) {
-            const data = await res.json();
-            detectedCountry = (data.country_code || '').toUpperCase();
+          const data = await fetchWithTimeout('https://ipwhois.app/json/');
+          if (data && data.country_code) {
+            detectedCountry = data.country_code.toUpperCase();
           }
         } catch (e) {}
       }
 
       if (detectedCountry) {
-        console.log(`🌐 GeoIP Detected User Country: ${detectedCountry}`);
-        
         const matchingLink = dropdown.querySelector(`.floating-country-link[data-value="${detectedCountry}"]`);
         let curr = detectedCountry;
         
@@ -812,13 +824,7 @@
           currentFlag.style.display = 'block';
         }
         if (currentCode) currentCode.textContent = curr;
-
-        {%- if localization.available_countries.size > 1 -%}
-          if (hiddenInput && form && detectedCountry !== '{{ localization.country.iso_code }}') {
-            hiddenInput.value = detectedCountry;
-            form.submit();
-          }
-        {%- endif -%}
+        if (hiddenInput) hiddenInput.value = detectedCountry;
       }
     }
 

@@ -1129,6 +1129,22 @@ class VariantSelects extends HTMLElement {
 
   connectedCallback() {
     this.addEventListener('change', (event) => {
+      // ── Handle combined-metal radio (data-mat-pos / data-col-pos) ──
+      // These custom swatches don't use standard data-option-position,
+      // so we sync their values into the hidden selects BEFORE computing
+      // currentVariant, ensuring the variant lookup always succeeds.
+      const changedInput = event.target;
+      if (
+        changedInput.tagName === 'INPUT' &&
+        changedInput.type === 'radio' &&
+        changedInput.dataset.option1 !== undefined
+      ) {
+        const matPos = parseInt(changedInput.dataset.matPos, 10) || 1;
+        const colPos = parseInt(changedInput.dataset.colPos, 10) || 2;
+        this._syncSelectSilent(matPos, changedInput.dataset.option1);
+        this._syncSelectSilent(colPos, changedInput.dataset.option2);
+      }
+
       const target = this.getInputForEventTarget(event.target);
       this.updateSelectionMetadata(event);
 
@@ -1143,6 +1159,16 @@ class VariantSelects extends HTMLElement {
         },
       });
     });
+  }
+
+  /**
+   * Silently update a hidden select's value without firing a change event.
+   * Used when combined-metal radio is clicked to keep hidden selects in sync.
+   */
+  _syncSelectSilent(position, value) {
+    if (!position || !value) return;
+    const sel = this.querySelector(`select[data-option-position="${position}"]`);
+    if (sel) sel.value = value;
   }
 
   updateSelectionMetadata({ target }) {
@@ -1195,23 +1221,33 @@ class VariantSelects extends HTMLElement {
     // so the order matches product.variants[].options regardless of DOM order
     const byPosition = {};
 
-    // Radio inputs (button/swatch picker) – has data-option-position
-    this.querySelectorAll('fieldset input[type="radio"]:checked').forEach((input) => {
-      const pos = parseInt(input.dataset.optionPosition, 10);
-      if (pos) byPosition[pos] = input.value;
-    });
+    // ── Combined-metal radio (custom swatch with data-mat-pos / data-col-pos) ──
+    const checkedMetal = this.querySelector(
+      'input[type="radio"][data-option1]:checked, input[type="radio"][data-mat-pos]:checked'
+    );
+    if (checkedMetal) {
+      const matPos = parseInt(checkedMetal.dataset.matPos, 10) || 1;
+      const colPos = parseInt(checkedMetal.dataset.colPos, 10) || 2;
+      if (checkedMetal.dataset.option1) byPosition[matPos] = checkedMetal.dataset.option1;
+      if (checkedMetal.dataset.option2) byPosition[colPos] = checkedMetal.dataset.option2;
+    }
 
-    // Select dropdowns – derive position from the order of <select> elements
-    // Each select corresponds to one option in product options order
+    // ── Standard radio inputs with data-option-position ──
+    if (!checkedMetal) {
+      this.querySelectorAll('fieldset input[type="radio"]:checked').forEach((input) => {
+        const pos = parseInt(input.dataset.optionPosition, 10);
+        if (pos) byPosition[pos] = input.value;
+      });
+    }
+
+    // ── Select dropdowns (ring size etc.) ──
     this.querySelectorAll('select').forEach((select) => {
-      // Try data-option-position on select or its options
       let pos = parseInt(select.dataset.optionPosition, 10);
       if (!pos) {
-        // Fall back: find from option id like "Option-SECTIONID-0" → position = index+1
         const match = select.id?.match(/-(\d+)$/);
         if (match) pos = parseInt(match[1], 10) + 1;
       }
-      if (pos && select.value) {
+      if (pos && select.value && !byPosition[pos]) {
         byPosition[pos] = select.value;
       }
     });
@@ -1227,7 +1263,7 @@ class VariantSelects extends HTMLElement {
 
     // Return in ascending position order
     return Object.keys(byPosition)
-      .sort((a, b) => a - b)
+      .sort((a, b) => Number(a) - Number(b))
       .map((k) => byPosition[k]);
   }
 

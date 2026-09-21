@@ -79,7 +79,45 @@ if (!customElements.get('product-info')) {
 
         // For same-product variant changes: use instant client-side update
         if (!shouldSwapProduct) {
-          const variant = currentVariant || this.variantSelectors?.currentVariant;
+          let variant = currentVariant || this.variantSelectors?.currentVariant;
+
+          // If variant is still null, try to resolve it from pre-loaded variant JSON
+          // (happens when ring-size is changed first and then metal type is switched)
+          if (!variant) {
+            const variantSelectsEl = this.querySelector('variant-selects');
+            const variantsScript = variantSelectsEl?.querySelector('script[data-product-variants]');
+            if (variantsScript) {
+              try {
+                const allVariants = JSON.parse(variantsScript.textContent);
+                // Build option map from checked radio (metal) + selects (ring size)
+                const optMap = {};
+                const checkedMetal = variantSelectsEl.querySelector(
+                  'input[type="radio"][data-option1]:checked, input[type="radio"][data-mat-pos]:checked'
+                );
+                if (checkedMetal) {
+                  const matPos = parseInt(checkedMetal.dataset.matPos || '1', 10);
+                  const colPos = parseInt(checkedMetal.dataset.colPos || '2', 10);
+                  if (checkedMetal.dataset.option1) optMap[matPos] = checkedMetal.dataset.option1;
+                  if (checkedMetal.dataset.option2) optMap[colPos] = checkedMetal.dataset.option2;
+                }
+                variantSelectsEl.querySelectorAll('select').forEach((sel) => {
+                  let pos = parseInt(sel.dataset.optionPosition, 10);
+                  if (!pos) {
+                    const m = sel.id?.match(/-(\d+)$/);
+                    if (m) pos = parseInt(m[1], 10) + 1;
+                  }
+                  if (pos && sel.value && !optMap[pos]) optMap[pos] = sel.value;
+                });
+                const selectedOpts = Object.keys(optMap).sort((a, b) => Number(a) - Number(b)).map((k) => optMap[k]);
+                variant = allVariants.find((v) =>
+                  v.options.every((opt, idx) => selectedOpts[idx] === undefined || selectedOpts[idx] === opt)
+                ) || null;
+              } catch (e) {
+                console.warn('[ProductInfo] Could not resolve variant from JSON', e);
+              }
+            }
+          }
+
           this.clientSideVariantUpdate(variant, rawProductUrl);
           return;
         }
@@ -234,33 +272,34 @@ if (!customElements.get('product-info')) {
         const priceEl = priceWrapper.querySelector('.price');
         if (!priceEl) return;
 
-        const calcCompareAtPrice = (compareAtPrice && compareAtPrice > price)
-          ? compareAtPrice
-          : Math.round(price * 100 / 70);
-        const discountPercent = Math.round((calcCompareAtPrice - price) * 100 / calcCompareAtPrice);
+        // MRP = compare_at_price if set, else admin price
+        const mrpPrice = (compareAtPrice && compareAtPrice > price) ? compareAtPrice : price;
+        // Selling price = 30% off MRP
+        const sellingPrice = Math.round(mrpPrice * 0.70);
+        const discountPercent = 30;
 
         // Toggle sale/sold-out classes
         priceEl.classList.toggle('price--sold-out', !available);
         priceEl.classList.add('price--on-sale');
 
-        const formattedPrice = formatMoney(price);
-        const formattedCompare = formatMoney(calcCompareAtPrice);
+        const formattedPrice = formatMoney(sellingPrice);
+        const formattedCompare = formatMoney(mrpPrice);
 
         // Update price text in sale container (.price__sale)
         const saleContainer = priceEl.querySelector('.price__sale');
         if (saleContainer) saleContainer.style.display = '';
 
         const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale, .price-item--sale');
-        if (salePriceEl) salePriceEl.textContent = formattedPrice;
+        if (salePriceEl) salePriceEl.innerHTML = formattedPrice;
 
-        // Show compare-at (strikethrough)
+        // Show compare-at (strikethrough) = MRP
         const compareEls = priceEl.querySelectorAll('s.price-item--regular, .price__sale s');
         compareEls.forEach((el) => {
-          el.textContent = formattedCompare;
+          el.innerHTML = formattedCompare;
           el.closest('span')?.classList.remove('hidden');
         });
 
-        // Update discount badge
+        // Update discount badge — always 30% OFF
         const discountBadgeEl = priceEl.querySelector('[data-discount-badge], .price__badge-discount');
         if (discountBadgeEl) {
           discountBadgeEl.textContent = `${discountPercent}% OFF`;
@@ -278,8 +317,92 @@ if (!customElements.get('product-info')) {
           this.productModal?.remove();
 
           const selector = updateFullPage ? "product-info[id^='MainProduct']" : 'product-info';
-          const variant = this.getSelectedVariant(html.querySelector(selector)) || this.variantSelectors?.currentVariant;
-          this.updateURL(productUrl, variant?.id);
+          const newProductInfo = html.querySelector(selector);
+          
+          if (newProductInfo) {
+            // --- Persist Option Selections Across Product Swap ---
+            // 1. Copy select dropdown values (e.g. Ring Size)
+            this.querySelectorAll('variant-selects select').forEach(oldSelect => {
+              const pos = oldSelect.dataset.optionPosition;
+              if (pos) {
+                const newSelect = newProductInfo.querySelector(`variant-selects select[data-option-position="${pos}"]`);
+                if (newSelect) {
+                  const optionExists = Array.from(newSelect.options).some(opt => opt.value === oldSelect.value);
+                  if (optionExists) {
+                    newSelect.value = oldSelect.value;
+                    // Remove selected attribute from others, add to new
+                    Array.from(newSelect.options).forEach(opt => opt.removeAttribute('selected'));
+                    newSelect.querySelector(`option[value="${oldSelect.value}"]`)?.setAttribute('selected', 'selected');
+                  }
+                }
+              }
+            });
+
+            // 2. Resolve the correct variant in the new product based on the copied options
+            let newVariant = null;
+            try {
+              const variantsScript = newProductInfo.querySelector('script[data-product-variants]');
+              if (variantsScript) {
+                const allVariants = JSON.parse(variantsScript.textContent);
+                
+                // Collect the options that should be selected in the new DOM
+                const optMap = {};
+                
+                // Read metal radio in new DOM (it should be pre-selected from the URL fetch)
+                const checkedMetal = newProductInfo.querySelector(
+                  'input[type="radio"][data-option1]:checked, input[type="radio"][data-mat-pos]:checked'
+                );
+                if (checkedMetal) {
+                  const matPos = parseInt(checkedMetal.dataset.matPos || '1', 10);
+                  const colPos = parseInt(checkedMetal.dataset.colPos || '2', 10);
+                  if (checkedMetal.dataset.option1) optMap[matPos] = checkedMetal.dataset.option1;
+                  if (checkedMetal.dataset.option2) optMap[colPos] = checkedMetal.dataset.option2;
+                }
+                
+                // Read the selects we just copied over
+                newProductInfo.querySelectorAll('variant-selects select').forEach((sel) => {
+                  let pos = parseInt(sel.dataset.optionPosition, 10);
+                  if (!pos) {
+                    const m = sel.id?.match(/-(\d+)$/);
+                    if (m) pos = parseInt(m[1], 10) + 1;
+                  }
+                  if (pos && sel.value && !optMap[pos]) optMap[pos] = sel.value;
+                });
+                
+                const selectedOpts = Object.keys(optMap).sort((a, b) => Number(a) - Number(b)).map((k) => optMap[k]);
+                
+                newVariant = allVariants.find((v) =>
+                  v.options.every((opt, idx) => selectedOpts[idx] === undefined || selectedOpts[idx] === opt)
+                ) || null;
+              }
+            } catch (e) {
+              console.warn('[ProductInfo] Swap parsing error', e);
+            }
+
+            const variant = newVariant || this.getSelectedVariant(newProductInfo) || this.variantSelectors?.currentVariant;
+            this.updateURL(productUrl, variant?.id);
+
+            // Force update the new DOM's price based on the correct variant before we inject it
+            if (variant) {
+              const priceEl = newProductInfo.querySelector('.price');
+              if (priceEl) {
+                const mrpPrice = (variant.compare_at_price && variant.compare_at_price > variant.price) ? variant.compare_at_price : variant.price;
+                const sellingPrice = Math.round(mrpPrice * 0.70);
+                
+                const salePriceEl = priceEl.querySelector('.price__sale .price-item--sale, .price-item--sale');
+                if (salePriceEl) salePriceEl.innerHTML = window.Shopify ? window.Shopify.formatMoney(sellingPrice, window.Shopify.money_format) : '$' + (sellingPrice/100).toFixed(2);
+                
+                const compareEls = priceEl.querySelectorAll('s.price-item--regular, .price__sale s');
+                compareEls.forEach(el => {
+                  el.innerHTML = window.Shopify ? window.Shopify.formatMoney(mrpPrice, window.Shopify.money_format) : '$' + (mrpPrice/100).toFixed(2);
+                });
+              }
+              
+              // Also update the hidden variant ID input in the new form
+              const idInput = newProductInfo.querySelector('input[name="id"]');
+              if (idInput) idInput.value = variant.id;
+            }
+          }
 
           if (updateFullPage) {
             document.querySelector('head title').innerHTML = html.querySelector('head title').innerHTML;

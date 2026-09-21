@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -14,6 +23,17 @@
         "title": {
           "type": "title",
           "settings": {}
+        },
+        "ait_loyalty_review_affiliate_app_review_rating_9inmpz": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-ReviewRating/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {
+            "colour": "#FFD700",
+            "language_setting_reviews": "Reviews",
+            "language_setting_noreview": "No reviews",
+            "language_setting_star": "Star",
+            "lang_based_on_reviews": "Based on {number_of_review} reviews",
+            "lang_see_all_reviews": "See all customer reviews"
+          }
         },
         "price": {
           "type": "price",
@@ -86,6 +106,7 @@
       "block_order": [
         "vendor",
         "title",
+        "ait_loyalty_review_affiliate_app_review_rating_9inmpz",
         "price",
         "custom_liquid_mmebJz",
         "variant_picker",
@@ -128,6 +149,21 @@
         "padding_bottom": 52
       }
     },
+    "1788871169fc0005b1": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_review_form_block_jb3Fzi": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-reviewFormBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_review_form_block_jb3Fzi"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
     "main_banner_swiper_MmWgwE": {
       "type": "main-banner-swiper",
       "blocks": {
@@ -135,9 +171,9 @@
           "type": "slide",
           "settings": {
             "media_type_desktop": "image",
-            "image_desktop": "shopify://shop_images/Under_1.png",
+            "image_desktop": "shopify://shop_images/A_styled_flat-lay_of_custom_jewelry_on_a_white_marble_background_featuring_silver_and_rose_gold_rings_with_blue_red_and_clear_gemstones_alongside_a_rose_gold_band_with_blue_sapphires._Text_in_the_center_reads_Handcrafted_for_Perfection..jpg",
             "media_type_mobile": "image",
-            "image_mobile": "shopify://shop_images/Under_1.png",
+            "image_mobile": "shopify://shop_images/A_promotional_jewelry_layout_on_a_white_marble_background_with_the_text_Handcrafted_for_Perfection._Start_Your_Customization_Journey..jpg",
             "video_autoplay": true,
             "video_loop": true,
             "video_muted": true,
@@ -343,7 +379,7 @@
         "color_scheme": "",
         "image_ratio": "adapt",
         "image_shape": "default",
-        "show_secondary_image": false,
+        "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
         "quick_add": "standard",
@@ -352,16 +388,49 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "178887072545c6dfea": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_related_product_block_PcVbUW": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-relatedProductBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_related_product_block_PcVbUW"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "178887073192d381d9": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_recent_view_block_fcxVYd": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-recentViewBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_recent_view_block_fcxVYd"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "main",
     "custom_liquid_rwxXFW",
+    "1788871169fc0005b1",
     "main_banner_swiper_MmWgwE",
     "custom_liquid_9Rt8jX",
     "related-products",
     "our_8_cs_promise_GykD3W",
     "featured_in_marquee_gzUpbk",
-    "featured_collection_LJfjz6"
+    "featured_collection_LJfjz6",
+    "178887072545c6dfea",
+    "178887073192d381d9"
   ]
 }

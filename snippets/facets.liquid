@@ -28,7 +28,7 @@
   endif
 -%}
 
-<div class="facets-container{% if filter_type == 'drawer' %} facets-container-drawer{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+<div class="facets-container{% if filter_type == 'drawer' %} facets-container-drawer{% endif %}">
   {%- if filter_type == 'vertical' or filter_type == 'horizontal' -%}
     <facet-filters-form class="facets small-hide">
       <form
@@ -48,6 +48,39 @@
               class="facets__wrapper"
             {% endif %}
           >
+            {%- if enable_sorting and filter_type == 'vertical' -%}
+              <div class="facet-filters-vertical sorting caption">
+                <div class="facet-filters__field">
+                  <h2 class="facet-filters__label caption-large text-body">
+                    <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
+                  </h2>
+                  <div class="select">
+                    {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+                    <select
+                      name="sort_by"
+                      class="facet-filters__sort select__select caption-large"
+                      id="SortBy"
+                      aria-describedby="a11y-refresh-page-message"
+                    >
+                      {%- for option in results.sort_options -%}
+                        <option
+                          value="{{ option.value | escape }}"
+                          {% if option.value == sort_by %}
+                            selected="selected"
+                          {% endif %}
+                        >
+                          {{ option.name | escape }}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    <span class="svg-wrapper">
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+
             {%- if filter_type == 'horizontal' and results.filters != empty -%}
               <h2 class="facets__heading caption-large text-body" id="verticalTitle" tabindex="-1">
                 {{ 'products.facets.filter_by_label' | t }}
@@ -58,13 +91,34 @@
               <div class="active-facets active-facets-desktop">
                 <div class="active-facets-vertical-filter">
                   {%- unless results.filters == empty -%}
-                    <h2
-                      class="facets__heading facets__heading--vertical caption-large text-body"
-                      id="verticalTitle"
-                      tabindex="-1"
-                    >
-                      {{ 'products.facets.filter_by_label' | t }}
-                    </h2>
+                    <div class="facets__sidebar-header-row">
+                      <h2
+                        class="facets__heading facets__heading--vertical caption-large text-body"
+                        id="verticalTitle"
+                        tabindex="-1"
+                      >
+                        {{ 'products.facets.filter_by_label' | t }}
+                      </h2>
+                      <div class="product-count-sidebar" role="status">
+                        <span class="product-count-sidebar__text">
+                          <span id="ProductCountDesktop">
+                            {%- if results.results_count -%}
+                              {{
+                                'templates.search.results_with_count'
+                                | t: terms: results.terms, count: results.results_count
+                              }}
+                            {%- elsif results.products_count == results.all_products_count -%}
+                              {{ 'products.facets.product_count_simple' | t: count: results.products_count }}
+                            {%- else -%}
+                              {{
+                                'products.facets.product_count'
+                                | t: product_count: results.products_count, count: results.all_products_count
+                              }}
+                            {%- endif -%}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
                   {%- endunless -%}
                   <facet-remove class="active-facets__button-wrapper">
                     <a href="{{ results_url }}" class="active-facets__button-remove underlined-link">

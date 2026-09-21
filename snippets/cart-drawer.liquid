@@ -857,28 +857,23 @@
                           {{- item.product.title | escape -}}
                         </a>
 
-                        {%- if item.original_price != item.final_price -%}
-                          <div class="cart-item__discounted-prices">
-                            <span class="visually-hidden">
-                              {{ 'products.product.price.regular_price' | t }}
-                            </span>
-                            <s class="cart-item__old-price product-option">
-                              {{- item.original_price | money -}}
-                            </s>
-                            <span class="visually-hidden">
-                              {{ 'products.product.price.sale_price' | t }}
-                            </span>
-                            <strong class="cart-item__final-price product-option">
-                              {{ item.final_price | money }}
-                            </strong>
-                          </div>
-                        {%- else -%}
-                          {% comment %}
-                            <div class="product-option">
-                              {{ item.original_price | money }}
-                            </div>
-                          {% endcomment %}
-                        {%- endif -%}
+                        {%- liquid
+                          assign drawer_unit_discounted = item.original_price | times: 0.70 | round
+                        -%}
+                        <div class="cart-item__discounted-prices">
+                          <span class="visually-hidden">
+                            {{ 'products.product.price.regular_price' | t }}
+                          </span>
+                          <s class="cart-item__old-price product-option">
+                            {{- item.original_price | money -}}
+                          </s>
+                          <span class="visually-hidden">
+                            {{ 'products.product.price.sale_price' | t }}
+                          </span>
+                          <strong class="cart-item__final-price product-option">
+                            {{ drawer_unit_discounted | money }}
+                          </strong>
+                        </div>
 
                         {%- if item.product.has_only_default_variant == false
                           or item.properties.size != 0
@@ -958,26 +953,23 @@
                           <div class="cart-item__quantity-wrapper quantity-popover-wrapper">
                             <div class="cart-item__totals" role="cell" headers="CartDrawer-ColumnTotal">
                               <div class="cart-item__price-wrapper">
-                                {%- if item.original_line_price != item.final_line_price -%}
-                                  <div class="cart-item__discounted-prices">
-                                    <span class="visually-hidden">
-                                      {{ 'products.product.price.regular_price' | t }}
-                                    </span>
-                                    <s class="cart-item__old-price price price--end">
-                                      {{ item.original_line_price | money }}
-                                    </s>
-                                    <span class="visually-hidden">
-                                      {{ 'products.product.price.sale_price' | t }}
-                                    </span>
-                                    <span class="price price--end">
-                                      {{ item.final_line_price | money }}
-                                    </span>
-                                  </div>
-                                {%- else -%}
-                                  <span class="price price--end">
-                                    {{ item.original_line_price | money }}
+                                {%- liquid
+                                  assign drawer_line_discounted = item.original_line_price | times: 0.70 | round
+                                -%}
+                                <div class="cart-item__discounted-prices">
+                                  <span class="visually-hidden">
+                                    {{ 'products.product.price.regular_price' | t }}
                                   </span>
-                                {%- endif -%}
+                                  <s class="cart-item__old-price price price--end">
+                                    {{ item.original_line_price | money }}
+                                  </s>
+                                  <span class="visually-hidden">
+                                    {{ 'products.product.price.sale_price' | t }}
+                                  </span>
+                                  <span class="price price--end">
+                                    {{ drawer_line_discounted | money }}
+                                  </span>
+                                </div>
 
                                 {%- if item.variant.available and item.unit_price_measurement -%}
                                   {% render 'unit-price',

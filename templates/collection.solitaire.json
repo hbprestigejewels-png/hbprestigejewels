@@ -97,7 +97,8 @@
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
-      }
+      },
+      "disabled": true
     },
     "banner": {
       "type": "main-collection-banner",

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "cart-items": {
@@ -10,11 +19,6 @@
     },
     "cart-footer": {
       "type": "main-cart-footer",
-      "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 20,
-        "padding_bottom": 40
-      },
       "blocks": {
         "subtotal": {
           "type": "subtotal",
@@ -28,11 +32,48 @@
       "block_order": [
         "subtotal",
         "buttons"
-      ]
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 40
+      }
+    },
+    "17888709926f581883": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_recent_view_block_kipHf6": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-recentViewBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_recent_view_block_kipHf6"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1788871001f1cd6795": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_related_product_block_hdpdtc": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-relatedProductBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_related_product_block_hdpdtc"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
     "cart-items",
-    "cart-footer"
+    "cart-footer",
+    "17888709926f581883",
+    "1788871001f1cd6795"
   ]
 }

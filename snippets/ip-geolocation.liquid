@@ -1,0 +1,39 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if we have already set the geolocation in this session to prevent infinite reload loops
+    if (!sessionStorage.getItem('geolocation_set')) {
+      var currentCountry = "{{ localization.country.iso_code }}";
+      
+      fetch('https://get.geojs.io/v1/ip/country.json')
+        .then(response => response.json())
+        .then(data => {
+          var userCountry = data.country;
+          
+          // Check if the user's detected country is different from the currently active country
+          if (userCountry && userCountry !== currentCountry) {
+            sessionStorage.setItem('geolocation_set', 'true');
+            
+            var formData = new FormData();
+            formData.append('_method', 'PUT');
+            formData.append('country_code', userCountry);
+            formData.append('return_to', window.location.pathname + window.location.search);
+            
+            fetch('/localization', {
+              method: 'POST',
+              headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: formData
+            }).then(() => {
+              window.location.reload();
+            }).catch(e => {
+              console.error('Localization error:', e);
+            });
+          } else {
+            sessionStorage.setItem('geolocation_set', 'true');
+          }
+        })
+        .catch(error => console.error('Error fetching IP geolocation:', error));
+    }
+  });
+</script>

@@ -219,6 +219,68 @@
       border-radius: 10px;
     }
   }
+
+  /* View More Button Styling */
+  .ct-view-more-wrapper {
+    text-align: center;
+    margin-top: 3.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  .ct-view-more-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    padding: 14px 42px !important;
+    font-size: 1.45rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #d89685 0%, #c28574 48%, #a66555 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    border-radius: 9999px !important;
+    box-shadow: 0 8px 24px -4px rgba(184, 123, 108, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    min-height: 48px !important;
+  }
+
+  .ct-view-more-btn:hover {
+    background: linear-gradient(135deg, #e4a292 0%, #cc8e7e 48%, #b37060 100%) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 12px 28px -2px rgba(184, 123, 108, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+    color: #ffffff !important;
+  }
+
+  .ct-view-more-icon {
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .ct-view-more-btn:hover .ct-view-more-icon {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 749px) {
+    .ct-view-more-wrapper {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      padding: 0 15px;
+    }
+    .ct-view-more-btn {
+      width: 100%;
+      max-width: 320px;
+      font-size: 1.35rem !important;
+      padding: 12px 24px !important;
+    }
+  }
 {%- endstyle -%}
 
 {%- liquid
@@ -247,6 +309,8 @@
         <button
           class="ct-tab {% if forloop.first %}active{% endif %}"
           data-target="panel-{{ section.id }}-{{ forloop.index }}"
+          data-collection-url="{{ col.url | default: '/collections/all' }}"
+          data-collection-title="{{ block.settings.label | default: col.title | escape }}"
         >
           {{ block.settings.label | default: col.title }}
         </button>
@@ -334,18 +398,7 @@
                   endcase
                 %}
                 {%- assign placeholder_image = 'product-apparel-' | append: ridx -%}
-                {%
-                  render 'card-product',
-                  card_product: product,
-                  media_aspect_ratio: section.settings.image_ratio,
-                  image_shape: section.settings.image_shape,
-                  lazy_load: forloop.index > cols_desktop,
-                  show_secondary_image: section.settings.show_secondary_image,
-                  show_vendor: section.settings.show_vendor,
-                  show_rating: section.settings.show_rating,
-                  section_id: section.id,
-                  quick_add: section.settings.quick_add
-                %}
+                {% render 'card-product', card_product: product, media_aspect_ratio: section.settings.image_ratio, image_shape: section.settings.image_shape, lazy_load: forloop.index, show_secondary_image: section.settings.show_secondary_image, show_vendor: section.settings.show_vendor, show_rating: section.settings.show_rating, section_id: section.id, quick_add: section.settings.quick_add %}
               </li>
             {%- endfor -%}
           {%- endif -%}
@@ -353,6 +406,25 @@
         {%- unless forloop.first -%}</template>{%- endunless -%}
       </div>
     {% endfor %}
+
+    <!-- DYNAMIC VIEW MORE PRODUCTS BUTTON -->
+    {% assign first_col = collections[section.blocks.first.settings.collection] %}
+    <div class="ct-view-more-wrapper">
+      <a
+        id="ct-view-more-btn-{{ section.id }}"
+        href="{{ first_col.url | default: '/collections/all' }}"
+        class="button ct-view-more-btn"
+        aria-label="View more {{ section.blocks.first.settings.label | default: first_col.title | default: 'products' }}"
+      >
+        <span class="ct-view-more-text">
+          {{ section.settings.view_more_text | default: 'View More Products' }}
+        </span>
+        <svg class="ct-view-more-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -363,6 +435,7 @@
 
     const tabs = root.querySelectorAll('.ct-tab');
     const panels = root.querySelectorAll('.ct-panel');
+    const viewMoreBtn = document.getElementById('ct-view-more-btn-{{ section.id }}');
 
     /**
      * Panels other than the first ship as <template> content. Clone it into the
@@ -387,6 +460,13 @@
         panels.forEach((p) => p.classList.remove('active'));
         tab.classList.add('active');
         targetPanel.classList.add('active');
+
+        // Dynamically update the View More Button destination URL & aria label
+        if (viewMoreBtn && tab.dataset.collectionUrl) {
+          viewMoreBtn.setAttribute('href', tab.dataset.collectionUrl);
+          const colTitle = tab.dataset.collectionTitle || 'products';
+          viewMoreBtn.setAttribute('aria-label', `View more ${colTitle}`);
+        }
       });
     });
   })();
@@ -396,6 +476,12 @@
 {
   "name": "Collection Tabs",
   "settings": [
+    {
+      "type": "text",
+      "id": "view_more_text",
+      "label": "View more button label",
+      "default": "View More Products"
+    },
     {
       "type": "checkbox",
       "id": "full_width",
@@ -532,3 +618,23 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%\r\n                  render 'card-product',\r\n                  card_product:
+    product,\r\n                  media_aspect_ratio: section.settings.image_ratio,\r\n
+    \                 image_shape: section.settings.image_shape,\r\n                  lazy_load:
+    forloop.index > cols_desktop,\r\n                  show_secondary_image: section.settings.show_secondary_image,\r\n
+    \                 show_vendor: section.settings.show_vendor,\r\n                  show_rating:
+    section.settings.show_rating,\r\n                  section_id: section.id,\r\n
+    \                 quick_add: section.settings.quick_add\r\n                %}"
+  to: "{% render 'card-product', card_product: product, media_aspect_ratio: section.settings.image_ratio,
+    image_shape: section.settings.image_shape, lazy_load: forloop.index, show_secondary_image:
+    section.settings.show_secondary_image, show_vendor: section.settings.show_vendor,
+    show_rating: section.settings.show_rating, section_id: section.id, quick_add:
+    section.settings.quick_add %}"
+  position: 12533..12912
+{% endcomment %}

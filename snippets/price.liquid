@@ -24,24 +24,28 @@
   assign price_min = product.price_min
   assign price_max = product.price_max
 
+  comment
+    MRP / Strikethrough = admin price (or compare_at_price if set)
+    Selling price = MRP x 0.70 (30% discount always applied)
+  endcomment
   if target.compare_at_price and target.compare_at_price > price
     assign compare_at_price = target.compare_at_price
-    assign discount_percent = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round
   else
-    assign compare_at_price = price | times: 100.0 | divided_by: 70 | round
-    assign discount_percent = 30
+    assign compare_at_price = price
   endif
+  assign display_price = compare_at_price | times: 0.70 | round
+  assign discount_percent = 30
 
-  assign money_price = price | money
+  assign money_price = display_price | money
   assign money_compare_price = compare_at_price | money
-  assign money_price_min = price_min | money
-  assign money_price_max = price_max | money
+  assign money_price_min = price_min | times: 0.70 | round | money
+  assign money_price_max = price_max | times: 0.70 | round | money
 
   if settings.currency_code_enabled
-    assign money_price = price | money_with_currency
+    assign money_price = display_price | money_with_currency
     assign money_compare_price = compare_at_price | money_with_currency
-    assign money_price_min = price_min | money_with_currency
-    assign money_price_max = price_max | money_with_currency
+    assign money_price_min = price_min | times: 0.70 | round | money_with_currency
+    assign money_price_max = price_max | times: 0.70 | round | money_with_currency
   endif
 
   if target == product and product.price_varies

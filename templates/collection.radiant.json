@@ -106,7 +106,8 @@
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
-      }
+      },
+      "disabled": true
     },
     "product-grid": {
       "type": "main-collection-product-grid",
@@ -122,7 +123,7 @@
         "show_rating": false,
         "quick_add": "standard",
         "enable_filtering": true,
-        "filter_type": "horizontal",
+        "filter_type": "vertical",
         "enable_sorting": true,
         "padding_top": 36,
         "padding_bottom": 36

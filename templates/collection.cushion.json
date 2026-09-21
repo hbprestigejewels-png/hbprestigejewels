@@ -102,11 +102,21 @@
         "loop": false,
         "show_arrows": false,
         "show_arrows_mobile": false,
+        "arrow_color": "#1a1a1a",
+        "arrow_size": 36,
+        "arrow_gap": 16,
+        "show_slide_counter": true,
+        "counter_color": "#1a1a1a",
         "show_mobile_dots": true,
+        "dot_color": "#d9d9d9",
+        "dot_active_color": "#1a1a1a",
+        "dot_size": 6,
+        "dot_gap": 8,
         "color_scheme": "",
         "padding_top": 36,
         "padding_bottom": 36
-      }
+      },
+      "disabled": true
     },
     "product-grid": {
       "type": "main-collection-product-grid",
@@ -122,16 +132,32 @@
         "show_rating": false,
         "quick_add": "standard",
         "enable_filtering": true,
-        "filter_type": "horizontal",
+        "filter_type": "vertical",
         "enable_sorting": true,
         "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "1788870800d2a46a86": {
+      "type": "apps",
+      "blocks": {
+        "ait_loyalty_review_affiliate_app_new_arrival_block_B67p8t": {
+          "type": "shopify://apps/ait-loyalty-review-affiliate/blocks/app-newArrivalBlock/0ac2ae90-3cb2-4597-b945-a3b33462ea90",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "ait_loyalty_review_affiliate_app_new_arrival_block_B67p8t"
+      ],
+      "settings": {
+        "include_margins": true
       }
     }
   },
   "order": [
     "banner",
     "collection_carousel_cFkE4K",
-    "product-grid"
+    "product-grid",
+    "1788870800d2a46a86"
   ]
 }
