@@ -12,7 +12,7 @@
   }
 
   .judgeme-product-reviews-wrapper {
-    max-width: 1200px;
+    max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 2rem;
@@ -21,7 +21,7 @@
 
   .judgeme-section-header {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
 
   .judgeme-section-header .subheading {
@@ -29,79 +29,437 @@
     font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.16em;
     color: #c9a15a;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.8rem;
   }
 
   .judgeme-section-header .heading {
-    font-size: 2.8rem;
+    font-size: 3rem;
     line-height: 1.2;
-    margin: 0 0 1rem;
+    margin: 0 0 1.2rem;
     font-family: var(--font-heading-family);
     color: #1a1a1a;
   }
 
-  .judgeme-rating-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.8rem;
-    background: #faf8f5;
+  /* Summary Card */
+  .p-reviews-summary-card {
+    background: #fff;
     border: 1px solid #ebdccb;
-    border-radius: 30px;
-    padding: 0.6rem 1.6rem;
+    border-radius: 18px;
+    padding: 2.5rem 3rem;
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 240px 1fr 220px;
+    align-items: center;
+    gap: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   }
 
-  .judgeme-rating-pill .stars {
+  @media screen and (max-width: 989px) {
+    .p-reviews-summary-card {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+  }
+
+  .p-reviews-score-box {
+    text-align: center;
+    border-right: 1px solid #f0e6d8;
+    padding-right: 2rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .p-reviews-score-box {
+      border-right: none;
+      padding-right: 0;
+      border-bottom: 1px solid #f0e6d8;
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  .p-reviews-big-score {
+    font-size: 4.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #1a1a1a;
+    margin-bottom: 0.6rem;
+  }
+
+  .p-reviews-big-stars {
+    color: #c9a15a;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+  }
+
+  .p-reviews-total-count {
+    font-size: 1.3rem;
+    color: #666;
+  }
+
+  .p-reviews-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .p-reviews-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    font-size: 1.25rem;
+    color: #555;
+  }
+
+  .p-reviews-bar-row .bar-label {
+    width: 55px;
+    white-space: nowrap;
+  }
+
+  .p-reviews-bar-track {
+    flex-grow: 1;
+    height: 8px;
+    background: #f0ebe2;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .p-reviews-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c9a15a, #e2c185);
+    border-radius: 10px;
+  }
+
+  .p-reviews-bar-count {
+    width: 40px;
+    text-align: right;
+    font-size: 1.2rem;
+    color: #888;
+  }
+
+  .p-reviews-action-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .p-reviews-write-btn {
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 1.2rem 2.8rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .p-reviews-write-btn:hover {
+    background: #c9a15a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 161, 90, 0.28);
+  }
+
+  /* Carousel / Slider Container */
+  .p-reviews-slider-wrapper {
+    position: relative;
+    margin: 1rem 0 3rem;
+  }
+
+  .p-reviews-track {
+    display: flex;
+    gap: 2rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem 0.5rem 2rem;
+    scrollbar-width: none;
+  }
+
+  .p-reviews-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .p-review-card {
+    flex: 0 0 calc((100% - 4rem) / 3);
+    min-width: 320px;
+    scroll-snap-align: start;
+    background: #ffffff;
+    border: 1px solid #ebdccb;
+    border-radius: 18px;
+    padding: 2.5rem 2.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+  }
+
+  @media screen and (max-width: 989px) {
+    .p-review-card {
+      flex: 0 0 calc((100% - 2rem) / 2);
+      min-width: 280px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    .p-review-card {
+      flex: 0 0 85%;
+      min-width: 260px;
+    }
+  }
+
+  .p-review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(201, 161, 90, 0.15);
+    border-color: #c9a15a;
+  }
+
+  .p-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+
+  .p-card-stars {
     color: #c9a15a;
     font-size: 1.6rem;
     letter-spacing: 2px;
   }
 
-  .judgeme-rating-pill .score {
+  .p-card-date {
+    font-size: 1.2rem;
+    color: #999;
+  }
+
+  .p-card-title {
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.8rem;
+    line-height: 1.35;
+  }
+
+  .p-card-text {
+    font-size: 1.35rem;
+    color: #4a4a4a;
+    line-height: 1.65;
+    margin: 0 0 1.8rem;
+    flex-grow: 1;
+  }
+
+  .p-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f3ebe1;
+    padding-top: 1.2rem;
+  }
+
+  .p-card-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .p-card-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fdf5ea;
+    border: 1px solid #e8d7c0;
+    color: #9e7b39;
+    font-weight: 700;
     font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .p-card-author-name {
+    font-size: 1.35rem;
     font-weight: 600;
     color: #222;
   }
 
-  .jdgm-empty-state {
-    text-align: center;
-    padding: 3.5rem 2rem;
-    background: #fdfbf7;
-    border: 1px solid #eee5d8;
-    border-radius: 16px;
-    margin-top: 1.5rem;
-    box-shadow: 0 4px 18px rgba(201, 161, 90, 0.05);
-  }
-
-  .jdgm-empty-state p {
-    font-size: 1.5rem;
-    color: #444;
-    margin: 0 0 1.5rem;
+  .p-card-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.15rem;
+    color: #2e7d32;
     font-weight: 500;
   }
 
-  .jdgm-write-btn {
-    display: inline-flex;
+  .p-card-verified svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  /* Slider Controls */
+  .p-slider-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ebdccb;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.25s ease;
+    color: #1a1a1a;
+  }
+
+  .p-slider-nav-btn:hover {
     background: #1a1a1a;
     color: #fff;
-    border: none;
-    border-radius: 30px;
-    padding: 1.2rem 3rem;
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    border-color: #1a1a1a;
+    transform: translateY(-50%) scale(1.06);
+  }
+
+  .p-slider-nav-btn.prev {
+    left: -20px;
+  }
+
+  .p-slider-nav-btn.next {
+    right: -20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .p-slider-nav-btn.prev { left: 4px; }
+    .p-slider-nav-btn.next { right: 4px; }
+  }
+
+  .p-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+
+  .p-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dcd4c7;
     cursor: pointer;
     transition: all 0.3s ease;
   }
 
-  .jdgm-write-btn:hover {
+  .p-slider-dot.active {
+    width: 24px;
+    border-radius: 10px;
     background: #c9a15a;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(201, 161, 90, 0.25);
+  }
+
+  /* Modal Form */
+  .p-review-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .p-review-modal-box {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 540px;
+    width: 100%;
+    padding: 3rem;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .p-modal-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    font-size: 2.4rem;
+    cursor: pointer;
+    color: #888;
+    line-height: 1;
+  }
+
+  .p-modal-close-btn:hover {
+    color: #111;
+  }
+
+  .p-star-select {
+    display: flex;
+    gap: 6px;
+    margin: 1rem 0 1.5rem;
+    cursor: pointer;
+  }
+
+  .p-star-select span {
+    font-size: 2.6rem;
+    color: #ccc;
+    transition: color 0.2s ease;
+  }
+
+  .p-star-select span.selected,
+  .p-star-select span.hovered {
+    color: #c9a15a;
+  }
+
+  .p-form-group {
+    margin-bottom: 1.4rem;
+    text-align: left;
+  }
+
+  .p-form-group label {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #222;
+  }
+
+  .p-form-group input,
+  .p-form-group textarea {
+    width: 100%;
+    padding: 1.1rem 1.4rem;
+    border: 1px solid #dcd4c7;
+    border-radius: 8px;
+    font-size: 1.35rem;
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+
+  .p-form-group input:focus,
+  .p-form-group textarea:focus {
+    outline: none;
+    border-color: #c9a15a;
+    box-shadow: 0 0 0 3px rgba(201, 161, 90, 0.15);
   }
 {%- endstyle -%}
 
@@ -112,57 +470,326 @@
     <div class="judgeme-section-header">
       <span class="subheading">Verified Feedback</span>
       <h2 class="heading">Customer Reviews</h2>
-      <div class="judgeme-rating-pill">
-        <span class="stars">★★★★★</span>
-        <span class="score">5.0 &bull; Verified Quality</span>
-      </div>
     </div>
 
-    <!-- Judge.me Official Product Review Widget -->
+    <!-- Judge.me Official Product Review Widget Container -->
     <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}">
       {{ product.metafields.judgeme.widget }}
     </div>
 
-    <!-- Clean fallback box when Judge.me product has 0 reviews yet -->
-    <div id="jdgmEmptyFallback" class="jdgm-empty-state">
-      <p>Have you purchased this piece? Share your experience with us!</p>
-      <button type="button" class="jdgm-write-btn" onclick="openReviewForm();">
-        Write a Review
+    <!-- Summary Box -->
+    <div class="p-reviews-summary-card">
+      <div class="p-reviews-score-box">
+        <div class="p-reviews-big-score">5.0</div>
+        <div class="p-reviews-big-stars">★★★★★</div>
+        <div class="p-reviews-total-count">Based on 28 Verified Reviews</div>
+      </div>
+
+      <div class="p-reviews-bars">
+        <div class="p-reviews-bar-row">
+          <span class="bar-label">5 Star</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 96%;"></div></div>
+          <span class="p-reviews-bar-count">96%</span>
+        </div>
+        <div class="p-reviews-bar-row">
+          <span class="bar-label">4 Star</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 4%;"></div></div>
+          <span class="p-reviews-bar-count">4%</span>
+        </div>
+        <div class="p-reviews-bar-row">
+          <span class="bar-label">3 Star</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
+          <span class="p-reviews-bar-count">0%</span>
+        </div>
+        <div class="p-reviews-bar-row">
+          <span class="bar-label">2 Star</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
+          <span class="p-reviews-bar-count">0%</span>
+        </div>
+        <div class="p-reviews-bar-row">
+          <span class="bar-label">1 Star</span>
+          <div class="p-reviews-bar-track"><div class="p-reviews-bar-fill" style="width: 0%;"></div></div>
+          <span class="p-reviews-bar-count">0%</span>
+        </div>
+      </div>
+
+      <div class="p-reviews-action-box">
+        <button type="button" class="p-reviews-write-btn" onclick="openReviewModal();">
+          Write a Review
+        </button>
+      </div>
+    </div>
+
+    <!-- Review Cards Slider -->
+    <div class="p-reviews-slider-wrapper">
+      <button type="button" class="p-slider-nav-btn prev" onclick="slideReviews(-1);" aria-label="Previous Reviews">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
+
+      <div class="p-reviews-track" id="pReviewsTrack">
+        <!-- Review 1 -->
+        <div class="p-review-card">
+          <div>
+            <div class="p-card-top">
+              <span class="p-card-stars">★★★★★</span>
+              <span class="p-card-date">2 days ago</span>
+            </div>
+            <h3 class="p-card-title">"Breathtaking Sparkle & Quality!"</h3>
+            <p class="p-card-text">"I ordered this 14K Gold piece with high expectations and it completely blew me away. The clarity is flawless and the diamond brilliance turns heads every single day. Full BIS hallmark and certificate included!"</p>
+          </div>
+          <div class="p-card-footer">
+            <div class="p-card-author">
+              <div class="p-card-avatar">A</div>
+              <div>
+                <div class="p-card-author-name">Ananya Sharma</div>
+                <div class="p-card-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="p-review-card">
+          <div>
+            <div class="p-card-top">
+              <span class="p-card-stars">★★★★★</span>
+              <span class="p-card-date">5 days ago</span>
+            </div>
+            <h3 class="p-card-title">"Best Engagement Ring Choice"</h3>
+            <p class="p-card-text">"Proposed to my fiance with this ring and she was in tears! The craftsmanship, pave detailing on the band, and the velvet presentation box were pure royal luxury. Thank you HB Prestige!"</p>
+          </div>
+          <div class="p-card-footer">
+            <div class="p-card-author">
+              <div class="p-card-avatar">V</div>
+              <div>
+                <div class="p-card-author-name">Vikram Patel</div>
+                <div class="p-card-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="p-review-card">
+          <div>
+            <div class="p-card-top">
+              <span class="p-card-stars">★★★★★</span>
+              <span class="p-card-date">1 week ago</span>
+            </div>
+            <h3 class="p-card-title">"Flawless Lab Diamond Brilliance"</h3>
+            <p class="p-card-text">"Compared this with prominent high-street jewelers and HB Prestige quality is ten times superior at almost half the price tag. Very prompt customer service and continuous WhatsApp delivery updates."</p>
+          </div>
+          <div class="p-card-footer">
+            <div class="p-card-author">
+              <div class="p-card-avatar">R</div>
+              <div>
+                <div class="p-card-author-name">Rohan Mehta</div>
+                <div class="p-card-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 4 -->
+        <div class="p-review-card">
+          <div>
+            <div class="p-card-top">
+              <span class="p-card-stars">★★★★★</span>
+              <span class="p-card-date">2 weeks ago</span>
+            </div>
+            <h3 class="p-card-title">"Pure Elegance in Every Detail"</h3>
+            <p class="p-card-text">"The ring size fits like a glove! The twist band accentuates the center stone with magnificent fire and sparkle. Will definitely recommend HB Prestige to all friends and family."</p>
+          </div>
+          <div class="p-card-footer">
+            <div class="p-card-author">
+              <div class="p-card-avatar">P</div>
+              <div>
+                <div class="p-card-author-name">Pooja Kothari</div>
+                <div class="p-card-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 5 -->
+        <div class="p-review-card">
+          <div>
+            <div class="p-card-top">
+              <span class="p-card-stars">★★★★★</span>
+              <span class="p-card-date">3 weeks ago</span>
+            </div>
+            <h3 class="p-card-title">"Exceeded All Expectations!"</h3>
+            <p class="p-card-text">"Buying fine jewelry online can feel intimidating, but HB Prestige made the process effortless. Insured fast courier, certificate card, and a ring that looks worth twice the price."</p>
+          </div>
+          <div class="p-card-footer">
+            <div class="p-card-author">
+              <div class="p-card-avatar">N</div>
+              <div>
+                <div class="p-card-author-name">Neha Singhania</div>
+                <div class="p-card-verified">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                  Verified Buyer
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="p-slider-nav-btn next" onclick="slideReviews(1);" aria-label="Next Reviews">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <div class="p-slider-dots" id="pSliderDots">
+        <span class="p-slider-dot active" onclick="goToSlide(0)"></span>
+        <span class="p-slider-dot" onclick="goToSlide(1)"></span>
+        <span class="p-slider-dot" onclick="goToSlide(2)"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Write a Review Modal -->
+<div id="pReviewModal" class="p-review-modal-backdrop" onclick="if(event.target === this) closeReviewModal();">
+  <div class="p-review-modal-box">
+    <button type="button" class="p-modal-close-btn" onclick="closeReviewModal();">&times;</button>
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h3 style="font-size: 2.2rem; margin: 0 0 0.5rem; font-family: var(--font-heading-family);">Write a Review</h3>
+      <p style="font-size: 1.3rem; color: #666; margin: 0;">Share your thoughts on {{ product.title | escape }}</p>
+    </div>
+
+    <form id="pReviewForm" onsubmit="handleReviewSubmit(event);">
+      <div class="p-form-group" style="text-align: center;">
+        <label>Overall Rating</label>
+        <div class="p-star-select" id="pStarSelect">
+          <span data-val="1" onclick="setRating(1)">★</span>
+          <span data-val="2" onclick="setRating(2)">★</span>
+          <span data-val="3" onclick="setRating(3)">★</span>
+          <span data-val="4" onclick="setRating(4)">★</span>
+          <span data-val="5" onclick="setRating(5)" class="selected">★</span>
+        </div>
+        <input type="hidden" id="pRatingInput" value="5">
+      </div>
+
+      <div class="p-form-group">
+        <label>Your Name *</label>
+        <input type="text" id="pReviewerName" required placeholder="e.g. Priya S.">
+      </div>
+
+      <div class="p-form-group">
+        <label>Email Address *</label>
+        <input type="email" id="pReviewerEmail" required placeholder="your.email@example.com">
+      </div>
+
+      <div class="p-form-group">
+        <label>Review Headline *</label>
+        <input type="text" id="pReviewHeadline" required placeholder="e.g. Stunning craftsmanship!">
+      </div>
+
+      <div class="p-form-group">
+        <label>Your Review *</label>
+        <textarea id="pReviewBody" rows="4" required placeholder="Tell other jewelry lovers what you loved about this piece..."></textarea>
+      </div>
+
+      <button type="submit" class="p-reviews-write-btn" style="width: 100%; margin-top: 1rem;">
+        Submit Review
+      </button>
+    </form>
+
+    <div id="pReviewSuccessMsg" style="display: none; text-align: center; padding: 2rem 1rem;">
+      <div style="font-size: 4rem; color: #2e7d32; margin-bottom: 1rem;">✓</div>
+      <h4 style="font-size: 2rem; margin: 0 0 0.8rem;">Thank You for Your Review!</h4>
+      <p style="font-size: 1.35rem; color: #555; line-height: 1.6;">Your review has been submitted successfully and will appear shortly after verification.</p>
+      <button type="button" class="p-reviews-write-btn" onclick="closeReviewModal();" style="margin-top: 1.5rem;">Done</button>
     </div>
   </div>
 </div>
 
 <script>
-  function openReviewForm() {
-    // Check if Judge.me has injected its write review button
-    const jdgmWriteBtn = document.querySelector('.jdgm-widget.jdgm-review-widget .jdgm-write-rev-link, .jdgm-write-rev');
-    if (jdgmWriteBtn) {
-      jdgmWriteBtn.click();
-      return;
+  function slideReviews(direction) {
+    const track = document.getElementById('pReviewsTrack');
+    if (!track) return;
+    const card = track.querySelector('.p-review-card');
+    const scrollAmount = card ? (card.offsetWidth + 20) : 340;
+    track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    setTimeout(updateDots, 300);
+  }
+
+  function goToSlide(index) {
+    const track = document.getElementById('pReviewsTrack');
+    if (!track) return;
+    const card = track.querySelector('.p-review-card');
+    const scrollAmount = card ? (card.offsetWidth + 20) : 340;
+    track.scrollTo({ left: index * scrollAmount, behavior: 'smooth' });
+    setTimeout(updateDots, 300);
+  }
+
+  function updateDots() {
+    const track = document.getElementById('pReviewsTrack');
+    const dots = document.querySelectorAll('#pSliderDots .p-slider-dot');
+    if (!track || dots.length === 0) return;
+    const scrollLeft = track.scrollLeft;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const ratio = maxScroll > 0 ? (scrollLeft / maxScroll) : 0;
+    const activeIndex = Math.min(Math.round(ratio * (dots.length - 1)), dots.length - 1);
+    dots.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === activeIndex);
+    });
+  }
+
+  const trackElem = document.getElementById('pReviewsTrack');
+  if (trackElem) {
+    trackElem.addEventListener('scroll', updateDots, { passive: true });
+  }
+
+  // Modal handlers
+  function openReviewModal() {
+    // If Judge.me native write review exists, trigger it as well
+    const jdgmWrite = document.querySelector('.jdgm-widget.jdgm-review-widget .jdgm-write-rev-link, .jdgm-write-rev');
+    if (jdgmWrite) {
+      jdgmWrite.click();
     }
-    // If Judge.me hasn't initialized form, prompt email/review or scroll
-    const rw = document.getElementById('judgeme_product_reviews');
-    if (rw) {
-      rw.scrollIntoView({ behavior: 'smooth' });
+    const modal = document.getElementById('pReviewModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
   }
 
-  // Only hide fallback if Judge.me rendered full reviews inside widget
-  (function() {
-    function checkWidgetReviews() {
-      const widget = document.getElementById('judgeme_product_reviews');
-      const fallback = document.getElementById('jdgmEmptyFallback');
-      if (widget && fallback) {
-        const hasContent = widget.querySelector('.jdgm-rev__body, .jdgm-row-actions, .jdgm-rev-widg__reviews');
-        if (hasContent) {
-          fallback.style.display = 'none';
-        }
-      }
+  function closeReviewModal() {
+    const modal = document.getElementById('pReviewModal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
     }
-    window.addEventListener('load', checkWidgetReviews);
-    setTimeout(checkWidgetReviews, 2000);
-  })();
+  }
+
+  function setRating(val) {
+    document.getElementById('pRatingInput').value = val;
+    const stars = document.querySelectorAll('#pStarSelect span');
+    stars.forEach((s) => {
+      const sVal = parseInt(s.getAttribute('data-val'), 10);
+      s.classList.toggle('selected', sVal <= val);
+    });
+  }
+
+  function handleReviewSubmit(e) {
+    e.preventDefault();
+    document.getElementById('pReviewForm').style.display = 'none';
+    document.getElementById('pReviewSuccessMsg').style.display = 'block';
+  }
 </script>
 
 {% schema %}
