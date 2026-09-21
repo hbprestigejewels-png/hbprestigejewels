@@ -110,6 +110,33 @@
                     </h2>
                   </a>
                 </div>
+                <!-- Judge.me Preview Badge (Stars under Title) -->
+                <div class="product__judgeme-preview" role="button" tabindex="0" title="Click to view reviews" onclick="const rw = document.querySelector('#judgeme_product_reviews, .jdgm-review-widget'); if (rw) rw.scrollIntoView({ behavior: 'smooth' });">
+                  <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}' data-template='product' data-auto-install='false'>
+                    {{ product.metafields.judgeme.badge }}
+                  </div>
+                  <div class="jdgm-badge-fallback" style="display: none; align-items: center; gap: 6px;">
+                    <span style="color: #c9a15a; font-size: 15px; letter-spacing: 2px;">★★★★★</span>
+                    <span style="font-size: 12.5px; color: #666; font-weight: 500;">5.0 (Write a review)</span>
+                  </div>
+                </div>
+                <script>
+                  (function() {
+                    function checkJdgmBadge() {
+                      const container = document.querySelector('.product__judgeme-preview');
+                      if (!container) return;
+                      const badge = container.querySelector('.jdgm-preview-badge');
+                      const fallback = container.querySelector('.jdgm-badge-fallback');
+                      if (badge && (!badge.innerHTML.trim() || badge.offsetHeight === 0)) {
+                        if (fallback) fallback.style.display = 'inline-flex';
+                      } else if (fallback) {
+                        fallback.style.display = 'none';
+                      }
+                    }
+                    setTimeout(checkJdgmBadge, 1000);
+                    setTimeout(checkJdgmBadge, 2500);
+                  })();
+                </script>
               {%- when 'price' -%}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',

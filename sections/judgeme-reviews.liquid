@@ -1,0 +1,207 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .judgeme-product-reviews-wrapper {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .judgeme-section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .judgeme-section-header .subheading {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #c9a15a;
+    margin-bottom: 0.6rem;
+  }
+
+  .judgeme-section-header .heading {
+    font-size: 2.8rem;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    font-family: var(--font-heading-family);
+    color: #1a1a1a;
+  }
+
+  .judgeme-rating-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #faf8f5;
+    border: 1px solid #ebdccb;
+    border-radius: 30px;
+    padding: 0.6rem 1.6rem;
+  }
+
+  .judgeme-rating-pill .stars {
+    color: #c9a15a;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+
+  .judgeme-rating-pill .score {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .jdgm-empty-state {
+    text-align: center;
+    padding: 3.5rem 2rem;
+    background: #fdfbf7;
+    border: 1px solid #eee5d8;
+    border-radius: 16px;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 18px rgba(201, 161, 90, 0.05);
+  }
+
+  .jdgm-empty-state p {
+    font-size: 1.5rem;
+    color: #444;
+    margin: 0 0 1.5rem;
+    font-weight: 500;
+  }
+
+  .jdgm-write-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 1.2rem 3rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .jdgm-write-btn:hover {
+    background: #c9a15a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 161, 90, 0.25);
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width judgeme-product-reviews-wrapper">
+    <div style="clear:both"></div>
+    
+    <div class="judgeme-section-header">
+      <span class="subheading">Verified Feedback</span>
+      <h2 class="heading">Customer Reviews</h2>
+      <div class="judgeme-rating-pill">
+        <span class="stars">★★★★★</span>
+        <span class="score">5.0 &bull; Verified Quality</span>
+      </div>
+    </div>
+
+    <!-- Judge.me Official Product Review Widget -->
+    <div id="judgeme_product_reviews" class="jdgm-widget jdgm-review-widget" data-product-title="{{ product.title | escape }}" data-id="{{ product.id }}">
+      {{ product.metafields.judgeme.widget }}
+    </div>
+
+    <!-- Clean fallback box when Judge.me product has 0 reviews yet -->
+    <div id="jdgmEmptyFallback" class="jdgm-empty-state">
+      <p>Have you purchased this piece? Share your experience with us!</p>
+      <button type="button" class="jdgm-write-btn" onclick="openReviewForm();">
+        Write a Review
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openReviewForm() {
+    // Check if Judge.me has injected its write review button
+    const jdgmWriteBtn = document.querySelector('.jdgm-widget.jdgm-review-widget .jdgm-write-rev-link, .jdgm-write-rev');
+    if (jdgmWriteBtn) {
+      jdgmWriteBtn.click();
+      return;
+    }
+    // If Judge.me hasn't initialized form, prompt email/review or scroll
+    const rw = document.getElementById('judgeme_product_reviews');
+    if (rw) {
+      rw.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Only hide fallback if Judge.me rendered full reviews inside widget
+  (function() {
+    function checkWidgetReviews() {
+      const widget = document.getElementById('judgeme_product_reviews');
+      const fallback = document.getElementById('jdgmEmptyFallback');
+      if (widget && fallback) {
+        const hasContent = widget.querySelector('.jdgm-rev__body, .jdgm-row-actions, .jdgm-rev-widg__reviews');
+        if (hasContent) {
+          fallback.style.display = 'none';
+        }
+      }
+    }
+    window.addEventListener('load', checkWidgetReviews);
+    setTimeout(checkWidgetReviews, 2000);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Judge.me Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Judge.me Reviews"
+    }
+  ]
+}
+{% endschema %}

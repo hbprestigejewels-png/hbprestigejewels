@@ -4042,3 +4042,72 @@ button.aio_recommended_product {
     background: linear-gradient(135deg, #fffffff2, #fdf6f3d9 45%, #f6e6e0b3) !important;
     border: 1.5px solid rgba(194, 133, 116, .75) !important;
 }
+
+/* Judge.me Reviews Custom Luxury Styling */
+.product__judgeme-preview {
+  margin: 0.8rem 0 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.product__judgeme-preview:hover {
+  opacity: 0.85;
+}
+
+.jdgm-prev-badge,
+.jdgm-preview-badge,
+.product__judgeme-preview .jdgm-widget {
+  display: inline-flex !important;
+  visibility: visible !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.jdgm-prev-badge[data-average-rating='0.00'] {
+  display: inline-flex !important;
+}
+
+.jdgm-star.jdgm--on,
+.jdgm-star.jdgm--half,
+.jdgm-star.jdgm--off,
+.jdgm-prev-badge__stars .jdgm-star,
+.product__judgeme-preview .jdgm-star,
+.jdgm-rev-widg .jdgm-star {
+  color: #c9a15a !important;
+}
+
+.jdgm-prev-badge__text {
+  font-size: 1.3rem !important;
+  color: #555 !important;
+  font-weight: 500 !important;
+  margin-left: 4px !important;
+}
+
+.jdgm-widget.jdgm-review-widget {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.jdgm-btn--primary,
+.jdgm-form-wrapper input[type="submit"],
+.jdgm-write-rev-link {
+  background: #1a1a1a !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 10px 24px !important;
+  border: 1px solid #1a1a1a !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.jdgm-btn--primary:hover,
+.jdgm-write-rev-link:hover {
+  background: #c9a15a !important;
+  border-color: #c9a15a !important;
+  color: #fff !important;
+}

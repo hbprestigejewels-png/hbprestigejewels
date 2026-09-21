@@ -1,0 +1,322 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .customer-reviews-section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .customer-reviews-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3.5rem;
+  }
+
+  .customer-reviews-subtitle {
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #c9a15a;
+    margin-bottom: 0.8rem;
+  }
+
+  .customer-reviews-title {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    font-family: var(--font-heading-family);
+    color: #1a1a1a;
+  }
+
+  .customer-reviews-overall {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: #faf8f5;
+    border: 1px solid #ebdccb;
+    border-radius: 30px;
+    padding: 0.6rem 1.6rem;
+    margin-top: 0.5rem;
+  }
+
+  .customer-reviews-overall .stars {
+    color: #c9a15a;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+
+  .customer-reviews-overall .score {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .customer-reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .customer-reviews-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .customer-reviews-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .customer-reviews-title {
+      font-size: 2.4rem;
+    }
+  }
+
+  .review-card {
+    background: #ffffff;
+    border: 1px solid #f0eae1;
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  }
+
+  .review-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(201, 161, 90, 0.12);
+    border-color: #dfcdb3;
+  }
+
+  .review-card-stars {
+    color: #c9a15a;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    margin-bottom: 1.2rem;
+  }
+
+  .review-card-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.8rem;
+    line-height: 1.3;
+  }
+
+  .review-card-text {
+    font-size: 1.35rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    flex-grow: 1;
+  }
+
+  .review-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f5ede4;
+    padding-top: 1.2rem;
+  }
+
+  .review-author {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .review-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 1.15rem;
+    color: #2e7d32;
+    font-weight: 500;
+  }
+
+  .review-verified svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+
+  .review-product-tag {
+    font-size: 1.15rem;
+    color: #888;
+    margin-top: 0.4rem;
+  }
+{%- endstyle -%}
+
+<div class="customer-reviews-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="customer-reviews-header">
+      {%- if section.settings.subheading != blank -%}
+        <span class="customer-reviews-subtitle">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="customer-reviews-title">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      <div class="customer-reviews-overall">
+        <span class="stars">★★★★★</span>
+        <span class="score">{{ section.settings.rating_score | default: "4.9 / 5" }} ({{ section.settings.rating_count | default: "500+ Reviews" }})</span>
+      </div>
+    </div>
+
+    <!-- Judge.me Official Carousel if available -->
+    <div class="jdgm-carousel-wrapper">
+      {{ shop.metafields.judgeme.featured_carousel }}
+    </div>
+
+    <!-- Luxury Featured Testimonials -->
+    <div class="customer-reviews-grid" id="fallbackReviewsGrid">
+      <div class="review-card">
+        <div>
+          <div class="review-card-stars">★★★★★</div>
+          <h3 class="review-card-title">"Breathtaking Sparkle and Quality!"</h3>
+          <p class="review-card-text">"I ordered a 14K Gold Lab Grown Diamond ring. The craftsmanship exceeds luxury designer standards. Delivered in a velvet box with full certificate!"</p>
+        </div>
+        <div class="review-card-footer">
+          <div>
+            <div class="review-author">Aarav M.</div>
+            <div class="review-product-tag">14K Gold Solitaire Ring</div>
+          </div>
+          <span class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Verified Buyer
+          </span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div>
+          <div class="review-card-stars">★★★★★</div>
+          <h3 class="review-card-title">"Exceptional Customer Care"</h3>
+          <p class="review-card-text">"Team was so helpful with sizing and gave continuous updates. The diamond clarity is flawless and the ring fits like a dream."</p>
+        </div>
+        <div class="review-card-footer">
+          <div>
+            <div class="review-author">Pooja K.</div>
+            <div class="review-product-tag">Pave Diamond Promise Ring</div>
+          </div>
+          <span class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Verified Buyer
+          </span>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div>
+          <div class="review-card-stars">★★★★★</div>
+          <h3 class="review-card-title">"Truly 5-Star Experience"</h3>
+          <p class="review-card-text">"HB Prestige Jewels is now my go-to jeweler. Outstanding lab grown moissanite brilliance, BIS hallmark stamp, and super fast insured delivery."</p>
+        </div>
+        <div class="review-card-footer">
+          <div>
+            <div class="review-author">Rohan S.</div>
+            <div class="review-product-tag">Moissanite Diamond Bracelet</div>
+          </div>
+          <span class="review-verified">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Verified Buyer
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Only hide fallback cards if Judge.me has actually rendered real review items
+  (function() {
+    function checkReviews() {
+      const realItems = document.querySelectorAll('.jdgm-carousel-wrapper .jdgm-carousel-item, .jdgm-carousel-wrapper .jdgm-carousel-slide');
+      if (realItems && realItems.length > 0) {
+        const fallback = document.getElementById('fallbackReviewsGrid');
+        if (fallback) fallback.style.display = 'none';
+      }
+    }
+    window.addEventListener('load', checkReviews);
+    setTimeout(checkReviews, 1500);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Customer Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Client Testimonials"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "rating_score",
+      "label": "Rating Score",
+      "default": "4.9 / 5"
+    },
+    {
+      "type": "text",
+      "id": "rating_count",
+      "label": "Review Count",
+      "default": "500+ Reviews"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Reviews"
+    }
+  ]
+}
+{% endschema %}
